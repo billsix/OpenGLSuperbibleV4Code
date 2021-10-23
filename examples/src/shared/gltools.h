@@ -25,10 +25,10 @@
 // Mac OS X
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>	// Brings in most Apple specific stuff
-#include "glee.h"		// OpenGL Extension "autoloader"
+#include "GLee.h"		// OpenGL Extension "autoloader"
 #include <OpenGL/gl.h>		// Apple OpenGL haders (version depends on OS X SDK version)
 #include <OpenGL/glu.h>		// OpenGL Utilities
-#include <Glut/glut.h>		// Apples Implementation of GLUT
+#include <GLUT/glut.h>		// Apples Implementation of GLUT
 
 // Just ignore sleep on Apple
 #define Sleep(x)

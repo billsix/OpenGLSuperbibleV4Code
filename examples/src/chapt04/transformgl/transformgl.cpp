@@ -3,99 +3,91 @@
 // Demonstrates letting OpenGL do the transformations
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h"	// OpenGL toolkit
+#include "../../shared/gltools.h" // OpenGL toolkit
 
-#include "../../shared/math3d.h"    // Math3D Library
+#include "../../shared/math3d.h" // Math3D Library
 
 #include <math.h>
 
-
-
 // Called to draw scene
-void RenderScene(void)
-    {
-    M3DMatrix44f rotationMatrix, translationMatrix, transformationMatrix;
+void RenderScene(void) {
+  M3DMatrix44f rotationMatrix, translationMatrix, transformationMatrix;
 
-    static GLfloat yRot = 0.0f;         // Rotation angle for animation
-    yRot += 0.5f;
+  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  yRot += 0.5f;
 
-    // Clear the window with current clearing color
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // Clear the window with current clearing color
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Build a rotation matrix
-    m3dRotationMatrix44(transformationMatrix, m3dDegToRad(yRot), 0.0f, 1.0f, 0.0f);
-    transformationMatrix[12] = 0.0f;
-    transformationMatrix[13] = 0.0f;
-    transformationMatrix[14] = -2.5f;
+  // Build a rotation matrix
+  m3dRotationMatrix44(transformationMatrix, m3dDegToRad(yRot), 0.0f, 1.0f,
+                      0.0f);
+  transformationMatrix[12] = 0.0f;
+  transformationMatrix[13] = 0.0f;
+  transformationMatrix[14] = -2.5f;
 
-    glLoadMatrixf(transformationMatrix);
+  glLoadMatrixf(transformationMatrix);
 
-    gltDrawTorus(0.35f, 0.15f, 40, 20);
+  gltDrawTorus(0.35f, 0.15f, 40, 20);
 
-    // Do the buffer Swap
-    glutSwapBuffers();
-    }
+  // Do the buffer Swap
+  glutSwapBuffers();
+}
 
 // This function does any needed initialization on the rendering
 // context.
-void SetupRC()
-    {
-    // Bluish background
-    glClearColor(0.0f, 0.0f, .50f, 1.0f );
+void SetupRC() {
+  // Bluish background
+  glClearColor(0.0f, 0.0f, .50f, 1.0f);
 
-    // Draw everything as wire frame
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
+  // Draw everything as wire frame
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+}
 
 ///////////////////////////////////////////////////////////
 // Called by GLUT library when idle (window not being
 // resized or moved)
-void TimerFunction(int value)
-    {
-    // Redraw the scene with new coordinates
-    glutPostRedisplay();
-    glutTimerFunc(33,TimerFunction, 1);
-    }
+void TimerFunction(int value) {
+  // Redraw the scene with new coordinates
+  glutPostRedisplay();
+  glutTimerFunc(33, TimerFunction, 1);
+}
 
+void ChangeSize(int w, int h) {
+  GLfloat fAspect;
 
+  // Prevent a divide by zero, when window is too short
+  // (you cant make a window of zero width).
+  if (h == 0)
+    h = 1;
 
-void ChangeSize(int w, int h)
-    {
-    GLfloat fAspect;
+  glViewport(0, 0, w, h);
 
-    // Prevent a divide by zero, when window is too short
-    // (you cant make a window of zero width).
-    if(h == 0)
-        h = 1;
+  fAspect = (GLfloat)w / (GLfloat)h;
 
-    glViewport(0, 0, w, h);
+  // Reset the coordinate system before modifying
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
 
-    fAspect = (GLfloat)w / (GLfloat)h;
+  // Set the clipping volume
+  gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
 
-    // Reset the coordinate system before modifying
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
 
-    // Set the clipping volume
-    gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
+int main(int argc, char *argv[]) {
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitWindowSize(800, 600);
+  glutCreateWindow("OpenGL Transformations Demo");
+  glutReshapeFunc(ChangeSize);
+  glutDisplayFunc(RenderScene);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    }
+  SetupRC();
+  glutTimerFunc(33, TimerFunction, 1);
 
-int main(int argc, char* argv[])
-    {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800,600);
-    glutCreateWindow("OpenGL Transformations Demo");
-    glutReshapeFunc(ChangeSize);
-    glutDisplayFunc(RenderScene);
+  glutMainLoop();
 
-    SetupRC();
-    glutTimerFunc(33, TimerFunction, 1);
-
-    glutMainLoop();
-
-    return 0;
-    }
+  return 0;
+}

@@ -4,6 +4,7 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"
+
 #include "../../shared/stopwatch.h" // General purpose stop watch class
 
 #undef FREEGLUT_VERSION_2_0
@@ -68,7 +69,7 @@ void DrawSphere(GLint sphereNum)
         GLint passingSamples;
 
         // Check if this sphere would be occluded
-        glGetQueryObjectiv(queryIDs[sphereNum], GL_QUERY_RESULT, 
+        glGetQueryObjectiv(queryIDs[sphereNum], GL_QUERY_RESULT,
                            &passingSamples);
         if (passingSamples == 0)
             occluded = GL_TRUE;
@@ -117,8 +118,8 @@ void DrawModels(void)
                         glColor3f(r * 0.5f, g * 0.5f, b * 0.5f);
 
                     glPushMatrix();
-                    glTranslatef(100.0f * r - 100.0f, 
-                                 100.0f * g - 100.0f, 
+                    glTranslatef(100.0f * r - 100.0f,
+                                 100.0f * g - 100.0f,
                                  100.0f * b - 100.0f);
                     glBeginQuery(GL_SAMPLES_PASSED, queryIDs[(r*9)+(g*3)+b]);
                     switch (boundingVolume)
@@ -174,8 +175,8 @@ void DrawModels(void)
                 glColor3f(r * 0.5f, g * 0.5f, b * 0.5f);
 
                 glPushMatrix();
-                glTranslatef(100.0f * r - 100.0f, 
-                             100.0f * g - 100.0f, 
+                glTranslatef(100.0f * r - 100.0f,
+                             100.0f * g - 100.0f,
                              100.0f * b - 100.0f);
                 DrawSphere((r*9)+(g*3)+b);
                 glPopMatrix();
@@ -193,14 +194,14 @@ void RenderScene(void)
 {
     static int iFrames = 0;           // Frame count
     static CStopWatch frameTimer;     // Render time
-    
+
     // Reset the stopwatch on first time
     if(iFrames == 0)
     {
         frameTimer.Reset();
         iFrames++;
     }
-    
+
     // Track camera angle
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -217,7 +218,7 @@ void RenderScene(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glViewport(0, 0, windowWidth, windowHeight);
@@ -268,24 +269,24 @@ void RenderScene(void)
     {
         float fps;
         char cBuffer[64];
-        
+
         fps = 100.0f / frameTimer.GetElapsedSeconds();
         if (occlusionDetection)
             sprintf(cBuffer,"Draw scene with occlusion detection %.1f fps", fps);
         else
             sprintf(cBuffer,"Draw scene without occlusion detection %.1f fps", fps);
-            
+
         glutSetWindowTitle(cBuffer);
         frameTimer.Reset();
         iFrames = 1;
     }
-        
+
     // Do it again
     glutPostRedisplay();
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     GLint queryCounterBits;
@@ -308,10 +309,10 @@ void SetupRC()
         Sleep(2000);
         exit(0);
     }
-    
+
     // Generate occlusion query names
     glGenQueries(27, queryIDs);
-    
+
     // Black background
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f );
 
@@ -321,9 +322,9 @@ void SetupRC()
 
     // Screen door transparency
     GLuint mask[32];
-    for (int i = 0; i < 32; i += 2) 
-    { 
-        mask[i] = 0xAAAAAAAA; 
+    for (int i = 0; i < 32; i += 2)
+    {
+        mask[i] = 0xAAAAAAAA;
         mask[i+1] = 0x55555555;
     }
     glPolygonStipple((GLubyte *)mask);

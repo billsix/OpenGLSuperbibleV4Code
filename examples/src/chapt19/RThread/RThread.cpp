@@ -5,10 +5,15 @@
 // Using the WGL Extensions
 
 #include <windows.h>
+
 #include <process.h>
+
 #include <stdio.h>
+
 #include "..\..\shared\glee.h"
+
 #include "..\..\shared\gltools.h"
+
 #include "resource.h"
 
 
@@ -24,13 +29,13 @@ static GLUquadricObj *pSphere = NULL;
 struct RENDER_STATE
 	{
 	unsigned int uiFrames;	// Running Frame count
-	BOOL bResize;			// Flag that window was resized	
+	BOOL bResize;			// Flag that window was resized
 	BOOL bTerminate;		// Flag to terminate rendering loop
 	BOOL bFatalError;		// Fatal error has occured in render thread
 	BOOL bModifyFlag;		// Flag set whenever something changes
 	};
 
-CRITICAL_SECTION	csThreadSafe;	// Critical section 
+CRITICAL_SECTION	csThreadSafe;	// Critical section
 struct RENDER_STATE		rsRenderData;	// Communication between threads
 
 // Rendering Thread Entry Point
@@ -193,12 +198,12 @@ void SetupRC(HDC hDC)
 void RenderScene(void)
 	{
 	static float fRot = 0.0f;
-	
+
 	fRot += 1.0f / 60.0f * 90.0f;
 
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	glPushMatrix();
 	glRotatef(fRot, 0.0f, 0.0f, 1.0f);
 	gluSphere(pSphere, 20.0f, 50, 25);
@@ -214,12 +219,12 @@ void SetDCPixelFormat(HDC hDC)
 
 	static PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
-		1,								// Version of this structure	
+		1,								// Version of this structure
 		PFD_DRAW_TO_WINDOW |			// Draw to Window (not to bitmap)
 		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
 		PFD_DOUBLEBUFFER,				// Double buffered mode
 		PFD_TYPE_RGBA,					// RGBA Color mode
-		32,								// Want 32 bit color 
+		32,								// Want 32 bit color
 		0,0,0,0,0,0,					// Not used to select mode
 		0,0,							// Not used to select mode
 		0,0,0,0,0,						// Not used to select mode
@@ -258,10 +263,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	wc.hInstance 		= hInstance;
 	wc.hIcon			= NULL;
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	
+
 	// No need for background brush for OpenGL window
-	wc.hbrBackground	= NULL;		
-	
+	wc.hbrBackground	= NULL;
+
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= lpszAppName;
 
@@ -273,10 +278,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	hWnd = CreateWindow(
 				lpszAppName,
 				lpszAppName,
-				
+
 				// OpenGL requires WS_CLIPCHILDREN and WS_CLIPSIBLINGS
 				WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-	
+
 				// Window position and size
 				100, 100,
 				400, 400,
@@ -292,7 +297,7 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	// Display the window
 	ShowWindow(hWnd,SW_SHOW);
 	UpdateWindow(hWnd);
-	
+
 	hMainWindow = hWnd;
 
 
@@ -322,7 +327,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 		// Window creation, setup for OpenGL
 		case WM_CREATE:
 			// Store the device context
-			hDC = GetDC(hWnd);		
+			hDC = GetDC(hWnd);
 
 			// Initialize the critical section
 			InitializeCriticalSection(&csThreadSafe);
@@ -395,7 +400,7 @@ void RenderingThreadEntryPoint(void *pVoid)
 		{
 		// Check rendering state info, terminate if flagged
 		if(CheckStates())
-			break;	
+			break;
 
 		RenderScene();
 

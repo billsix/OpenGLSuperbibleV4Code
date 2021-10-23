@@ -6,6 +6,7 @@
 #include "../../shared/gltools.h"   // OpenGL toolkit
 
 #include <assert.h>
+
 #include <stdio.h>
 
 GLboolean npotTexturesAvailable = GL_FALSE;
@@ -147,7 +148,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_QUADS);
         glVertex3f(-100.0f, -25.0f, -100.0f);
-        glVertex3f(-100.0f, -25.0f, 100.0f);		
+        glVertex3f(-100.0f, -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, -100.0f);
     glEnd();
@@ -159,7 +160,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-100.0f, -25.0f, 100.0f);		
+        glVertex3f(-100.0f, -25.0f, 100.0f);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -177,7 +178,7 @@ void DrawModels(GLboolean drawTeapot)
         glTexCoord2f(1.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(100.0f, -25.0f, 100.0f);		
+        glVertex3f(100.0f, -25.0f, 100.0f);
     glEnd();
     glBindTexture(GL_TEXTURE_2D, wallTextureID[1]);
     glNormal3f(0.0f, 0.0f, 1.0f);
@@ -185,7 +186,7 @@ void DrawModels(GLboolean drawTeapot)
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(-100.0f, -25.0f, -100.0f);
         glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-100.0f, 125.0f, -100.0f);		
+        glVertex3f(-100.0f, 125.0f, -100.0f);
         glTexCoord2f(1.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, -100.0f);
         glTexCoord2f(1.0f, 0.0f);
@@ -195,7 +196,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, 0.0f, -1.0f);
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(100.0f, -25.0f, 100.0f);		
+        glVertex3f(100.0f, -25.0f, 100.0f);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -210,7 +211,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, -1.0f, 0.0f);
     glBegin(GL_QUADS);
         glVertex3f(-100.0f, 125.0f, -100.0f);
-        glVertex3f(-100.0f, 125.0f, 100.0f);		
+        glVertex3f(-100.0f, 125.0f, 100.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glVertex3f(100.0f,  125.0f, -100.0f);
     glEnd();
@@ -290,7 +291,7 @@ void RenderScene(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     if (doProcessing)
@@ -298,7 +299,7 @@ void RenderScene(void)
         // draw the scene as pass 1 to an FBO
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID[0]);
         glViewport(0, 0, fboWidth, fboHeight);
-        
+
         GLenum fboStatus = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE_EXT)
         {
@@ -336,7 +337,7 @@ void RenderScene(void)
             needsValidation[whichShader] = GL_FALSE;
         }
     }
-    
+
     DrawModels(GL_TRUE);
 
     if (doProcessing)
@@ -538,7 +539,7 @@ void SetupShaders(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     fprintf(stdout, "FBO Draw Buffers Demo\n\n");
@@ -575,7 +576,7 @@ void SetupRC()
     maxDrawBuffers = (maxDrawBuffers > maxColorAttachments) ? maxColorAttachments : maxDrawBuffers;
     maxDrawBuffers = (maxDrawBuffers > (maxTexUnits-1)) ? (maxTexUnits-1) : maxDrawBuffers;
     maxDrawBuffers = (maxDrawBuffers > 4) ? 4 : maxDrawBuffers;
-    if (((!GLEE_ARB_draw_buffers || !GLEE_ARB_fragment_shader || !GLEE_ARB_shader_objects) 
+    if (((!GLEE_ARB_draw_buffers || !GLEE_ARB_fragment_shader || !GLEE_ARB_shader_objects)
         && !GLEE_VERSION_2_0) || (maxDrawBuffers != 4))
     {
         fprintf(stderr, "Support for at least 4 draw buffers is unavailable!\n");
@@ -594,7 +595,7 @@ void SetupRC()
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction\n\n");
     fprintf(stdout, "\td/D\t\tToggle use of draw buffers\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 

@@ -3,6 +3,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <string.h>
 
 // NURBS object pointer
@@ -13,7 +14,7 @@ GLint nNumPoints = 4; // 4 X 4
 
 // Mesh extends four units -6 to +6 along x and y axis
 // Lies in Z plane
-//                 u  v  (x,y,z)	
+//                 u  v  (x,y,z)
 GLfloat ctrlPoints[4][3]  = {{  -6.0f, -6.0f, 0.0f},
                              {   2.0f, -2.0f, 8.0f},
                              {   2.0f,  6.0f, 0.0f},
@@ -37,7 +38,7 @@ void DrawPoints(void)
     // Draw all the points in the array
     glBegin(GL_POINTS);
         for(i = 0; i < 4; i++)
-            glVertex3fv(ctrlPoints[i]);	
+            glVertex3fv(ctrlPoints[i]);
     glEnd();
     }
 
@@ -71,22 +72,22 @@ void RenderScene(void)
 
 	// Rotate the mesh around to make it easier to see
 	glRotatef(330.0f, 1.0f,0.0f,0.0f);
-	
+
 	// Render the NURB
 	// Begin the NURB definition
     gluBeginCurve(pNurb);
-	
+
 	// Evaluate the surface
-    gluNurbsCurve(pNurb, 
+    gluNurbsCurve(pNurb,
         8, Knots,
 		3,
-        &ctrlPoints[0][0], 
+        &ctrlPoints[0][0],
         4,
         GL_MAP1_VERTEX_3);
-    
+
 	// Done with surface
 	gluEndCurve(pNurb);
-	
+
 	// Show the control points
 	DrawPoints();
 

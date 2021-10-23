@@ -4,10 +4,13 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/glframe.h"   // OpenGL toolkit
+
 #include "../../shared/stopwatch.h" // General purpose stop watch class
 
 #include <assert.h>
+
 #include <stdio.h>
 
 GLint windowWidth = 512;            // window size
@@ -38,7 +41,7 @@ void RenderScene(void)
 {
     static int iFrames = 0;           // Frame count
     static CStopWatch frameTimer;     // Render time
- 
+
     // Reset the stopwatch on first time
     if(iFrames == 0)
     {
@@ -230,7 +233,7 @@ void SetupTextures(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     pixels[0] = pixels[1] = pixels[2] = NULL;
@@ -279,7 +282,7 @@ void SetupRC()
     fprintf(stdout, "\tp\tToggle PBO usage\n\n");
     fprintf(stdout, "\tarrows\t+/- rotation speed\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Colors
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
     glColor4f(0.0f, 0.0f, 0.0f, 1.0f );
@@ -441,7 +444,7 @@ void ChangeSize(int w, int h)
 
     // Track camera angle
     glViewport(dataOffsetX, dataOffsetY, dataWidth, dataHeight);
-    
+
     // by default, rows are padded to 4 bytes
     dataPitch = (((dataWidth*3)+3) & ~0x3);
 

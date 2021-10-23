@@ -7,10 +7,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Include Files
 #include <windows.h>                // Win32 Framework (No MFC)
+
 #include <stdio.h>                  // Standard IO (sprintf)
+
 #include "..\..\shared\glee.h"
+
 #include "..\..\shared\gltools.h"   // GLTools library
+
 #include "..\..\shared\glframe.h"
+
 #include "resource.h"               // Dialog resources
 
 
@@ -63,11 +68,11 @@ GLuint  lTorusList, lSphereList;
 // Forward Declarations
 
 // Declaration for Window procedure
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, 
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
                                         WPARAM wParam, LPARAM	lParam);
 
 // Startup Dialog Procedure
-BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, 
+BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message,
                                         UINT wParam, LONG lParam);
 
 // Find the best available pixelformat, including if Multisample is available
@@ -95,18 +100,18 @@ void ChangeSize(GLsizei w, GLsizei h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
 	}
 
 
@@ -121,12 +126,12 @@ void DrawGround(void)
     GLfloat s = 0.0f;
     GLfloat t = 0.0f;
     GLfloat texStep = 1.0f / (fExtent * .075f);
-    
+
     // Ground is a tiling texture
     glBindTexture(GL_TEXTURE_2D, textureObjects[GROUND_TEXTURE]);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
+
     // Lay out strips and repeat textures coordinates
     for(iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep)
         {
@@ -138,11 +143,11 @@ void DrawGround(void)
                 glTexCoord2f(s, t);
                 glNormal3f(0.0f, 1.0f, 0.0f);   // All Point up
                 glVertex3f(iStrip, y, iRun);
-                
+
                 glTexCoord2f(s + texStep, t);
                 glNormal3f(0.0f, 1.0f, 0.0f);   // All Point up
                 glVertex3f(iStrip + fStep, y, iRun);
-                
+
                 t += texStep;
                 }
         glEnd();
@@ -164,8 +169,8 @@ void DrawInhabitants(GLint nShadow)
         }
     else
         glColor4f(0.0f, 0.0f, .0f, .75f);  // Shadow color
-  
-        
+
+
     // Draw the randomly located spheres
     glBindTexture(GL_TEXTURE_2D, textureObjects[SPHERE_TEXTURE]);
     for(i = 0; i < NUM_SPHERES; i++)
@@ -178,19 +183,19 @@ void DrawInhabitants(GLint nShadow)
 
     glPushMatrix();
         glTranslatef(0.0f, 0.1f, -2.5f);
-    
+
         glPushMatrix();
             glRotatef(-yRot * 2.0f, 0.0f, 1.0f, 0.0f);
             glTranslatef(1.0f, 0.0f, 0.0f);
             glCallList(lSphereList);
         glPopMatrix();
-    
+
         if(nShadow == 0)
             {
             // Torus alone will be specular
             glMaterialfv(GL_FRONT, GL_SPECULAR, fBrightLight);
             }
-        
+
         glRotatef(yRot, 0.0f, 1.0f, 0.0f);
         glBindTexture(GL_TEXTURE_2D, textureObjects[TORUS_TEXTURE]);
         glCallList(lTorusList);
@@ -208,17 +213,17 @@ void RenderScene(void)
 
     // Clear the window
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
+
     glPushMatrix();
         frameCamera.ApplyCameraTransform();
-        
+
         // Position light before any other transformations
         glLightfv(GL_LIGHT0, GL_POSITION, fLightPos);
-        
+
         // Draw the ground
         glColor3f(1.0f, 1.0f, 1.0f);
         DrawGround();
-        
+
         // Draw shadows first
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
@@ -235,7 +240,7 @@ void RenderScene(void)
         glEnable(GL_LIGHTING);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
-        
+
         // Draw inhabitants normally
         DrawInhabitants(0);
     glPopMatrix();
@@ -254,7 +259,7 @@ void RenderScene(void)
 		fTime = (float)(lCurrent.QuadPart - FPSCount.QuadPart) /
 										(float)CounterFrequency.QuadPart;
         fps = (float)iFrames / fTime;
-      
+
 
         // Reset frame count and timer
         iFrames = 0;
@@ -279,7 +284,7 @@ void RenderScene(void)
         // Set position and display message
         glWindowPos2i(0, iRow);
     	glListBase(nFontList);
-	    glCallLists (13, GL_UNSIGNED_BYTE, "OpenGL Rocks!"); 	
+	    glCallLists (13, GL_UNSIGNED_BYTE, "OpenGL Rocks!");
         iRow+= 20;
 
         // Display the frame rate
@@ -343,18 +348,18 @@ void SetupRC(HDC hDC)
 
 	// Create the font and display list
 	hFont = CreateFontIndirect(&logfont);
-	SelectObject (hDC, hFont); 
+	SelectObject (hDC, hFont);
 
-	
+
 	//Create display lists for glyphs 0 through 128
 	nFontList = glGenLists(128);
 	wglUseFontBitmaps(hDC, 0, 128, nFontList);
 
 	DeleteObject(hFont);		// Don't need original font anymore
-   
+
     // Grayish background
     glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
-   
+
     // Clear stencil buffer with zero, increment by one whenever anybody
     // draws into it. When stencil function is enabled, only write where
     // stencil value is zero. This prevents the transparent shadow from drawing
@@ -362,14 +367,14 @@ void SetupRC(HDC hDC)
     glStencilOp(GL_INCR, GL_INCR, GL_INCR);
     glClearStencil(0);
     glStencilFunc(GL_EQUAL, 0x0, 0x01);
-    
+
     // Cull backs of polygons
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    
-    
+
+
     // Setup light parameters
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, fNoLight);
     glLightfv(GL_LIGHT0, GL_AMBIENT, fLowLight);
@@ -377,45 +382,45 @@ void SetupRC(HDC hDC)
     glLightfv(GL_LIGHT0, GL_SPECULAR, fBrightLight);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    
+
     // Calculate shadow matrix
     M3DVector4f pPlane;
     m3dGetPlaneEquation(pPlane, vPoints[0], vPoints[1], vPoints[2]);
     m3dMakePlanarShadowMatrix(mShadowMatrix, pPlane, fLightPos);
-    
+
     // Mostly use material tracking
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glMateriali(GL_FRONT, GL_SHININESS, 128);
-    
+
     // Randomly place the sphere inhabitants
     for(iSphere = 0; iSphere < NUM_SPHERES; iSphere++)
         {
         // Pick a random location between -20 and 20 at .1 increments
         spheres[iSphere].SetOrigin((float)((rand() % 400) - 200) * 0.1f,
-                                    0.0f, 
+                                    0.0f,
                                     (float)((rand() % 400) - 200) * 0.1f);
         }
-        
+
     // Set up texture maps
     glEnable(GL_TEXTURE_2D);
     glGenTextures(NUM_TEXTURES, textureObjects);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    
-    // Load teach texture    
+
+    // Load teach texture
     for(i = 0; i < NUM_TEXTURES; i++)
         {
         GLbyte *pBytes;
         GLint iWidth, iHeight, iComponents;
         GLenum eFormat;
-        
+
         glBindTexture(GL_TEXTURE_2D, textureObjects[i]);
-        
+
         // Load this texture map
         pBytes = gltLoadTGA(szTextureFiles[i], &iWidth, &iHeight, &iComponents, &eFormat);
         gluBuild2DMipmaps(GL_TEXTURE_2D, iComponents, iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pBytes);
         free(pBytes);
-        
+
         // Trilinear mipmapping
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -493,18 +498,18 @@ HPALETTE GetOpenGLPalette(HDC hDC)
         return NULL;
 
     // Number of entries in palette.  8 bits yeilds 256 entries
-    nColors = 1 << pfd.cColorBits;	
+    nColors = 1 << pfd.cColorBits;
 
     // Allocate space for a logical palette structure plus all the palette entries
     pPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) +nColors*sizeof(PALETTEENTRY));
 
-    // Fill in palette header 
+    // Fill in palette header
     pPal->palVersion = 0x300;		// Windows 3.0
     pPal->palNumEntries = nColors; // table size
 
     // Build mask of all 1's.  This creates a number represented by having
     // the low order x bits set, where x = pfd.cRedBits, pfd.cGreenBits, and
-    // pfd.cBlueBits.  
+    // pfd.cBlueBits.
     RedRange = (1 << pfd.cRedBits) -1;
     GreenRange = (1 << pfd.cGreenBits) - 1;
     BlueRange = (1 << pfd.cBlueBits) -1;
@@ -527,7 +532,7 @@ HPALETTE GetOpenGLPalette(HDC hDC)
 
         pPal->palPalEntry[i].peFlags = (unsigned char) NULL;
         }
-		
+
 
     // Create the palette
     hRetPal = CreatePalette(pPal);
@@ -582,10 +587,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
     wc.hInstance 		= hInstance;
     wc.hIcon			= NULL;
     wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	
+
     // No need for background brush for OpenGL window
-    wc.hbrBackground	= NULL;		
-	
+    wc.hbrBackground	= NULL;
+
     wc.lpszMenuName		= NULL;
     wc.lpszClassName	= lpszAppName;
 
@@ -647,7 +652,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,	UINT message, WPARAM wParam, LPARAM lParam)
 		// Window creation, setup for OpenGL
 		case WM_CREATE:
 			// Store the device context
-			hDC = GetDC(hWnd);		
+			hDC = GetDC(hWnd);
 
             // The screen and desktop may have changed, so do this again
 			FindBestPF(hDC, &startupOptions.nPixelFormat, &startupOptions.nPixelFormatMS);
@@ -713,7 +718,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,	UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_DESTROY:
 			// Kill the timer that we created
 			KillTimer(hWnd,101);
-    
+
             ShutdownRC();
 
 			// Deselect the current rendering context and delete it
@@ -732,7 +737,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,	UINT message, WPARAM wParam, LPARAM lParam)
 			ChangeSize(LOWORD(lParam), HIWORD(lParam));
 			break;
 
-		// The painting function.  This message sent by Windows 
+		// The painting function.  This message sent by Windows
 		// whenever the screen needs updating.
 		case WM_PAINT:
 			{
@@ -766,7 +771,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,	UINT message, WPARAM wParam, LPARAM lParam)
 
                 if(GetAsyncKeyState(VK_LEFT))
                     frameCamera.MoveForward(fAngular);
-      
+
                 if(GetAsyncKeyState(VK_RIGHT))
                     frameCamera.MoveForward(-fAngular);
                 }
@@ -812,7 +817,7 @@ BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam)
 			unsigned int nHeight;
 			char cBuffer[64];
 			HWND hListBox;
-			
+
 			PIXELFORMATDESCRIPTOR pfd = {   // Not going to be too picky
 			sizeof(PIXELFORMATDESCRIPTOR),
 			1,
@@ -833,7 +838,7 @@ BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam)
 
 			// Create a "temporary" OpenGL rendering context
 			hDC = GetDC(hDlg);
-		
+
 			// Set pixel format one time....
 			nPF = ChoosePixelFormat(hDC, &pfd);
 			SetPixelFormat(hDC, nPF, &pfd);
@@ -847,7 +852,7 @@ BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam)
 			SetDlgItemText(hDlg, IDC_VENDOR, (const char *)glGetString(GL_VENDOR));
 			SetDlgItemText(hDlg, IDC_RENDERER, (const char *)glGetString(GL_RENDERER));
 			SetDlgItemText(hDlg, IDC_VERSION, (const char *)glGetString(GL_VERSION));
-			
+
 			// Vertical Sync off by default
 			if(gltIsExtSupported("WGL_EXT_swap_control"))
 				EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_CHECK), TRUE);
@@ -881,22 +886,22 @@ BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam)
 				    }
 				iMode++;
                 }
-			
+
 
 			// Set other defaults /////////////
 			// Windowed or full screen
-			CheckDlgButton(hDlg, IDC_FS_CHECK, BST_CHECKED);	
+			CheckDlgButton(hDlg, IDC_FS_CHECK, BST_CHECKED);
 
 			// FSAA, but only if support detected
 			if(startupOptions.nPixelFormatMS != 0)
 				EnableWindow(GetDlgItem(hDlg, IDC_MULTISAMPLED_CHECK), TRUE);
-				
+
 			return (TRUE);
 			}
 			break;
 
 		// Process command messages
-	    case WM_COMMAND:      
+	    case WM_COMMAND:
 			{
 			// Validate and Make the changes
 			if(LOWORD(wParam) == IDOK)
@@ -907,14 +912,14 @@ BOOL APIENTRY StartupDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam)
 				int iMode = SendMessage(hListBox, CB_GETCURSEL, 0, 0);
 				iMode = SendMessage(hListBox, CB_GETITEMDATA, iMode, 0);
 				EnumDisplaySettings(NULL, iMode, &startupOptions.devMode);
-			
+
 				// Full screen or windowed?
 				if(IsDlgButtonChecked(hDlg, IDC_FS_CHECK))
 					startupOptions.bFullScreen = TRUE;
 				else
 					startupOptions.bFullScreen = FALSE;
-			
-				
+
+
 				// FSAA
 				if(IsDlgButtonChecked(hDlg, IDC_MULTISAMPLED_CHECK))
 					startupOptions.bFSAA = TRUE;
@@ -1000,7 +1005,7 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat)
             // Query pixel format
             wglGetPixelFormatAttribivARB(hDC, i+1, 0, 9, iAttributes, iResults);
 
-            // Match? Must support OpenGL AND be Accelerated AND draw to Window 
+            // Match? Must support OpenGL AND be Accelerated AND draw to Window
             if(iResults[0] == 1 && iResults[1] == WGL_FULL_ACCELERATION_ARB && iResults[2] == 1)
             if(iResults[3] == 1)                    // Double buffered
             if(iResults[4] == WGL_TYPE_RGBA_ARB)    // Full Color
@@ -1012,7 +1017,7 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat)
                     {
                     if(iResults[8] > nBestMS)       // Look for most samples
                         {
-                        *nMSFormat = i;			// Multisamples	
+                        *nMSFormat = i;			// Multisamples
                         nBestMS = iResults[8];	// Looking for the best
                         }
                     }
@@ -1026,9 +1031,9 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat)
         }
     else
         {
-        // Old fashioned way... 
+        // Old fashioned way...
         // or multisample
-        PIXELFORMATDESCRIPTOR pfd = { 
+        PIXELFORMATDESCRIPTOR pfd = {
         sizeof(PIXELFORMATDESCRIPTOR),
         1,
         PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,

@@ -4,6 +4,7 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/glframe.h"   // OpenGL toolkit
 
 #include <stdio.h>
@@ -22,8 +23,8 @@
 #define TOTAL_BUMPMAPS    2
 
 GLuint fShader[TOTAL_SHADER_SETS]; // shader object names
-GLuint vShader[TOTAL_SHADER_SETS]; 
-GLuint progObj[TOTAL_SHADER_SETS]; 
+GLuint vShader[TOTAL_SHADER_SETS];
+GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
 char *shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
 char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
@@ -287,7 +288,7 @@ void DrawCylinder(GLfloat radius, GLfloat height, GLint slices, GLfloat xTexScal
 
     for (i = 0; i <= slices; i++)
     {
-        glMultiTexCoord2f(GL_TEXTURE0, xTexScale * cos(angleInc * i) * 0.159155f, 
+        glMultiTexCoord2f(GL_TEXTURE0, xTexScale * cos(angleInc * i) * 0.159155f,
                                        xTexScale * sin(angleInc * i) * 0.159155f);
         glVertex3f(radius * cos(angleInc * -i), height*0.5f, radius * sin(angleInc * -i));
     }
@@ -304,7 +305,7 @@ void DrawCylinder(GLfloat radius, GLfloat height, GLint slices, GLfloat xTexScal
 
     for (i = 0; i <= slices; i++)
     {
-        glMultiTexCoord2f(GL_TEXTURE0, xTexScale * cos(angleInc * i) * 0.159155f, 
+        glMultiTexCoord2f(GL_TEXTURE0, xTexScale * cos(angleInc * i) * 0.159155f,
                                        xTexScale * sin(angleInc * i) * 0.159155f);
         glVertex3f(radius * cos(angleInc * i), -height*0.5f, radius * sin(angleInc * i));
     }
@@ -458,11 +459,11 @@ void RenderScene(void)
     gluPerspective(45.0f, 1.0f, 1.0f, 1000.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -485,10 +486,10 @@ void RenderScene(void)
 
         needsValidation[whichShader] = GL_FALSE;
     }
-    
+
     // Draw objects in the scene
     DrawModels();
-    
+
     if (glGetError() != GL_NO_ERROR)
         fprintf(stderr, "GL Error!\n");
 
@@ -497,7 +498,7 @@ void RenderScene(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     GLint i;
@@ -505,9 +506,9 @@ void SetupRC()
     fprintf(stdout, "Bump Mapping Demo\n\n");
 
     // Make sure required functionality is available!
-    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_fragment_shader || 
-                              !GLEE_ARB_vertex_shader || 
-                              !GLEE_ARB_shader_objects || 
+    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_fragment_shader ||
+                              !GLEE_ARB_vertex_shader ||
+                              !GLEE_ARB_shader_objects ||
                               !GLEE_ARB_shading_language_100))
     {
         fprintf(stderr, "GLSL extensions not available!\n");
@@ -533,7 +534,7 @@ void SetupRC()
     fprintf(stdout, "\ty/Y\t\tMove +/- in y direction\n");
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 

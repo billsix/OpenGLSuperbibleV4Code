@@ -4,6 +4,7 @@
 // rwright@starstonesoftware.com
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 struct Rectangle
@@ -18,7 +19,7 @@ struct Rectangle
 // Object Names
 #define TORUS	1
 #define SPHERE	2
- 
+
 struct Rectangle boundingRect;	// Bounding rectangle
 GLuint selectedObject = 0;		// Who is selected
 float fAspect;					// Display aspect ratio
@@ -29,7 +30,7 @@ float fAspect;					// Display aspect ratio
 #endif
 
 ///////////////////////////////////////////////////////////
-// Draw a torus (doughnut)  
+// Draw a torus (doughnut)
 // at z = 0... torus aligns with xy plane
 void DrawTorus(int numMajor, int numMinor)
 	{
@@ -41,7 +42,7 @@ void DrawTorus(int numMajor, int numMinor)
 	float c, r, z;
 
 	glEnable(GL_NORMALIZE);
-    for (i=0; i<numMajor; ++i) 
+    for (i=0; i<numMajor; ++i)
 		{
 		double a0 = i * majorStep;
 		double a1 = a0 + majorStep;
@@ -51,7 +52,7 @@ void DrawTorus(int numMajor, int numMinor)
 		GLfloat y1 = (GLfloat) sin(a1);
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for (j=0; j<=numMinor; ++j) 
+		for (j=0; j<=numMinor; ++j)
 			{
 			double b = j * minorStep;
 			c = (float) cos(b);
@@ -92,8 +93,8 @@ void DrawObjects(void)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
-	// Translate the whole scene out and into view	
-	glTranslatef(-0.75f, 0.0f, -2.5f);	
+	// Translate the whole scene out and into view
+	glTranslatef(-0.75f, 0.0f, -2.5f);
 
 	// Initialize the names stack
 	glInitNames();
@@ -111,20 +112,20 @@ void DrawObjects(void)
 	glColor3f(0.5f, 0.0f, 0.0f);
 	glTranslatef(1.5f, 0.0f, 0.0f);
 	glLoadName(SPHERE);
-	glPassThrough((GLfloat)SPHERE);	
+	glPassThrough((GLfloat)SPHERE);
 	DrawSphere(0.5f);
 
 	// Restore the matrix state
 	glPopMatrix();	// Modelview matrix
 	}
-	
+
 ///////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void)
 	{
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	// Draw the objects in the scene
 	DrawObjects();
 
@@ -132,7 +133,7 @@ void RenderScene(void)
 	if(selectedObject != 0)
 		{
 		GLint viewport[4];
-		
+
 		// Get the viewport
 		glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -140,7 +141,7 @@ void RenderScene(void)
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		
+
 		// Establish clipping volume (left, right, bottom, top, near, far)
 		glOrtho(viewport[0], viewport[2], viewport[3], viewport[1], -1, 1);
 		glMatrixMode(GL_MODELVIEW);
@@ -255,7 +256,7 @@ void ProcessSelection(int xPos, int yPos)
 
 	// Setup selection buffer
 	glSelectBuffer(BUFFER_LENGTH, selectBuff);
-	
+
 	// Get the viewport
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -272,7 +273,7 @@ void ProcessSelection(int xPos, int yPos)
 	glLoadIdentity();
 	gluPickMatrix(xPos, viewport[3] - yPos + viewport[1], 2,2, viewport);
 
-	// Apply perspective matrix 
+	// Apply perspective matrix
 	gluPerspective(60.0f, fAspect, 1.0, 425.0);
 
 	// Draw the scene
@@ -330,7 +331,7 @@ void SetupRC()
 
 	// Enable color tracking
 	glEnable(GL_COLOR_MATERIAL);
-	
+
 	// Set Material properties to follow glColor values
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 

@@ -2,8 +2,11 @@
 //
 
 #include "stdafx.h"
+
 #include "GLView.h"
+
 #include "GLViewPixFormatDlg.h"
+
 #include ".\glviewpixformatdlg.h"
 
 

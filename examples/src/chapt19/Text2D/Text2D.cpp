@@ -3,7 +3,9 @@
 // Program by Richard S. Wright Jr.
 // This program demonstrates using a Windows font for text in OpenGL
 #include <windows.h>
+
 #include <gl\gl.h>
+
 #include <gl\glu.h>
 
 // Palette Handle
@@ -61,7 +63,7 @@ void RenderScene(void)
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glRasterPos2i(0, 200);
 	glListBase(nFontList);
-	glCallLists (13, GL_UNSIGNED_BYTE, "OpenGL Rocks!"); 	
+	glCallLists (13, GL_UNSIGNED_BYTE, "OpenGL Rocks!");
 	}
 
 ///////////////////////////////////////////////////
@@ -89,9 +91,9 @@ void SetupRC(HDC hDC)
 
 	// Create the font and display list
 	hFont = CreateFontIndirect(&logfont);
-	SelectObject (hDC, hFont); 
+	SelectObject (hDC, hFont);
 
-	
+
 	//Create display lists for glyphs 0 through 128
 	nFontList = glGenLists(128);
 	wglUseFontBitmaps(hDC, 0, 128, nFontList);
@@ -126,18 +128,18 @@ HPALETTE GetOpenGLPalette(HDC hDC)
 		return NULL;
 
 	// Number of entries in palette.  8 bits yeilds 256 entries
-	nColors = 1 << pfd.cColorBits;	
+	nColors = 1 << pfd.cColorBits;
 
 	// Allocate space for a logical palette structure plus all the palette entries
 	pPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) +nColors*sizeof(PALETTEENTRY));
 
-	// Fill in palette header 
+	// Fill in palette header
 	pPal->palVersion = 0x300;		// Windows 3.0
 	pPal->palNumEntries = nColors; // table size
 
 	// Build mask of all 1's.  This creates a number represented by having
 	// the low order x bits set, where x = pfd.cRedBits, pfd.cGreenBits, and
-	// pfd.cBlueBits.  
+	// pfd.cBlueBits.
 	RedRange = (1 << pfd.cRedBits) -1;
 	GreenRange = (1 << pfd.cGreenBits) - 1;
 	BlueRange = (1 << pfd.cBlueBits) -1;
@@ -160,7 +162,7 @@ HPALETTE GetOpenGLPalette(HDC hDC)
 
 		pPal->palPalEntry[i].peFlags = (unsigned char) NULL;
 		}
-		
+
 
 	// Create the palette
 	hRetPal = CreatePalette(pPal);
@@ -185,7 +187,7 @@ void SetDCPixelFormat(HDC hDC)
 
 	static PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
-		1,								// Version of this structure	
+		1,								// Version of this structure
 		PFD_DRAW_TO_WINDOW |			// Draw to Window (not to bitmap)
 		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
 		PFD_DOUBLEBUFFER,				// Double buffered mode
@@ -229,10 +231,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	wc.hInstance 		= hInstance;
 	wc.hIcon			= NULL;
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	
+
 	// No need for background brush for OpenGL window
-	wc.hbrBackground	= NULL;		
-	
+	wc.hbrBackground	= NULL;
+
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= lpszAppName;
 
@@ -245,10 +247,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	hWnd = CreateWindow(
 				lpszAppName,
 				lpszAppName,
-				
+
 				// OpenGL requires WS_CLIPCHILDREN and WS_CLIPSIBLINGS
 				WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-	
+
 				// Window position and size
 				100, 100,
 				400, 400,
@@ -292,10 +294,10 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 		// Window creation, setup for OpenGL
 		case WM_CREATE:
 			// Store the device context
-			hDC = GetDC(hWnd);		
+			hDC = GetDC(hWnd);
 
 			// Select the pixel format
-			SetDCPixelFormat(hDC);		
+			SetDCPixelFormat(hDC);
 
 			// Create the rendering context and make it current
 			hRC = wglCreateContext(hDC);
@@ -335,7 +337,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 			ChangeSize(LOWORD(lParam), HIWORD(lParam));
 			break;
 
-		// The painting function.  This message sent by Windows 
+		// The painting function.  This message sent by Windows
 		// whenever the screen needs updating.
 		case WM_PAINT:
 			{
@@ -351,7 +353,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 
 
 		// Windows is telling the application that it may modify
-		// the system palette.  This message in essance asks the 
+		// the system palette.  This message in essance asks the
 		// application for a new palette.
 		case WM_QUERYNEWPALETTE:
 			// If the palette was created.
@@ -363,7 +365,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 				SelectPalette(hDC, hPalette, FALSE);
 
 				// Map entries from the currently selected palette to
-				// the system palette.  The return value is the number 
+				// the system palette.  The return value is the number
 				// of palette entries modified.
 				nRet = RealizePalette(hDC);
 
@@ -374,8 +376,8 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 				}
 			break;
 
-	
-		// This window may set the palette, even though it is not the 
+
+		// This window may set the palette, even though it is not the
 		// currently active window.
 		case WM_PALETTECHANGED:
 			// Don't do anything if the palette does not exist, or if
@@ -387,7 +389,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 
 				// Map entries to system palette
 				RealizePalette(hDC);
-				
+
 				// Remap the current colors to the newly realized palette
 				UpdateColors(hDC);
 				return 0;
@@ -402,5 +404,3 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 
     return (0L);
 	}
-
-

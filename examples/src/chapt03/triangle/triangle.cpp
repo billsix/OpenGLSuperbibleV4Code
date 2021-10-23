@@ -3,6 +3,7 @@
 // Demonstrates OpenGL Triangle Fans, backface culling, and depth testing
 // Program by Richard S. Wright Jr.
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -69,7 +70,7 @@ void RenderScene(void)
 		glPolygonMode(GL_BACK,GL_LINE);
 	else
 		glPolygonMode(GL_BACK,GL_FILL);
-		
+
 
 	// Save matrix state and do the rotation
 	glPushMatrix();
@@ -83,7 +84,7 @@ void RenderScene(void)
 	// Pinnacle of cone is shared vertex for fan, moved up Z axis
 	// to produce a cone instead of a circle
 	glVertex3f(0.0f, 0.0f, 75.0f);
-	
+
 	// Loop around in a circle and specify even points along the circle
 	// as the vertices of the triangle fan
 	for(angle = 0.0f; angle < (2.0f*GL_PI); angle += (GL_PI/8.0f))
@@ -91,13 +92,13 @@ void RenderScene(void)
 		// Calculate x and y position of the next vertex
 		x = 50.0f*sin(angle);
 		y = 50.0f*cos(angle);
-	
+
 		// Alternate color between red and green
 		if((iPivot %2) == 0)
 			glColor3f(0.0f, 1.0f, 0.0f);
 		else
 			glColor3f(1.0f, 0.0f, 0.0f);
-			
+
 		// Increment pivot to change color next time
 		iPivot++;
 
@@ -119,13 +120,13 @@ void RenderScene(void)
 		// Calculate x and y position of the next vertex
 		x = 50.0f*sin(angle);
 		y = 50.0f*cos(angle);
-	
+
 		// Alternate color between red and green
 		if((iPivot %2) == 0)
 			glColor3f(0.0f, 1.0f, 0.0f);
 		else
 			glColor3f(1.0f, 0.0f, 0.0f);
-			
+
 		// Increment pivot to change color next time
 		iPivot++;
 
@@ -144,7 +145,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Black background
@@ -208,9 +209,9 @@ void ChangeSize(int w, int h)
 	glLoadIdentity();
 
 	// Establish clipping volume (left, right, bottom, top, near, far)
-    if (w <= h) 
+    if (w <= h)
 		glOrtho (-nRange, nRange, -nRange*h/w, nRange*h/w, -nRange, nRange);
-    else 
+    else
 		glOrtho (-nRange*w/h, nRange*w/h, -nRange, nRange, -nRange, nRange);
 
 	// Reset Model view matrix stack
@@ -223,14 +224,14 @@ int main(int argc, char* argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutCreateWindow("Triangle Culling Example");
-	
+
 	// Create the Menu
 	glutCreateMenu(ProcessMenu);
 	glutAddMenuEntry("Toggle depth test",1);
 	glutAddMenuEntry("Toggle cull backface",2);
 	glutAddMenuEntry("Toggle outline back",3);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+
 	glutReshapeFunc(ChangeSize);
 	glutSpecialFunc(SpecialKeys);
 	glutDisplayFunc(RenderScene);

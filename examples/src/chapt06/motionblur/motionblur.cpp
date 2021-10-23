@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 // Light and material Data
@@ -14,31 +15,31 @@ GLfloat fLowLight[] = { 0.25f, 0.25f, 0.25f, 1.0f };
 GLfloat fBrightLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 GLfloat yRot = 45.0f;
-    
+
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Grayish background
     glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
-   
+
     // Cull backs of polygons
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    
+
     // Setup light parameters
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, fNoLight);
     glLightfv(GL_LIGHT0, GL_AMBIENT, fLowLight);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, fBrightLight);
     glLightfv(GL_LIGHT0, GL_SPECULAR, fBrightLight);
     glLightfv(GL_LIGHT0, GL_POSITION, fLightPos);
-    
+
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-     
+
     // Mostly use material tracking
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
@@ -47,8 +48,8 @@ void SetupRC()
 
 
 ///////////////////////////////////////////////////////////
-// Draw the ground as a series of triangle strips. The 
-// shading model and colors are set such that we end up 
+// Draw the ground as a series of triangle strips. The
+// shading model and colors are set such that we end up
 // with a black and white checkerboard pattern.
 void DrawGround(void)
     {
@@ -58,7 +59,7 @@ void DrawGround(void)
     GLfloat fColor;
     GLfloat iStrip, iRun;
     GLint iBounce = 0;
-    
+
     glShadeModel(GL_FLAT);
     for(iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep)
         {
@@ -69,11 +70,11 @@ void DrawGround(void)
                     fColor = 1.0f;
                 else
                     fColor = 0.0f;
-                    
+
                 glColor4f(fColor, fColor, fColor, 0.5f);
                 glVertex3f(iStrip, y, iRun);
                 glVertex3f(iStrip + fStep, y, iRun);
-                
+
                 iBounce++;
                 }
         glEnd();
@@ -88,10 +89,10 @@ void DrawGeometry(void)
     {
      // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
     glPushMatrix();
         DrawGround();
-        
+
         // Place the moving sphere
         glColor3f(1.0f, 0.0f, 0.0f);
         glTranslatef(0.0f, 0.5f, -3.5f);
@@ -101,7 +102,7 @@ void DrawGeometry(void)
     glPopMatrix();
     }
 
-///////////////////////////////////////////////////////////////////////        
+///////////////////////////////////////////////////////////////////////
 // Called to draw scene. The world is drawn multiple times with each
 // frame blended with the last. The current rotation is advanced each
 // time to create the illusion of motion blur.
@@ -109,17 +110,17 @@ void RenderScene(void)
     {
     GLfloat fPass;
     GLfloat fPasses = 10.0f;
-    
+
     // Set the current rotation back a few degrees
     yRot = 35.0f;
-            
+
     for(fPass = 0.0f; fPass < fPasses; fPass += 1.0f)
         {
         yRot += .75f; //1.0f / (fPass+1.0f);
-       
+
         // Draw sphere
         DrawGeometry();
-        
+
         // Accumulate to back buffer
         if(fPass == 0.0f)
             glAccum(GL_LOAD, 0.5f);
@@ -145,18 +146,18 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
     glTranslatef(0.0f, -0.4f, 0.0f);
     }
 
@@ -170,7 +171,7 @@ int main(int argc, char* argv[])
     glutCreateWindow("Motion Blur with the Accumulation Buffer");
     glutReshapeFunc(ChangeSize);
     glutDisplayFunc(RenderScene);
-    
+
     SetupRC();
     glutMainLoop();
 

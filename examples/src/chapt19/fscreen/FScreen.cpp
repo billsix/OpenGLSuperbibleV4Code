@@ -4,7 +4,9 @@
 // This program shows a how to create a full screen
 // window and render into it with OpenGL.
 #include <windows.h>
+
 #include <gl\gl.h>
+
 #include <gl\glu.h>
 
 
@@ -52,12 +54,12 @@ void ChangeSize(GLsizei w, GLsizei h)
 
 	// Keep the square square, this time, save calculated
 	// width and height for later use
-	if (w <= h) 
+	if (w <= h)
 		{
 		windowHeight = 250.0f*h/w;
 		windowWidth = 250.0f;
 		}
-    else 
+    else
 		{
 		windowWidth = 250.0f*w/h;
 		windowHeight = 250.0f;
@@ -101,7 +103,7 @@ void RenderScene(void)
 	{
 	// Set background clearing color to blue
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-	
+
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -122,12 +124,12 @@ void SetDCPixelFormat(HDC hDC)
 
 	static PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
-		1,								// Version of this structure	
+		1,								// Version of this structure
 		PFD_DRAW_TO_WINDOW |			// Draw to Window (not to bitmap)
 		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
 		PFD_DOUBLEBUFFER,				// Double buffered mode
 		PFD_TYPE_RGBA,					// RGBA Color mode
-		32,								// Want 32 bit color 
+		32,								// Want 32 bit color
 		0,0,0,0,0,0,					// Not used to select mode
 		0,0,							// Not used to select mode
 		0,0,0,0,0,						// Not used to select mode
@@ -168,10 +170,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	wc.hInstance 		= hInstance;
 	wc.hIcon			= NULL;
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	
+
 	// No need for background brush for OpenGL window
-	wc.hbrBackground	= NULL;		
-	
+	wc.hbrBackground	= NULL;
+
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= lpszAppName;
 
@@ -194,10 +196,10 @@ int APIENTRY WinMain(	HINSTANCE 	hInstance,
 	hWnd = CreateWindow(
 				lpszAppName,
 				lpszAppName,
-				
+
 				// OpenGL requires WS_CLIPCHILDREN and WS_CLIPSIBLINGS
 				WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-	
+
 				// Window position and size
 				0, 0,
 				nScreenX, nScreenY,
@@ -242,10 +244,10 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 		// Window creation, setup for OpenGL
 		case WM_CREATE:
 			// Store the device context
-			hDC = GetDC(hWnd);		
+			hDC = GetDC(hWnd);
 
 			// Select the pixel format
-			SetDCPixelFormat(hDC);		
+			SetDCPixelFormat(hDC);
 
 			// Create the rendering context and make it current
 			hRC = wglCreateContext(hDC);
@@ -268,7 +270,7 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 			// is gone.
 			PostQuitMessage(0);
 			break;
-        
+
 		// Window is resized.
 		case WM_SIZE:
 			// Call our function which modifies the clipping
@@ -277,17 +279,17 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 			break;
 
 		// Timer, moves and bounces the rectangle, simply calls
-		// our previous OnIdle function, then invalidates the 
+		// our previous OnIdle function, then invalidates the
 		// window so it will be redrawn.
 		case WM_TIMER:
 			{
 			IdleFunction();
-		
+
 			InvalidateRect(hWnd,NULL,FALSE);
 			}
 			break;
 
-		// The painting function.  This message sent by Windows 
+		// The painting function.  This message sent by Windows
 		// whenever the screen needs updating.
 		case WM_PAINT:
 			{
@@ -311,5 +313,3 @@ LRESULT CALLBACK WndProc(	HWND 	hWnd,
 
     return (0L);
 	}
-
-

@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -34,7 +35,7 @@ void RenderScene(void)
 	// Get supported point size range and step size
 	glGetFloatv(GL_POINT_SIZE_RANGE,sizes);
 	glGetFloatv(GL_POINT_SIZE_GRANULARITY,&step);
-	
+
 	// Set the initial point size
 	curSize = sizes[0];
 
@@ -47,7 +48,7 @@ void RenderScene(void)
 		// Calculate x and y values on the circle
 		x = 50.0f*sin(angle);
 		y = 50.0f*cos(angle);
-	
+
 		// Specify the point size before the primative is specified
 		glPointSize(curSize);
 
@@ -69,7 +70,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Black background
@@ -126,9 +127,9 @@ void ChangeSize(int w, int h)
 	glLoadIdentity();
 
 	// Establish clipping volume (left, right, bottom, top, near, far)
-    if (w <= h) 
+    if (w <= h)
 		glOrtho (-nRange, nRange, -nRange*h/w, nRange*h/w, -nRange, nRange);
-    else 
+    else
 		glOrtho (-nRange*w/h, nRange*w/h, -nRange, nRange, -nRange, nRange);
 
 	// Reset Model view matrix stack

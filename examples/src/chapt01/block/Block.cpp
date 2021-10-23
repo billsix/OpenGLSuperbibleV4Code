@@ -3,9 +3,13 @@
 // Demonstrates an assortment of basic 3D concepts
 // Program by Richard S. Wright Jr.
 
+
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"
+
 #include <math.h>
+
 #include <stdlib.h>
 
 // Keep track of effects step
@@ -33,7 +37,7 @@ void RenderScene(void)
 	{
 	M3DMatrix44f mCubeTransform;
 	M3DVector4f pPlane;
-	
+
 
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -53,7 +57,7 @@ void RenderScene(void)
 			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(-100.0f, -25.3f, -100.0f);
 			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(-100.0f, -25.3f, 100.0f);		
+			glVertex3f(-100.0f, -25.3f, 100.0f);
 			glTexCoord2f(1.0f, 1.0f);
 			glVertex3f(100.0f,  -25.3f, 100.0f);
 			glTexCoord2f(1.0f, 0.0f);
@@ -65,7 +69,7 @@ void RenderScene(void)
 		glColor3f(0.0f, 0.0f, 0.90f); // Blue
 		glBegin(GL_QUADS);
 			glVertex3f(-100.0f, -25.3f, -100.0f);
-			glVertex3f(-100.0f, -25.3f, 100.0f);		
+			glVertex3f(-100.0f, -25.3f, 100.0f);
 			glVertex3f(100.0f,  -25.3f, 100.0f);
 			glVertex3f(100.0f,  -25.3f, -100.0f);
 		glEnd();
@@ -108,7 +112,7 @@ void RenderScene(void)
 			glBegin(GL_LINES);
 				glVertex3f(25.0f,25.0f,25.0f);
 				glVertex3f(25.0f,-25.0f,25.0f);
-				
+
 				glVertex3f(25.0f,-25.0f,25.0f);
 				glVertex3f(-25.0f,-25.0f,25.0f);
 
@@ -124,7 +128,7 @@ void RenderScene(void)
 				// Front Face
 				glVertex3f(25.0f,25.0f,25.0f);
 				glVertex3f(25.0f,25.0f,-25.0f);
-				
+
 				glVertex3f(25.0f,25.0f,-25.0f);
 				glVertex3f(-25.0f,25.0f,-25.0f);
 
@@ -143,7 +147,7 @@ void RenderScene(void)
 				glVertex3f(25.0f,-25.0f,-25.0f);
 				glVertex3f(25.0f,-25.0f,25.0f);
 			glEnd();
-		
+
 			break;
 
 		// Uniform colored surface, looks 2D and goofey
@@ -163,16 +167,16 @@ void RenderScene(void)
 
 			// Disable lighting, we'll just draw the shadow as black
 			glDisable(GL_LIGHTING);
-			
+
 			glPushMatrix();
 
 			m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
 			m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
 			//MakeShadowMatrix(ground, lightpos, cubeXform);
 			glMultMatrixf(mCubeTransform);
-			
-			glTranslatef(-10.0f, 0.0f, 10.0f);			
-			
+
+			glTranslatef(-10.0f, 0.0f, 10.0f);
+
 			// Set drawing color to Black
 			glColor3f(0.0f, 0.0f, 0.0f);
 
@@ -222,27 +226,27 @@ void RenderScene(void)
 				glTexCoord2f(0.0f, 1.0f);
 				glVertex3f(25.0f,25.0f,25.0f);
 			glEnd();
-		
+
 
 			glPopMatrix();
 
 			// Disable lighting, we'll just draw the shadow as black
 			glDisable(GL_LIGHTING);
 			glDisable(GL_TEXTURE_2D);
-			
+
 			glPushMatrix();
 
 			m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
 			m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
-			glMultMatrixf(mCubeTransform);			
-			
-			glTranslatef(-10.0f, 0.0f, 10.0f);			
-			
+			glMultMatrixf(mCubeTransform);
+
+			glTranslatef(-10.0f, 0.0f, 10.0f);
+
 			// Set drawing color to Black
 			glColor3f(0.0f, 0.0f, 0.0f);
 			glutSolidCube(50.0f);
 			break;
-			
+
 		}
 
 	glPopMatrix();
@@ -252,7 +256,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
         GLbyte *pBytes;
@@ -264,7 +268,7 @@ void SetupRC()
 
         glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glGenTextures(4, textures);
-        
+
 	// Load the texture objects
         pBytes = gltLoadTGA("floor.tga", &nWidth, &nHeight, &nComponents, &format);
         glBindTexture(GL_TEXTURE_2D, textures[0]);
@@ -334,12 +338,12 @@ void ChangeSize(int w, int h)
 		h = 1;
 
 	// Keep the square square
-	if (w <= h) 
+	if (w <= h)
 		{
 		windowHeight = 100.0f*(GLfloat)h/(GLfloat)w;
 		windowWidth = 100.0f;
 		}
-    else 
+    else
 		{
 		windowWidth = 100.0f*(GLfloat)w/(GLfloat)h;
 		windowHeight = 100.0f;

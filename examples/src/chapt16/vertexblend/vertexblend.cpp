@@ -4,6 +4,7 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/glframe.h"   // OpenGL toolkit
 
 #include <stdio.h>
@@ -151,7 +152,7 @@ void PrepareShader(GLint shaderNum)
 }
 
 // Draw a cylinder with supplied dimensions
-void DrawCylinder(GLfloat length, GLfloat diameter1, GLfloat diameter2, 
+void DrawCylinder(GLfloat length, GLfloat diameter1, GLfloat diameter2,
                   GLfloat startWeight, GLfloat endWeight)
 {
     int numFacets = 50;
@@ -345,11 +346,11 @@ void RenderScene(void)
     }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glViewport(0, 0, windowWidth, windowHeight);
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -372,10 +373,10 @@ void RenderScene(void)
 
         needsValidation[0] = GL_FALSE;
     }
-    
+
     // Draw objects in the scene
     DrawModels();
-    
+
     if (glGetError() != GL_NO_ERROR)
         fprintf(stderr, "GL Error!\n");
 
@@ -384,7 +385,7 @@ void RenderScene(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     GLint i;
@@ -392,8 +393,8 @@ void SetupRC()
     fprintf(stdout, "Vertex Blending Demo\n\n");
 
     // Make sure required functionality is available!
-    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_vertex_shader || 
-                              !GLEE_ARB_shader_objects || 
+    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_vertex_shader ||
+                              !GLEE_ARB_shader_objects ||
                               !GLEE_ARB_shading_language_100))
     {
         fprintf(stderr, "GLSL extensions not available!\n");
@@ -402,7 +403,7 @@ void SetupRC()
     }
 
     // Make sure we have multitexture, cube maps, and texenv add!
-    if (!GLEE_VERSION_1_3 && (!GLEE_ARB_multitexture || 
+    if (!GLEE_VERSION_1_3 && (!GLEE_ARB_multitexture ||
                               !GLEE_ARB_texture_cube_map ||
                               !GLEE_ARB_texture_env_add))
     {
@@ -422,7 +423,7 @@ void SetupRC()
     fprintf(stdout, "\ty/Y\t\tMove  +/- in y direction\n");
     fprintf(stdout, "\tz/Z\t\tMove  +/- in z direction\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 

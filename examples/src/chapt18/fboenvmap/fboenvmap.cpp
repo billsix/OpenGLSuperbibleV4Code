@@ -4,9 +4,11 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/stopwatch.h" // General purpose stop watch class
 
 #include <assert.h>
+
 #include <stdio.h>
 
 GLboolean npotTexturesAvailable = GL_FALSE;
@@ -44,7 +46,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_QUADS);
         glVertex3f(-100.0f, -25.0f, -100.0f);
-        glVertex3f(-100.0f, -25.0f, 100.0f);		
+        glVertex3f(-100.0f, -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, -100.0f);
     glEnd();
@@ -56,7 +58,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-100.0f, -25.0f, 100.0f);		
+        glVertex3f(-100.0f, -25.0f, 100.0f);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -74,7 +76,7 @@ void DrawModels(GLboolean drawTeapot)
         glTexCoord2f(1.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(100.0f, -25.0f, 100.0f);		
+        glVertex3f(100.0f, -25.0f, 100.0f);
     glEnd();
     glBindTexture(GL_TEXTURE_2D, wallTextureID[1]);
     glNormal3f(0.0f, 0.0f, 1.0f);
@@ -82,7 +84,7 @@ void DrawModels(GLboolean drawTeapot)
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(-100.0f, -25.0f, -100.0f);
         glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-100.0f, 125.0f, -100.0f);		
+        glVertex3f(-100.0f, 125.0f, -100.0f);
         glTexCoord2f(1.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, -100.0f);
         glTexCoord2f(1.0f, 0.0f);
@@ -92,7 +94,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, 0.0f, -1.0f);
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(100.0f, -25.0f, 100.0f);		
+        glVertex3f(100.0f, -25.0f, 100.0f);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -107,7 +109,7 @@ void DrawModels(GLboolean drawTeapot)
     glNormal3f(0.0f, -1.0f, 0.0f);
     glBegin(GL_QUADS);
         glVertex3f(-100.0f, 125.0f, -100.0f);
-        glVertex3f(-100.0f, 125.0f, 100.0f);		
+        glVertex3f(-100.0f, 125.0f, 100.0f);
         glVertex3f(100.0f,  125.0f, 100.0f);
         glVertex3f(100.0f,  125.0f, -100.0f);
     glEnd();
@@ -212,39 +214,39 @@ void RegenerateEnvMap(void)
         {
         case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
             // +X
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
             break;
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
             // -X
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
             break;
         case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
             // +Y
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
             break;
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
             // -Y
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f);
             break;
         case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
             // +Z
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f);
             break;
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             // -Z
-            gluLookAt(0.0f, 0.0f, 0.0f, 
+            gluLookAt(0.0f, 0.0f, 0.0f,
                       0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
             break;
         default:
             assert(0);
             break;
         }
-        
+
         if (useFBO)
             glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, i, envMapTextureID, 0);
 
@@ -276,7 +278,7 @@ void RenderScene(void)
 {
     static int iFrames = 0;           // Frame count
     static CStopWatch frameTimer;     // Render time
- 
+
     // Reset the stopwatch on first time
     if(iFrames == 0)
     {
@@ -316,11 +318,11 @@ void RenderScene(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glViewport(0, 0, windowWidth, windowHeight);
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -408,7 +410,7 @@ void RenderScene(void)
         // Draw objects in the scene, including teapot
         DrawModels(GL_TRUE);
     }
-    
+
     if (glGetError() != GL_NO_ERROR)
         fprintf(stderr, "GL Error!\n");
 
@@ -506,7 +508,7 @@ void SetupTextures(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     fprintf(stdout, "FBO Environment Mapping Demo\n\n");
@@ -549,7 +551,7 @@ void SetupRC()
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction\n\n");
     fprintf(stdout, "\tf/F\t\tChange polygon offset factor +/-\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -602,7 +604,7 @@ void ChangeSize(int w, int h)
         // env map is limited to size of window
         envMapSize = (w > h) ? h : w;
     }
-    
+
     if (!npotTexturesAvailable)
     {
         // Find the largest power of two that will fit in window.

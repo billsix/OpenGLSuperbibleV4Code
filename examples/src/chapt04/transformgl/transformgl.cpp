@@ -4,11 +4,13 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"    // Math3D Library
+
 #include <math.h>
 
-        
-        
+
+
 // Called to draw scene
 void RenderScene(void)
     {
@@ -16,31 +18,31 @@ void RenderScene(void)
 
     static GLfloat yRot = 0.0f;         // Rotation angle for animation
     yRot += 0.5f;
-        
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
     // Build a rotation matrix
     m3dRotationMatrix44(transformationMatrix, m3dDegToRad(yRot), 0.0f, 1.0f, 0.0f);
     transformationMatrix[12] = 0.0f;
     transformationMatrix[13] = 0.0f;
     transformationMatrix[14] = -2.5f;
-        
+
     glLoadMatrixf(transformationMatrix);
 
     gltDrawTorus(0.35f, 0.15f, 40, 20);
-    
+
     // Do the buffer Swap
     glutSwapBuffers();
     }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Bluish background
     glClearColor(0.0f, 0.0f, .50f, 1.0f );
-         
+
     // Draw everything as wire frame
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
@@ -67,16 +69,16 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     }

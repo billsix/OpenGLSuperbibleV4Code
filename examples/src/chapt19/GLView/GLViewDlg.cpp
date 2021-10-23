@@ -2,8 +2,11 @@
 //
 
 #include "stdafx.h"
+
 #include "GLView.h"
+
 #include "GLViewDlg.h"
+
 #include ".\glviewdlg.h"
 
 #ifdef _DEBUG
@@ -98,10 +101,10 @@ END_MESSAGE_MAP()
 BOOL CGLViewDlg::OnInitDialog()
 	{
 	PIXELFORMATDESCRIPTOR pfd;		// Pixel format descriptor
-	char cBuffer[64];				// String buffer 
+	char cBuffer[64];				// String buffer
 	char cOutput[128];
 	int nTabs[] = { 16, 40, 40+46, 64+46, 95+46, 159+46, 195+46, 222+46 };
-	
+
 	CDialog::OnInitDialog();
 	m_ListBox.SetTabStops(8, nTabs);
 
@@ -127,7 +130,7 @@ BOOL CGLViewDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
-	
+
 	WNDCLASS wndClass;
 
 	wndClass.style = CS_OWNDC;
@@ -157,7 +160,7 @@ BOOL CGLViewDlg::OnInitDialog()
 		{
 		// Get description of pixel format
 		DescribePixelFormat(hDC, i, pfd.nSize, &pfd);
-		
+
 		// Pixel format identifier
 		wsprintf(cOutput,"%d\t",i);
 
@@ -190,7 +193,7 @@ BOOL CGLViewDlg::OnInitDialog()
 
 
 		// Color
-		wsprintf(cBuffer,"%d (%d-%d-%d-%d)\t",pfd.cColorBits, pfd.cRedBits, 
+		wsprintf(cBuffer,"%d (%d-%d-%d-%d)\t",pfd.cColorBits, pfd.cRedBits,
 			pfd.cGreenBits, pfd.cBlueBits, pfd.cAlphaBits);
 		strcat(cOutput, cBuffer);
 
@@ -245,13 +248,13 @@ void CGLViewDlg::OnSysCommand(UINT nID, LPARAM lParam)
 		{
 		CDialog::OnSysCommand(nID, lParam);
 		}
-	}	
+	}
 
 // If you add a minimize button to your dialog, you will need the code below
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
-void CGLViewDlg::OnPaint() 
+void CGLViewDlg::OnPaint()
 	{
 	if (IsIconic())
 		{
@@ -285,7 +288,7 @@ HCURSOR CGLViewDlg::OnQueryDragIcon()
 
 // Whenever the selection in the list box changes, we must destroy the current
 // window if it exists, and create a new one
-void CGLViewDlg::OnSelchangeList() 
+void CGLViewDlg::OnSelchangeList()
 	{
 	// Destroy the window and reset the pixel format
 	m_glWnd.DestroyWindow();
@@ -293,7 +296,7 @@ void CGLViewDlg::OnSelchangeList()
 
 	m_glWnd.Create("OpenGLClass",NULL,WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 			newRect,this,901,NULL);
-	
+
 	m_glWnd.Invalidate(FALSE);
 
     m_lbWGLExtensions.ResetContent();
@@ -322,7 +325,7 @@ void CGLViewDlg::OnSelchangeList()
 			m_lbGLExtensions.AddString(szTemp);
 			szTemp = strtok(NULL," ");
 			}
-		
+
 		free(szStringTemp);
 
 
@@ -337,16 +340,16 @@ void CGLViewDlg::OnSelchangeList()
 			if(wglGetExtensionsStringARB != NULL)
 				{
 				szStringTemp = strdup((const char *)wglGetExtensionsStringARB(m_glWnd.m_hDC));
-				
+
 				szTemp = strtok(szStringTemp," ");
 				while(szTemp != NULL)
 					{
 					m_lbWGLExtensions.AddString(szTemp);
 					szTemp = strtok(NULL," ");
 					}
-				
+
 				free(szStringTemp);
-			
+
 				}
 			}
 		}
@@ -363,14 +366,14 @@ void CGLViewDlg::OnBnClickedButton1()
     CFileDialog fileDlg (TRUE, "txt", "PixelFormats.txt",
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, NULL, NULL);
 
-    // Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+    // Display the file dialog. When user clicks OK, fileDlg.DoModal()
     // returns IDOK.
     if( fileDlg.DoModal() == IDOK )
     {
         DWORD foo;
 
         CString pathName = fileDlg.GetPathName();
-   
+
         // Implement opening and reading file in here.
         hFile=CreateFile(pathName, FILE_WRITE_DATA, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 

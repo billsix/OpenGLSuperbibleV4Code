@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -36,8 +37,8 @@ void RenderScene(void)
 		{
 		x = 50.0f*sin(angle);
 		y = 50.0f*cos(angle);
-	
-		// Specify the point and move the Z value up a little	
+
+		// Specify the point and move the Z value up a little
 		glVertex3f(x, y, z);
 		z += 0.5f;
 		}
@@ -53,7 +54,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Black background
@@ -110,9 +111,9 @@ void ChangeSize(int w, int h)
 	glLoadIdentity();
 
 	// Establish clipping volume (left, right, bottom, top, near, far)
-    if (w <= h) 
+    if (w <= h)
 		glOrtho (-nRange, nRange, -nRange*h/w, nRange*h/w, -nRange, nRange);
-    else 
+    else
 		glOrtho (-nRange*w/h, nRange*w/h, -nRange, nRange, -nRange, nRange);
 
 	glMatrixMode(GL_MODELVIEW);

@@ -4,34 +4,35 @@
 // rwright@starstonesoftware.com
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
-	
+
 ///////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void)
 	{
         static GLdouble dRadius = 0.1;
         static GLdouble dAngle = 0.0;
-        
+
         // Clear blue window
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
-        
+
         if(dAngle == 0.0)
             glClear(GL_COLOR_BUFFER_BIT);
-                
+
         glBegin(GL_POINTS);
             glVertex2d(dRadius * cos(dAngle), dRadius * sin(dAngle));
         glEnd();
-        
+
         dRadius *= 1.01;
         dAngle += 0.1;
-        
+
         if(dAngle > 30.0)
             {
             dRadius = 0.1;
             dAngle = 0.0;
             }
-        
+
         glFlush();
         }
 

@@ -3,11 +3,16 @@
 // OpenGL SuperBible
 // Richard S. Wright Jr.
 #include "../../shared/gltools.h"   // GLTools
+
 #include "../../shared/math3d.h"    // 3D Math Library
+
 #include <stdlib.h>
 
+
 #include "imgui.h"
+
 #include "imgui_impl_glut.h"
+
 #include "imgui_impl_opengl2.h"
 
 // Rotation amounts
@@ -50,7 +55,7 @@ void SetupRC()
     GLbyte *pBytes;
     GLint iWidth, iHeight, iComponents;
     GLenum eFormat;
-    
+
     // Light values and coordinates
     GLfloat  whiteLight[] = { 0.05f, 0.05f, 0.05f, 1.0f };
     GLfloat  sourceLight[] = { 0.25f, 0.25f, 0.25f, 1.0f };
@@ -72,13 +77,13 @@ void SetupRC()
 
     // Enable color tracking
     glEnable(GL_COLOR_MATERIAL);
-	
+
     // Set Material properties to follow glColor values
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
     // Black blue background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
-    
+
     // Load texture
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     pBytes = gltLoadTGA("stone.tga", &iWidth, &iHeight, &iComponents, &eFormat);
@@ -88,7 +93,7 @@ void SetupRC()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     free(pBytes);
-    
+
     }
 
 // Respond to arrow keys
@@ -105,7 +110,7 @@ void SpecialKeys(int key, int x, int y)
 
 	if(key == GLUT_KEY_RIGHT)
 		yRot += 5.0f;
-                
+
         xRot = (GLfloat)((const int)xRot % 360);
         yRot = (GLfloat)((const int)yRot % 360);
 
@@ -228,7 +233,7 @@ void RenderScene(void)
                               { 0.5f, 0.0f, -0.50f },    // Back right    2
                               { 0.5f, 0.0f, 0.5f },      // Front right   3
                               { -0.5f, 0.0f, 0.5f }};    // Front left    4
-                              
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -246,23 +251,23 @@ void RenderScene(void)
             glNormal3f(0.0f, -1.0f, 0.0f);
             glTexCoord2f(1.0f, 1.0f);
             glVertex3fv(vCorners[2]);
-            
+
             glTexCoord2f(0.0f, 0.0f);
             glVertex3fv(vCorners[4]);
-            
+
             glTexCoord2f(0.0f, 1.0f);
             glVertex3fv(vCorners[1]);
-            
-            
+
+
             glTexCoord2f(1.0f, 1.0f);
             glVertex3fv(vCorners[2]);
-            
+
             glTexCoord2f(1.0f, 0.0f);
             glVertex3fv(vCorners[3]);
-            
+
             glTexCoord2f(0.0f, 0.0f);
             glVertex3fv(vCorners[4]);
-            
+
             // Front Face
             m3dFindNormal(vNormal, vCorners[0], vCorners[4], vCorners[3]);
             glNormal3fv(vNormal);
@@ -272,7 +277,7 @@ void RenderScene(void)
             glVertex3fv(vCorners[4]);
             glTexCoord2f(1.0f, 0.0f);
             glVertex3fv(vCorners[3]);
-            
+
             // Left Face
             m3dFindNormal(vNormal, vCorners[0], vCorners[1], vCorners[4]);
             glNormal3fv(vNormal);
@@ -288,13 +293,13 @@ void RenderScene(void)
             glNormal3fv(vNormal);
             glTexCoord2f(0.5f, 1.0f);
             glVertex3fv(vCorners[0]);
-            
+
             glTexCoord2f(0.0f, 0.0f);
             glVertex3fv(vCorners[2]);
-            
+
             glTexCoord2f(1.0f, 0.0f);
             glVertex3fv(vCorners[1]);
-            
+
             // Right Face
             m3dFindNormal(vNormal, vCorners[0], vCorners[3], vCorners[2]);
             glNormal3fv(vNormal);
@@ -305,7 +310,7 @@ void RenderScene(void)
             glTexCoord2f(1.0f, 0.0f);
             glVertex3fv(vCorners[2]);
         glEnd();
-    
+
 
     // Restore the matrix state
     glPopMatrix();
@@ -364,9 +369,6 @@ int main(int argc, char *argv[])
 
 
     glutMainLoop();
-    
+
     return 0;
     }
-    
-    
-  

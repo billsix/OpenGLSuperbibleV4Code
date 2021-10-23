@@ -4,9 +4,11 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/glframe.h"   // OpenGL toolkit
 
 #include <stdio.h>
+
 #include <assert.h>
 
 #define HDRBALL           0
@@ -16,8 +18,8 @@
 #define TOTAL_SHADER_SETS 4
 
 GLuint fShader[TOTAL_SHADER_SETS]; // shader object names
-GLuint vShader[TOTAL_SHADER_SETS]; 
-GLuint progObj[TOTAL_SHADER_SETS]; 
+GLuint vShader[TOTAL_SHADER_SETS];
+GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
 char *shaderNames[TOTAL_SHADER_SETS] = {"hdrball", "gaussian", "combine", "show2d"};
 
@@ -249,7 +251,7 @@ void FirstPass(void)
 
         needsValidation[HDRBALL] = GL_FALSE;
     }
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -376,7 +378,7 @@ void FinalPass(void)
     case JUST_AFTER_GLOW:
     case FULL_SCENE:
         glUseProgram(progObj[COMBINE]);
-        glBindTexture(GL_TEXTURE_2D, 
+        glBindTexture(GL_TEXTURE_2D,
             ((whichStopPoint == JUST_BLOOM) || (whichStopPoint == JUST_AFTER_GLOW)) ? 0 : textureID[0]);
         glUniform1i(afterGlowLoc, ((whichStopPoint >= JUST_AFTER_GLOW) && afterGlowValid) ? 1 : 0);
         break;
@@ -514,7 +516,7 @@ void RenderScene(void)
     }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     // Original Scene + Bright Pass
@@ -580,7 +582,7 @@ void SetupTextures(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     GLint i;
@@ -588,10 +590,10 @@ void SetupRC()
     fprintf(stdout, "High Dynamic Range Bloom Demo\n\n");
 
     // Make sure required functionality is available!
-    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_draw_buffers || 
-                              !GLEE_ARB_fragment_shader || 
-                              !GLEE_ARB_vertex_shader || 
-                              !GLEE_ARB_shader_objects || 
+    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_draw_buffers ||
+                              !GLEE_ARB_fragment_shader ||
+                              !GLEE_ARB_vertex_shader ||
+                              !GLEE_ARB_shader_objects ||
                               !GLEE_ARB_shading_language_100))
     {
         fprintf(stderr, "GLSL extensions not available!\n");
@@ -651,7 +653,7 @@ void SetupRC()
     fprintf(stdout, "\ty/Y\t\tMove +/- in y direction\n");
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 

@@ -6,7 +6,9 @@
 #include "../../shared/gltools.h"
 
 #include "imgui.h"
+
 #include "imgui_impl_glut.h"
+
 #include "imgui_impl_opengl3.h"
 
 #undef FREEGLUT_VERSION_2_0

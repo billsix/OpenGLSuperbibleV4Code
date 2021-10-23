@@ -4,6 +4,7 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/glframe.h"   // OpenGL toolkit
 
 #include <stdio.h>
@@ -22,7 +23,7 @@
 
 GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
-char *shaderNames[TOTAL_SHADERS] = {"simple", "diffuse", "specular", "sepspec", "texspec", 
+char *shaderNames[TOTAL_SHADERS] = {"simple", "diffuse", "specular", "sepspec", "texspec",
                                     "3lights", "fogcoord", "fog", "ptsize", "stretch"};
 
 GLint whichShader = SIMPLE;             // current shader
@@ -204,7 +205,7 @@ void DrawModels(void)
     glNormal3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_QUADS);
         glVertex3f(-100.0f, -25.0f, -100.0f);
-        glVertex3f(-100.0f, -25.0f, 100.0f);		
+        glVertex3f(-100.0f, -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, 100.0f);
         glVertex3f(100.0f,  -25.0f, -100.0f);
     glEnd();
@@ -279,11 +280,11 @@ void RenderScene(void)
     }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glViewport(0, 0, windowWidth, windowHeight);
-    
+
     if ((whichShader == FOGCOORD) || (whichShader == FOG))
     {
         // Use a green-gray color for fog
@@ -294,7 +295,7 @@ void RenderScene(void)
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
     }
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -317,10 +318,10 @@ void RenderScene(void)
 
         needsValidation[whichShader] = GL_FALSE;
     }
-    
+
     // Draw objects in the scene
     DrawModels();
-    
+
     if (glGetError() != GL_NO_ERROR)
         fprintf(stderr, "GL Error!\n");
 
@@ -329,7 +330,7 @@ void RenderScene(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     GLint i;
@@ -337,8 +338,8 @@ void SetupRC()
     fprintf(stdout, "Vertex Shaders Demo\n\n");
 
     // Make sure required functionality is available!
-    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_vertex_shader || 
-                              !GLEE_ARB_shader_objects || 
+    if (!GLEE_VERSION_2_0 && (!GLEE_ARB_vertex_shader ||
+                              !GLEE_ARB_shader_objects ||
                               !GLEE_ARB_shading_language_100))
     {
         fprintf(stderr, "GLSL extensions not available!\n");
@@ -347,7 +348,7 @@ void SetupRC()
     }
 
     // Make sure we have multitexture, cube maps, and texenv add!
-    if (!GLEE_VERSION_1_3 && (!GLEE_ARB_multitexture || 
+    if (!GLEE_VERSION_1_3 && (!GLEE_ARB_multitexture ||
                               !GLEE_ARB_texture_cube_map ||
                               !GLEE_ARB_texture_env_add))
     {
@@ -367,7 +368,7 @@ void SetupRC()
     fprintf(stdout, "\ty/Y\t\tMove +/- in y direction, stretch for \"stretch\" shader\n");
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction, stretch for \"stretch\" shader\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -552,14 +553,14 @@ void SpecialKeys(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_LEFT:
-        if ((whichShader == FOGCOORD) || 
+        if ((whichShader == FOGCOORD) ||
             (whichShader == FOG))
             density -= 0.0005f;
         else
             lightRotation -= 5.0f;
         break;
     case GLUT_KEY_RIGHT:
-        if ((whichShader == FOGCOORD) || 
+        if ((whichShader == FOGCOORD) ||
             (whichShader == FOG))
             density += 0.0005f;
         else

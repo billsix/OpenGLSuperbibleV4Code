@@ -6,10 +6,15 @@
 // Program by Richard S. Wright Jr.
 
 #include <stdio.h>
+
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"    // 3D Math Library
+
 #include "../../shared/glframe.h"   // Frame class
+
 #include "../../shared/stopwatch.h" // Timer class
+
 #include <math.h>
 
 #define NUM_SPHERES      30
@@ -34,7 +39,7 @@ const char *szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
 
 // Display list identifiers
 GLuint sphereList, groundList, torusList;
-        
+
 int iMethod = 0;    // Without display lists
 
 // Forward declaration
@@ -46,7 +51,7 @@ void ProcessMenu(int value)
     {
     // Save menu identifier as method flag
     iMethod = value;
-        
+
     // Trigger a redraw
     glutPostRedisplay();
     }
@@ -54,7 +59,7 @@ void ProcessMenu(int value)
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     M3DVector3f vPoints[3] = {{ 0.0f, -0.4f, 0.0f },
@@ -62,10 +67,10 @@ void SetupRC()
                              { 5.0f, -0.4f, -5.0f }};
     int iSphere;
     int i;
-    
+
     // Grayish background
     glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
-   
+
     // Clear stencil buffer with zero, increment by one whenever anybody
     // draws into it. When stencil function is enabled, only write where
     // stencil value is zero. This prevents the transparent shadow from drawing
@@ -73,14 +78,14 @@ void SetupRC()
     glStencilOp(GL_INCR, GL_INCR, GL_INCR);
     glClearStencil(0);
     glStencilFunc(GL_EQUAL, 0x0, 0x01);
-    
+
     // Cull backs of polygons
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE_ARB);
-    
+
     // Setup light parameters
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, fNoLight);
     glLightfv(GL_LIGHT0, GL_AMBIENT, fLowLight);
@@ -88,58 +93,58 @@ void SetupRC()
     glLightfv(GL_LIGHT0, GL_SPECULAR, fBrightLight);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    
+
     glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-    
+
     // Calculate shadow matrix
     M3DVector4f pPlane;
     m3dGetPlaneEquation(pPlane, vPoints[0], vPoints[1], vPoints[2]);
     m3dMakePlanarShadowMatrix(mShadowMatrix, pPlane, fLightPos);
-    
+
     // Mostly use material tracking
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glMaterialfv(GL_FRONT, GL_SPECULAR, fBrightLight);
     glMateriali(GL_FRONT, GL_SHININESS, 128);
-  
-    
+
+
     // Randomly place the sphere inhabitants
     for(iSphere = 0; iSphere < NUM_SPHERES; iSphere++)
         {
         // Pick a random location between -20 and 20 at .1 increments
         spheres[iSphere].SetOrigin(((float)((rand() % 400) - 200) * 0.1f), 0.0, (float)((rand() % 400) - 200) * 0.1f);
         }
-      
+
     // Set up texture maps
     glEnable(GL_TEXTURE_2D);
     glGenTextures(NUM_TEXTURES, textureObjects);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    
-    
+
+
     for(i = 0; i < NUM_TEXTURES; i++)
         {
         GLbyte *pBytes;
         GLint iWidth, iHeight, iComponents;
         GLenum eFormat;
-        
+
         glBindTexture(GL_TEXTURE_2D, textureObjects[i]);
-        
+
         // Load this texture map
         pBytes = gltLoadTGA(szTextureFiles[i], &iWidth, &iHeight, &iComponents, &eFormat);
         gluBuild2DMipmaps(GL_TEXTURE_2D, iComponents, iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pBytes);
         free(pBytes);
-        
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         }
-        
+
     // Create display lists
     groundList = glGenLists(3);
     sphereList = groundList + 1;
     torusList = sphereList + 1;
-    
+
     // Create sphere display list
     glNewList(sphereList, GL_COMPILE);
        gltDrawSphere(0.1f, 40, 20);
@@ -149,7 +154,7 @@ void SetupRC()
     glNewList(torusList, GL_COMPILE);
        gltDrawTorus(0.35, 0.15, 61, 37);
     glEndList();
-    
+
     // Create the ground display list
     glNewList(groundList, GL_COMPILE);
         DrawGround();
@@ -179,11 +184,11 @@ void DrawGround(void)
     GLfloat s = 0.0f;
     GLfloat t = 0.0f;
     GLfloat texStep = 1.0f / (fExtent * .075f);
-    
+
     glBindTexture(GL_TEXTURE_2D, textureObjects[GROUND_TEXTURE]);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
+
     for(iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep)
         {
         t = 0.0f;
@@ -194,11 +199,11 @@ void DrawGround(void)
                 glTexCoord2f(s, t);
                 glNormal3f(0.0f, 1.0f, 0.0f);   // All Point up
                 glVertex3f(iStrip, y, iRun);
-                
+
                 glTexCoord2f(s + texStep, t);
                 glNormal3f(0.0f, 1.0f, 0.0f);   // All Point up
                 glVertex3f(iStrip + fStep, y, iRun);
-                
+
                 t += texStep;
                 }
         glEnd();
@@ -220,8 +225,8 @@ void DrawInhabitants(GLint nShadow)
         }
     else
         glColor4f(0.00f, 0.00f, 0.00f, .6f);  // Shadow color
-  
-        
+
+
     // Draw the randomly located spheres
     glBindTexture(GL_TEXTURE_2D, textureObjects[SPHERE_TEXTURE]);
     for(i = 0; i < NUM_SPHERES; i++)
@@ -237,7 +242,7 @@ void DrawInhabitants(GLint nShadow)
 
     glPushMatrix();
         glTranslatef(0.0f, 0.1f, -2.5f);
-    
+
         glPushMatrix();
             glRotatef(-yRot * 2.0f, 0.0f, 1.0f, 0.0f);
             glTranslatef(1.0f, 0.0f, 0.0f);
@@ -246,16 +251,16 @@ void DrawInhabitants(GLint nShadow)
             else
                 glCallList(sphereList);
         glPopMatrix();
-    
+
         if(nShadow == 0)
             {
             // Torus alone will be specular
             glMaterialfv(GL_FRONT, GL_SPECULAR, fBrightLight);
             }
-        
+
         glRotatef(yRot, 0.0f, 1.0f, 0.0f);
         glBindTexture(GL_TEXTURE_2D, textureObjects[TORUS_TEXTURE]);
-        if(iMethod == 0)   
+        if(iMethod == 0)
             gltDrawTorus(0.35, 0.15, 61, 37);
         else
             glCallList(torusList);
@@ -263,29 +268,29 @@ void DrawInhabitants(GLint nShadow)
     glPopMatrix();
     }
 
-        
+
 // Called to draw scene
 void RenderScene(void)
     {
     static int iFrames = 0;             // Frame count
     static CStopWatch frameTimer;       // Render time
-    
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
+
     glPushMatrix();
         frameCamera.ApplyCameraTransform();
-        
+
         // Position light before any other transformations
         glLightfv(GL_LIGHT0, GL_POSITION, fLightPos);
-        
+
         // Draw the ground
         glColor3f(1.0f, 1.0f, 1.0f);
         if(iMethod == 0)
             DrawGround();
         else
             glCallList(groundList);
-        
+
         // Draw shadows first
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
@@ -302,12 +307,12 @@ void RenderScene(void)
         glEnable(GL_LIGHTING);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
-        
+
         // Draw inhabitants normally
         DrawInhabitants(0);
 
     glPopMatrix();
-        
+
     // Do the buffer Swap
     glutSwapBuffers();
 
@@ -319,15 +324,15 @@ void RenderScene(void)
         {
         float fps;
         char cBuffer[64];
-        
+
         fps = 100.0f / frameTimer.GetElapsedSeconds();
         if(iMethod == 0)
             sprintf(cBuffer,"OpenGL SphereWorld without Display Lists %.1f fps", fps);
         else
             sprintf(cBuffer,"OpenGL SphereWorld with Display Lists %.1f fps", fps);
-            
+
         glutSetWindowTitle(cBuffer);
-        
+
         frameTimer.Reset();
         iFrames = 0;
         }
@@ -347,10 +352,10 @@ void SpecialKeys(int key, int x, int y)
 
     if(key == GLUT_KEY_LEFT)
 		frameCamera.RotateLocalY(0.1f);
-	   
+
     if(key == GLUT_KEY_RIGHT)
         frameCamera.RotateLocalY(-0.1f);
-                        
+
     // Refresh the Window
     glutPostRedisplay();
     }
@@ -375,18 +380,18 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
     }
 
 int main(int argc, char* argv[])
@@ -409,7 +414,7 @@ int main(int argc, char* argv[])
     glutTimerFunc(33, TimerFunction, 1);
 
     glutMainLoop();
-    
+
     ShutdownRC();
 
     return 0;

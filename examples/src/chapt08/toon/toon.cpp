@@ -4,7 +4,9 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"    // 3D Math Library
+
 #include <math.h>
 
 // Vector pointing towards the light

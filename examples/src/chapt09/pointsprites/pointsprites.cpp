@@ -3,7 +3,9 @@
 // Demonstrates point sprites
 // Program by Richard S. Wright Jr.
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/glframe.h"
+
 #include <math.h>
 
 
@@ -66,7 +68,7 @@ void ProcessMenu(int value)
         default:
             break;
         }
-        
+
     // Trigger a redraw
     glutPostRedisplay();
     }
@@ -81,13 +83,13 @@ void RenderScene(void)
     GLfloat y = 500.0f;
     GLfloat r = 50.0f;
     GLfloat angle = 0.0f;   // Another looping variable
-		        
+
     // Clear the window
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         
+
     // Everything is white
     glColor3f(1.0f, 1.0f, 1.0f);
-    
+
     if(drawMode == 3)
         {
         glEnable(GL_POINT_SPRITE);
@@ -102,21 +104,21 @@ void RenderScene(void)
         for(i = 0; i < SMALL_STARS; i++)
             glVertex2fv(vSmallStars[i]);
     glEnd();
-        
+
     // Draw medium sized stars
     glPointSize(12.0f);         // 3.0
     glBegin(GL_POINTS);
         for(i = 0; i< MEDIUM_STARS; i++)
             glVertex2fv(vMediumStars[i]);
     glEnd();
-        
+
     // Draw largest stars
     glPointSize(20.0f);      // 5.5
     glBegin(GL_POINTS);
         for(i = 0; i < LARGE_STARS; i++)
             glVertex2fv(vLargeStars[i]);
     glEnd();
-        
+
     glPointSize(120.0f);
     if(drawMode == 3)
         {
@@ -146,7 +148,7 @@ void RenderScene(void)
         glVertex2f(600.0f, 20.0f);
         glVertex2f(675.0f, 70.0f);
         glVertex2f(750.0f, 25.0f);
-        glVertex2f(800.0f, 90.0f);    
+        glVertex2f(800.0f, 90.0f);
     glEnd();
 
 
@@ -156,18 +158,18 @@ void RenderScene(void)
 
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     int i;
-        
+
     // Populate star list
     for(i = 0; i < SMALL_STARS; i++)
         {
         vSmallStars[i][0] = (GLfloat)(rand() % SCREEN_X);
         vSmallStars[i][1] = (GLfloat)(rand() % (SCREEN_Y - 100))+100.0f;
         }
-            
+
     // Populate star list
     for(i = 0; i < MEDIUM_STARS; i++)
         {
@@ -181,8 +183,8 @@ void SetupRC()
         vLargeStars[i][0] = (GLfloat)(rand() % SCREEN_X*10)/10.0f;
         vLargeStars[i][1] = (GLfloat)(rand() % (SCREEN_Y - 100)*10.0f)/ 10.0f +100.0f;
         }
-            
-            
+
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -194,16 +196,16 @@ void SetupRC()
     GLbyte *pBytes;
     GLint iWidth, iHeight, iComponents;
     GLenum eFormat;
-     
+
     glBindTexture(GL_TEXTURE_2D, textureObjects[0]);
-     
-       
+
+
     // Load this texture map
     glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
     pBytes = gltLoadTGA("star.tga", &iWidth, &iHeight, &iComponents, &eFormat);
     glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pBytes);
     free(pBytes);
-    
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -214,7 +216,7 @@ void SetupRC()
     pBytes = gltLoadTGA("moon.tga", &iWidth, &iHeight, &iComponents, &eFormat);
     glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pBytes);
     free(pBytes);
-    
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -263,7 +265,7 @@ int main(int argc, char* argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("Point Sprite Night Lights");
-	
+
 	// Create the Menu
 	glutCreateMenu(ProcessMenu);
 
@@ -272,7 +274,7 @@ int main(int argc, char* argv[])
     glutAddMenuEntry("Point Sprites", 3);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+
 	glutReshapeFunc(ChangeSize);
 	glutDisplayFunc(RenderScene);
 	SetupRC();

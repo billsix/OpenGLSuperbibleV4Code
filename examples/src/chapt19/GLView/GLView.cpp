@@ -2,7 +2,9 @@
 //
 
 #include "stdafx.h"
+
 #include "GLView.h"
+
 #include "GLViewDlg.h"
 
 #ifdef _DEBUG

@@ -2,7 +2,9 @@
 //
 
 #include "stdafx.h"
+
 #include "GLView.h"
+
 #include "GLWindow.h"
 
 #ifdef _DEBUG
@@ -74,7 +76,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CGLWindow message handlers
 
-void CGLWindow::OnPaint() 
+void CGLWindow::OnPaint()
 	{
 	static float fX = 0.0f;
 	static float fY = 0.0f;
@@ -201,7 +203,7 @@ void CGLWindow::OnPaint()
 		HBITMAP m_hBitmap, m_hOldBitmap;
 
 		m_hMemDC = CreateCompatibleDC(m_hDC);
-	
+
 		// Load the bitmap
 		m_hBitmap = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BM_NOGL));
 		m_hOldBitmap = (HBITMAP) SelectObject(m_hMemDC, m_hBitmap);
@@ -217,14 +219,14 @@ void CGLWindow::OnPaint()
 	ValidateRect(NULL);
 	}
 
-int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
-	
+
 	// Get the device context
 	m_hDC = ::GetDC(this->m_hWnd);
-	
+
 	// Set the Pixel Format
 	SetPixelFormat(m_hDC, m_nPixelFormat, NULL);
 
@@ -246,7 +248,7 @@ int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	    BYTE *pBytes;
 	    int nWidth, nHeight;
-	
+
 	    glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 		// Load the texture objects
@@ -305,20 +307,20 @@ int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			GL_BGR_EXT, GL_UNSIGNED_BYTE, pBytes);
 
 		}
-		
+
 	SetTimer(101, 30, NULL);
 
 	return 0;
 	}
 
-void CGLWindow::OnDestroy() 
+void CGLWindow::OnDestroy()
 	{
 	KillTimer(101);
 
 	CWnd::OnDestroy();
 
 	if(m_hRC)
-		{	
+		{
 		glDeleteTextures(6, m_Sides);
 
 
@@ -331,10 +333,10 @@ void CGLWindow::OnDestroy()
 	m_hDC = NULL;
 	}
 
-void CGLWindow::OnSize(UINT nType, int w, int h) 
+void CGLWindow::OnSize(UINT nType, int w, int h)
 	{
 	CWnd::OnSize(nType, w, h);
-	
+
 	GLfloat nRange = 100.0f;
 	GLfloat fAspect;
 
@@ -361,8 +363,8 @@ void CGLWindow::OnSize(UINT nType, int w, int h)
 	glTranslatef(0.0f, 0.0f, -250.0f);
 	}
 
-void CGLWindow::OnTimer(UINT nIDEvent) 
+void CGLWindow::OnTimer(UINT nIDEvent)
 {
-	InvalidateRect(NULL);	
+	InvalidateRect(NULL);
 	CWnd::OnTimer(nIDEvent);
 }

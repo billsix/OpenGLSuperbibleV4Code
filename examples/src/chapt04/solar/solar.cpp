@@ -5,6 +5,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -28,9 +29,9 @@ void RenderScene(void)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
-	// Translate the whole scene out and into view	
-	glTranslatef(0.0f, 0.0f, -300.0f);	
-	
+	// Translate the whole scene out and into view
+	glTranslatef(0.0f, 0.0f, -300.0f);
+
 	// Set material color, Red
 	// Sun
         glDisable(GL_LIGHTING);
@@ -75,7 +76,7 @@ void RenderScene(void)
 
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Light values and coordinates
@@ -94,7 +95,7 @@ void SetupRC()
 
 	// Enable color tracking
 	glEnable(GL_COLOR_MATERIAL);
-	
+
 	// Set Material properties to follow glColor values
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 

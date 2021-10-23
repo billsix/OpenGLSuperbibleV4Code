@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -96,10 +97,10 @@ void RenderScene(void)
 		glVertex2f(-20.0f,-40.0f);
 		glVertex2f(0.0f, -80.0f);
 		glEdgeFlag(bEdgeFlag);
-		glVertex2f(20.0f, -40.0f);		
+		glVertex2f(20.0f, -40.0f);
 		glEdgeFlag(GL_TRUE);
 
-		glVertex2f(20.0f, -40.0f);		
+		glVertex2f(20.0f, -40.0f);
 		glVertex2f(60.0f, -20.0f);
 		glEdgeFlag(bEdgeFlag);
 		glVertex2f(20.0f, 0.0f);
@@ -110,12 +111,12 @@ void RenderScene(void)
 		glVertex2f(-20.0f, 0.0f);
 		glVertex2f(-20.0f,-40.0f);
 		glVertex2f(20.0f, 0.0f);
-		
+
 		glVertex2f(-20.0f,-40.0f);
 		glVertex2f(20.0f, -40.0f);
 		glVertex2f(20.0f, 0.0f);
 		glEdgeFlag(GL_TRUE);
-	
+
 	// Done drawing Triangles
 	glEnd();
 
@@ -127,7 +128,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Black background
@@ -184,9 +185,9 @@ void ChangeSize(int w, int h)
 	glLoadIdentity();
 
 	// Establish clipping volume (left, right, bottom, top, near, far)
-    if (w <= h) 
+    if (w <= h)
 		glOrtho (-nRange, nRange, -nRange*h/w, nRange*h/w, -nRange, nRange);
-    else 
+    else
 		glOrtho (-nRange*w/h, nRange*w/h, -nRange, nRange, -nRange, nRange);
 
 	// Reset Model view matrix stack
@@ -203,7 +204,7 @@ int main(int argc, char* argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutCreateWindow("Solid and Outlined Star");
-	
+
 	// Create the Menu
 	nModeMenu = glutCreateMenu(ProcessMenu);
 	glutAddMenuEntry("Solid",1);
@@ -218,7 +219,7 @@ int main(int argc, char* argv[])
 	glutAddSubMenu("Mode", nModeMenu);
 	glutAddSubMenu("Edges", nEdgeMenu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+
 	glutReshapeFunc(ChangeSize);
 	glutSpecialFunc(SpecialKeys);
 	glutDisplayFunc(RenderScene);

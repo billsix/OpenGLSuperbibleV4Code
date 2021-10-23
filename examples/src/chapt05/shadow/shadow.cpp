@@ -3,7 +3,8 @@
 // Demonstrates simple planar shadows
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h"     
+#include "../../shared/gltools.h"
+
 #include "../../shared/math3d.h"
 
 // Rotation amounts
@@ -45,8 +46,8 @@ void DrawJet(int nShadow)
 		glVertex3f(0.0f, 0.0f, 60.0f);
 		glVertex3f(-15.0f, 0.0f, 30.0f);
 		glVertex3f(15.0f,0.0f,30.0f);
-                
-	
+
+
         // Verticies for this panel
         {
         M3DVector3f vPoints[3] = {{ 15.0f, 0.0f,  30.0f},
@@ -59,7 +60,7 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[0]);
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
-        }	
+        }
 
 
         {
@@ -87,25 +88,25 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                	
+
         {
         M3DVector3f vPoints[3] = {{ 0.0f, 0.0f, -56.0f },
                                   { 0.0f, 15.0f, 30.0f },
                                   { 15.0f,0.0f,30.0f }};
-	
+
         m3dFindNormal(vNormal, vPoints[0], vPoints[1], vPoints[2]);
         glNormal3fv(vNormal);
 		glVertex3fv(vPoints[0]);
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                		
-    
+
+
 		glNormal3f(0.0f, -1.0f, 0.0f);
 		glVertex3f(15.0f,0.0f,30.0f);
 		glVertex3f(-15.0f, 0.0f, 30.0f);
 		glVertex3f(0.0f, 0.0f, -56.0f);
-    
+
         ///////////////////////////////////////////////
         // Left wing
         // Large triangle for bottom of wing
@@ -120,20 +121,20 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
-                        	
+
+
         {
         M3DVector3f vPoints[3] = {{ 60.0f, 2.0f, -8.0f},
                                    {0.0f, 7.0f, -8.0f},
                                    {0.0f,2.0f,27.0f }};
-                
+
         m3dFindNormal(vNormal, vPoints[0], vPoints[1], vPoints[2]);
         glNormal3fv(vNormal);
 		glVertex3fv(vPoints[0]);
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
+
         {
         M3DVector3f vPoints[3] = {{60.0f, 2.0f, -8.0f},
 					{-60.0f, 2.0f, -8.0f},
@@ -145,7 +146,7 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
+
         {
         M3DVector3f vPoints[3] = {{0.0f,2.0f,27.0f},
                                     {0.0f, 7.0f, -8.0f},
@@ -157,8 +158,8 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
-                        
+
+
         // Tail section///////////////////////////////
         // Bottom of back fin
 		glNormal3f(0.0f, -1.0f, 0.0f);
@@ -177,8 +178,8 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
-                        
+
+
         {
         M3DVector3f vPoints[3] = {{ 0.0f, 4.0f, -57.0f },
                 { -30.0f, -0.5f, -57.0f },
@@ -202,7 +203,7 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
+
         {
         M3DVector3f vPoints[3] = {{ 0.0f,0.5f,-40.0f },
 					{ 3.0f, 0.5f, -57.0f },
@@ -214,8 +215,8 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
-                        
+
+
         {
         M3DVector3f vPoints[3] = {{ 0.0f, 25.0f, -65.0f },
 					{ -3.0f, 0.5f, -57.0f},
@@ -227,7 +228,7 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
+
         {
         M3DVector3f vPoints[3] = {{ 3.0f,0.5f,-57.0f },
 					{ -3.0f, 0.5f, -57.0f },
@@ -239,8 +240,8 @@ void DrawJet(int nShadow)
 		glVertex3fv(vPoints[1]);
 		glVertex3fv(vPoints[2]);
         }
-                
-                
+
+
         glEnd();
 	}
 
@@ -274,7 +275,7 @@ void RenderScene(void)
     DrawJet(0);
 
     // Restore original matrix state
-    glPopMatrix();	
+    glPopMatrix();
 
 
     // Get ready to draw the shadow and the ground
@@ -291,7 +292,7 @@ void RenderScene(void)
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
 
     // Pass true to indicate drawing shadow
-    DrawJet(1);	
+    DrawJet(1);
 
     // Restore the projection to normal
     glPopMatrix();
@@ -311,7 +312,7 @@ void RenderScene(void)
     }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Any three points on the ground (counter clockwise order)
@@ -332,7 +333,7 @@ void SetupRC()
 
     // Enable color tracking
     glEnable(GL_COLOR_MATERIAL);
-	
+
     // Set Material properties to follow glColor values
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
@@ -350,7 +351,7 @@ void SetupRC()
 
     // Calculate projection matrix to draw shadow on the ground
     m3dMakePlanarShadowMatrix(shadowMat, vPlaneEquation, lightPos);
-    
+
     glEnable(GL_NORMALIZE);
     }
 
@@ -393,7 +394,7 @@ void ChangeSize(int w, int h)
     if(h == 0)
         h = 1;
 
-	
+
     // Set Viewport to window dimensions
     glViewport(0, 0, w, h);
 

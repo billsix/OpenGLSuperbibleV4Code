@@ -6,10 +6,13 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"
+
 #include "../../shared/glframe.h"
 
 #include <math.h>
+
 #include <stdlib.h>
 
 #define NUM_SPHERES      30
@@ -25,35 +28,35 @@ GLfloat fBrightLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 M3DMatrix44f mShadowMatrix;
 
 
-        
+
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Calculate shadow matrix
     M3DVector3f vPoints[3] = {{ 0.0f, -0.4f, 0.0f },
                              { 10.0f, -0.4f, 0.0f },
                              { 5.0f, -0.4f, -5.0f }};
-    
+
     int iSphere;
-    
+
     // Grayish background
     glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
-         
+
     // Setup Fog parameters
     glEnable(GL_FOG);                   // Turn Fog on
     glFogfv(GL_FOG_COLOR, fLowLight);   // Set fog color to match background
     glFogf(GL_FOG_START, 5.0f);         // How far away does the fog start
     glFogf(GL_FOG_END, 30.0f);          // How far away does the fog stop
     glFogi(GL_FOG_MODE, GL_LINEAR);     // Which fog equation do I use?
-         
+
     // Cull backs of polygons
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    
+
     // Setup light parameters
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, fNoLight);
     glLightfv(GL_LIGHT0, GL_AMBIENT, fLowLight);
@@ -61,7 +64,7 @@ void SetupRC()
     glLightfv(GL_LIGHT0, GL_SPECULAR, fBrightLight);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    
+
 
     // Get the plane equation from three points on the ground
     M3DVector4f vPlaneEquation;
@@ -69,16 +72,16 @@ void SetupRC()
 
     // Calculate projection matrix to draw shadow on the ground
     m3dMakePlanarShadowMatrix(mShadowMatrix, vPlaneEquation, fLightPos);
-    
+
     // Mostly use material tracking
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glMateriali(GL_FRONT, GL_SHININESS, 128);
-        
+
     // Randomly place the sphere inhabitants
     for(iSphere = 0; iSphere < NUM_SPHERES; iSphere++)
         {
-        spheres[iSphere].SetOrigin((float)((rand() % 400) - 200) * 0.1f, 0.0, 
+        spheres[iSphere].SetOrigin((float)((rand() % 400) - 200) * 0.1f, 0.0,
                                             (float)((rand() % 400) - 200) * 0.1f);
         }
     }
@@ -92,12 +95,12 @@ void DrawGround(void)
     GLfloat fStep = 1.0f;
     GLfloat y = -0.4f;
     GLfloat iStrip, iRun;
-    
+
     for(iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep)
         {
         glBegin(GL_TRIANGLE_STRIP);
             glNormal3f(0.0f, 1.0f, 0.0f);   // All Point up
-            
+
             for(iRun = fExtent; iRun >= -fExtent; iRun -= fStep)
                 {
                 glVertex3f(iStrip, y, iRun);
@@ -118,12 +121,12 @@ void DrawInhabitants(GLint nShadow)
         yRot += 0.5f;
     else
         glColor3f(0.0f, 0.0f, 0.0f);
-    
+
     // Draw the randomly located spheres
     if(nShadow == 0)
         glColor3f(0.0f, 1.0f, 0.0f);
-        
-    
+
+
     for(i = 0; i < NUM_SPHERES; i++)
         {
         glPushMatrix();
@@ -134,7 +137,7 @@ void DrawInhabitants(GLint nShadow)
 
     glPushMatrix();
         glTranslatef(0.0f, 0.1f, -2.5f);
-    
+
         if(nShadow == 0)
             glColor3f(0.0f, 0.0f, 1.0f);
 
@@ -143,37 +146,37 @@ void DrawInhabitants(GLint nShadow)
             glTranslatef(1.0f, 0.0f, 0.0f);
             glutSolidSphere(0.1f, 17, 9);
         glPopMatrix();
-    
+
         if(nShadow == 0)
             {
             // Torus alone will be specular
             glColor3f(1.0f, 0.0f, 0.0f);
             glMaterialfv(GL_FRONT, GL_SPECULAR, fBrightLight);
             }
-        
+
         glRotatef(yRot, 0.0f, 1.0f, 0.0f);
         gltDrawTorus(0.35, 0.15, 61, 37);
         glMaterialfv(GL_FRONT, GL_SPECULAR, fNoLight);
     glPopMatrix();
     }
 
-        
+
 // Called to draw scene
 void RenderScene(void)
     {
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
-        
+
     glPushMatrix();
         frameCamera.ApplyCameraTransform();
-                
+
         // Position light before any other transformations
         glLightfv(GL_LIGHT0, GL_POSITION, fLightPos);
-        
+
         // Draw the ground
         glColor3f(0.60f, .40f, .10f);
         DrawGround();
-        
+
         // Draw shadows first
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
@@ -183,12 +186,12 @@ void RenderScene(void)
         glPopMatrix();
         glEnable(GL_LIGHTING);
         glEnable(GL_DEPTH_TEST);
-        
+
         // Draw inhabitants normally
         DrawInhabitants(0);
 
     glPopMatrix();
-        
+
     // Do the buffer Swap
     glutSwapBuffers();
     }
@@ -203,13 +206,13 @@ void SpecialKeys(int key, int x, int y)
 
     if(key == GLUT_KEY_DOWN)
         frameCamera.MoveForward(-0.1f);
-        
+
     if(key == GLUT_KEY_LEFT)
         frameCamera.RotateLocalY(0.1);
-      
+
     if(key == GLUT_KEY_RIGHT)
         frameCamera.RotateLocalY(-0.1);
-                        
+
     // Refresh the Window
     glutPostRedisplay();
     }
@@ -235,18 +238,18 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
     }
 
 int main(int argc, char* argv[])

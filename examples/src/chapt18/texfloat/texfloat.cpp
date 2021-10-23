@@ -4,7 +4,9 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include <ImfRgbaFile.h>            // OpenEXR headers
+
 #include <ImfArray.h>
 
 #ifdef _WIN32
@@ -14,6 +16,7 @@
 #endif
 
 #include <assert.h>
+
 #include <stdio.h>
 
 GLint windowWidth = 1024;           // window size
@@ -386,7 +389,7 @@ void SetupShaders(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
 //    fprintf(stdout, "Floating-Point Texture Demo\n\n");
@@ -418,7 +421,7 @@ void SetupRC()
 //    fprintf(stdout, "\tt\t\tTrivial tone mapping\n\n");
 //    fprintf(stdout, "\tf\t\tFancy tone mapping\n\n");
 //    fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Clear color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -494,7 +497,7 @@ void MouseMotion(int x, int y)
     iCursorX = x;
     iCursorY = y;
 
-    CursorUpdate((GLfloat)x / (GLfloat)(windowWidth-1), 
+    CursorUpdate((GLfloat)x / (GLfloat)(windowWidth-1),
                  (GLfloat)y / (GLfloat)(windowHeight-1));
 }
 
@@ -542,7 +545,7 @@ void ChangeSize(int w, int h)
     AlterAspect();
 
     // reposition the cursor with new aspect
-    CursorUpdate((x * xAspect * 0.5f) + 0.5f, 
+    CursorUpdate((x * xAspect * 0.5f) + 0.5f,
                  (-y * yAspect * 0.5f) + 0.5f);
 }
 

@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -55,38 +56,38 @@ void ProcessMenu(int value)
     {
     // Save menu identifier as method flag
     iMethod = value;
-        
+
     // Trigger a redraw
     glutPostRedisplay();
     }
-    
+
 ////////////////////////////////////////////////////////////////////
 // Tesselation error callback
 void tessError(GLenum error)
     {
     // Get error message string
     const char *szError = (const char *)gluErrorString(error);
-    
+
     // Set error message as window caption
     glutSetWindowTitle(szError);
     }
-    
+
 
 ///////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void)
     {
     int i;                  // Loop variable
-      
+
     // Clear the window
     glClear(GL_COLOR_BUFFER_BIT);
-         
+
     switch(iMethod)
         {
         case DRAW_LOOPS:                    // Draw line loops
             {
             glColor3f(0.0f, 0.0f, 0.0f);    // Just black outline
-            
+
             // Line loop with coastline shape
             glBegin(GL_LINE_LOOP);
             for(i = 0; i < COAST_POINTS; i++)
@@ -100,101 +101,101 @@ void RenderScene(void)
             glEnd();
             }
             break;
-            
+
         case DRAW_CONCAVE:              // Tesselate concave polygon
             {
             // Tesselator object
             GLUtesselator *pTess;
-            
+
             // Green polygon
-            glColor3f(0.0f, 1.0f, 0.0f); 
-            
+            glColor3f(0.0f, 1.0f, 0.0f);
+
             // Create the tesselator object
             pTess = gluNewTess();
-            
+
             // Set callback functions
             // Just call glBegin at begining of triangle batch
-            gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin); 
-            
+            gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
+
             // Just call glEnd at end of triangle batch
             gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
-            
+
             // Just call glVertex3dv for each  vertex
             gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
-            
+
             // Register error callback
             gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
-            
+
             // Begin the polygon
             gluTessBeginPolygon(pTess, NULL);
-            
+
             // Gegin the one and only contour
             gluTessBeginContour(pTess);
 
             // Feed in the list of vertices
             for(i = 0; i < COAST_POINTS; i++)
                 gluTessVertex(pTess, vCoast[i], vCoast[i]); // Can't be NULL
-                
+
             // Close contour and polygon
             gluTessEndContour(pTess);
             gluTessEndPolygon(pTess);
-            
+
             // All done with tesselator object
             gluDeleteTess(pTess);
             }
         break;
-    
+
         case DRAW_COMPLEX:          // Tesselate, but with hole cut out
             {
             // Tesselator object
             GLUtesselator *pTess;
-            
+
             // Green polygon
-            glColor3f(0.0f, 1.0f, 0.0f); 
+            glColor3f(0.0f, 1.0f, 0.0f);
 
              // Create the tesselator object
             pTess = gluNewTess();
-            
+
             // Set callback functions
             // Just call glBegin at begining of triangle batch
             gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
-            
+
             // Just call glEnd at end of triangle batch
             gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
-            
+
             // Just call glVertex3dv for each  vertex
             gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
-            
+
             // Register error callback
             gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
 
             // How to count filled and open areas
             gluTessProperty(pTess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
-            
+
             // Begin the polygon
             gluTessBeginPolygon(pTess, NULL); // No user data
-            
+
             // First contour, outline of state
             gluTessBeginContour(pTess);
             for(i = 0; i < COAST_POINTS; i++)
                 gluTessVertex(pTess, vCoast[i], vCoast[i]);
             gluTessEndContour(pTess);
-            
+
             // Second contour, outline of lake
             gluTessBeginContour(pTess);
             for(i = 0; i < LAKE_POINTS; i++)
                 gluTessVertex(pTess, vLake[i], vLake[i]);
             gluTessEndContour(pTess);
-            
+
             // All done with polygon
             gluTessEndPolygon(pTess);
-            
+
             // No longer need tessellator object
-            gluDeleteTess(pTess);            
+            gluDeleteTess(pTess);
             }
         break;
         }
-        
+
     // Swap buffers
     glutSwapBuffers();
     }
@@ -206,7 +207,7 @@ void SetupRC()
     {
     // Blue background
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f );
-    
+
     // Fat smooth lines to make it look nicer
     glLineWidth(2.0f);
     glEnable(GL_LINE_SMOOTH);
@@ -246,14 +247,14 @@ int main(int argc, char* argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(500, 400);
 	glutCreateWindow("Tesselated Florida");
-	
+
 	// Create the Menu
 	glutCreateMenu(ProcessMenu);
 	glutAddMenuEntry("Line Loops",DRAW_LOOPS);
 	glutAddMenuEntry("Concave Polygon",DRAW_CONCAVE);
     glutAddMenuEntry("Complex Polygon",DRAW_COMPLEX);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+
 	glutReshapeFunc(ChangeSize);
 	glutDisplayFunc(RenderScene);
 	SetupRC();

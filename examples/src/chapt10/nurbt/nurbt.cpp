@@ -3,6 +3,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <string.h>
 
 // NURBS object pointer
@@ -13,17 +14,17 @@ GLint nNumPoints = 4; // 4 X 4
 
 // Mesh extends four units -6 to +6 along x and y axis
 // Lies in Z plane
-//                 u  v  (x,y,z)	
+//                 u  v  (x,y,z)
 GLfloat ctrlPoints[4][4][3]= {{{  -6.0f, -6.0f, 0.0f},	// u = 0,	v = 0
                               {	  -6.0f, -2.0f, 0.0f},	//			v = 1
-							  {   -6.0f,  2.0f, 0.0f},	//			v = 2	
+							  {   -6.0f,  2.0f, 0.0f},	//			v = 2
 							  {   -6.0f,  6.0f, 0.0f}}, //			v = 3
-							 
+
 							  {{  -2.0f, -6.0f, 0.0f},	// u = 1	v = 0
 						      {   -2.0f, -2.0f, 8.0f},	//			v = 1
 							  {   -2.0f,  2.0f, 8.0f},	//			v = 2
 							  {   -2.0f,  6.0f, 0.0f}},	//			v = 3
-							  
+
 							  {{   2.0f, -6.0f, 0.0f }, // u =2		v = 0
 							  {    2.0f, -2.0f, 8.0f }, //			v = 1
 							  {    2.0f,  2.0f, 8.0f },	//			v = 2
@@ -42,7 +43,7 @@ GLfloat outsidePts[5][2] = /* counter clockwise */
         {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}, {0.0f, 0.0f}};
 
 // Inside trimming points to create triangle shaped hole in surface
-GLfloat insidePts[4][2] = /* clockwise */ 
+GLfloat insidePts[4][2] = /* clockwise */
     {{0.25f, 0.25f}, {0.5f, 0.5f}, {0.75f, 0.25f}, { 0.25f, 0.25f}};
 
 
@@ -59,7 +60,7 @@ void DrawPoints(void)
     glBegin(GL_POINTS);
         for(i = 0; i < 4; i++)
             for(j = 0; j < 4; j++)
-                glVertex3fv(ctrlPoints[i][j]);	
+                glVertex3fv(ctrlPoints[i][j]);
     glEnd();
     }
 
@@ -93,21 +94,21 @@ void RenderScene(void)
 
     // Rotate the mesh around to make it easier to see
     glRotatef(330.0f, 1.0f,0.0f,0.0f);
-	
+
     // Render the NURB
     // Begin the NURB definition
     gluBeginSurface(pNurb);
-	
+
     // Evaluate the surface
     gluNurbsSurface(pNurb,	// pointer to NURBS renderer
-        8, Knots,			// No. of knots and knot array u direction	
+        8, Knots,			// No. of knots and knot array u direction
         8, Knots,			// No. of knots and knot array v direction
         4 * 3,				// Distance between control points in u dir.
         3,					// Distance between control points in v dir.
         &ctrlPoints[0][0][0], // Control points
         4, 4,					// u and v order of surface
         GL_MAP2_VERTEX_3);		// Type of surface
-	
+
     // Outer area, include entire curve
     gluBeginTrim (pNurb);
     gluPwlCurve (pNurb, 5, &outsidePts[0][0], 2, GLU_MAP1_TRIM_2);
@@ -120,7 +121,7 @@ void RenderScene(void)
 
     // Done with surface
     gluEndSurface(pNurb);
-	
+
     // Restore the modelview matrix
     glPopMatrix();
 
@@ -147,12 +148,12 @@ void SetupRC()
 
     // Enable color tracking
     glEnable(GL_COLOR_MATERIAL);
-	
+
     // Set Material properties to follow glColor values
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, shine);
-	
+
     // Automatically generate normals for evaluated surfaces
     glEnable(GL_AUTO_NORMAL);
 

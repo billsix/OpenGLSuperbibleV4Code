@@ -5,6 +5,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -75,7 +76,7 @@ void RenderScene(void)
 
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	glEnable(GL_DEPTH_TEST);	// Hidden surface removal
@@ -83,7 +84,7 @@ void SetupRC()
 	glEnable(GL_CULL_FACE);		// Do not calculate inside of jet
 
 	// Black background
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f );	
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
     }
 
 void SpecialKeys(int key, int x, int y)

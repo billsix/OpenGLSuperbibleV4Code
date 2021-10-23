@@ -4,7 +4,9 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include "../../shared/math3d.h"    // 3D Math Library
+
 #include <math.h>
 
 
@@ -18,12 +20,12 @@ void DrawTorus(M3DMatrix44f mTransform)
     GLint   numMajor = 40;
     GLint   numMinor = 20;
     M3DVector3f objectVertex;         // Vertex in object/eye space
-    M3DVector3f transformedVertex;    // New Transformed vertex   
+    M3DVector3f transformedVertex;    // New Transformed vertex
     double majorStep = 2.0f*M3D_PI / numMajor;
     double minorStep = 2.0f*M3D_PI / numMinor;
     int i, j;
-    
-    for (i=0; i<numMajor; ++i) 
+
+    for (i=0; i<numMajor; ++i)
         {
         double a0 = i * majorStep;
         double a1 = a0 + majorStep;
@@ -33,7 +35,7 @@ void DrawTorus(M3DMatrix44f mTransform)
         GLfloat y1 = (GLfloat) sin(a1);
 
         glBegin(GL_TRIANGLE_STRIP);
-        for (j=0; j<=numMinor; ++j) 
+        for (j=0; j<=numMinor; ++j)
             {
             double b = j * minorStep;
             GLfloat c = (GLfloat) cos(b);
@@ -57,24 +59,24 @@ void DrawTorus(M3DMatrix44f mTransform)
         glEnd();
         }
     }
-        
-        
+
+
 // Called to draw scene
 void RenderScene(void)
     {
     M3DMatrix44f   transformationMatrix;   // Storeage for rotation matrix
     static GLfloat yRot = 0.0f;         // Rotation angle for animation
     yRot += 0.5f;
-        
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
     // Build a rotation matrix
     m3dRotationMatrix44(transformationMatrix, m3dDegToRad(yRot), 0.0f, 1.0f, 0.0f);
     transformationMatrix[12] = 0.0f;
     transformationMatrix[13] = 0.0f;
     transformationMatrix[14] = -2.5f;
-        
+
     DrawTorus(transformationMatrix);
 
     // Do the buffer Swap
@@ -82,12 +84,12 @@ void RenderScene(void)
     }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Bluish background
     glClearColor(0.0f, 0.0f, .50f, 1.0f );
-         
+
     // Draw everything as wire frame
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
@@ -114,16 +116,16 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     }

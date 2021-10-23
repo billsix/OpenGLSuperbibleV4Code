@@ -4,6 +4,7 @@
 // rwright@starstonesoftware.com
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <string.h>
 
 
@@ -39,21 +40,21 @@ void RenderScene(void)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
-	// Translate the whole scene out and into view	
-	glTranslatef(0.0f, 0.0f, -300.0f);	
+	// Translate the whole scene out and into view
+	glTranslatef(0.0f, 0.0f, -300.0f);
 
 	// Initialize the names stack
 	glInitNames();
 	glPushName(0);
 
-	
+
 	// Draw the Earth
 	glPushMatrix();
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glTranslatef(-100.0f,0.0f,0.0f);
 	glLoadName(EARTH);
 	DrawSphere(30.0f);
-	
+
 	// Draw the Moon
 	glTranslatef(45.0f, 0.0f, 0.0f);
 	glColor3f(0.85f, 0.85f, 0.85f);
@@ -91,7 +92,7 @@ void RenderScene(void)
 
 
 ///////////////////////////////////////////////////////////
-// Parse the selection buffer to see which 
+// Parse the selection buffer to see which
 // planet/moon was selected
 void ProcessPlanet(GLuint *pSelectBuff)
 	{
@@ -156,7 +157,7 @@ void ProcessSelection(int xPos, int yPos)
 
 	// Setup selection buffer
 	glSelectBuffer(BUFFER_LENGTH, selectBuff);
-	
+
 	// Get the viewport
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -171,12 +172,12 @@ void ProcessSelection(int xPos, int yPos)
 	// mouse cursor point (xPos, yPos) and extending two pixels
 	// in the vertical and horzontal direction. Remember OpenGL specifies the
 	// y coordinate from the bottom, Windows from the top. So windows position
-	// (as measured from the top) subtract the height and you get it in terms 
+	// (as measured from the top) subtract the height and you get it in terms
 	// OpenGL Likes.
 	glLoadIdentity();
 	gluPickMatrix(xPos, viewport[3] - yPos + viewport[1], 2,2, viewport);
 
-	// Apply perspective matrix 
+	// Apply perspective matrix
 	fAspect = (float)viewport[2] / (float)viewport[3];
 	gluPerspective(45.0f, fAspect, 1.0, 425.0);
 
@@ -212,8 +213,8 @@ void MouseCallback(int button, int state, int x, int y)
 
 
 ///////////////////////////////////////////////////////////
-// This function does any needed initialization on the 
-// rendering context. 
+// This function does any needed initialization on the
+// rendering context.
 void SetupRC()
 	{
 	// Lighting values
@@ -237,7 +238,7 @@ void SetupRC()
 
 	// Enable color tracking
 	glEnable(GL_COLOR_MATERIAL);
-	
+
 	// Set Material properties to follow glColor values
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 

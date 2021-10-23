@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 // Light and material Data
@@ -13,23 +14,23 @@ GLfloat fNoLight[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 GLfloat fLowLight[] = { 0.25f, 0.25f, 0.25f, 1.0f };
 GLfloat fBrightLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-static GLfloat yRot = 0.0f;         // Rotation angle for animation        
+static GLfloat yRot = 0.0f;         // Rotation angle for animation
 
-        
+
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Grayish background
     glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
-   
+
     // Cull backs of polygons
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    
+
     // Setup light parameters
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, fNoLight);
     glLightfv(GL_LIGHT0, GL_AMBIENT, fLowLight);
@@ -37,7 +38,7 @@ void SetupRC()
     glLightfv(GL_LIGHT0, GL_SPECULAR, fBrightLight);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-     
+
     // Mostly use material tracking
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
@@ -46,8 +47,8 @@ void SetupRC()
 
 
 ///////////////////////////////////////////////////////////
-// Draw the ground as a series of triangle strips. The 
-// shading model and colors are set such that we end up 
+// Draw the ground as a series of triangle strips. The
+// shading model and colors are set such that we end up
 // with a black and white checkerboard pattern.
 void DrawGround(void)
     {
@@ -57,7 +58,7 @@ void DrawGround(void)
     GLfloat fColor;
     GLfloat iStrip, iRun;
     GLint iBounce = 0;
-    
+
     glShadeModel(GL_FLAT);
     for(iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep)
         {
@@ -68,11 +69,11 @@ void DrawGround(void)
                     fColor = 1.0f;
                 else
                     fColor = 0.0f;
-                    
+
                 glColor4f(fColor, fColor, fColor, 0.5f);
                 glVertex3f(iStrip, y, iRun);
                 glVertex3f(iStrip + fStep, y, iRun);
-                
+
                 iBounce++;
                 }
         glEnd();
@@ -87,14 +88,14 @@ void DrawWorld(void)
     glColor3f(1.0f, 0.0f, 0.0f);
     glPushMatrix();
         glTranslatef(0.0f, 0.5f, -3.5f);
-    
+
         glPushMatrix();
             glRotatef(-yRot * 2.0f, 0.0f, 1.0f, 0.0f);
             glTranslatef(1.0f, 0.0f, 0.0f);
             glutSolidSphere(0.1f, 17, 9);
         glPopMatrix();
 
-        
+
         glRotatef(yRot, 0.0f, 1.0f, 0.0f);
         gltDrawTorus(0.35, 0.15, 61, 37);
 
@@ -102,13 +103,13 @@ void DrawWorld(void)
     }
 
 
-///////////////////////////////////////////////////////////////////////        
+///////////////////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void)
     {
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
     glPushMatrix();
         // Move light under floor to light the "reflected" world
         glLightfv(GL_LIGHT0, GL_POSITION, fLightPosMirror);
@@ -118,7 +119,7 @@ void RenderScene(void)
             DrawWorld();
             glFrontFace(GL_CCW);
         glPopMatrix();
-    
+
         // Draw the ground transparently over the reflection
         glDisable(GL_LIGHTING);
         glEnable(GL_BLEND);
@@ -126,12 +127,12 @@ void RenderScene(void)
         DrawGround();
         glDisable(GL_BLEND);
         glEnable(GL_LIGHTING);
-        
+
         // Restore correct lighting and draw the world correctly
         glLightfv(GL_LIGHT0, GL_POSITION, fLightPos);
         DrawWorld();
     glPopMatrix();
-        
+
     // Do the buffer Swap
     glutSwapBuffers();
     }
@@ -144,10 +145,10 @@ void RenderScene(void)
 void TimerFunction(int value)
     {
     yRot += 1.0f;   // Update Rotation
-    
+
     // Redraw the scene
     glutPostRedisplay();
-    
+
     // Reset timer
     glutTimerFunc(1,TimerFunction, 1);
     }
@@ -162,18 +163,18 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
     fAspect = (GLfloat)w / (GLfloat)h;
 
     // Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluPerspective(35.0f, fAspect, 1.0f, 50.0f);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
     glTranslatef(0.0f, -0.4f, 0.0f);
     }
 
@@ -188,7 +189,7 @@ int main(int argc, char* argv[])
     glutReshapeFunc(ChangeSize);
     glutDisplayFunc(RenderScene);
     glutTimerFunc(10, TimerFunction, 1);
-    
+
     SetupRC();
     glutMainLoop();
 

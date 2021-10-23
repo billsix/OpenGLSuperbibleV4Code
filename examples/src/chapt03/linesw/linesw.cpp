@@ -4,6 +4,7 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
 
 
@@ -35,7 +36,7 @@ void RenderScene(void)
 	glGetFloatv(GL_LINE_WIDTH_RANGE,fSizes);
 	fCurrSize = fSizes[0];
 
-	// Step up Y axis 20 units at a time	
+	// Step up Y axis 20 units at a time
 	for(y = -90.0f; y < 90.0f; y += 20.0f)
 		{
 		// Set the line width
@@ -44,7 +45,7 @@ void RenderScene(void)
 		// Draw the line
 		glBegin(GL_LINES);
 			glVertex2f(-80.0f, y);
-			glVertex2f(80.0f, y);	
+			glVertex2f(80.0f, y);
 		glEnd();
 
 		// Increase the line width
@@ -60,7 +61,7 @@ void RenderScene(void)
 	}
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 	{
 	// Black background
@@ -117,9 +118,9 @@ void ChangeSize(int w, int h)
 	glLoadIdentity();
 
 	// Establish clipping volume (left, right, bottom, top, near, far)
-    if (w <= h) 
+    if (w <= h)
 		glOrtho (-nRange, nRange, -nRange*h/w, nRange*h/w, -nRange, nRange);
-    else 
+    else
 		glOrtho (-nRange*w/h, nRange*w/h, -nRange, nRange, -nRange, nRange);
 
 	glMatrixMode(GL_MODELVIEW);

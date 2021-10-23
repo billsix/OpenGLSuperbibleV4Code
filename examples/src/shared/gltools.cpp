@@ -8,9 +8,13 @@
  */
 
 #include "gltools.h"
+
 #include "math3d.h"
+
 #include <stdio.h>
+
 #include <assert.h>
+
 #include <stdlib.h>
 
 
@@ -25,13 +29,13 @@ bool gltGetOpenGLVersion(int &nMajor, int &nMinor)
 		nMinor = 0;
 		return false;
 		}
-	
+
 	// Get major version number. This stops at the first non numeric character
 	nMajor = atoi(szVersionString);
-	
+
 	// Get minor version number. Start past the first ".", atoi terminates on first non numeric char.
 	nMinor = atoi(strstr(szVersionString, ".")+1);
-	
+
 	return true;
 	}
 
@@ -43,26 +47,26 @@ int gltIsExtSupported(const char *extension)
 	GLubyte *extensions = NULL;
 	const GLubyte *start;
 	GLubyte *where, *terminator;
-	
+
 	where = (GLubyte *) strchr(extension, ' ');
 	if (where || *extension == '\0')
 		return 0;
-	
+
 	extensions = (GLubyte *)glGetString(GL_EXTENSIONS);
-	
+
 	start = extensions;
-	for (;;) 
+	for (;;)
 		{
 		where = (GLubyte *) strstr((const char *) start, extension);
-		
+
 		if (!where)
 			break;
-		
+
 		terminator = where + strlen(extension);
-		
-		if (where == start || *(where - 1) == ' ') 
+
+		if (where == start || *(where - 1) == ' ')
 			{
-			if (*terminator == ' ' || *terminator == '\0') 
+			if (*terminator == ' ' || *terminator == '\0')
 				return 1;
 			}
 		start = terminator;
@@ -80,31 +84,31 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension)
 	const GLubyte *start;
 	GLubyte *where, *terminator;
     PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
-	
+
     // Just look or the entry point
     wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
     if(wglGetExtensionsStringARB == NULL)
         return 0;
-	
+
 	where = (GLubyte *) strchr(szExtension, ' ');
 	if (where || *szExtension == '\0')
 		return 0;
-	
+
 	extensions = (GLubyte *)wglGetExtensionsStringARB(hDC);
-	
+
 	start = extensions;
-	for (;;) 
+	for (;;)
 		{
 		where = (GLubyte *) strstr((const char *) start, szExtension);
-		
+
 		if (!where)
 			break;
-		
+
 		terminator = where + strlen(szExtension);
-		
-		if (where == start || *(where - 1) == ' ') 
+
+		if (where == start || *(where - 1) == ' ')
 			{
-			if (*terminator == ' ' || *terminator == '\0') 
+			if (*terminator == ' ' || *terminator == '\0')
 				return 1;
 			}
 		start = terminator;
@@ -118,7 +122,7 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension)
 
 ///////////////////////////////////////////////////////////////////
 // Draw the unit axis. A small white sphere represents the origin
-// and the three axes are colored Red, Green, and Blue, which 
+// and the three axes are colored Red, Green, and Blue, which
 // corresponds to positive X, Y, and Z respectively. Each axis has
 // an arrow on the end, and normals are provided should the axes
 // be lit. These are all built using the quadric shapes. For best
@@ -126,20 +130,20 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension)
 void gltDrawUnitAxes(void)
 	{
 	GLUquadricObj *pObj;	// Temporary, used for quadrics
-	
+
 	// Measurements
 	float fAxisRadius = 0.025f;
 	float fAxisHeight = 1.0f;
 	float fArrowRadius = 0.06f;
 	float fArrowHeight = 0.1f;
-	
+
 	// Setup the quadric object
 	pObj = gluNewQuadric();
 	gluQuadricDrawStyle(pObj, GLU_FILL);
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 	gluQuadricOrientation(pObj, GLU_OUTSIDE);
 	gluQuadricTexture(pObj, GLU_FALSE);
-	
+
 	///////////////////////////////////////////////////////
 	// Draw the blue Z axis first, with arrowed head
 	glColor3f(0.0f, 0.0f, 1.0f);
@@ -150,7 +154,7 @@ void gltDrawUnitAxes(void)
     glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
     gluDisk(pObj, fAxisRadius, fArrowRadius, 10, 1);
 	glPopMatrix();
-	
+
 	///////////////////////////////////////////////////////
 	// Draw the Red X axis 2nd, with arrowed head
     glColor3f(1.0f, 0.0f, 0.0f);
@@ -164,7 +168,7 @@ void gltDrawUnitAxes(void)
 	gluDisk(pObj, fAxisRadius, fArrowRadius, 10, 1);
 	glPopMatrix();
 	glPopMatrix();
-	
+
 	///////////////////////////////////////////////////////
 	// Draw the Green Y axis 3rd, with arrowed head
 	glColor3f(0.0f, 1.0f, 0.0f);
@@ -178,12 +182,12 @@ void gltDrawUnitAxes(void)
 	gluDisk(pObj, fAxisRadius, fArrowRadius, 10, 1);
 	glPopMatrix();
 	glPopMatrix();
-	
+
 	////////////////////////////////////////////////////////
 	// White Sphere at origin
 	glColor3f(1.0f, 1.0f, 1.0f);
 	gluSphere(pObj, 0.05f, 15, 15);
-	
+
 	// Delete the quadric
 	gluDeleteQuadric(pObj);
 	}
@@ -197,8 +201,8 @@ void gltDrawTorus(GLfloat majorRadius, GLfloat minorRadius, GLint numMajor, GLin
     double majorStep = 2.0f*M3D_PI / numMajor;
     double minorStep = 2.0f*M3D_PI / numMinor;
     int i, j;
-	
-    for (i=0; i<numMajor; ++i) 
+
+    for (i=0; i<numMajor; ++i)
 		{
 		double a0 = i * majorStep;
 		double a1 = a0 + majorStep;
@@ -206,15 +210,15 @@ void gltDrawTorus(GLfloat majorRadius, GLfloat minorRadius, GLint numMajor, GLin
 		GLfloat y0 = (GLfloat) sin(a0);
 		GLfloat x1 = (GLfloat) cos(a1);
 		GLfloat y1 = (GLfloat) sin(a1);
-		
+
 		glBegin(GL_TRIANGLE_STRIP);
-		for (j=0; j<=numMinor; ++j) 
+		for (j=0; j<=numMinor; ++j)
 			{
 			double b = j * minorStep;
 			GLfloat c = (GLfloat) cos(b);
 			GLfloat r = minorRadius * c + majorRadius;
 			GLfloat z = minorRadius * (GLfloat) sin(b);
-			
+
 			// First point
 			glTexCoord2f((float)(i)/(float)(numMajor), (float)(j)/(float)(numMinor));
 			vNormal[0] = x0*c;
@@ -223,7 +227,7 @@ void gltDrawTorus(GLfloat majorRadius, GLfloat minorRadius, GLint numMajor, GLin
 			m3dNormalizeVector(vNormal);
 			glNormal3fv(vNormal);
 			glVertex3f(x0*r, y0*r, z);
-			
+
 			glTexCoord2f((float)(i+1)/(float)(numMajor), (float)(j)/(float)(numMinor));
 			vNormal[0] = x1*c;
 			vNormal[1] = y1*c;
@@ -244,37 +248,37 @@ void gltDrawSphere(GLfloat fRadius, GLint iSlices, GLint iStacks)
     GLfloat dtheta = 2.0f * (GLfloat)(3.141592653589) / (GLfloat) iSlices;
 	GLfloat ds = 1.0f / (GLfloat) iSlices;
 	GLfloat dt = 1.0f / (GLfloat) iStacks;
-	GLfloat t = 1.0f;	
+	GLfloat t = 1.0f;
 	GLfloat s = 0.0f;
     GLint i, j;     // Looping variables
-	
-	for (i = 0; i < iStacks; i++) 
+
+	for (i = 0; i < iStacks; i++)
 		{
 		GLfloat rho = (GLfloat)i * drho;
 		GLfloat srho = (GLfloat)(sin(rho));
 		GLfloat crho = (GLfloat)(cos(rho));
 		GLfloat srhodrho = (GLfloat)(sin(rho + drho));
 		GLfloat crhodrho = (GLfloat)(cos(rho + drho));
-		
+
         // Many sources of OpenGL sphere drawing code uses a triangle fan
-        // for the caps of the sphere. This however introduces texturing 
+        // for the caps of the sphere. This however introduces texturing
         // artifacts at the poles on some OpenGL implementations
 		glBegin(GL_TRIANGLE_STRIP);
         s = 0.0f;
-		for ( j = 0; j <= iSlices; j++) 
+		for ( j = 0; j <= iSlices; j++)
 			{
 			GLfloat theta = (j == iSlices) ? 0.0f : j * dtheta;
 			GLfloat stheta = (GLfloat)(-sin(theta));
 			GLfloat ctheta = (GLfloat)(cos(theta));
-			
+
 			GLfloat x = stheta * srho;
 			GLfloat y = ctheta * srho;
 			GLfloat z = crho;
-            
+
             glTexCoord2f(s, t);
             glNormal3f(x, y, z);
             glVertex3f(x * fRadius, y * fRadius, z * fRadius);
-			
+
             x = stheta * srhodrho;
 			y = ctheta * srhodrho;
 			z = crhodrho;
@@ -323,24 +327,24 @@ GLint gltWriteTGA(const char *szFileName)
     GLbyte	*pBits = NULL;      // Pointer to bits
     GLint iViewport[4];         // Viewport in pixels
     GLenum lastBuffer;          // Storage for the current read buffer setting
-    
+
 	// Get the viewport dimensions
 	glGetIntegerv(GL_VIEWPORT, iViewport);
-	
+
     // How big is the image going to be (targas are tightly packed)
-	lImageSize = iViewport[2] * 3 * iViewport[3];	
-	
+	lImageSize = iViewport[2] * 3 * iViewport[3];
+
     // Allocate block. If this doesn't work, go home
     pBits = (GLbyte *)malloc(lImageSize);
     if(pBits == NULL)
         return 0;
-	
+
     // Read bits from color buffer
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ROW_LENGTH, 0);
 	glPixelStorei(GL_PACK_SKIP_ROWS, 0);
 	glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
-    
+
     // Get the current read buffer setting and save it. Switch to
     // the front buffer and do the read operation. Finally, restore
     // the read buffer state
@@ -348,7 +352,7 @@ GLint gltWriteTGA(const char *szFileName)
     glReadBuffer(GL_FRONT);
     glReadPixels(0, 0, iViewport[2], iViewport[3], GL_BGR_EXT, GL_UNSIGNED_BYTE, pBits);
     glReadBuffer(lastBuffer);
-    
+
     // Initialize the Targa header
     tgaHeader.identsize = 0;
     tgaHeader.colorMapType = 0;
@@ -362,7 +366,7 @@ GLint gltWriteTGA(const char *szFileName)
     tgaHeader.height = iViewport[3];
     tgaHeader.bits = 24;
     tgaHeader.descriptor = 0;
-    
+
     // Do byte swap for big vs little endian
 #ifdef __APPLE__
     LITTLE_ENDIAN_WORD(&tgaHeader.colorMapStart);
@@ -372,7 +376,7 @@ GLint gltWriteTGA(const char *szFileName)
     LITTLE_ENDIAN_WORD(&tgaHeader.width);
     LITTLE_ENDIAN_WORD(&tgaHeader.height);
 #endif
-    
+
     // Attempt to open the file
     pFile = fopen(szFileName, "wb");
     if(pFile == NULL)
@@ -380,17 +384,17 @@ GLint gltWriteTGA(const char *szFileName)
         free(pBits);    // Free buffer and return error
         return 0;
 		}
-	
+
     // Write the header
     fwrite(&tgaHeader, sizeof(TGAHEADER), 1, pFile);
-    
+
     // Write the image data
     fwrite(pBits, lImageSize, 1, pFile);
-	
+
     // Free temporary buffer and close the file
-    free(pBits);    
+    free(pBits);
     fclose(pFile);
-    
+
     // Success!
     return 1;
 	}
@@ -409,51 +413,51 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint 
     unsigned long lImageSize;		// Size in bytes of image
     short sDepth;			// Pixel depth;
     GLbyte	*pBits = NULL;          // Pointer to bits
-    
+
     // Default/Failed values
     *iWidth = 0;
     *iHeight = 0;
     *eFormat = GL_BGR_EXT;
     *iComponents = GL_RGB8;
-    
+
     // Attempt to open the fil
     pFile = fopen(szFileName, "rb");
     if(pFile == NULL)
         return NULL;
-	
+
     // Read in header (binary)
     fread(&tgaHeader, 18/* sizeof(TGAHEADER)*/, 1, pFile);
-    
+
     // Do byte swap for big vs little endian
-	
-	
+
+
     // Get width, height, and depth of texture
     *iWidth = tgaHeader.width;
     *iHeight = tgaHeader.height;
     sDepth = tgaHeader.bits / 8;
-    
+
     // Put some validity checks here. Very simply, I only understand
     // or care about 8, 24, or 32 bit targa's.
     if(tgaHeader.bits != 8 && tgaHeader.bits != 24 && tgaHeader.bits != 32)
         return NULL;
-	
+
     // Calculate size of image buffer
     lImageSize = tgaHeader.width * tgaHeader.height * sDepth;
-    
+
     // Allocate memory and check for success
     pBits = (GLbyte*)malloc(lImageSize * sizeof(GLbyte));
     if(pBits == NULL)
         return NULL;
-    
+
     // Read in the bits
-    // Check for read error. This should catch RLE or other 
+    // Check for read error. This should catch RLE or other
     // weird formats that I don't want to recognize
     if(fread(pBits, lImageSize, 1, pFile) != 1)
 		{
         free(pBits);
         return NULL;
 		}
-    
+
     // Set OpenGL format expected
     switch(sDepth)
 		{
@@ -470,11 +474,11 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint 
             *iComponents = GL_LUMINANCE8;
             break;
 		};
-	
-    
+
+
     // Done with File
     fclose(pFile);
-	
+
     // Return pointer to image data
     return pBits;
 	}
@@ -498,7 +502,7 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader)
     GLint shaderLength = 0;
     FILE *fp;
     GLcharARB *fsStringPtr[1];
-	
+
     // Open the shader file
     fp = fopen(szFile, "r");
     if(fp != NULL)
@@ -506,7 +510,7 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader)
         // See how long the file s
         while (fgetc(fp) != EOF)
             shaderLength++;
-		
+
         // Allocate a block of memory to send in the shader
         assert(shaderLength < MAX_SHADER_LENGTH);   // make me bigger!
         if(shaderLength > MAX_SHADER_LENGTH)
@@ -514,28 +518,28 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader)
             fclose(fp);
             return false;
 			}
-		
+
         // Go back to beginning of file
         rewind(fp);
-		
+
         // Read the whole file in
         if (shaderText != NULL)
             fread(shaderText, 1, shaderLength, fp);
-		
+
         // Make sure it is null terminated and close the file
         shaderText[shaderLength] = '\0';
         fclose(fp);
 		}
     else
         return false;
-    
-	
+
+
     // Load the string
     fsStringPtr[0] = (GLcharARB *)shaderText;
     glShaderSourceARB(shader, 1, (const GLcharARB **)fsStringPtr, NULL);
-    
+
     return true;
-	}   
+	}
 
 
 /////////////////////////////////////////////////////////////////
@@ -546,14 +550,14 @@ GLhandleARB gltLoadShaderPair(const char *szVertexProg, const char *szFragmentPr
 	{
     // Temporary Shader objects
     GLhandleARB hVertexShader;
-    GLhandleARB hFragmentShader; 
-    GLhandleARB hReturn = 0;   
+    GLhandleARB hFragmentShader;
+    GLhandleARB hReturn = 0;
     GLint testVal;
-	
+
     // Create shader objects
     hVertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
     hFragmentShader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
-	
+
     // Load them. If fail clean up and return null
     if(bLoadShaderFile(szVertexProg, hVertexShader) == false)
 		{
@@ -561,18 +565,18 @@ GLhandleARB gltLoadShaderPair(const char *szVertexProg, const char *szFragmentPr
         glDeleteObjectARB(hFragmentShader);
         return 0;
 		}
-	
+
     if(bLoadShaderFile(szFragmentProg, hFragmentShader) == false)
 		{
         glDeleteObjectARB(hVertexShader);
         glDeleteObjectARB(hFragmentShader);
         return 0;
 		}
-    
+
     // Compile them
     glCompileShaderARB(hVertexShader);
     glCompileShaderARB(hFragmentShader);
-    
+
     // Check for errors
     glGetObjectParameterivARB(hVertexShader, GL_OBJECT_COMPILE_STATUS_ARB, &testVal);
     if(testVal == GL_FALSE)
@@ -581,7 +585,7 @@ GLhandleARB gltLoadShaderPair(const char *szVertexProg, const char *szFragmentPr
         glDeleteObjectARB(hFragmentShader);
         return 0;
 		}
-    
+
     glGetObjectParameterivARB(hFragmentShader, GL_OBJECT_COMPILE_STATUS_ARB, &testVal);
     if(testVal == GL_FALSE)
 		{
@@ -589,18 +593,16 @@ GLhandleARB gltLoadShaderPair(const char *szVertexProg, const char *szFragmentPr
         glDeleteObjectARB(hFragmentShader);
         return 0;
 		}
-    
+
     // Link them - assuming it works...
     hReturn = glCreateProgramObjectARB();
     glAttachObjectARB(hReturn, hVertexShader);
     glAttachObjectARB(hReturn, hFragmentShader);
     glLinkProgramARB(hReturn);
-	
+
     // These are no longer needed
     glDeleteObjectARB(hVertexShader);
-    glDeleteObjectARB(hFragmentShader);  
-    
-    return hReturn;  
-	}   
+    glDeleteObjectARB(hFragmentShader);
 
-
+    return hReturn;
+	}

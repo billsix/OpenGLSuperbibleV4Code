@@ -4,13 +4,15 @@
 // Program by Richard S. Wright Jr.
 
 #include "../../shared/gltools.h"	// OpenGL toolkit
+
 #include <math.h>
+
 #include <stdlib.h>
 
-        
+
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
     {
     // Black background
@@ -18,40 +20,40 @@ void SetupRC()
 	}
 
 
-///////////////////////////////////////////////////////////////////////        
+///////////////////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void)
     {
 	GLbyte *pImage = NULL;
 	GLint iWidth, iHeight, iComponents;
 	GLenum eFormat;
-	
+
     // Clear the window with current clearing color
     glClear(GL_COLOR_BUFFER_BIT);
-    
+
     // Targa's are 1 byte aligned
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // Load the TGA file, get width, height, and component/format information
 	pImage = gltLoadTGA("Fire.tga", &iWidth, &iHeight, &iComponents, &eFormat);
-	
+
     // Use Window coordinates to set raster position
 	glRasterPos2i(0, 0);
-	
+
     // Draw the pixmap
     if(pImage != NULL)
         glDrawPixels(iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pImage);
-	
+
     // Don't need the image data anymore
 	free(pImage);
-		
+
     // Do the buffer Swap
     glutSwapBuffers();
     }
 
 
 //////////////////////////////////////////////////////////////
-// For this example, it really doesn't matter what the 
+// For this example, it really doesn't matter what the
 // projection is since we are using glWindowPos
 void ChangeSize(int w, int h)
     {
@@ -61,16 +63,16 @@ void ChangeSize(int w, int h)
         h = 1;
 
     glViewport(0, 0, w, h);
-        
+
 	// Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	
+
     // Set the clipping volume
     gluOrtho2D(0.0f, (GLfloat) w, 0.0, (GLfloat) h);
-        
+
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();    
+    glLoadIdentity();
     }
 
 /////////////////////////////////////////////////////////////
@@ -83,7 +85,7 @@ int main(int argc, char* argv[])
     glutCreateWindow("OpenGL Image Loading");
     glutReshapeFunc(ChangeSize);
     glutDisplayFunc(RenderScene);
-    
+
     SetupRC();
     glutMainLoop();
 

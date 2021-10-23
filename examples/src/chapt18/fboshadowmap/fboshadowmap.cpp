@@ -4,7 +4,9 @@
 // Program by Benjamin Lipchak
 
 #include "../../shared/gltools.h"   // OpenGL toolkit
+
 #include "../../shared/math3d.h"
+
 #include <stdio.h>
 
 GLboolean ambientShadowAvailable = GL_FALSE;
@@ -97,8 +99,8 @@ void RegenerateShadowMap(void)
     GLfloat sceneBoundingRadius = 95.0f; // based on objects in scene
 
     // Save the depth precision for where it's useful
-    lightToSceneDistance = sqrt(lightPos[0] * lightPos[0] + 
-                                lightPos[1] * lightPos[1] + 
+    lightToSceneDistance = sqrt(lightPos[0] * lightPos[0] +
+                                lightPos[1] * lightPos[1] +
                                 lightPos[2] * lightPos[2]);
     nearPlane = lightToSceneDistance - sceneBoundingRadius;
     // Keep the scene filling the depth texture
@@ -111,7 +113,7 @@ void RegenerateShadowMap(void)
     // Switch to light's point of view
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(lightPos[0], lightPos[1], lightPos[2], 
+    gluLookAt(lightPos[0], lightPos[1], lightPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     glGetFloatv(GL_MODELVIEW_MATRIX, lightModelview);
     glViewport(0, 0, shadowWidth, shadowHeight);
@@ -138,7 +140,7 @@ void RegenerateShadowMap(void)
     DrawModels(GL_FALSE);
 
     // Copy depth values into depth texture
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
                      0, 0, shadowWidth, shadowHeight, 0);
 
     // Restore normal drawing state
@@ -183,11 +185,11 @@ void RenderScene(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2], 
+    gluLookAt(cameraPos[0], cameraPos[1], cameraPos[2],
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glViewport(0, 0, windowWidth, windowHeight);
-    
+
     // Track light position
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
@@ -215,13 +217,13 @@ void RenderScene(void)
             glTexCoord2f(0.0f, 0.0f);
             glVertex2f(-1.0f, -1.0f);
             glTexCoord2f(1.0f, 0.0f);
-            glVertex2f(((GLfloat)showShadowWidth/(GLfloat)windowWidth)*2.0f-1.0f, 
+            glVertex2f(((GLfloat)showShadowWidth/(GLfloat)windowWidth)*2.0f-1.0f,
                        -1.0f);
             glTexCoord2f(1.0f, 1.0f);
-            glVertex2f(((GLfloat)showShadowWidth/(GLfloat)windowWidth)*2.0f-1.0f, 
+            glVertex2f(((GLfloat)showShadowWidth/(GLfloat)windowWidth)*2.0f-1.0f,
                        ((GLfloat)showShadowHeight/(GLfloat)windowHeight)*2.0f-1.0f);
             glTexCoord2f(0.0f, 1.0f);
-            glVertex2f(-1.0f, 
+            glVertex2f(-1.0f,
                        ((GLfloat)showShadowHeight/(GLfloat)windowHeight)*2.0f-1.0f);
         glEnd();
         glDisable(GL_TEXTURE_2D);
@@ -267,7 +269,7 @@ void RenderScene(void)
         // Set up shadow comparison
         glEnable(GL_TEXTURE_2D);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, 
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
                         GL_COMPARE_R_TO_TEXTURE);
 
         // Set up the eye plane for projecting the shadow map on the scene
@@ -290,7 +292,7 @@ void RenderScene(void)
         glDisable(GL_TEXTURE_GEN_R);
         glDisable(GL_TEXTURE_GEN_Q);
     }
-    
+
     if (glGetError() != GL_NO_ERROR)
         fprintf(stderr, "GL Error!\n");
 
@@ -299,7 +301,7 @@ void RenderScene(void)
 }
 
 // This function does any needed initialization on the rendering
-// context. 
+// context.
 void SetupRC()
 {
     fprintf(stdout, "FBO Shadow Mapping Demo\n\n");
@@ -354,7 +356,7 @@ void SetupRC()
     fprintf(stdout, "\tz/Z\t\tMove +/- in z direction\n\n");
     fprintf(stdout, "\tf/F\t\tChange polygon offset factor +/-\n\n");
     fprintf(stdout, "\tq\t\tExit demo\n\n");
-    
+
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -379,7 +381,7 @@ void SetupRC()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
     if (ambientShadowAvailable)
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB, 
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
                         0.5f);
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
@@ -410,7 +412,7 @@ void ChangeSize(int w, int h)
     GLint i;
     GLint origShadowWidth = shadowWidth;
     GLint origShadowHeight = shadowHeight;
-    
+
     windowWidth = w;
     windowHeight = h;
 
@@ -425,7 +427,7 @@ void ChangeSize(int w, int h)
         shadowWidth = w;
         shadowHeight = h;
     }
-    
+
     if (!npotTexturesAvailable)
     {
         // Find the largest power of two that will fit in window.

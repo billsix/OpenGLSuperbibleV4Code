@@ -11,16 +11,20 @@
 		39657A2D0BB5EDE5008695DA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39657A2B0BB5EDE5008695DA /* OpenGL.framework */; };
 		39657A380BB5EEC9008695DA /* shaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39657A370BB5EEC9008695DA /* shaders.cpp */; };
 		39657A410BB5EFB4008695DA /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 39657A400BB5EFB4008695DA /* GLee.c */; };
+		470774B4273FF36D001F1C8C /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774AE273FF36C001F1C8C /* imgui_widgets.cpp */; };
+		470774B5273FF36D001F1C8C /* imgui_impl_glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774AF273FF36C001F1C8C /* imgui_impl_glut.cpp */; };
+		470774B6273FF36D001F1C8C /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774B0273FF36C001F1C8C /* imgui_draw.cpp */; };
+		470774B7273FF36D001F1C8C /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774B1273FF36D001F1C8C /* imgui_demo.cpp */; };
+		470774B8273FF36D001F1C8C /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774B2273FF36D001F1C8C /* imgui.cpp */; };
+		470774B9273FF36D001F1C8C /* imgui_impl_opengl3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 470774B3273FF36D001F1C8C /* imgui_impl_opengl3.cpp */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* shaders_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shaders_Prefix.pch; sourceTree = "<group>"; };
@@ -28,6 +32,14 @@
 		39657A2B0BB5EDE5008695DA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		39657A370BB5EEC9008695DA /* shaders.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = shaders.cpp; path = ../../../../src/chapt15/shaders/shaders.cpp; sourceTree = SOURCE_ROOT; };
 		39657A400BB5EFB4008695DA /* GLee.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = GLee.c; path = ../../../../src/shared/GLee.c; sourceTree = SOURCE_ROOT; };
+		470774AC273FF329001F1C8C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		470774AD273FF32A001F1C8C /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		470774AE273FF36C001F1C8C /* imgui_widgets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_widgets.cpp; path = ../../../../../../contrib/imgui/imgui_widgets.cpp; sourceTree = "<group>"; };
+		470774AF273FF36C001F1C8C /* imgui_impl_glut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_impl_glut.cpp; path = ../../../../../../contrib/imgui/imgui_impl_glut.cpp; sourceTree = "<group>"; };
+		470774B0273FF36C001F1C8C /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_draw.cpp; path = ../../../../../../contrib/imgui/imgui_draw.cpp; sourceTree = "<group>"; };
+		470774B1273FF36D001F1C8C /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = ../../../../../../contrib/imgui/imgui_demo.cpp; sourceTree = "<group>"; };
+		470774B2273FF36D001F1C8C /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = ../../../../../../contrib/imgui/imgui.cpp; sourceTree = "<group>"; };
+		470774B3273FF36D001F1C8C /* imgui_impl_opengl3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_impl_opengl3.cpp; path = ../../../../../../contrib/imgui/imgui_impl_opengl3.cpp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* shaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shaders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -94,6 +106,12 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				470774B1273FF36D001F1C8C /* imgui_demo.cpp */,
+				470774B0273FF36C001F1C8C /* imgui_draw.cpp */,
+				470774AF273FF36C001F1C8C /* imgui_impl_glut.cpp */,
+				470774B3273FF36D001F1C8C /* imgui_impl_opengl3.cpp */,
+				470774AE273FF36C001F1C8C /* imgui_widgets.cpp */,
+				470774B2273FF36D001F1C8C /* imgui.cpp */,
 				39657A3F0BB5EF95008695DA /* shared */,
 				39657A370BB5EEC9008695DA /* shaders.cpp */,
 				32CA4F630368D1EE00C91783 /* shaders_Prefix.pch */,
@@ -157,7 +175,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1310;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "shaders" */;
 			compatibilityVersion = "Xcode 2.4";
@@ -166,7 +184,6 @@
 			knownRegions = (
 				en,
 				Base,
-				English,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* shaders */;
 			projectDirPath = "";
@@ -195,7 +212,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				39657A380BB5EEC9008695DA /* shaders.cpp in Sources */,
+				470774B4273FF36D001F1C8C /* imgui_widgets.cpp in Sources */,
+				470774B9273FF36D001F1C8C /* imgui_impl_opengl3.cpp in Sources */,
+				470774B7273FF36D001F1C8C /* imgui_demo.cpp in Sources */,
 				39657A410BB5EFB4008695DA /* GLee.c in Sources */,
+				470774B6273FF36D001F1C8C /* imgui_draw.cpp in Sources */,
+				470774B8273FF36D001F1C8C /* imgui.cpp in Sources */,
+				470774B5273FF36D001F1C8C /* imgui_impl_glut.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +228,7 @@
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
+				470774AC273FF329001F1C8C /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -213,7 +236,7 @@
 		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				29B97319FDCFA39411CA2CEA /* English */,
+				470774AD273FF32A001F1C8C /* en */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -270,6 +293,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -284,6 +308,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../../../../../contrib/imgui;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -305,6 +330,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -318,6 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../../../../../contrib/imgui;
 				SDKROOT = macosx;
 			};
 			name = Release;

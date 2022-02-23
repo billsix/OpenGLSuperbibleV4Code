@@ -182,11 +182,11 @@ void ChangeSize(int w, int h) {
   aspectRatio = (GLfloat)w / (GLfloat)h;
   if (w <= h) {
     windowWidth = 100;
-    windowHeight = 100 / aspectRatio;
+    windowHeight = windowWidth / aspectRatio;
     glOrtho(-100.0, 100.0, -windowHeight, windowHeight, 1.0, -1.0);
   } else {
-    windowWidth = 100 * aspectRatio;
     windowHeight = 100;
+    windowWidth = windowHeight * aspectRatio;
     glOrtho(-windowWidth, windowWidth, -100.0, 100.0, 1.0, -1.0);
   }
 

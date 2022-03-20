@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,8 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef INCLUDED_IMF_HEADER_H
 #define INCLUDED_IMF_HEADER_H
 
@@ -43,19 +41,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ImfLineOrder.h>
+#include "IexBaseExc.h"
+#include "ImathBox.h"
+#include "ImathVec.h"
 #include <ImfCompression.h>
+#include <ImfInt64.h>
+#include <ImfLineOrder.h>
 #include <ImfName.h>
 #include <ImfTileDescription.h>
-#include <ImfInt64.h>
-#include "ImathVec.h"
-#include "ImathBox.h"
-#include "IexBaseExc.h"
-#include <map>
 #include <iosfwd>
+#include <map>
 
 namespace Imf {
-
 
 class Attribute;
 class ChannelList;
@@ -63,311 +60,275 @@ class IStream;
 class OStream;
 class PreviewImage;
 
+class Header {
+public:
+  //----------------------------------------------------------------
+  // Default constructor -- the display window and the data window
+  // are both set to Box2i (V2i (0, 0), V2i (width-1, height-1).
+  //----------------------------------------------------------------
 
-class Header
-{
-  public:
-    
-    //----------------------------------------------------------------
-    // Default constructor -- the display window and the data window
-    // are both set to Box2i (V2i (0, 0), V2i (width-1, height-1).
-    //----------------------------------------------------------------
+  Header(int width = 64, int height = 64, float pixelAspectRatio = 1,
+         const Imath::V2f &screenWindowCenter = Imath::V2f(0, 0),
+         float screenWindowWidth = 1, LineOrder lineOrder = INCREASING_Y,
+         Compression = ZIP_COMPRESSION);
 
-    Header (int width = 64,
-	    int height = 64,
-	    float pixelAspectRatio = 1,
-	    const Imath::V2f &screenWindowCenter = Imath::V2f (0, 0),
-	    float screenWindowWidth = 1,
-	    LineOrder lineOrder = INCREASING_Y,
-	    Compression = ZIP_COMPRESSION);
+  //--------------------------------------------------------------------
+  // Constructor -- the data window is specified explicitly; the display
+  // window is set to Box2i (V2i (0, 0), V2i (width-1, height-1).
+  //--------------------------------------------------------------------
 
+  Header(int width, int height, const Imath::Box2i &dataWindow,
+         float pixelAspectRatio = 1,
+         const Imath::V2f &screenWindowCenter = Imath::V2f(0, 0),
+         float screenWindowWidth = 1, LineOrder lineOrder = INCREASING_Y,
+         Compression = ZIP_COMPRESSION);
 
-    //--------------------------------------------------------------------
-    // Constructor -- the data window is specified explicitly; the display
-    // window is set to Box2i (V2i (0, 0), V2i (width-1, height-1).
-    //--------------------------------------------------------------------
+  //----------------------------------------------------------
+  // Constructor -- the display window and the data window are
+  // both specified explicitly.
+  //----------------------------------------------------------
 
-    Header (int width,
-	    int height,
-	    const Imath::Box2i &dataWindow,
-	    float pixelAspectRatio = 1,
-	    const Imath::V2f &screenWindowCenter = Imath::V2f (0, 0),
-	    float screenWindowWidth = 1,
-	    LineOrder lineOrder = INCREASING_Y,
-	    Compression = ZIP_COMPRESSION);
+  Header(const Imath::Box2i &displayWindow, const Imath::Box2i &dataWindow,
+         float pixelAspectRatio = 1,
+         const Imath::V2f &screenWindowCenter = Imath::V2f(0, 0),
+         float screenWindowWidth = 1, LineOrder lineOrder = INCREASING_Y,
+         Compression = ZIP_COMPRESSION);
 
+  //-----------------
+  // Copy constructor
+  //-----------------
 
-    //----------------------------------------------------------
-    // Constructor -- the display window and the data window are
-    // both specified explicitly.
-    //----------------------------------------------------------
+  Header(const Header &other);
 
-    Header (const Imath::Box2i &displayWindow,
-	    const Imath::Box2i &dataWindow,
-	    float pixelAspectRatio = 1,
-	    const Imath::V2f &screenWindowCenter = Imath::V2f (0, 0),
-	    float screenWindowWidth = 1,
-	    LineOrder lineOrder = INCREASING_Y,
-	    Compression = ZIP_COMPRESSION);
+  //-----------
+  // Destructor
+  //-----------
 
+  ~Header();
 
-    //-----------------
-    // Copy constructor
-    //-----------------
+  //-----------
+  // Assignment
+  //-----------
 
-    Header (const Header &other);
+  Header &operator=(const Header &other);
 
+  //---------------------------------------------------------------
+  // Add an attribute:
+  //
+  // insert(n,attr)	If no attribute with name n exists, a new
+  //			attribute with name n, and the same type as
+  //			attr, is added, and the value of attr is
+  //			copied into the new attribute.
+  //
+  //			If an attribute with name n exists, and its
+  //			type is the same as attr, the value of attr
+  //			is copied into this attribute.
+  //
+  //			If an attribute with name n exists, and its
+  //			type is different from attr, an Iex::TypeExc
+  //			is thrown.
+  //
+  //---------------------------------------------------------------
 
-    //-----------
-    // Destructor
-    //-----------
+  void insert(const char name[], const Attribute &attribute);
 
-    ~Header ();
+  //------------------------------------------------------------------
+  // Access to existing attributes:
+  //
+  // [n]			Returns a reference to the attribute
+  //				with name n.  If no attribute with
+  //				name n exists, an Iex::ArgExc is thrown.
+  //
+  // typedAttribute<T>(n)	Returns a reference to the attribute
+  //				with name n and type T.  If no attribute
+  //				with name n exists, an Iex::ArgExc is
+  //				thrown.  If an attribute with name n
+  //				exists, but its type is not T, an
+  //				Iex::TypeExc is thrown.
+  //
+  // findTypedAttribute<T>(n)	Returns a pointer to the attribute with
+  //				name n and type T, or 0 if no attribute
+  //				with name n and type T exists.
+  //
+  //------------------------------------------------------------------
 
+  Attribute &operator[](const char name[]);
+  const Attribute &operator[](const char name[]) const;
 
-    //-----------
-    // Assignment
-    //-----------
+  template <class T> T &typedAttribute(const char name[]);
+  template <class T> const T &typedAttribute(const char name[]) const;
 
-    Header &			operator = (const Header &other);
+  template <class T> T *findTypedAttribute(const char name[]);
+  template <class T> const T *findTypedAttribute(const char name[]) const;
 
+  //---------------------------------------------
+  // Iterator-style access to existing attributes
+  //---------------------------------------------
 
-    //---------------------------------------------------------------
-    // Add an attribute:
-    //
-    // insert(n,attr)	If no attribute with name n exists, a new
-    //			attribute with name n, and the same type as
-    //			attr, is added, and the value of attr is
-    //			copied into the new attribute.
-    //
-    //			If an attribute with name n exists, and its
-    //			type is the same as attr, the value of attr
-    //			is copied into this attribute.
-    //
-    //			If an attribute with name n exists, and its
-    //			type is different from attr, an Iex::TypeExc
-    //			is thrown.
-    //
-    //---------------------------------------------------------------
+  typedef std::map<Name, Attribute *> AttributeMap;
 
-    void			insert (const char name[],
-				        const Attribute &attribute);
+  class Iterator;
+  class ConstIterator;
 
-    //------------------------------------------------------------------
-    // Access to existing attributes:
-    //
-    // [n]			Returns a reference to the attribute
-    //				with name n.  If no attribute with
-    //				name n exists, an Iex::ArgExc is thrown.
-    //
-    // typedAttribute<T>(n)	Returns a reference to the attribute
-    //				with name n and type T.  If no attribute
-    //				with name n exists, an Iex::ArgExc is
-    //				thrown.  If an attribute with name n
-    //				exists, but its type is not T, an
-    //				Iex::TypeExc is thrown.
-    //
-    // findTypedAttribute<T>(n)	Returns a pointer to the attribute with
-    //				name n and type T, or 0 if no attribute
-    //				with name n and type T exists.
-    //
-    //------------------------------------------------------------------
+  Iterator begin();
+  ConstIterator begin() const;
+  Iterator end();
+  ConstIterator end() const;
+  Iterator find(const char name[]);
+  ConstIterator find(const char name[]) const;
 
-    Attribute &			operator [] (const char name[]);
-    const Attribute &		operator [] (const char name[]) const;
+  //--------------------------------
+  // Access to predefined attributes
+  //--------------------------------
 
-    template <class T> T&	typedAttribute (const char name[]);
-    template <class T> const T&	typedAttribute (const char name[]) const;
+  Imath::Box2i &displayWindow();
+  const Imath::Box2i &displayWindow() const;
 
-    template <class T> T*	findTypedAttribute (const char name[]);
-    template <class T> const T*	findTypedAttribute (const char name[]) const;
+  Imath::Box2i &dataWindow();
+  const Imath::Box2i &dataWindow() const;
 
+  float &pixelAspectRatio();
+  const float &pixelAspectRatio() const;
 
-    //---------------------------------------------
-    // Iterator-style access to existing attributes
-    //---------------------------------------------
+  Imath::V2f &screenWindowCenter();
+  const Imath::V2f &screenWindowCenter() const;
 
-    typedef std::map <Name, Attribute *> AttributeMap;
+  float &screenWindowWidth();
+  const float &screenWindowWidth() const;
 
-    class Iterator;
-    class ConstIterator;
+  ChannelList &channels();
+  const ChannelList &channels() const;
 
-    Iterator			begin ();
-    ConstIterator		begin () const;
-    Iterator			end ();
-    ConstIterator		end () const;
-    Iterator			find (const char name[]);
-    ConstIterator		find (const char name[]) const;
+  LineOrder &lineOrder();
+  const LineOrder &lineOrder() const;
 
+  Compression &compression();
+  const Compression &compression() const;
 
-    //--------------------------------
-    // Access to predefined attributes
-    //--------------------------------
+  //----------------------------------------------------------------------
+  // Tile Description:
+  //
+  // The tile description is a TileDescriptionAttribute whose name
+  // is "tiles".  The "tiles" attribute must be present in any tiled
+  // image file. When present, it describes various properties of the
+  // tiles that make up the file.
+  //
+  // Convenience functions:
+  //
+  // setTileDescription(td)
+  //     calls insert ("tiles", TileDescriptionAttribute (td))
+  //
+  // tileDescription()
+  //     returns typedAttribute<TileDescriptionAttribute>("tiles").value()
+  //
+  // hasTileDescription()
+  //     return findTypedAttribute<TileDescriptionAttribute>("tiles") != 0
+  //
+  //----------------------------------------------------------------------
 
-    Imath::Box2i &		displayWindow ();
-    const Imath::Box2i &	displayWindow () const;
+  void setTileDescription(const TileDescription &td);
 
-    Imath::Box2i &		dataWindow ();
-    const Imath::Box2i &	dataWindow () const;
+  TileDescription &tileDescription();
+  const TileDescription &tileDescription() const;
 
-    float &			pixelAspectRatio ();
-    const float &		pixelAspectRatio () const;
+  bool hasTileDescription() const;
 
-    Imath::V2f &		screenWindowCenter ();
-    const Imath::V2f &		screenWindowCenter () const;
+  //----------------------------------------------------------------------
+  // Preview image:
+  //
+  // The preview image is a PreviewImageAttribute whose name is "preview".
+  // This attribute is special -- while an image file is being written,
+  // the pixels of the preview image can be changed repeatedly by calling
+  // OutputFile::updatePreviewImage().
+  //
+  // Convenience functions:
+  //
+  // setPreviewImage(p)
+  //     calls insert ("preview", PreviewImageAttribute (p))
+  //
+  // previewImage()
+  //     returns typedAttribute<PreviewImageAttribute>("preview").value()
+  //
+  // hasPreviewImage()
+  //     return findTypedAttribute<PreviewImageAttribute>("preview") != 0
+  //
+  //----------------------------------------------------------------------
 
-    float &			screenWindowWidth ();
-    const float &		screenWindowWidth () const;
+  void setPreviewImage(const PreviewImage &p);
 
-    ChannelList &		channels ();
-    const ChannelList &		channels () const;
+  PreviewImage &previewImage();
+  const PreviewImage &previewImage() const;
 
-    LineOrder &			lineOrder ();
-    const LineOrder &		lineOrder () const;
+  bool hasPreviewImage() const;
 
-    Compression &		compression ();
-    const Compression &		compression () const;
+  //-------------------------------------------------------------
+  // Sanity check -- examines the header, and throws an exception
+  // if it finds something wrong (empty display window, negative
+  // pixel aspect ratio, unknown compression sceme etc.)
+  //
+  // set isTiled to true if you are checking a tiled/multi-res
+  // header
+  //-------------------------------------------------------------
 
+  void sanityCheck(bool isTiled = false) const;
 
-    //----------------------------------------------------------------------
-    // Tile Description:
-    //
-    // The tile description is a TileDescriptionAttribute whose name
-    // is "tiles".  The "tiles" attribute must be present in any tiled
-    // image file. When present, it describes various properties of the
-    // tiles that make up the file.
-    //
-    // Convenience functions:
-    //
-    // setTileDescription(td)
-    //     calls insert ("tiles", TileDescriptionAttribute (td))
-    //
-    // tileDescription()
-    //     returns typedAttribute<TileDescriptionAttribute>("tiles").value()
-    //
-    // hasTileDescription()
-    //     return findTypedAttribute<TileDescriptionAttribute>("tiles") != 0
-    //
-    //----------------------------------------------------------------------
+  //------------------------------------------------------------------
+  // Input and output:
+  //
+  // If the header contains a preview image attribute, then writeTo()
+  // returns the position of that attribute in the output stream; this
+  // information is used by OutputFile::updatePreviewImage().
+  // If the header contains no preview image attribute, then writeTo()
+  // returns 0.
+  //------------------------------------------------------------------
 
-    void			setTileDescription (const TileDescription & td);
+  Int64 writeTo(OStream &os, bool isTiled = false) const;
 
-    TileDescription &		tileDescription ();
-    const TileDescription &	tileDescription () const;
+  void readFrom(IStream &is, int &version);
 
-    bool			hasTileDescription() const;
-
-
-    //----------------------------------------------------------------------
-    // Preview image:
-    //
-    // The preview image is a PreviewImageAttribute whose name is "preview".
-    // This attribute is special -- while an image file is being written,
-    // the pixels of the preview image can be changed repeatedly by calling
-    // OutputFile::updatePreviewImage().
-    //
-    // Convenience functions:
-    //
-    // setPreviewImage(p)
-    //     calls insert ("preview", PreviewImageAttribute (p))
-    //
-    // previewImage()
-    //     returns typedAttribute<PreviewImageAttribute>("preview").value()
-    //
-    // hasPreviewImage()
-    //     return findTypedAttribute<PreviewImageAttribute>("preview") != 0
-    //
-    //----------------------------------------------------------------------
-
-    void			setPreviewImage (const PreviewImage &p);
-
-    PreviewImage &		previewImage ();
-    const PreviewImage &	previewImage () const;
-
-    bool			hasPreviewImage () const;
-
-
-    //-------------------------------------------------------------
-    // Sanity check -- examines the header, and throws an exception
-    // if it finds something wrong (empty display window, negative
-    // pixel aspect ratio, unknown compression sceme etc.)
-    //
-    // set isTiled to true if you are checking a tiled/multi-res
-    // header
-    //-------------------------------------------------------------
-
-    void			sanityCheck (bool isTiled = false) const;
-
-
-    //------------------------------------------------------------------
-    // Input and output:
-    //
-    // If the header contains a preview image attribute, then writeTo()
-    // returns the position of that attribute in the output stream; this
-    // information is used by OutputFile::updatePreviewImage().
-    // If the header contains no preview image attribute, then writeTo()
-    // returns 0.
-    //------------------------------------------------------------------
-
-
-    Int64			writeTo (OStream &os,
-					 bool isTiled = false) const;
-
-    void			readFrom (IStream &is, int &version);
-
-  private:
-
-    AttributeMap		_map;
+private:
+  AttributeMap _map;
 };
-
 
 //----------
 // Iterators
 //----------
 
-class Header::Iterator
-{
-  public:
+class Header::Iterator {
+public:
+  Iterator();
+  Iterator(const Header::AttributeMap::iterator &i);
 
-    Iterator ();
-    Iterator (const Header::AttributeMap::iterator &i);
+  Iterator &operator++();
+  Iterator operator++(int);
 
-    Iterator &			operator ++ ();
-    Iterator 			operator ++ (int);
+  const char *name() const;
+  Attribute &attribute() const;
 
-    const char *		name () const;
-    Attribute &			attribute () const;
+private:
+  friend class Header::ConstIterator;
 
-  private:
-
-    friend class Header::ConstIterator;
-
-    Header::AttributeMap::iterator _i;
+  Header::AttributeMap::iterator _i;
 };
 
+class Header::ConstIterator {
+public:
+  ConstIterator();
+  ConstIterator(const Header::AttributeMap::const_iterator &i);
+  ConstIterator(const Header::Iterator &other);
 
-class Header::ConstIterator
-{
-  public:
+  ConstIterator &operator++();
+  ConstIterator operator++(int);
 
-    ConstIterator ();
-    ConstIterator (const Header::AttributeMap::const_iterator &i);
-    ConstIterator (const Header::Iterator &other);
+  const char *name() const;
+  const Attribute &attribute() const;
 
-    ConstIterator &		operator ++ ();
-    ConstIterator 		operator ++ (int);
+private:
+  friend bool operator==(const ConstIterator &, const ConstIterator &);
+  friend bool operator!=(const ConstIterator &, const ConstIterator &);
 
-    const char *		name () const;
-    const Attribute &		attribute () const;
-
-  private:
-
-    friend bool operator == (const ConstIterator &, const ConstIterator &);
-    friend bool operator != (const ConstIterator &, const ConstIterator &);
-
-    Header::AttributeMap::const_iterator _i;
+  Header::AttributeMap::const_iterator _i;
 };
-
 
 //------------------------------------------------------------------------
 // Library initialization:
@@ -383,174 +344,112 @@ class Header::ConstIterator
 //
 //------------------------------------------------------------------------
 
-void staticInitialize ();
-
+void staticInitialize();
 
 //-----------------
 // Inline Functions
 //-----------------
 
-
-inline
-Header::Iterator::Iterator (): _i()
-{
-    // empty
+inline Header::Iterator::Iterator() : _i() {
+  // empty
 }
 
-
-inline
-Header::Iterator::Iterator (const Header::AttributeMap::iterator &i): _i (i)
-{
-    // empty
+inline Header::Iterator::Iterator(const Header::AttributeMap::iterator &i)
+    : _i(i) {
+  // empty
 }
 
-
-inline Header::Iterator &		
-Header::Iterator::operator ++ ()
-{
-    ++_i;
-    return *this;
+inline Header::Iterator &Header::Iterator::operator++() {
+  ++_i;
+  return *this;
 }
 
-
-inline Header::Iterator 	
-Header::Iterator::operator ++ (int)
-{
-    Iterator tmp = *this;
-    ++_i;
-    return tmp;
+inline Header::Iterator Header::Iterator::operator++(int) {
+  Iterator tmp = *this;
+  ++_i;
+  return tmp;
 }
 
+inline const char *Header::Iterator::name() const { return *_i->first; }
 
-inline const char *
-Header::Iterator::name () const
-{
-    return *_i->first;
+inline Attribute &Header::Iterator::attribute() const { return *_i->second; }
+
+inline Header::ConstIterator::ConstIterator() : _i() {
+  // empty
 }
 
-
-inline Attribute &	
-Header::Iterator::attribute () const
-{
-    return *_i->second;
+inline Header::ConstIterator::ConstIterator(
+    const Header::AttributeMap::const_iterator &i)
+    : _i(i) {
+  // empty
 }
 
-
-inline
-Header::ConstIterator::ConstIterator (): _i()
-{
-    // empty
+inline Header::ConstIterator::ConstIterator(const Header::Iterator &other)
+    : _i(other._i) {
+  // empty
 }
 
-inline
-Header::ConstIterator::ConstIterator
-    (const Header::AttributeMap::const_iterator &i): _i (i)
-{
-    // empty
+inline Header::ConstIterator &Header::ConstIterator::operator++() {
+  ++_i;
+  return *this;
 }
 
-
-inline
-Header::ConstIterator::ConstIterator (const Header::Iterator &other):
-    _i (other._i)
-{
-    // empty
+inline Header::ConstIterator Header::ConstIterator::operator++(int) {
+  ConstIterator tmp = *this;
+  ++_i;
+  return tmp;
 }
 
-inline Header::ConstIterator &
-Header::ConstIterator::operator ++ ()
-{
-    ++_i;
-    return *this;
+inline const char *Header::ConstIterator::name() const { return *_i->first; }
+
+inline const Attribute &Header::ConstIterator::attribute() const {
+  return *_i->second;
 }
 
-
-inline Header::ConstIterator 		
-Header::ConstIterator::operator ++ (int)
-{
-    ConstIterator tmp = *this;
-    ++_i;
-    return tmp;
+inline bool operator==(const Header::ConstIterator &x,
+                       const Header::ConstIterator &y) {
+  return x._i == y._i;
 }
 
-
-inline const char *
-Header::ConstIterator::name () const
-{
-    return *_i->first;
+inline bool operator!=(const Header::ConstIterator &x,
+                       const Header::ConstIterator &y) {
+  return !(x == y);
 }
-
-
-inline const Attribute &	
-Header::ConstIterator::attribute () const
-{
-    return *_i->second;
-}
-
-
-inline bool
-operator == (const Header::ConstIterator &x, const Header::ConstIterator &y)
-{
-    return x._i == y._i;
-}
-
-
-inline bool
-operator != (const Header::ConstIterator &x, const Header::ConstIterator &y)
-{
-    return !(x == y);
-}
-
 
 //---------------------
 // Template definitions
 //---------------------
 
-template <class T>
-T &
-Header::typedAttribute (const char name[])
-{
-    Attribute *attr = &(*this)[name];
-    T *tattr = dynamic_cast <T*> (attr);
+template <class T> T &Header::typedAttribute(const char name[]) {
+  Attribute *attr = &(*this)[name];
+  T *tattr = dynamic_cast<T *>(attr);
 
-    if (tattr == 0)
-	throw Iex::TypeExc ("Unexpected attribute type.");
+  if (tattr == 0)
+    throw Iex::TypeExc("Unexpected attribute type.");
 
-    return *tattr;
+  return *tattr;
 }
 
+template <class T> const T &Header::typedAttribute(const char name[]) const {
+  const Attribute *attr = &(*this)[name];
+  const T *tattr = dynamic_cast<const T *>(attr);
 
-template <class T>
-const T &
-Header::typedAttribute (const char name[]) const
-{
-    const Attribute *attr = &(*this)[name];
-    const T *tattr = dynamic_cast <const T*> (attr);
+  if (tattr == 0)
+    throw Iex::TypeExc("Unexpected attribute type.");
 
-    if (tattr == 0)
-	throw Iex::TypeExc ("Unexpected attribute type.");
-
-    return *tattr;
+  return *tattr;
 }
 
-
-template <class T>
-T *
-Header::findTypedAttribute (const char name[])
-{
-    AttributeMap::iterator i = _map.find (name);
-    return (i == _map.end())? 0: dynamic_cast <T*> (i->second);
+template <class T> T *Header::findTypedAttribute(const char name[]) {
+  AttributeMap::iterator i = _map.find(name);
+  return (i == _map.end()) ? 0 : dynamic_cast<T *>(i->second);
 }
 
-
 template <class T>
-const T *
-Header::findTypedAttribute (const char name[]) const
-{
-    AttributeMap::const_iterator i = _map.find (name);
-    return (i == _map.end())? 0: dynamic_cast <const T*> (i->second);
+const T *Header::findTypedAttribute(const char name[]) const {
+  AttributeMap::const_iterator i = _map.find(name);
+  return (i == _map.end()) ? 0 : dynamic_cast<const T *>(i->second);
 }
-
 
 } // namespace Imf
 

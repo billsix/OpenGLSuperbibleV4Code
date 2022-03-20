@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2003, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,7 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_CHROMATICITIES_H
 #define INCLUDED_IMF_CHROMATICITIES_H
 
@@ -43,25 +42,22 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "ImathVec.h"
 #include "ImathMatrix.h"
+#include "ImathVec.h"
 
 namespace Imf {
 
-   
-struct Chromaticities
-{
-    Imath::V2f	red;
-    Imath::V2f	green;
-    Imath::V2f	blue;
-    Imath::V2f	white;
+struct Chromaticities {
+  Imath::V2f red;
+  Imath::V2f green;
+  Imath::V2f blue;
+  Imath::V2f white;
 
-    Chromaticities (const Imath::V2f &red   = Imath::V2f (0.6400f, 0.3300f),
-		    const Imath::V2f &green = Imath::V2f (0.3000f, 0.6000f),
-		    const Imath::V2f &blue  = Imath::V2f (0.1500f, 0.0600f),
-		    const Imath::V2f &white = Imath::V2f (0.3127f, 0.3290f));
+  Chromaticities(const Imath::V2f &red = Imath::V2f(0.6400f, 0.3300f),
+                 const Imath::V2f &green = Imath::V2f(0.3000f, 0.6000f),
+                 const Imath::V2f &blue = Imath::V2f(0.1500f, 0.0600f),
+                 const Imath::V2f &white = Imath::V2f(0.3127f, 0.3290f));
 };
-
 
 //
 // Conversions between RGB and CIE XYZ
@@ -72,55 +68,54 @@ struct Chromaticities
 // 	triple (1,1,1), or "white", RGBtoXYZ(c,Y) computes a matrix, M, so
 // 	that multiplying an RGB value, v, with M produces an equivalent
 // 	XYZ value, w.  (w == v * M)
-// 
+//
 // 	If we define that
-// 
+//
 // 	   (Xr, Yr, Zr) == (1, 0, 0) * M
 // 	   (Xg, Yg, Zg) == (0, 1, 0) * M
 // 	   (Xb, Yb, Zb) == (0, 0, 1) * M
 // 	   (Xw, Yw, Zw) == (1, 1, 1) * M,
-// 
+//
 // 	then the following statements are true:
-// 
+//
 // 	   Xr / (Xr + Yr + Zr) == c.red.x
 // 	   Yr / (Xr + Yr + Zr) == c.red.y
-// 
+//
 // 	   Xg / (Xg + Yg + Zg) == c.red.x
 // 	   Yg / (Xg + Yg + Zg) == c.red.y
-// 
+//
 // 	   Xb / (Xb + Yb + Zb) == c.red.x
 // 	   Yb / (Xb + Yb + Zb) == c.red.y
-// 
+//
 // 	   Xw / (Xw + Yw + Zw) == c.red.x
 // 	   Yw / (Xw + Yw + Zw) == c.red.y
-// 
+//
 // 	   Yw == Y.
-// 
+//
 // XYZ to RGB:
-// 
+//
 // 	YYZtoRGB(c,Y) returns RGBtoXYZ(c,Y).inverse().
-// 
+//
 // Warning:
-// 
+//
 // 	It would seem that RGBtoXYZ() and XYZtoRGB() are all you need
 // 	to convert RGB values with one set of primary and white point
 // 	chromaticities into perceptually equivalent RGB values with
 // 	different primary and white point chromaticities:
-// 
+//
 // 	    M44f M = RGBtoXYZ (chromaticities1, Y1) *
 // 		     XYZtoRGB (chromaticities2, Y2);
-// 
+//
 // 	However, this simple conversion does not account for white point
 // 	adaptation, and produces undesirable results.  The proper thing
 // 	to do is to perform a Bradford or a von Kries transform, which
 // 	moves the white point of the original color space to the white
 // 	point of the destination color space, dragging other colors with
-// 	it in a sensible fashion.  
+// 	it in a sensible fashion.
 //
 
-Imath::M44f	RGBtoXYZ (const Chromaticities chroma, float Y);
-Imath::M44f	XYZtoRGB (const Chromaticities chroma, float Y);
-
+Imath::M44f RGBtoXYZ(const Chromaticities chroma, float Y);
+Imath::M44f XYZtoRGB(const Chromaticities chroma, float Y);
 
 } // namespace Imf
 

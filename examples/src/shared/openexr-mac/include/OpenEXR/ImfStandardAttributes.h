@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,7 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////
-
 
 #ifndef INCLUDED_IMF_STANDARD_ATTRIBUTES_H
 #define INCLUDED_IMF_STANDARD_ATTRIBUTES_H
@@ -54,24 +53,22 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ImfHeader.h>
-#include <ImfFloatAttribute.h>
-#include <ImfStringAttribute.h>
 #include <ImfChromaticitiesAttribute.h>
 #include <ImfEnvmapAttribute.h>
+#include <ImfFloatAttribute.h>
+#include <ImfHeader.h>
 #include <ImfKeyCodeAttribute.h>
+#include <ImfStringAttribute.h>
 #include <ImfTimeCodeAttribute.h>
 
-
-#define IMF_STD_ATTRIBUTE_DEF(name,suffix,type)				      \
-									      \
-    void			 add##suffix (Header &header, const type &v); \
-    bool			 has##suffix (const Header &header);	      \
-    const TypedAttribute<type> & name##Attribute (const Header &header);      \
-    TypedAttribute<type> &	 name##Attribute (Header &header);	      \
-    const type &		 name (const Header &header);		      \
-    type &			 name (Header &header);
-
+#define IMF_STD_ATTRIBUTE_DEF(name, suffix, type)                              \
+                                                                               \
+  void add##suffix(Header &header, const type &v);                             \
+  bool has##suffix(const Header &header);                                      \
+  const TypedAttribute<type> &name##Attribute(const Header &header);           \
+  TypedAttribute<type> &name##Attribute(Header &header);                       \
+  const type &name(const Header &header);                                      \
+  type &name(Header &header);
 
 namespace Imf {
 
@@ -80,8 +77,7 @@ namespace Imf {
 // chromaticities of the primaries and the white point
 //
 
-IMF_STD_ATTRIBUTE_DEF (chromaticities, Chromaticities, Chromaticities)
-
+IMF_STD_ATTRIBUTE_DEF(chromaticities, Chromaticities, Chromaticities)
 
 //
 // whiteLuminance -- for RGB images, defines the luminance, in Nits
@@ -91,34 +87,30 @@ IMF_STD_ATTRIBUTE_DEF (chromaticities, Chromaticities, Chromaticities)
 // known, then it is possible to convert the image's pixels from RGB
 // to CIE XYZ tristimulus values (see function RGBtoXYZ() in header
 // file ImfChromaticities.h).
-// 
+//
 //
 
-IMF_STD_ATTRIBUTE_DEF (whiteLuminance, WhiteLuminance, float)
-
+IMF_STD_ATTRIBUTE_DEF(whiteLuminance, WhiteLuminance, float)
 
 //
 // xDensity -- horizontal output density, in pixels per inch.
 // The image's vertical output density is xDensity * pixelAspectRatio.
 //
 
-IMF_STD_ATTRIBUTE_DEF (xDensity, XDensity, float)
-
+IMF_STD_ATTRIBUTE_DEF(xDensity, XDensity, float)
 
 //
 // owner -- name of the owner of the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (owner, Owner, std::string)
-   
+IMF_STD_ATTRIBUTE_DEF(owner, Owner, std::string)
 
 //
 // comments -- additional image information in human-readable
 // form, for example a verbal description of the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (comments, Comments, std::string)
-
+IMF_STD_ATTRIBUTE_DEF(comments, Comments, std::string)
 
 //
 // capDate -- the date when the image was created or captured,
@@ -133,8 +125,7 @@ IMF_STD_ATTRIBUTE_DEF (comments, Comments, std::string)
 //
 //
 
-IMF_STD_ATTRIBUTE_DEF (capDate, CapDate, std::string)
-
+IMF_STD_ATTRIBUTE_DEF(capDate, CapDate, std::string)
 
 //
 // utcOffset -- offset of local time at capDate from
@@ -143,8 +134,7 @@ IMF_STD_ATTRIBUTE_DEF (capDate, CapDate, std::string)
 //    UTC == local time + utcOffset
 //
 
-IMF_STD_ATTRIBUTE_DEF (utcOffset, utcOffset, float)
-
+IMF_STD_ATTRIBUTE_DEF(utcOffset, utcOffset, float)
 
 //
 // longitude, latitude, altitude -- for images of real objects, the
@@ -154,40 +144,35 @@ IMF_STD_ATTRIBUTE_DEF (utcOffset, utcOffset, float)
 // at longitude 85.317, latitude 27.717, altitude 1305.
 //
 
-IMF_STD_ATTRIBUTE_DEF (longitude, Longitude, float)
-IMF_STD_ATTRIBUTE_DEF (latitude, Latitude, float)
-IMF_STD_ATTRIBUTE_DEF (altitude, Altitude, float)
-
+IMF_STD_ATTRIBUTE_DEF(longitude, Longitude, float)
+IMF_STD_ATTRIBUTE_DEF(latitude, Latitude, float)
+IMF_STD_ATTRIBUTE_DEF(altitude, Altitude, float)
 
 //
 // focus -- the camera's focus distance, in meters
 //
 
-IMF_STD_ATTRIBUTE_DEF (focus, Focus, float)
-
+IMF_STD_ATTRIBUTE_DEF(focus, Focus, float)
 
 //
 // exposure -- exposure time, in seconds
 //
 
-IMF_STD_ATTRIBUTE_DEF (expTime, ExpTime, float)
-
+IMF_STD_ATTRIBUTE_DEF(expTime, ExpTime, float)
 
 //
 // aperture -- the camera's lens aperture, in f-stops (focal length
 // of the lens divided by the diameter of the iris opening)
 //
 
-IMF_STD_ATTRIBUTE_DEF (aperture, Aperture, float)
-
+IMF_STD_ATTRIBUTE_DEF(aperture, Aperture, float)
 
 //
 // isoSpeed -- the ISO speed of the film or image sensor
 // that was used to record the image
 //
 
-IMF_STD_ATTRIBUTE_DEF (isoSpeed, IsoSpeed, float)
-
+IMF_STD_ATTRIBUTE_DEF(isoSpeed, IsoSpeed, float)
 
 //
 // envmap -- if this attribute is present, the image represents
@@ -196,8 +181,7 @@ IMF_STD_ATTRIBUTE_DEF (isoSpeed, IsoSpeed, float)
 // see header file ImfEnvmap.h
 //
 
-IMF_STD_ATTRIBUTE_DEF (envmap, Envmap, Envmap)
-
+IMF_STD_ATTRIBUTE_DEF(envmap, Envmap, Envmap)
 
 //
 // keyCode -- for motion picture film frames.  Identifies film
@@ -205,15 +189,13 @@ IMF_STD_ATTRIBUTE_DEF (envmap, Envmap, Envmap)
 // the roll.
 //
 
-IMF_STD_ATTRIBUTE_DEF (keyCode, KeyCode, KeyCode)
-
+IMF_STD_ATTRIBUTE_DEF(keyCode, KeyCode, KeyCode)
 
 //
 // timeCode -- time and control code
 //
 
-IMF_STD_ATTRIBUTE_DEF (timeCode, TimeCode, TimeCode)
-
+IMF_STD_ATTRIBUTE_DEF(timeCode, TimeCode, TimeCode)
 
 //
 // wrapmodes -- determines how texture map images are extrapolated.
@@ -243,8 +225,7 @@ IMF_STD_ATTRIBUTE_DEF (timeCode, TimeCode, TimeCode)
 //			every other instance is mirrored
 //
 
-IMF_STD_ATTRIBUTE_DEF (wrapmodes, Wrapmodes, std::string)
-
+IMF_STD_ATTRIBUTE_DEF(wrapmodes, Wrapmodes, std::string)
 
 } // namespace Imf
 

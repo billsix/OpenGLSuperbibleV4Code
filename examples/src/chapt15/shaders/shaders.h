@@ -5,31 +5,30 @@
 
 #include "../../shared/SuperbibleSample.h"
 
-class Shaders : public SuperbibleSample
-{
+class Shaders : public SuperbibleSample {
 private:
-    GLboolean useVertexShader;
-    GLboolean useFragmentShader;
-    GLboolean doBlink;
+  GLboolean useVertexShader;
+  GLboolean useFragmentShader;
+  GLboolean doBlink;
 
-    GLboolean needsValidation;
+  GLboolean needsValidation;
 
-    GLint flickerLocation;
+  GLint flickerLocation;
 
 public:
-    GLuint vShader, fShader, progObj;
+  GLuint vShader, fShader, progObj;
 
-    Shaders();
-    ~Shaders();
+  Shaders();
+  ~Shaders();
 
-    // static callbacks
-    static void MyProcessMenu(int value);
+  // static callbacks
+  static void MyProcessMenu(int value);
 
-    void ProcessMenu(int value);
+  void ProcessMenu(int value);
 
-    void Link(GLboolean firstTime);
-    void Relink();
-    void InsideRender();
-    void DrawModels();
-    void SetupRC();
+  void Link(GLboolean firstTime);
+  void Relink();
+  void InsideRender();
+  void DrawModels();
+  void SetupRC();
 };

@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,8 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef INCLUDED_IMF_LUT_H
 #define INCLUDED_IMF_LUT_H
 
@@ -45,10 +43,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ImfRgbaFile.h>
-#include <ImfFrameBuffer.h>
 #include "ImathBox.h"
 #include "halfFunction.h"
+#include <ImfFrameBuffer.h>
+#include <ImfRgbaFile.h>
 
 namespace Imf {
 
@@ -56,80 +54,59 @@ namespace Imf {
 // Lookup table for individual half channels.
 //
 
-class HalfLut
-{
-  public:
+class HalfLut {
+public:
+  //------------
+  // Constructor
+  //------------
 
-    //------------
-    // Constructor
-    //------------
+  template <class Function> HalfLut(Function f);
 
-    template <class Function>
-    HalfLut (Function f);
+  //----------------------------------------------------------------------
+  // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
+  //----------------------------------------------------------------------
 
+  void apply(half *data, int nData, int stride = 1) const;
 
-    //----------------------------------------------------------------------
-    // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
-    //----------------------------------------------------------------------
+  //---------------------------------------------------------------
+  // Apply the table to a frame buffer slice (see ImfFrameBuffer.h)
+  //---------------------------------------------------------------
 
-    void apply (half *data,
-		int nData,
-		int stride = 1) const;
+  void apply(const Slice &data, const Imath::Box2i &dataWindow) const;
 
-
-    //---------------------------------------------------------------
-    // Apply the table to a frame buffer slice (see ImfFrameBuffer.h)
-    //---------------------------------------------------------------
-
-    void apply (const Slice &data,
-		const Imath::Box2i &dataWindow) const;
-
-  private:
-
-    halfFunction <half>	_lut;
+private:
+  halfFunction<half> _lut;
 };
-
 
 //
 // Lookup table for combined RGBA data.
 //
 
-class RgbaLut
-{
-  public:
+class RgbaLut {
+public:
+  //------------
+  // Constructor
+  //------------
 
-    //------------
-    // Constructor
-    //------------
+  template <class Function> RgbaLut(Function f, RgbaChannels chn = WRITE_RGB);
 
-    template <class Function>
-    RgbaLut (Function f, RgbaChannels chn = WRITE_RGB);
+  //----------------------------------------------------------------------
+  // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
+  //----------------------------------------------------------------------
 
+  void apply(Rgba *data, int nData, int stride = 1) const;
 
-    //----------------------------------------------------------------------
-    // Apply the table to data[0], data[stride] ... data[(nData-1) * stride]
-    //----------------------------------------------------------------------
+  //-----------------------------------------------------------------------
+  // Apply the table to a frame buffer (see RgbaOutpuFile.setFrameBuffer())
+  //-----------------------------------------------------------------------
 
-    void apply (Rgba *data,
-		int nData,
-		int stride = 1) const;
+  void apply(Rgba *base, int xStride, int yStride,
+             const Imath::Box2i &dataWindow) const;
 
-
-    //-----------------------------------------------------------------------
-    // Apply the table to a frame buffer (see RgbaOutpuFile.setFrameBuffer())
-    //-----------------------------------------------------------------------
-
-    void apply (Rgba *base,
-		int xStride,
-		int yStride,
-		const Imath::Box2i &dataWindow) const;
-
-  private:
-
-    halfFunction <half>	_lut;
-    RgbaChannels	_chn;
+private:
+  halfFunction<half> _lut;
+  RgbaChannels _chn;
 };
-
 
 //
 // 12bit log rounding reduces data to 20 stops with 200 steps per stop.
@@ -139,8 +116,7 @@ class RgbaLut
 // the center [2000] and that number is near 0.18.
 //
 
-half round12log (half x);
-
+half round12log(half x);
 
 //
 // Round to n-bit precision (n should be between 0 and 10).
@@ -148,37 +124,30 @@ half round12log (half x);
 // bits will be zero.
 //
 
-struct roundNBit
-{
-    roundNBit (int n): n(n) {}
-    half operator () (half x) {return x.round(n);}
-    int n;
+struct roundNBit {
+  roundNBit(int n) : n(n) {}
+  half operator()(half x) { return x.round(n); }
+  int n;
 };
-
 
 //
 // Template definitions
 //
 
-
 template <class Function>
-HalfLut::HalfLut (Function f):
-    _lut(f, -HALF_MAX, HALF_MAX, half (0),
-	 half::posInf(), half::negInf(), half::qNan())
-{
-    // empty
+HalfLut::HalfLut(Function f)
+    : _lut(f, -HALF_MAX, HALF_MAX, half(0), half::posInf(), half::negInf(),
+           half::qNan()) {
+  // empty
 }
 
-
 template <class Function>
-RgbaLut::RgbaLut (Function f, RgbaChannels chn):
-    _lut(f, -HALF_MAX, HALF_MAX, half (0),
-	 half::posInf(), half::negInf(), half::qNan()),
-    _chn(chn)
-{
-    // empty
+RgbaLut::RgbaLut(Function f, RgbaChannels chn)
+    : _lut(f, -HALF_MAX, HALF_MAX, half(0), half::posInf(), half::negInf(),
+           half::qNan()),
+      _chn(chn) {
+  // empty
 }
-
 
 } // namespace Imf
 

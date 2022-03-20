@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,14 +32,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_TIME_CODE_H
 #define INCLUDED_IMF_TIME_CODE_H
 
 //-----------------------------------------------------------------------------
 //
 //	class TimeCode
-// 	
+//
 // 	A TimeCode object stores time and control codes as described
 // 	in SMPTE standard 12M-1999.  A TimeCode object contains the
 // 	following fields:
@@ -112,114 +111,91 @@
 
 namespace Imf {
 
-   
-class TimeCode
-{
-  public:
+class TimeCode {
+public:
+  //---------------------
+  // Bit packing variants
+  //---------------------
 
-    //---------------------
-    // Bit packing variants
-    //---------------------
+  enum Packing {
+    TV60_PACKING,  // packing for 60-field television
+    TV50_PACKING,  // packing for 50-field television
+    FILM24_PACKING // packing for 24-frame film
+  };
 
-    enum Packing
-    {
-	TV60_PACKING,		// packing for 60-field television
-	TV50_PACKING,		// packing for 50-field television
-	FILM24_PACKING		// packing for 24-frame film
-    };
+  //-------------------------------------
+  // Constructors and assignment operator
+  //-------------------------------------
 
+  TimeCode(); // all fields set to 0 or false
 
-    //-------------------------------------
-    // Constructors and assignment operator
-    //-------------------------------------
+  TimeCode(int hours, int minutes, int seconds, int frame,
+           bool dropFrame = false, bool colorFrame = false,
+           bool fieldPhase = false, bool bgf0 = false, bool bgf1 = false,
+           bool bgf2 = false, int binaryGroup1 = 0, int binaryGroup2 = 0,
+           int binaryGroup3 = 0, int binaryGroup4 = 0, int binaryGroup5 = 0,
+           int binaryGroup6 = 0, int binaryGroup7 = 0, int binaryGroup8 = 0);
 
-    TimeCode ();  // all fields set to 0 or false
+  TimeCode(unsigned int timeAndFlags, unsigned int userData = 0,
+           Packing packing = TV60_PACKING);
 
-    TimeCode (int hours,
-	      int minutes,
-	      int seconds,
-	      int frame,
-	      bool dropFrame = false,
-	      bool colorFrame = false,
-	      bool fieldPhase = false,
-	      bool bgf0 = false,
-	      bool bgf1 = false,
-	      bool bgf2 = false,
-	      int binaryGroup1 = 0,
-	      int binaryGroup2 = 0,
-	      int binaryGroup3 = 0,
-	      int binaryGroup4 = 0,
-	      int binaryGroup5 = 0,
-	      int binaryGroup6 = 0,
-	      int binaryGroup7 = 0,
-	      int binaryGroup8 = 0);
+  TimeCode(const TimeCode &other);
 
-    TimeCode (unsigned int timeAndFlags,
-	      unsigned int userData = 0,
-	      Packing packing = TV60_PACKING);
+  TimeCode &operator=(const TimeCode &other);
 
-    TimeCode (const TimeCode &other);
+  //----------------------------
+  // Access to individual fields
+  //----------------------------
 
-    TimeCode & operator = (const TimeCode &other);
+  int hours() const;
+  void setHours(int value);
 
+  int minutes() const;
+  void setMinutes(int value);
 
-    //----------------------------
-    // Access to individual fields
-    //----------------------------
+  int seconds() const;
+  void setSeconds(int value);
 
-    int		hours () const;
-    void	setHours (int value);
+  int frame() const;
+  void setFrame(int value);
 
-    int		minutes () const;
-    void	setMinutes (int value);
+  bool dropFrame() const;
+  void setDropFrame(bool value);
 
-    int		seconds () const;
-    void	setSeconds (int value);
+  bool colorFrame() const;
+  void setColorFrame(bool value);
 
-    int		frame () const;
-    void	setFrame (int value);
+  bool fieldPhase() const;
+  void setFieldPhase(bool value);
 
-    bool	dropFrame () const;
-    void	setDropFrame (bool value);
+  bool bgf0() const;
+  void setBgf0(bool value);
 
-    bool	colorFrame () const;
-    void	setColorFrame (bool value);
+  bool bgf1() const;
+  void setBgf1(bool value);
 
-    bool	fieldPhase () const;
-    void	setFieldPhase (bool value);
+  bool bgf2() const;
+  void setBgf2(bool value);
 
-    bool	bgf0 () const;
-    void	setBgf0 (bool value);
+  int binaryGroup(int group) const; // group must be between 1 and 8
+  void setBinaryGroup(int group, int value);
 
-    bool	bgf1 () const;
-    void	setBgf1 (bool value);
+  //---------------------------------
+  // Access to packed representations
+  //---------------------------------
 
-    bool	bgf2 () const;
-    void	setBgf2 (bool value);
+  unsigned int timeAndFlags(Packing packing = TV60_PACKING) const;
 
-    int		binaryGroup (int group) const; // group must be between 1 and 8
-    void	setBinaryGroup (int group, int value);
+  void setTimeAndFlags(unsigned int value, Packing packing = TV60_PACKING);
 
-    
-    //---------------------------------
-    // Access to packed representations
-    //---------------------------------
+  unsigned int userData() const;
 
-    unsigned int	timeAndFlags (Packing packing = TV60_PACKING) const;
+  void setUserData(unsigned int value);
 
-    void		setTimeAndFlags (unsigned int value,
-					 Packing packing = TV60_PACKING);
-
-    unsigned int	userData () const;
-
-    void		setUserData (unsigned int value);
-
-  private:
-
-    unsigned int	_time;
-    unsigned int	_user;
+private:
+  unsigned int _time;
+  unsigned int _user;
 };
-
 
 } // namespace Imf
 

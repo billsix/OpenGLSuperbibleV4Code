@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2005, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -41,8 +41,8 @@
 //
 //	Class ThreadPool manages a set of worker threads and accepts
 //	tasks for processing.  Tasks added to the thread pool are
-//	executed concurrently by the worker threads.  
-//	
+//	executed concurrently by the worker threads.
+//
 //	Class Thread provides an abstract interface for a task which
 //	a ThreadPool works on.  Derived classes need to implement the
 //	execute() function which performs the actual task.
@@ -65,91 +65,75 @@ namespace IlmThread {
 class TaskGroup;
 class Task;
 
+class ThreadPool {
+public:
+  //-------------------------------------------------------
+  // Constructor -- creates numThreads worker threads which
+  // wait until a task is available.
+  //-------------------------------------------------------
 
-class ThreadPool  
-{
-  public:
+  ThreadPool(unsigned numThreads = 0);
 
-    //-------------------------------------------------------
-    // Constructor -- creates numThreads worker threads which
-    // wait until a task is available. 
-    //-------------------------------------------------------
+  //-----------------------------------------------------------
+  // Destructor -- waits for all tasks to complete, joins all
+  // the threads to the calling thread, and then destroys them.
+  //-----------------------------------------------------------
 
-    ThreadPool (unsigned numThreads = 0);
-    
-    
-    //-----------------------------------------------------------
-    // Destructor -- waits for all tasks to complete, joins all
-    // the threads to the calling thread, and then destroys them.
-    //-----------------------------------------------------------
+  virtual ~ThreadPool();
 
-    virtual ~ThreadPool ();
-    
+  //--------------------------------------------------------
+  // Query and set the number of worker threads in the pool.
+  //
+  // Warning: never call setNumThreads from within a worker
+  // thread as this will almost certainly cause a deadlock
+  // or crash.
+  //--------------------------------------------------------
 
-    //--------------------------------------------------------
-    // Query and set the number of worker threads in the pool.
-    //
-    // Warning: never call setNumThreads from within a worker
-    // thread as this will almost certainly cause a deadlock
-    // or crash.
-    //--------------------------------------------------------
-    
-    int		numThreads () const;
-    void	setNumThreads (int count);
-    
-    
-    //------------------------------------------------------------
-    // Add a task for processing.  The ThreadPool can handle any
-    // number of tasks regardless of the number of worker threads.
-    // The tasks are first added onto a queue, and are executed
-    // by threads as they become available, in FIFO order.
-    //------------------------------------------------------------
+  int numThreads() const;
+  void setNumThreads(int count);
 
-    void addTask (Task* task);
-    
+  //------------------------------------------------------------
+  // Add a task for processing.  The ThreadPool can handle any
+  // number of tasks regardless of the number of worker threads.
+  // The tasks are first added onto a queue, and are executed
+  // by threads as they become available, in FIFO order.
+  //------------------------------------------------------------
 
-    //-------------------------------------------
-    // Access functions for the global threadpool
-    //-------------------------------------------
-    
-    static ThreadPool&	globalThreadPool ();
-    static void		addGlobalTask (Task* task);
+  void addTask(Task *task);
 
-    struct Data;
+  //-------------------------------------------
+  // Access functions for the global threadpool
+  //-------------------------------------------
 
-  protected:
+  static ThreadPool &globalThreadPool();
+  static void addGlobalTask(Task *task);
 
-    Data *		_data;
+  struct Data;
+
+protected:
+  Data *_data;
 };
 
+class Task {
+public:
+  Task(TaskGroup *g);
+  virtual ~Task();
 
-class Task
-{
-  public:
+  virtual void execute() = 0;
+  TaskGroup *group();
 
-    Task (TaskGroup* g);
-    virtual ~Task ();
-
-    virtual void	execute () = 0;
-    TaskGroup *		group();
-
-  protected:
-
-    TaskGroup *		_group;
+protected:
+  TaskGroup *_group;
 };
 
+class TaskGroup {
+public:
+  TaskGroup();
+  ~TaskGroup();
 
-class TaskGroup
-{
-  public:
-
-     TaskGroup();
-    ~TaskGroup();
-
-    struct Data;
-    Data* const		_data;
+  struct Data;
+  Data *const _data;
 };
-
 
 } // namespace IlmThread
 

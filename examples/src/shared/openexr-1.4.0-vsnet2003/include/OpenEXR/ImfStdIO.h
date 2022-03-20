@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,7 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////
-
 
 #ifndef INCLUDED_IMF_STD_IO_H
 #define INCLUDED_IMF_STD_IO_H
@@ -54,102 +53,86 @@ namespace Imf {
 // class IStream based on class std::ifstream
 //-------------------------------------------
 
-class StdIFStream: public IStream
-{
-  public:
+class StdIFStream : public IStream {
+public:
+  //-------------------------------------------------------
+  // A constructor that opens the file with the given name.
+  // The destructor will close the file.
+  //-------------------------------------------------------
 
-    //-------------------------------------------------------
-    // A constructor that opens the file with the given name.
-    // The destructor will close the file.
-    //-------------------------------------------------------
+  StdIFStream(const char fileName[]);
 
-    StdIFStream (const char fileName[]);
+  //---------------------------------------------------------
+  // A constructor that uses a std::ifstream that has already
+  // been opened by the caller.  The StdIFStream's destructor
+  // will not close the std::ifstream.
+  //---------------------------------------------------------
 
-    
-    //---------------------------------------------------------
-    // A constructor that uses a std::ifstream that has already
-    // been opened by the caller.  The StdIFStream's destructor
-    // will not close the std::ifstream.
-    //---------------------------------------------------------
+  StdIFStream(std::ifstream &is, const char fileName[]);
 
-    StdIFStream (std::ifstream &is, const char fileName[]);
+  virtual ~StdIFStream();
 
+  virtual bool read(char c[/*n*/], int n);
+  virtual Int64 tellg();
+  virtual void seekg(Int64 pos);
+  virtual void clear();
 
-    virtual ~StdIFStream ();
-
-    virtual bool	read (char c[/*n*/], int n);
-    virtual Int64	tellg ();
-    virtual void	seekg (Int64 pos);
-    virtual void	clear ();
-
-  private:
-
-    std::ifstream *	_is;
-    bool		_deleteStream;
+private:
+  std::ifstream *_is;
+  bool _deleteStream;
 };
-
 
 //-------------------------------------------
 // class StdOFStream -- an implementation of
 // class OStream based on class std::ofstream
 //-------------------------------------------
 
-class StdOFStream: public OStream
-{
-  public:
+class StdOFStream : public OStream {
+public:
+  //-------------------------------------------------------
+  // A constructor that opens the file with the given name.
+  // The destructor will close the file.
+  //-------------------------------------------------------
 
-    //-------------------------------------------------------
-    // A constructor that opens the file with the given name.
-    // The destructor will close the file.
-    //-------------------------------------------------------
+  StdOFStream(const char fileName[]);
 
-    StdOFStream (const char fileName[]);
-    
+  //---------------------------------------------------------
+  // A constructor that uses a std::ofstream that has already
+  // been opened by the caller.  The StdOFStream's destructor
+  // will not close the std::ofstream.
+  //---------------------------------------------------------
 
-    //---------------------------------------------------------
-    // A constructor that uses a std::ofstream that has already
-    // been opened by the caller.  The StdOFStream's destructor
-    // will not close the std::ofstream.
-    //---------------------------------------------------------
+  StdOFStream(std::ofstream &os, const char fileName[]);
 
-    StdOFStream (std::ofstream &os, const char fileName[]);
+  virtual ~StdOFStream();
 
+  virtual void write(const char c[/*n*/], int n);
+  virtual Int64 tellp();
+  virtual void seekp(Int64 pos);
 
-    virtual ~StdOFStream ();
-
-    virtual void	write (const char c[/*n*/], int n);
-    virtual Int64	tellp ();
-    virtual void	seekp (Int64 pos);
-
-  private:
-
-    std::ofstream *	_os;
-    bool		_deleteStream;
+private:
+  std::ofstream *_os;
+  bool _deleteStream;
 };
-
 
 //------------------------------------------------
 // class StdOSStream -- an implementation of class
 // OStream, based on class std::ostringstream
 //------------------------------------------------
 
-class StdOSStream: public OStream
-{
-  public:
+class StdOSStream : public OStream {
+public:
+  StdOSStream();
 
-    StdOSStream ();
+  virtual void write(const char c[/*n*/], int n);
+  virtual Int64 tellp();
+  virtual void seekp(Int64 pos);
 
-    virtual void	write (const char c[/*n*/], int n);
-    virtual Int64	tellp ();
-    virtual void	seekp (Int64 pos);
+  std::string str() const { return _os.str(); }
 
-    std::string		str () const {return _os.str();}
-
-  private:
-
-    std::ostringstream 	_os;
+private:
+  std::ostringstream _os;
 };
-
 
 } // namespace Imf
 

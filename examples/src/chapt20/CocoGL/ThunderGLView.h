@@ -2,9 +2,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ThunderGLView : NSOpenGLView
-{
-    NSTimer *pTimer;
+@interface ThunderGLView : NSOpenGLView {
+  NSTimer *pTimer;
 }
 
 @end

@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,7 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_TEST_FILE_H
 #define INCLUDED_IMF_TEST_FILE_H
 
@@ -44,19 +43,16 @@
 //
 //-----------------------------------------------------------------------------
 
-
 namespace Imf {
 
 class IStream;
 
-
-bool isOpenExrFile (const char fileName[], bool &isTiled);
-bool isOpenExrFile (const char fileName[]);
-bool isTiledOpenExrFile (const char fileName[]);
-bool isOpenExrFile (IStream &is, bool &isTiled);
-bool isOpenExrFile (IStream &is);
-bool isTiledOpenExrFile (IStream &is);
-
+bool isOpenExrFile(const char fileName[], bool &isTiled);
+bool isOpenExrFile(const char fileName[]);
+bool isTiledOpenExrFile(const char fileName[]);
+bool isOpenExrFile(IStream &is, bool &isTiled);
+bool isOpenExrFile(IStream &is);
+bool isTiledOpenExrFile(IStream &is);
 
 } // namespace Imf
 

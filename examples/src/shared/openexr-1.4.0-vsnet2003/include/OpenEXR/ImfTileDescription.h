@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,7 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_TILE_DESCRIPTION_H
 #define INCLUDED_IMF_TILE_DESCRIPTION_H
 
@@ -44,58 +43,39 @@
 
 namespace Imf {
 
+enum LevelMode {
+  ONE_LEVEL = 0,
+  MIPMAP_LEVELS = 1,
+  RIPMAP_LEVELS = 2,
 
-enum LevelMode
-{
-    ONE_LEVEL = 0,
-    MIPMAP_LEVELS = 1,
-    RIPMAP_LEVELS = 2,
-    
-    NUM_LEVELMODES	// number of different level modes
+  NUM_LEVELMODES // number of different level modes
 };
 
+enum LevelRoundingMode {
+  ROUND_DOWN = 0,
+  ROUND_UP = 1,
 
-enum LevelRoundingMode
-{
-    ROUND_DOWN = 0,
-    ROUND_UP = 1,
-
-    NUM_ROUNDINGMODES	// number of different rounding modes
+  NUM_ROUNDINGMODES // number of different rounding modes
 };
 
+class TileDescription {
+public:
+  unsigned int xSize; // size of a tile in the x dimension
+  unsigned int ySize; // size of a tile in the y dimension
+  LevelMode mode;
+  LevelRoundingMode roundingMode;
 
-class TileDescription
-{
-  public:
+  TileDescription(unsigned int xs = 32, unsigned int ys = 32,
+                  LevelMode m = ONE_LEVEL, LevelRoundingMode r = ROUND_DOWN)
+      : xSize(xs), ySize(ys), mode(m), roundingMode(r) {
+    // empty
+  }
 
-    unsigned int    xSize;          // size of a tile in the x dimension
-    unsigned int    ySize;          // size of a tile in the y dimension
-    LevelMode       mode;
-    LevelRoundingMode	roundingMode;
-    
-    TileDescription (unsigned int xs = 32,
-		     unsigned int ys = 32,
-                     LevelMode m = ONE_LEVEL,
-		     LevelRoundingMode r = ROUND_DOWN)
-    :
-        xSize (xs),
-	ySize (ys),
-	mode (m),
-	roundingMode (r)
-    {
-	// empty
-    }
-
-    bool
-    operator == (const TileDescription &other) const
-    {
-	return xSize        == other.xSize &&
-	       ySize        == other.ySize &&
-	       mode         == other.mode &&
-	       roundingMode == other.roundingMode;
-    }
+  bool operator==(const TileDescription &other) const {
+    return xSize == other.xSize && ySize == other.ySize && mode == other.mode &&
+           roundingMode == other.roundingMode;
+  }
 };
-
 
 } // namespace Imf
 

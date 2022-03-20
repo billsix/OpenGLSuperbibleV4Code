@@ -310,8 +310,8 @@ void SetupRC() {
 
   if (!GLEE_VERSION_1_4 && !GLEE_EXT_secondary_color) {
     // gltPrintf(GLUT_BITMAP_9_BY_15, 0, 3, "Neither OpenGL 1.4 nor
-    // GL_EXT_secondary_color"); gltPrintf(GLUT_BITMAP_9_BY_15, 1, 3, " extension
-    // is available!");
+    // GL_EXT_secondary_color"); gltPrintf(GLUT_BITMAP_9_BY_15, 1, 3, "
+    // extension is available!");
     glutSwapBuffers();
     Sleep(2000);
     exit(0);
@@ -353,8 +353,8 @@ void SetupRC() {
     GLchar infoLog[MAX_INFO_LOG_SIZE];
     glGetShaderInfoLog(fShader, MAX_INFO_LOG_SIZE, NULL, infoLog);
     // gltPrintf(GLUT_BITMAP_9_BY_15, 0, 0, "Error in fragment shader
-    // compilation!  Info log:"); gltPrintf(GLUT_BITMAP_HELVETICA_10, 2, 0, "%s",
-    // infoLog);
+    // compilation!  Info log:"); gltPrintf(GLUT_BITMAP_HELVETICA_10, 2, 0,
+    // "%s", infoLog);
     glutSwapBuffers();
     Sleep(5000);
     exit(0);

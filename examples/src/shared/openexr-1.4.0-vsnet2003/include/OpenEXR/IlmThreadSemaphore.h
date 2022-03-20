@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2005, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -45,64 +45,58 @@
 #include "OpenEXRConfig.h"
 
 #if defined _WIN32 || defined _WIN64
-    #ifdef NOMINMAX
-        #undef NOMINMAX
-    #endif
-    #define NOMINMAX
-    #include <windows.h>
+#ifdef NOMINMAX
+#undef NOMINMAX
+#endif
+#define NOMINMAX
+#include <windows.h>
 #elif HAVE_PTHREAD && !HAVE_POSIX_SEMAPHORES
-    #include <pthread.h>
+#include <pthread.h>
 #elif HAVE_PTHREAD && HAVE_POSIX_SEMAPHORES
-    #include <semaphore.h>
+#include <semaphore.h>
 #endif
 
 namespace IlmThread {
 
+class Semaphore {
+public:
+  Semaphore(unsigned int value = 0);
+  virtual ~Semaphore();
 
-class Semaphore
-{
-  public:
+  void wait();
+  void post();
+  int value() const;
 
-    Semaphore (unsigned int value = 0);
-    virtual ~Semaphore();
+private:
+#if defined _WIN32 || defined _WIN64
 
-    void	wait();
-    void	post();
-    int		value() const;
+  mutable HANDLE _semaphore;
 
-  private:
+#elif HAVE_PTHREAD && !HAVE_POSIX_SEMAPHORES
 
-    #if defined _WIN32 || defined _WIN64
+  //
+  // If the platform has Posix threads but no semapohores,
+  // then we implement them ourselves using condition variables
+  //
 
-	mutable HANDLE _semaphore;
+  struct sema_t {
+    unsigned int count;
+    unsigned long numWaiting;
+    pthread_mutex_t mutex;
+    pthread_cond_t nonZero;
+  };
 
-    #elif HAVE_PTHREAD && !HAVE_POSIX_SEMAPHORES
+  mutable sema_t _semaphore;
 
-	//
-	// If the platform has Posix threads but no semapohores,
-	// then we implement them ourselves using condition variables
-	//
+#elif HAVE_PTHREAD && HAVE_POSIX_SEMAPHORES
 
-	struct sema_t
-	{
-	    unsigned int count;
-	    unsigned long numWaiting;
-	    pthread_mutex_t mutex;
-	    pthread_cond_t nonZero;
-	};
+  mutable sem_t _semaphore;
 
-	mutable sema_t _semaphore;
+#endif
 
-    #elif HAVE_PTHREAD && HAVE_POSIX_SEMAPHORES
-
-	mutable sem_t _semaphore;
-
-    #endif
-
-    void operator = (const Semaphore& s);	// not implemented
-    Semaphore (const Semaphore& s);		// not implemented
+  void operator=(const Semaphore &s); // not implemented
+  Semaphore(const Semaphore &s);      // not implemented
 };
-
 
 } // namespace IlmThread
 

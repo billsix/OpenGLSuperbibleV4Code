@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,7 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_VERSION_H
 #define INCLUDED_IMF_VERSION_H
 
@@ -42,9 +41,7 @@
 //
 //-----------------------------------------------------------------------------
 
-
 namespace Imf {
-
 
 //
 // The MAGIC number is stored in the first four bytes of every
@@ -53,7 +50,6 @@ namespace Imf {
 //
 
 const int MAGIC = 20000630;
-
 
 //
 // The second item in each OpenEXR image file, right after the
@@ -66,51 +62,45 @@ const int MAGIC = 20000630;
 // and a 24-bit flags field.
 //
 
-const int VERSION_NUMBER_FIELD	= 0x000000ff;
-const int VERSION_FLAGS_FIELD	= 0xffffff00;
-
+const int VERSION_NUMBER_FIELD = 0x000000ff;
+const int VERSION_FLAGS_FIELD = 0xffffff00;
 
 //
 // Value that goes into VERSION_NUMBER_FIELD.
 //
 
-const int EXR_VERSION		= 2;
-
+const int EXR_VERSION = 2;
 
 //
 // Flags that can go into VERSION_FLAGS_FIELD.
 // Flags can only occupy the 1 bits in VERSION_FLAGS_FIELD.
 //
 
-const int TILED_FLAG		= 0x00000200;
-
+const int TILED_FLAG = 0x00000200;
 
 //
 // Bitwise OR of all known flags.
 //
 
-const int ALL_FLAGS		= TILED_FLAG;
-
+const int ALL_FLAGS = TILED_FLAG;
 
 //
 // Utility functions
 //
 
-inline bool  isTiled (int version)	{return !!(version & TILED_FLAG);}
-inline int   makeTiled (int version)	{return version | TILED_FLAG;}
-inline int   makeNotTiled (int version) {return version & ~TILED_FLAG;}
-inline int   getVersion (int version)	{return version & VERSION_NUMBER_FIELD;}
-inline int   getFlags (int version)	{return version & VERSION_FLAGS_FIELD;}
-inline bool  supportsFlags (int flags)	{return !(flags & ~ALL_FLAGS);}
-
+inline bool isTiled(int version) { return !!(version & TILED_FLAG); }
+inline int makeTiled(int version) { return version | TILED_FLAG; }
+inline int makeNotTiled(int version) { return version & ~TILED_FLAG; }
+inline int getVersion(int version) { return version & VERSION_NUMBER_FIELD; }
+inline int getFlags(int version) { return version & VERSION_FLAGS_FIELD; }
+inline bool supportsFlags(int flags) { return !(flags & ~ALL_FLAGS); }
 
 //
 // Given the first four bytes of a file, returns true if the
 // file is probably an OpenEXR image file, false if not.
 //
 
-bool	     isImfMagic (const char bytes[4]);
-
+bool isImfMagic(const char bytes[4]);
 
 } // namespace Imf
 

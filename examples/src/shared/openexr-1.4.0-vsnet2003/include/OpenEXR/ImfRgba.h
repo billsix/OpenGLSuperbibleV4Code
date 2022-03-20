@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,7 +32,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 #ifndef INCLUDED_IMF_RGBA_H
 #define INCLUDED_IMF_RGBA_H
 
@@ -46,58 +45,52 @@
 
 namespace Imf {
 
-
 //
 // RGBA pixel
 //
 
-struct Rgba
-{
-    half	r;
-    half	g;
-    half	b;
-    half	a;
-    
-    Rgba () {}
-    Rgba (half r, half g, half b, half a = 1.f): r (r), g (g), b (b), a (a) {}
+struct Rgba {
+  half r;
+  half g;
+  half b;
+  half a;
 
-    Rgba & operator = (const Rgba &other)
-    {
-    	r = other.r;
-    	g = other.g;
-    	b = other.b;
-    	a = other.a;
+  Rgba() {}
+  Rgba(half r, half g, half b, half a = 1.f) : r(r), g(g), b(b), a(a) {}
 
-    	return *this;
-    }
+  Rgba &operator=(const Rgba &other) {
+    r = other.r;
+    g = other.g;
+    b = other.b;
+    a = other.a;
+
+    return *this;
+  }
 };
-
 
 //
 // Channels in an RGBA file
 //
 
-enum RgbaChannels
-{
-    WRITE_R	= 0x01,		// Red
-    WRITE_G	= 0x02,		// Green
-    WRITE_B	= 0x04,		// Blue
-    WRITE_A	= 0x08,		// Alpha
+enum RgbaChannels {
+  WRITE_R = 0x01, // Red
+  WRITE_G = 0x02, // Green
+  WRITE_B = 0x04, // Blue
+  WRITE_A = 0x08, // Alpha
 
-    WRITE_Y	= 0x10,		// Luminance, for black-and-white images,
-    				// or in combination with chroma
+  WRITE_Y = 0x10, // Luminance, for black-and-white images,
+                  // or in combination with chroma
 
-    WRITE_C	= 0x20,		// Chroma (two subsampled channels, RY and BY,
-    				// supported only for scanline-based files)
+  WRITE_C = 0x20, // Chroma (two subsampled channels, RY and BY,
+                  // supported only for scanline-based files)
 
-    WRITE_RGB	= 0x07,		// Red, green, blue
-    WRITE_RGBA	= 0x0f,		// Red, green, blue, alpha
+  WRITE_RGB = 0x07,  // Red, green, blue
+  WRITE_RGBA = 0x0f, // Red, green, blue, alpha
 
-    WRITE_YC	= 0x30,		// Luminance, chroma
-    WRITE_YA	= 0x18,		// Luminance, alpha
-    WRITE_YCA	= 0x38		// Luminance, chroma, alpha
+  WRITE_YC = 0x30, // Luminance, chroma
+  WRITE_YA = 0x18, // Luminance, alpha
+  WRITE_YCA = 0x38 // Luminance, chroma, alpha
 };
-
 
 } // namespace Imf
 

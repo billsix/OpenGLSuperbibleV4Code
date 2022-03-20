@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,11 +32,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef INCLUDED_IEX_H
 #define INCLUDED_IEX_H
-
 
 //--------------------------------
 //
@@ -44,9 +41,8 @@
 //
 //--------------------------------
 
-
-#include "IexMacros.h"
 #include "IexBaseExc.h"
+#include "IexMacros.h"
 #include "IexMathExc.h"
 #include "IexThrowErrnoExc.h"
 
@@ -55,6 +51,5 @@
 // If you throw ErrnoExc exceptions using the throwErrnoExc() function,
 // you don't need IexErrnoExc.h.  You have to include IexErrnoExc.h
 // only if you want to catch specific subclasses of ErrnoExc.
-
 
 #endif

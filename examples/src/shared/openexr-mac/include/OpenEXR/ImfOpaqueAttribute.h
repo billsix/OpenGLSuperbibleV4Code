@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2004, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,8 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////
-
-
 
 #ifndef INCLUDED_IMF_OPAQUE_ATTRIBUTE_H
 #define INCLUDED_IMF_OPAQUE_ATTRIBUTE_H
@@ -49,60 +47,48 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ImfAttribute.h>
 #include <ImfArray.h>
+#include <ImfAttribute.h>
 
 namespace Imf {
 
+class OpaqueAttribute : public Attribute {
+public:
+  //----------------------------
+  // Constructors and destructor
+  //----------------------------
 
-class OpaqueAttribute: public Attribute
-{
-  public:
+  OpaqueAttribute(const char typeName[]);
+  OpaqueAttribute(const OpaqueAttribute &other);
+  virtual ~OpaqueAttribute();
 
-    //----------------------------
-    // Constructors and destructor
-    //----------------------------
+  //-------------------------------
+  // Get this attribute's type name
+  //-------------------------------
 
-    OpaqueAttribute (const char typeName[]);
-    OpaqueAttribute (const OpaqueAttribute &other);
-    virtual ~OpaqueAttribute ();
+  virtual const char *typeName() const;
 
+  //------------------------------
+  // Make a copy of this attribute
+  //------------------------------
 
-    //-------------------------------
-    // Get this attribute's type name
-    //-------------------------------
+  virtual Attribute *copy() const;
 
-    virtual const char *	typeName () const;
-    
+  //----------------
+  // I/O and copying
+  //----------------
 
-    //------------------------------
-    // Make a copy of this attribute
-    //------------------------------
+  virtual void writeValueTo(OStream &os, int version) const;
 
-    virtual Attribute *		copy () const;
+  virtual void readValueFrom(IStream &is, int size, int version);
 
+  virtual void copyValueFrom(const Attribute &other);
 
-    //----------------
-    // I/O and copying
-    //----------------
-
-    virtual void		writeValueTo (OStream &os,
-					      int version) const;
-
-    virtual void		readValueFrom (IStream &is,
-					       int size,
-					       int version);
-
-    virtual void		copyValueFrom (const Attribute &other);
-
-
-  private:
-
-    Array<char>			_typeName;
-    long			_dataSize;
-    Array<char>			_data;
+private:
+  Array<char> _typeName;
+  long _dataSize;
+  Array<char> _data;
 };
-
 
 } // namespace Imf
 

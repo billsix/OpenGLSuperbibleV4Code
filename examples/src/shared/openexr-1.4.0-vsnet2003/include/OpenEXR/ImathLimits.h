@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,8 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////
-
-
 
 #ifndef INCLUDED_IMATHLIMITS_H
 #define INCLUDED_IMATHLIMITS_H
@@ -51,16 +49,15 @@
 //------------------------------------------
 
 #if defined _WIN32 || defined _WIN64
-    #ifdef min
-        #undef min
-    #endif
-    #ifdef max
-        #undef max
-    #endif
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 #endif
 
 namespace Imath {
-
 
 //-----------------------------------------------------------------
 //
@@ -111,154 +108,126 @@ namespace Imath {
 //
 //-----------------------------------------------------------------
 
-
-template <class T> struct limits
-{
-    static T	min();
-    static T	max();
-    static T	smallest();
-    static T	epsilon();
-    static bool	isIntegral();
-    static bool	isSigned();
+template <class T> struct limits {
+  static T min();
+  static T max();
+  static T smallest();
+  static T epsilon();
+  static bool isIntegral();
+  static bool isSigned();
 };
-
 
 //---------------
 // Implementation
 //---------------
 
-template <>
-struct limits <char>
-{
-    static char			min()		{return CHAR_MIN;}
-    static char			max()		{return CHAR_MAX;}
-    static char			smallest()	{return 1;}
-    static char			epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return (char) ~0 < 0;}
+template <> struct limits<char> {
+  static char min() { return CHAR_MIN; }
+  static char max() { return CHAR_MAX; }
+  static char smallest() { return 1; }
+  static char epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return (char)~0 < 0; }
 };
 
-template <>
-struct limits <signed char>
-{
-    static signed char		min()		{return SCHAR_MIN;}
-    static signed char		max()		{return SCHAR_MAX;}
-    static signed char		smallest()	{return 1;}
-    static signed char		epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<signed char> {
+  static signed char min() { return SCHAR_MIN; }
+  static signed char max() { return SCHAR_MAX; }
+  static signed char smallest() { return 1; }
+  static signed char epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <unsigned char>
-{
-    static unsigned char	min()		{return 0;}
-    static unsigned char	max()		{return UCHAR_MAX;}
-    static unsigned char	smallest()	{return 1;}
-    static unsigned char	epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return false;}
+template <> struct limits<unsigned char> {
+  static unsigned char min() { return 0; }
+  static unsigned char max() { return UCHAR_MAX; }
+  static unsigned char smallest() { return 1; }
+  static unsigned char epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return false; }
 };
 
-template <>
-struct limits <short>
-{
-    static short		min()		{return SHRT_MIN;}
-    static short		max()		{return SHRT_MAX;}
-    static short		smallest()	{return 1;}
-    static short		epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<short> {
+  static short min() { return SHRT_MIN; }
+  static short max() { return SHRT_MAX; }
+  static short smallest() { return 1; }
+  static short epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <unsigned short>
-{
-    static unsigned short	min()		{return 0;}
-    static unsigned short	max()		{return USHRT_MAX;}
-    static unsigned short	smallest()	{return 1;}
-    static unsigned short	epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return false;}
+template <> struct limits<unsigned short> {
+  static unsigned short min() { return 0; }
+  static unsigned short max() { return USHRT_MAX; }
+  static unsigned short smallest() { return 1; }
+  static unsigned short epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return false; }
 };
 
-template <>
-struct limits <int>
-{
-    static int			min()		{return INT_MIN;}
-    static int			max()		{return INT_MAX;}
-    static int			smallest()	{return 1;}
-    static int			epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<int> {
+  static int min() { return INT_MIN; }
+  static int max() { return INT_MAX; }
+  static int smallest() { return 1; }
+  static int epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <unsigned int>
-{
-    static unsigned int		min()		{return 0;}
-    static unsigned int		max()		{return UINT_MAX;}
-    static unsigned int		smallest()	{return 1;}
-    static unsigned int		epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return false;}
+template <> struct limits<unsigned int> {
+  static unsigned int min() { return 0; }
+  static unsigned int max() { return UINT_MAX; }
+  static unsigned int smallest() { return 1; }
+  static unsigned int epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return false; }
 };
 
-template <>
-struct limits <long>
-{
-    static long			min()		{return LONG_MIN;}
-    static long			max()		{return LONG_MAX;}
-    static long			smallest()	{return 1;}
-    static long			epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<long> {
+  static long min() { return LONG_MIN; }
+  static long max() { return LONG_MAX; }
+  static long smallest() { return 1; }
+  static long epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <unsigned long>
-{
-    static unsigned long	min()		{return 0;}
-    static unsigned long	max()		{return ULONG_MAX;}
-    static unsigned long	smallest()	{return 1;}
-    static unsigned long	epsilon()	{return 1;}
-    static bool			isIntegral()	{return true;}
-    static bool			isSigned()	{return false;}
+template <> struct limits<unsigned long> {
+  static unsigned long min() { return 0; }
+  static unsigned long max() { return ULONG_MAX; }
+  static unsigned long smallest() { return 1; }
+  static unsigned long epsilon() { return 1; }
+  static bool isIntegral() { return true; }
+  static bool isSigned() { return false; }
 };
 
-template <>
-struct limits <float>
-{
-    static float		min()		{return -FLT_MAX;}
-    static float		max()		{return FLT_MAX;}
-    static float		smallest()	{return FLT_MIN;}
-    static float		epsilon()	{return FLT_EPSILON;}
-    static bool			isIntegral()	{return false;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<float> {
+  static float min() { return -FLT_MAX; }
+  static float max() { return FLT_MAX; }
+  static float smallest() { return FLT_MIN; }
+  static float epsilon() { return FLT_EPSILON; }
+  static bool isIntegral() { return false; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <double>
-{
-    static double		min()		{return -DBL_MAX;}
-    static double		max()		{return DBL_MAX;}
-    static double		smallest()	{return DBL_MIN;}
-    static double		epsilon()	{return DBL_EPSILON;}
-    static bool			isIntegral()	{return false;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<double> {
+  static double min() { return -DBL_MAX; }
+  static double max() { return DBL_MAX; }
+  static double smallest() { return DBL_MIN; }
+  static double epsilon() { return DBL_EPSILON; }
+  static bool isIntegral() { return false; }
+  static bool isSigned() { return true; }
 };
 
-template <>
-struct limits <long double>
-{
-    static long double		min()		{return -LDBL_MAX;}
-    static long double		max()		{return LDBL_MAX;}
-    static long double		smallest()	{return LDBL_MIN;}
-    static long double		epsilon()	{return LDBL_EPSILON;}
-    static bool			isIntegral()	{return false;}
-    static bool			isSigned()	{return true;}
+template <> struct limits<long double> {
+  static long double min() { return -LDBL_MAX; }
+  static long double max() { return LDBL_MAX; }
+  static long double smallest() { return LDBL_MIN; }
+  static long double epsilon() { return LDBL_EPSILON; }
+  static bool isIntegral() { return false; }
+  static bool isSigned() { return true; }
 };
-
 
 } // namespace Imath
 

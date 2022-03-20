@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -35,7 +35,6 @@
 // Primary authors:
 //     Florian Kainz <kainz@ilm.com>
 //     Rod Bogart <rgb@ilm.com>
-
 
 //---------------------------------------------------------------------------
 //
@@ -83,39 +82,29 @@
 #ifndef _HALF_FUNCTION_H_
 #define _HALF_FUNCTION_H_
 
-#include <float.h>
 #include "half.h"
+#include <float.h>
 
+template <class T> class halfFunction {
+public:
+  //------------
+  // Constructor
+  //------------
 
-template <class T>
-class halfFunction
-{
-  public:
+  template <class Function>
+  halfFunction(Function f, half domainMin = -HALF_MAX,
+               half domainMax = HALF_MAX, T defaultValue = 0, T posInfValue = 0,
+               T negInfValue = 0, T nanValue = 0);
 
-    //------------
-    // Constructor
-    //------------
+  //-----------
+  // Evaluation
+  //-----------
 
-    template <class Function>
-    halfFunction (Function f,
-		  half domainMin = -HALF_MAX,
-		  half domainMax =  HALF_MAX,
-		  T defaultValue = 0,
-		  T posInfValue  = 0,
-		  T negInfValue  = 0,
-		  T nanValue     = 0);
+  T operator()(half x) const;
 
-    //-----------
-    // Evaluation
-    //-----------
-
-    T		operator () (half x) const;
-
-  private:
-
-    T		_lut[1 << 16];
+private:
+  T _lut[1 << 16];
 };
-
 
 //---------------
 // Implementation
@@ -123,37 +112,26 @@ class halfFunction
 
 template <class T>
 template <class Function>
-halfFunction<T>::halfFunction (Function f,
-			       half domainMin,
-			       half domainMax,
-			       T defaultValue,
-			       T posInfValue,
-			       T negInfValue,
-			       T nanValue)
-{
-    for (int i = 0; i < (1 << 16); i++)
-    {
-	half x;
-	x.setBits (i);
+halfFunction<T>::halfFunction(Function f, half domainMin, half domainMax,
+                              T defaultValue, T posInfValue, T negInfValue,
+                              T nanValue) {
+  for (int i = 0; i < (1 << 16); i++) {
+    half x;
+    x.setBits(i);
 
-	if (x.isNan())
-	    _lut[i] = nanValue;
-	else if (x.isInfinity())
-	    _lut[i] = x.isNegative()? negInfValue: posInfValue;
-	else if (x < domainMin || x > domainMax)
-	    _lut[i] = defaultValue;
-	else
-	    _lut[i] = f (x);
-    }
+    if (x.isNan())
+      _lut[i] = nanValue;
+    else if (x.isInfinity())
+      _lut[i] = x.isNegative() ? negInfValue : posInfValue;
+    else if (x < domainMin || x > domainMax)
+      _lut[i] = defaultValue;
+    else
+      _lut[i] = f(x);
+  }
 }
 
-
-template <class T>
-inline T
-halfFunction<T>::operator () (half x) const
-{
-    return _lut[x.bits()];
+template <class T> inline T halfFunction<T>::operator()(half x) const {
+  return _lut[x.bits()];
 }
-
 
 #endif

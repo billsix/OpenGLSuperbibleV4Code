@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2005, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -51,7 +51,7 @@
 //	share a Lock object among multiple threads.
 //
 //	Typical usage:
-//    
+//
 //	    Mutex mtx;	// Create a Mutex object that is visible
 //	    		//to multiple threads
 //
@@ -69,89 +69,70 @@
 #include "OpenEXRConfig.h"
 
 #if defined _WIN32 || defined _WIN64
-    #ifdef NOMINMAX
-        #undef NOMINMAX
-    #endif
-    #define NOMINMAX
-    #include <windows.h>
+#ifdef NOMINMAX
+#undef NOMINMAX
+#endif
+#define NOMINMAX
+#include <windows.h>
 #elif HAVE_PTHREAD
-    #include <pthread.h>
+#include <pthread.h>
 #endif
 
 namespace IlmThread {
 
 class Lock;
 
+class Mutex {
+public:
+  Mutex();
+  virtual ~Mutex();
 
-class Mutex
-{
-  public:
+private:
+  void lock() const;
+  void unlock() const;
 
-    Mutex ();
-    virtual ~Mutex ();
+#if defined _WIN32 || defined _WIN64
+  mutable CRITICAL_SECTION _mutex;
+#elif HAVE_PTHREAD
+  mutable pthread_mutex_t _mutex;
+#endif
 
-  private:
+  void operator=(const Mutex &M); // not implemented
+  Mutex(const Mutex &M);          // not implemented
 
-    void	lock () const;
-    void	unlock () const;
-
-    #if defined _WIN32 || defined _WIN64
-	mutable CRITICAL_SECTION _mutex;
-    #elif HAVE_PTHREAD
-	mutable pthread_mutex_t _mutex;
-    #endif
-
-    void operator = (const Mutex& M);	// not implemented
-    Mutex (const Mutex& M);		// not implemented
-    
-    friend class Lock;
+  friend class Lock;
 };
 
+class Lock {
+public:
+  Lock(const Mutex &m, bool autoLock = true) : _mutex(m), _locked(false) {
+    if (autoLock) {
+      _mutex.lock();
+      _locked = true;
+    }
+  }
 
-class Lock
-{
-  public:
+  ~Lock() {
+    if (_locked)
+      _mutex.unlock();
+  }
 
-    Lock (const Mutex& m, bool autoLock = true):
-	_mutex (m),
-	_locked (false)
-    {
-        if (autoLock)
-        {
-            _mutex.lock();
-            _locked = true;
-        }
-    }
-    
-    ~Lock ()
-    {
-        if (_locked)
-            _mutex.unlock();
-    }
-    
-    void acquire ()
-    {
-        _mutex.lock();
-        _locked = true;
-    }
-    
-    void release ()
-    {
-        _mutex.unlock();
-        _locked = false;
-    }
-    
-    bool locked ()
-    {
-        return _locked;
-    }
+  void acquire() {
+    _mutex.lock();
+    _locked = true;
+  }
 
-  private:
+  void release() {
+    _mutex.unlock();
+    _locked = false;
+  }
 
-    const Mutex &	_mutex;
-    bool		_locked;
+  bool locked() { return _locked; }
+
+private:
+  const Mutex &_mutex;
+  bool _locked;
 };
-
 
 } // namespace IlmThread
 

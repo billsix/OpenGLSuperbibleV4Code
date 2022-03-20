@@ -2,9 +2,9 @@
 //
 // Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
 // Digital Ltd. LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
@@ -16,8 +16,8 @@
 // distribution.
 // *       Neither the name of Industrial Light & Magic nor the names of
 // its contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission. 
-// 
+// from this software without specific prior written permission.
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,8 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////
-
-
 
 #ifndef INCLUDED_IMF_NAME_H
 #define INCLUDED_IMF_NAME_H
@@ -48,99 +46,69 @@
 
 namespace Imf {
 
+class Name {
+public:
+  //-------------
+  // Constructors
+  //-------------
 
-class Name
-{
-  public:
+  Name();
+  Name(const char text[]);
 
-    //-------------
-    // Constructors
-    //-------------
+  //--------------------
+  // Assignment operator
+  //--------------------
 
-    Name ();
-    Name (const char text[]);
+  Name &operator=(const char text[]);
 
+  //---------------------
+  // Access to the string
+  //---------------------
 
-    //--------------------
-    // Assignment operator
-    //--------------------
+  const char *text() const { return _text; }
+  const char *operator*() const { return _text; }
 
-    Name &		operator = (const char text[]);
+  //---------------
+  // Maximum length
+  //---------------
 
+  static const int SIZE = 32;
+  static const int MAX_LENGTH = SIZE - 1;
 
-    //---------------------
-    // Access to the string
-    //---------------------
-
-    const char *	text () const		{return _text;}
-    const char *	operator * () const	{return _text;}
-
-    //---------------
-    // Maximum length
-    //---------------
-
-    static const int	SIZE = 32;
-    static const int	MAX_LENGTH = SIZE - 1;
-
-  private:
-
-    char		_text[SIZE];
+private:
+  char _text[SIZE];
 };
 
-
-bool operator == (const Name &x, const Name &y);
-bool operator != (const Name &x, const Name &y);
-bool operator < (const Name &x, const Name &y);
-
+bool operator==(const Name &x, const Name &y);
+bool operator!=(const Name &x, const Name &y);
+bool operator<(const Name &x, const Name &y);
 
 //-----------------
 // Inline functions
 //-----------------
 
-inline Name &
-Name::operator = (const char text[])
-{
-    strncpy (_text, text, MAX_LENGTH);
-    return *this;
+inline Name &Name::operator=(const char text[]) {
+  strncpy(_text, text, MAX_LENGTH);
+  return *this;
 }
 
+inline Name::Name() { _text[0] = 0; }
 
-inline
-Name::Name ()
-{
-    _text[0] = 0;
+inline Name::Name(const char text[]) {
+  *this = text;
+  _text[MAX_LENGTH] = 0;
 }
 
-
-inline
-Name::Name (const char text[])
-{
-    *this = text;
-    _text [MAX_LENGTH] = 0;
+inline bool operator==(const Name &x, const Name &y) {
+  return strcmp(*x, *y) == 0;
 }
 
+inline bool operator!=(const Name &x, const Name &y) { return !(x == y); }
 
-inline bool
-operator == (const Name &x, const Name &y)
-{
-    return strcmp (*x, *y) == 0;
+inline bool operator<(const Name &x, const Name &y) {
+  return strcmp(*x, *y) < 0;
 }
 
-
-inline bool
-operator != (const Name &x, const Name &y)
-{
-    return !(x == y);
-}
-
-
-inline bool
-operator < (const Name &x, const Name &y)
-{
-    return strcmp (*x, *y) < 0;
-}
-
-
-} // namespace IMF
+} // namespace Imf
 
 #endif

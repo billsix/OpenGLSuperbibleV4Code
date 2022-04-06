@@ -11,6 +11,13 @@
 
 #include "imgui_impl_opengl3.h"
 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/freeglut.h>
+#endif
+
+
 #undef FREEGLUT_VERSION_2_0
 
 GLint windowWidth = 1024; // window size

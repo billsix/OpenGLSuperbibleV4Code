@@ -14,7 +14,7 @@ void main(void)
     vec3 N = normalize(gl_NormalMatrix * gl_Normal);
     vec4 V = gl_ModelViewMatrix * gl_Vertex;
     vec3 L = normalize(lightPos[0] - V.xyz);
-    vec3 H = normalize(L + -V.xyz);
+    vec3 H = normalize(L + normalize(-V.xyz));
     const float specularExp = 128.0;
 
     // calculate diffuse lighting

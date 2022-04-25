@@ -30,7 +30,7 @@ void main(void)
         L[i] = normalize(lightPos[i] - V.xyz);
 
         // Half-angles
-        H[i] = normalize(L[i] +  -V.xyz);
+        H[i] = normalize(L[i] +  normalize(-V.xyz));
 
         float NdotL = max(0.0, dot(N, L[i]));
 

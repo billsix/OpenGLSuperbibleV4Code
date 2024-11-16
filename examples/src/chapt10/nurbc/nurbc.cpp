@@ -2,7 +2,7 @@
 // OpenGL SuperBible
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <string.h>
 
@@ -10,7 +10,7 @@
 GLUnurbsObj *pNurb = NULL;
 
 // The number of control points for this curve
-GLint nNumPoints = 4; // 4 X 4
+GLint nNumPoints = 4;  // 4 X 4
 
 // Mesh extends four units -6 to +6 along x and y axis
 // Lies in Z plane
@@ -33,8 +33,7 @@ void DrawPoints(void) {
 
   // Draw all the points in the array
   glBegin(GL_POINTS);
-  for (i = 0; i < 4; i++)
-    glVertex3fv(ctrlPoints[i]);
+  for (i = 0; i < 4; i++) glVertex3fv(ctrlPoints[i]);
   glEnd();
 }
 
@@ -100,8 +99,7 @@ void SetupRC() {
 
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

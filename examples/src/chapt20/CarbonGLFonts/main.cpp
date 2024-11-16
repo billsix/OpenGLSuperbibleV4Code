@@ -22,7 +22,7 @@ static OSStatus WindowEventHandler(EventHandlerCallRef inCaller,
 
 static IBNibRef sNibRef;
 
-static AGLContext openGLContext = NULL; // OpenGL rendering context
+static AGLContext openGLContext = NULL;  // OpenGL rendering context
 
 static int nFrames = 0;
 static CStopWatch fpsTimer;
@@ -36,24 +36,22 @@ void ChangeSize(int w, int h);
 
 ///////////////////////////////////////////////////////////////////////////////////
 bool SetupGL(WindowRef &windowRef) {
-  static AGLPixelFormat openGLFormat = NULL; // OpenGL pixel format
+  static AGLPixelFormat openGLFormat = NULL;  // OpenGL pixel format
 
   static GLint glAttributes[] = {
-      AGL_DOUBLEBUFFER, GL_TRUE, // Double buffered
-      AGL_RGBA,         GL_TRUE, // Four component color
-      AGL_DEPTH_SIZE,   16,      // 16-bit (at least) depth buffer
-      AGL_NONE};                 // Terminator
+      AGL_DOUBLEBUFFER, GL_TRUE,  // Double buffered
+      AGL_RGBA,         GL_TRUE,  // Four component color
+      AGL_DEPTH_SIZE,   16,       // 16-bit (at least) depth buffer
+      AGL_NONE};                  // Terminator
 
   // Initialize OpenGL, set to one and only window
   // Choose pixelformat based on attribute list
   openGLFormat = aglChoosePixelFormat(NULL, 0, glAttributes);
-  if (openGLFormat == NULL)
-    return false;
+  if (openGLFormat == NULL) return false;
 
   // Create the context
   openGLContext = aglCreateContext(openGLFormat, NULL);
-  if (openGLContext == NULL)
-    return false;
+  if (openGLContext == NULL) return false;
 
   aglDestroyPixelFormat(openGLFormat);
 
@@ -101,13 +99,13 @@ int main(int argc, char *argv[]) {
   parentdir = strdup(argv[0]);
   c = (char *)parentdir;
 
-  while (*c != '\0') // go to end
+  while (*c != '\0')  // go to end
     c++;
 
-  while (*c != '/') // back up to parent
+  while (*c != '/')  // back up to parent
     c--;
 
-  *c++ = '\0'; // cut off last part (binary name)
+  *c++ = '\0';  // cut off last part (binary name)
 
   // Change to Resources directory. Any files need to be place there
   chdir(parentdir);
@@ -148,30 +146,30 @@ static OSStatus AppEventHandler(EventHandlerCallRef inCaller, EventRef inEvent,
   OSStatus result = eventNotHandledErr;
 
   switch (GetEventClass(inEvent)) {
-  case kEventClassCommand: {
-    HICommandExtended cmd;
-    verify_noerr(GetEventParameter(inEvent, kEventParamDirectObject,
-                                   typeHICommand, NULL, sizeof(cmd), NULL,
-                                   &cmd));
+    case kEventClassCommand: {
+      HICommandExtended cmd;
+      verify_noerr(GetEventParameter(inEvent, kEventParamDirectObject,
+                                     typeHICommand, NULL, sizeof(cmd), NULL,
+                                     &cmd));
 
-    switch (GetEventKind(inEvent)) {
-    case kEventCommandProcess:
-      switch (cmd.commandID) {
-      case kHICommandNew:
-        result = HandleNew();
-        break;
+      switch (GetEventKind(inEvent)) {
+        case kEventCommandProcess:
+          switch (cmd.commandID) {
+            case kHICommandNew:
+              result = HandleNew();
+              break;
 
-        // Add your own command-handling cases here
+              // Add your own command-handling cases here
 
-      default:
-        break;
+            default:
+              break;
+          }
+          break;
       }
       break;
     }
-    break;
-  }
-  default:
-    break;
+    default:
+      break;
   }
 
   return result;
@@ -234,77 +232,77 @@ static OSStatus WindowEventHandler(EventHandlerCallRef inCaller,
   static char cBuffer[32] = {"FPS: "};
 
   switch (GetEventClass(inEvent)) {
-  case kEventClassCommand: {
-    HICommandExtended cmd;
-    verify_noerr(GetEventParameter(inEvent, kEventParamDirectObject,
-                                   typeHICommand, NULL, sizeof(cmd), NULL,
-                                   &cmd));
+    case kEventClassCommand: {
+      HICommandExtended cmd;
+      verify_noerr(GetEventParameter(inEvent, kEventParamDirectObject,
+                                     typeHICommand, NULL, sizeof(cmd), NULL,
+                                     &cmd));
 
-    switch (GetEventKind(inEvent)) {
-    case kEventCommandProcess:
-      switch (cmd.commandID) {
-        // Add your own command-handling cases here
+      switch (GetEventKind(inEvent)) {
+        case kEventCommandProcess:
+          switch (cmd.commandID) {
+              // Add your own command-handling cases here
 
-      default:
-        break;
+            default:
+              break;
+          }
+          break;
       }
       break;
+
+      case kEventClassWindow: {
+        WindowRef window = NULL;
+        GetEventParameter(inEvent, kEventParamDirectObject, typeWindowRef, NULL,
+                          sizeof(WindowRef), NULL, &window);
+
+        switch (GetEventKind(inEvent)) {
+          // Window is closed
+          case kEventWindowClose:
+            ShutdownGL();
+            QuitApplicationEventLoop();
+            break;
+
+          // Draw/Render contents
+          case kEventWindowDrawContent: {
+            RenderScene();
+
+            nFrames++;
+            if (nFrames == 100) {
+              float fps = 100.0f / fpsTimer.GetElapsedSeconds();
+              sprintf(cBuffer, "FPS: %.1f", fps);
+
+              nFrames = 0;
+              fpsTimer.Reset();
+            }
+
+            glColor3f(1.0f, 1.0f, 1.0f);  // Just in case it get's changed
+            glWindowPos2f(10.0f, 10.0f);
+            glListBase(fontStart - ' ');
+            glCallLists(strlen(cBuffer), GL_BYTE, cBuffer);
+
+            aglSwapBuffers(openGLContext);
+
+            GetWindowPortBounds(window, &windowRect);
+            InvalWindowRect(window, &windowRect);
+          } break;
+
+          // Size of window has changed
+          case kEventWindowBoundsChanged:
+            if (openGLContext) {
+              aglUpdateContext(openGLContext);
+
+              GetWindowPortBounds(window, &windowRect);
+              ChangeSize(windowRect.right - windowRect.left,
+                         windowRect.bottom - windowRect.top);
+              InvalWindowRect(window, &windowRect);
+            }
+            break;
+        }
+      } break;
     }
-    break;
 
-  case kEventClassWindow: {
-    WindowRef window = NULL;
-    GetEventParameter(inEvent, kEventParamDirectObject, typeWindowRef, NULL,
-                      sizeof(WindowRef), NULL, &window);
-
-    switch (GetEventKind(inEvent)) {
-    // Window is closed
-    case kEventWindowClose:
-      ShutdownGL();
-      QuitApplicationEventLoop();
+    default:
       break;
-
-    // Draw/Render contents
-    case kEventWindowDrawContent: {
-      RenderScene();
-
-      nFrames++;
-      if (nFrames == 100) {
-        float fps = 100.0f / fpsTimer.GetElapsedSeconds();
-        sprintf(cBuffer, "FPS: %.1f", fps);
-
-        nFrames = 0;
-        fpsTimer.Reset();
-      }
-
-      glColor3f(1.0f, 1.0f, 1.0f); // Just in case it get's changed
-      glWindowPos2f(10.0f, 10.0f);
-      glListBase(fontStart - ' ');
-      glCallLists(strlen(cBuffer), GL_BYTE, cBuffer);
-
-      aglSwapBuffers(openGLContext);
-
-      GetWindowPortBounds(window, &windowRect);
-      InvalWindowRect(window, &windowRect);
-    } break;
-
-    // Size of window has changed
-    case kEventWindowBoundsChanged:
-      if (openGLContext) {
-        aglUpdateContext(openGLContext);
-
-        GetWindowPortBounds(window, &windowRect);
-        ChangeSize(windowRect.right - windowRect.left,
-                   windowRect.bottom - windowRect.top);
-        InvalWindowRect(window, &windowRect);
-      }
-      break;
-    }
-  } break;
-  }
-
-  default:
-    break;
   }
 
   return err;

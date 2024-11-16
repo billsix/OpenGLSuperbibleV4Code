@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 ///////////////////////////////////////////////////////////
 // Called to draw scene
@@ -33,8 +33,7 @@ void RenderScene(void) {
 // Set viewport and projection
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

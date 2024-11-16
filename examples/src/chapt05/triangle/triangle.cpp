@@ -3,7 +3,7 @@
 // Demonstrates OpenGL color triangle
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // System and OpenGL Stuff
+#include "../../shared/gltools.h"  // System and OpenGL Stuff
 
 // Called to draw scene
 void RenderScene(void) {
@@ -44,8 +44,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set the viewport to be the entire window
   glViewport(0, 0, w, h);

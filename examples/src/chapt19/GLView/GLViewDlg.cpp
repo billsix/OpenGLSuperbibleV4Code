@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 // CAboutDlg dialog used for App About
 
 class CAboutDlg : public CDialog {
-public:
+ public:
   CAboutDlg();
 
   // Dialog Data
@@ -29,12 +29,12 @@ public:
 
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CAboutDlg)
-protected:
-  virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV support
-                                                   //}}AFX_VIRTUAL
+ protected:
+  virtual void DoDataExchange(CDataExchange *pDX);  // DDX/DDV support
+                                                    //}}AFX_VIRTUAL
 
   // Implementation
-protected:
+ protected:
   //{{AFX_MSG(CAboutDlg)
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
@@ -94,8 +94,8 @@ END_MESSAGE_MAP()
 // CGLViewDlg message handlers
 
 BOOL CGLViewDlg::OnInitDialog() {
-  PIXELFORMATDESCRIPTOR pfd; // Pixel format descriptor
-  char cBuffer[64];          // String buffer
+  PIXELFORMATDESCRIPTOR pfd;  // Pixel format descriptor
+  char cBuffer[64];           // String buffer
   char cOutput[128];
   int nTabs[] = {16,      40,       40 + 46,  64 + 46,
                  95 + 46, 159 + 46, 195 + 46, 222 + 46};
@@ -121,8 +121,8 @@ BOOL CGLViewDlg::OnInitDialog() {
 
   // Set the icon for this dialog.  The framework does this automatically
   //  when the application's main window is not a dialog
-  SetIcon(m_hIcon, TRUE);  // Set big icon
-  SetIcon(m_hIcon, FALSE); // Set small icon
+  SetIcon(m_hIcon, TRUE);   // Set big icon
+  SetIcon(m_hIcon, FALSE);  // Set small icon
 
   WNDCLASS wndClass;
 
@@ -223,7 +223,7 @@ BOOL CGLViewDlg::OnInitDialog() {
   // Create initial window
   OnSelchangeList();
 
-  return TRUE; // return TRUE  unless you set the focus to a control
+  return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
 void CGLViewDlg::OnSysCommand(UINT nID, LPARAM lParam) {
@@ -241,7 +241,7 @@ void CGLViewDlg::OnSysCommand(UINT nID, LPARAM lParam) {
 
 void CGLViewDlg::OnPaint() {
   if (IsIconic()) {
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  // device context for painting
 
     SendMessage(WM_ICONERASEBKGND, (WPARAM)dc.GetSafeHdc(), 0);
 
@@ -351,9 +351,7 @@ void CGLViewDlg::OnBnClickedButton1() {
                        FILE_ATTRIBUTE_NORMAL, NULL);
 
     for (i = 0;; i++) {
-
-      if (LB_ERR == m_ListBox.GetText(i, pText))
-        break;
+      if (LB_ERR == m_ListBox.GetText(i, pText)) break;
 
       // write to file
       WriteFile(hFile, pText, strlen(pText), &foo, NULL);
@@ -368,7 +366,7 @@ void CGLViewDlg::OnBnClickedButton1() {
 
 void CGLViewDlg::OnLbnDblclkList() {
   GLViewPixFormatDlg dlg;
-  PIXELFORMATDESCRIPTOR pfd; // Pixel format descriptor
+  PIXELFORMATDESCRIPTOR pfd;  // Pixel format descriptor
 
   // Store format data into the class
   dlg.iFormatNumber = m_ListBox.GetCurSel() + 1;

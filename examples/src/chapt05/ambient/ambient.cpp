@@ -4,7 +4,7 @@
 // Demonstrates Ambient Lighting
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // System and OpenGL Stuff
+#include "../../shared/gltools.h"  // System and OpenGL Stuff
 
 #include "imgui.h"
 
@@ -18,7 +18,6 @@ static GLfloat yRot = 0.0f;
 
 // Called to draw scene
 void RenderScene(void) {
-
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -149,15 +148,14 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
 
   // Lighting stuff
-  glEnable(GL_LIGHTING); // Enable lighting
+  glEnable(GL_LIGHTING);  // Enable lighting
 
-  glEnable(GL_COLOR_MATERIAL); // Enable Material color tracking
+  glEnable(GL_COLOR_MATERIAL);  // Enable Material color tracking
 
   // Front material ambient and diffuse colors track glColor
   glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
@@ -167,29 +165,21 @@ void SetupRC() {
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   ImGui_ImplGLUT_SpecialFunc(key, x, y);
   // Refresh the Window
@@ -207,8 +197,7 @@ void TimerFunction(int value) {
 void ChangeSize(int w, int h) {
   GLfloat nRange = 80.0f;
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

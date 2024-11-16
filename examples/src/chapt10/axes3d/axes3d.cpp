@@ -3,7 +3,7 @@
 // OpenGL SuperBible
 // Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
@@ -15,8 +15,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -43,9 +42,9 @@ void SetupRC() {
   GLfloat sourceLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
   GLfloat lightPos[] = {-10.f, 5.0f, 5.0f, 1.0f};
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -69,17 +68,13 @@ void SetupRC() {
 
 // Respond to arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
   xRot = (GLfloat)((const int)xRot % 360);
   yRot = (GLfloat)((const int)yRot % 360);

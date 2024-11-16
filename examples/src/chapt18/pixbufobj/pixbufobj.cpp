@@ -3,34 +3,34 @@
 // Demonstrates use of Pixel Buffer Objects (PBOs)
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
-#include "../../shared/stopwatch.h" // General purpose stop watch class
+#include "../../shared/stopwatch.h"  // General purpose stop watch class
 
 #include <assert.h>
 
 #include <stdio.h>
 
-GLint windowWidth = 512; // window size
+GLint windowWidth = 512;  // window size
 GLint windowHeight = 512;
-GLint dataWidth = 512; // dimensions of PBOs & textures
+GLint dataWidth = 512;  // dimensions of PBOs & textures
 GLint dataHeight = 512;
-GLint dataPitch = 512 * 3; // size of row (padded to 4 byte boundary)
-GLint dataOffsetX = 0;     // offset of data within window
+GLint dataPitch = 512 * 3;  // size of row (padded to 4 byte boundary)
+GLint dataOffsetX = 0;      // offset of data within window
 GLint dataOffsetY = 0;
 
-GLint mainMenu; // menu handles
+GLint mainMenu;  // menu handles
 GLint usageMenu;
 
 GLboolean npotTexturesAvailable = GL_FALSE;
 GLboolean usePBOs = GL_FALSE;
 GLboolean useMotionBlur = GL_TRUE;
 
-GLubyte *pixels[3];      // 3 old frames the size of window
-GLboolean frameGood[3];  // is this frame valid yet?
-GLuint currentFrame = 0; // which old frame are we on?
+GLubyte *pixels[3];       // 3 old frames the size of window
+GLboolean frameGood[3];   // is this frame valid yet?
+GLuint currentFrame = 0;  // which old frame are we on?
 
 GLfloat angleIncrement = 1.0f;
 
@@ -38,8 +38,8 @@ GLenum usageHint = GL_STREAM_COPY;
 
 // Called to draw scene
 void RenderScene(void) {
-  static int iFrames = 0;       // Frame count
-  static CStopWatch frameTimer; // Render time
+  static int iFrames = 0;        // Frame count
+  static CStopWatch frameTimer;  // Render time
 
   // Reset the stopwatch on first time
   if (iFrames == 0) {
@@ -69,17 +69,13 @@ void RenderScene(void) {
   // Draw objects in the scene
   int i;
   glBegin(GL_QUADS);
-  for (i = 0; i < 3; i++)
-    glMultiTexCoord2f(GL_TEXTURE0 + i, 0.0f, 0.0f);
+  for (i = 0; i < 3; i++) glMultiTexCoord2f(GL_TEXTURE0 + i, 0.0f, 0.0f);
   glVertex2f(-1.0f, -1.0f);
-  for (i = 0; i < 3; i++)
-    glMultiTexCoord2f(GL_TEXTURE0 + i, 0.0f, 1.0f);
+  for (i = 0; i < 3; i++) glMultiTexCoord2f(GL_TEXTURE0 + i, 0.0f, 1.0f);
   glVertex2f(-1.0f, 1.0f);
-  for (i = 0; i < 3; i++)
-    glMultiTexCoord2f(GL_TEXTURE0 + i, 1.0f, 1.0f);
+  for (i = 0; i < 3; i++) glMultiTexCoord2f(GL_TEXTURE0 + i, 1.0f, 1.0f);
   glVertex2f(1.0f, 1.0f);
-  for (i = 0; i < 3; i++)
-    glMultiTexCoord2f(GL_TEXTURE0 + i, 1.0f, 0.0f);
+  for (i = 0; i < 3; i++) glMultiTexCoord2f(GL_TEXTURE0 + i, 1.0f, 0.0f);
   glVertex2f(1.0f, -1.0f);
   glEnd();
 
@@ -131,8 +127,7 @@ void RenderScene(void) {
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, 2 + frameBeforeThat);
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -326,23 +321,23 @@ void togglePBOs(void) {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    togglePBOs();
-    break;
-
-  case 2:
-    toggleMotionBlur();
-    break;
-
-  default:
-    // we have a change of usage
-    usageHint = GL_STREAM_DRAW + (value - 3);
-    if (usePBOs) {
-      // destroy then recreate PBOs
+    case 1:
       togglePBOs();
-      togglePBOs();
-    }
-    break;
+      break;
+
+    case 2:
+      toggleMotionBlur();
+      break;
+
+    default:
+      // we have a change of usage
+      usageHint = GL_STREAM_DRAW + (value - 3);
+      if (usePBOs) {
+        // destroy then recreate PBOs
+        togglePBOs();
+        togglePBOs();
+      }
+      break;
   }
 
   // Refresh the Window
@@ -351,18 +346,18 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'b':
-  case 'B':
-    toggleMotionBlur();
-    break;
-  case 'p':
-  case 'P':
-    togglePBOs();
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'b':
+    case 'B':
+      toggleMotionBlur();
+      break;
+    case 'p':
+    case 'P':
+      togglePBOs();
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -371,16 +366,16 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_UP:
-  case GLUT_KEY_RIGHT:
-    angleIncrement += 1.0f;
-    break;
-  case GLUT_KEY_DOWN:
-  case GLUT_KEY_LEFT:
-    angleIncrement -= 1.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_UP:
+    case GLUT_KEY_RIGHT:
+      angleIncrement += 1.0f;
+      break;
+    case GLUT_KEY_DOWN:
+    case GLUT_KEY_LEFT:
+      angleIncrement -= 1.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -393,10 +388,8 @@ void ChangeSize(int w, int h) {
 
   if (!npotTexturesAvailable) {
     // make the data region the next smaller power of two
-    while (dataWidth & (dataWidth - 1))
-      dataWidth--;
-    while (dataHeight & (dataHeight - 1))
-      dataHeight--;
+    while (dataWidth & (dataWidth - 1)) dataWidth--;
+    while (dataHeight & (dataHeight - 1)) dataHeight--;
 
     dataOffsetX = (windowWidth - dataWidth) / 2;
     dataOffsetY = (windowHeight - dataHeight) / 2;
@@ -423,8 +416,7 @@ void ChangeSize(int w, int h) {
       glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     } else {
       // pixels[i] may not be set up yet on 1st time through
-      if (pixels[i])
-        free(pixels[i]);
+      if (pixels[i]) free(pixels[i]);
       pixels[i] = (GLubyte *)malloc(dataHeight * dataPitch);
       assert(pixels[i]);
     }
@@ -465,8 +457,7 @@ int main(int argc, char *argv[]) {
   glutMainLoop();
 
   for (int i = 0; i < 3; i++) {
-    if (!usePBOs)
-      free(pixels[i]);
+    if (!usePBOs) free(pixels[i]);
   }
 
   return 0;

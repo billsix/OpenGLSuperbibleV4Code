@@ -5,13 +5,13 @@
 // manually.
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // Camera class
+#include "../../shared/glframe.h"  // Camera class
 
 #include <math.h>
 
-GLFrame frameCamera; // The camera
+GLFrame frameCamera;  // The camera
 
 // Six sides of a cube map
 const char *szCubeFaces[6] = {"pos_x.tga", "neg_x.tga", "pos_y.tga",
@@ -164,7 +164,7 @@ void RenderScene(void) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glPushMatrix();
-  frameCamera.ApplyCameraTransform(); // Move the camera about
+  frameCamera.ApplyCameraTransform();  // Move the camera about
 
   // Sky Box is manually textured
   glDisable(GL_TEXTURE_GEN_S);
@@ -204,17 +204,13 @@ void RenderScene(void) {
 
 // Respond to arrow keys by moving the camera frame of reference
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    frameCamera.MoveForward(0.1f);
+  if (key == GLUT_KEY_UP) frameCamera.MoveForward(0.1f);
 
-  if (key == GLUT_KEY_DOWN)
-    frameCamera.MoveForward(-0.1f);
+  if (key == GLUT_KEY_DOWN) frameCamera.MoveForward(-0.1f);
 
-  if (key == GLUT_KEY_LEFT)
-    frameCamera.RotateLocalY(0.1);
+  if (key == GLUT_KEY_LEFT) frameCamera.RotateLocalY(0.1);
 
-  if (key == GLUT_KEY_RIGHT)
-    frameCamera.RotateLocalY(-0.1);
+  if (key == GLUT_KEY_RIGHT) frameCamera.RotateLocalY(-0.1);
 
   // Refresh the Window
   glutPostRedisplay();
@@ -234,8 +230,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

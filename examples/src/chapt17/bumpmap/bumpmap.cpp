@@ -3,9 +3,9 @@
 // Demonstrates shader-based bump mapping
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -22,7 +22,7 @@
 #define PYRAMIDS 1
 #define TOTAL_BUMPMAPS 2
 
-GLuint fShader[TOTAL_SHADER_SETS]; // shader object names
+GLuint fShader[TOTAL_SHADER_SETS];  // shader object names
 GLuint vShader[TOTAL_SHADER_SETS];
 GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
@@ -30,16 +30,16 @@ char *shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
 char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
 char *bumpmapNames[TOTAL_BUMPMAPS] = {"rivets", "pyramids"};
 
-GLint whichShader = BUMPMAP; // current shader
-GLint whichShape = BOX;      // current shape
-GLint whichBumpmap = RIVETS; // current bumpmap
+GLint whichShader = BUMPMAP;  // current shader
+GLint whichShape = BOX;       // current shape
+GLint whichBumpmap = RIVETS;  // current bumpmap
 
-GLint windowWidth = 512; // window size
+GLint windowWidth = 512;  // window size
 GLint windowHeight = 512;
 
 GLint mainMenu, shapeMenu, shaderMenu, bumpmapMenu;
 
-GLint maxTexSize; // maximum allowed size for 1D/2D texture
+GLint maxTexSize;  // maximum allowed size for 1D/2D texture
 
 GLfloat cameraPos[] = {0.0f, 125.0f, -200.0f, 1.0f};
 GLfloat lightPos0[3];
@@ -246,10 +246,10 @@ void DrawCylinder(GLfloat radius, GLfloat height, GLint slices,
     glMultiTexCoord2f(GL_TEXTURE0, xTexScale * i / (GLfloat)slices, 0.0f);
     glMultiTexCoord3f(GL_TEXTURE1, cos((angleInc * i) + (3.14159265f * 0.5f)),
                       0.0f,
-                      sin((angleInc * i) + (3.14159265f * 0.5f))); // tangent
-    glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);              // binormal
+                      sin((angleInc * i) + (3.14159265f * 0.5f)));  // tangent
+    glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);               // binormal
     glMultiTexCoord3f(GL_TEXTURE3, cos(angleInc * i), 0.0f,
-                      sin(angleInc * i)); // normal
+                      sin(angleInc * i));  // normal
     glVertex3f(radius * cos(angleInc * i), -height * 0.5f,
                radius * sin(angleInc * i));
     glMultiTexCoord2f(GL_TEXTURE0, xTexScale * i / (GLfloat)slices, yTexScale);
@@ -262,9 +262,9 @@ void DrawCylinder(GLfloat radius, GLfloat height, GLint slices,
   glBegin(GL_TRIANGLE_FAN);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, 1.0f); // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 1.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, 1.0f);  // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 1.0f, 0.0f);  // normal
   glVertex3f(0.0f, height * 0.5f, 0.0f);
 
   for (i = 0; i <= slices; i++) {
@@ -279,9 +279,9 @@ void DrawCylinder(GLfloat radius, GLfloat height, GLint slices,
   glBegin(GL_TRIANGLE_FAN);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, -1.0f, 0.0f, 0.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, -1.0f); // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, -1.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, -1.0f, 0.0f, 0.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, -1.0f);  // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, -1.0f, 0.0f);  // normal
   glVertex3f(0.0f, -height * 0.5f, 0.0f);
 
   for (i = 0; i <= slices; i++) {
@@ -309,13 +309,13 @@ void DrawTorus(GLfloat innerRadius, GLfloat ringRadius, GLint rings,
       glMultiTexCoord3f(
           GL_TEXTURE1, cos((ringAngleInc * (i + 1)) + (3.14159265f * 0.5f)),
           0.0f,
-          sin((ringAngleInc * (i + 1)) + (3.14159265f * 0.5f))); // tangent
+          sin((ringAngleInc * (i + 1)) + (3.14159265f * 0.5f)));  // tangent
       glMultiTexCoord3f(GL_TEXTURE2, 0.0f,
                         sin((sliceAngleInc * j) + (3.14159265f * 0.5f)),
-                        0.0f); // binormal
+                        0.0f);  // binormal
       glMultiTexCoord3f(GL_TEXTURE3, cos(ringAngleInc * (i + 1)),
                         sin(sliceAngleInc * j),
-                        sin(ringAngleInc * (i + 1))); // normal
+                        sin(ringAngleInc * (i + 1)));  // normal
       glVertex3f(
           (innerRadius + ringRadius + (ringRadius * cos(sliceAngleInc * j))) *
               cos(ringAngleInc * (i + 1)),
@@ -326,13 +326,13 @@ void DrawTorus(GLfloat innerRadius, GLfloat ringRadius, GLint rings,
                         yTexScale * j / (GLfloat)slices);
       glMultiTexCoord3f(
           GL_TEXTURE1, cos((ringAngleInc * i) + (3.14159265f * 0.5f)), 0.0f,
-          sin((ringAngleInc * i) + (3.14159265f * 0.5f))); // tangent
+          sin((ringAngleInc * i) + (3.14159265f * 0.5f)));  // tangent
       glMultiTexCoord3f(GL_TEXTURE2, 0.0f,
                         sin((sliceAngleInc * j) + (3.14159265f * 0.5f)),
-                        0.0f); // binormal
+                        0.0f);  // binormal
       glMultiTexCoord3f(GL_TEXTURE3, cos(ringAngleInc * i),
                         sin(sliceAngleInc * j),
-                        sin(ringAngleInc * i)); // normal
+                        sin(ringAngleInc * i));  // normal
       glVertex3f(
           (innerRadius + ringRadius + (ringRadius * cos(sliceAngleInc * j))) *
               cos(ringAngleInc * i),
@@ -350,9 +350,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
 
   glBegin(GL_QUADS);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);  // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);  // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 0.0f, -1.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);   // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);   // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 0.0f, -1.0f);  // normal
   glVertex3f(-size, -size, -size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(-size, size, -size);
@@ -362,9 +362,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
   glVertex3f(size, -size, -size);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, -1.0f, 0.0f, 0.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);  // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 0.0f, 1.0f);  // normal
+  glMultiTexCoord3f(GL_TEXTURE1, -1.0f, 0.0f, 0.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);   // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 0.0f, 1.0f);   // normal
   glVertex3f(size, -size, size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(size, size, size);
@@ -374,9 +374,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
   glVertex3f(-size, -size, size);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 0.0f, 0.0f, 1.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f); // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 1.0f, 0.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 0.0f, 0.0f, 1.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);  // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 1.0f, 0.0f, 0.0f);  // normal
   glVertex3f(size, -size, -size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(size, size, -size);
@@ -386,9 +386,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
   glVertex3f(size, -size, size);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 0.0f, 0.0f, -1.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);  // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, -1.0f, 0.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 0.0f, 0.0f, -1.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 1.0f, 0.0f);   // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, -1.0f, 0.0f, 0.0f);  // normal
   glVertex3f(-size, -size, size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(-size, size, size);
@@ -398,9 +398,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
   glVertex3f(-size, -size, -size);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f); // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, 1.0f); // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 1.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);  // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, 1.0f);  // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, 1.0f, 0.0f);  // normal
   glVertex3f(-size, size, -size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(-size, size, size);
@@ -410,9 +410,9 @@ void DrawBox(GLfloat size, GLfloat texScale) {
   glVertex3f(size, size, -size);
 
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f);
-  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);  // tangent
-  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, -1.0f); // binormal
-  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, -1.0f, 0.0f); // normal
+  glMultiTexCoord3f(GL_TEXTURE1, 1.0f, 0.0f, 0.0f);   // tangent
+  glMultiTexCoord3f(GL_TEXTURE2, 0.0f, 0.0f, -1.0f);  // binormal
+  glMultiTexCoord3f(GL_TEXTURE3, 0.0f, -1.0f, 0.0f);  // normal
   glVertex3f(-size, -size, size);
   glMultiTexCoord2f(GL_TEXTURE0, 0.0f, texScale);
   glVertex3f(-size, -size, -size);
@@ -437,15 +437,15 @@ void DrawModels(void) {
   // Draw box to demonstrate low-geometry, high-detail
   glColor3f(0.8f, 0.5f, 0.3f);
   switch (whichShape) {
-  case CYLINDER:
-    DrawCylinder(25.0f, 70.0f, 25, 20.0f, 10.0f);
-    break;
-  case TORUS:
-    DrawTorus(20.0f, 15.0f, 50, 25, 40.0f, 12.0f);
-    break;
-  default:
-    DrawBox(70.0f, 10.0f);
-    break;
+    case CYLINDER:
+      DrawCylinder(25.0f, 70.0f, 25, 20.0f, 10.0f);
+      break;
+    case TORUS:
+      DrawTorus(20.0f, 15.0f, 50, 25, 40.0f, 12.0f);
+      break;
+    default:
+      DrawBox(70.0f, 10.0f);
+      break;
   }
 }
 
@@ -487,8 +487,7 @@ void RenderScene(void) {
   // Draw objects in the scene
   DrawModels();
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -512,8 +511,9 @@ void SetupRC() {
 
   // Make sure we have multitexture!
   if (!GLEE_VERSION_1_3 && !GLEE_ARB_multitexture) {
-    fprintf(stderr, "Neither OpenGL 1.3 nor necessary"
-                    " extensions are available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.3 nor necessary"
+            " extensions are available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -602,28 +602,28 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -632,20 +632,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    lightRotation -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    lightRotation += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      lightRotation -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      lightRotation += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
   lightPos0[0] = 300.0f * cos(-lightRotation * 3.14159265f / 180.0f);

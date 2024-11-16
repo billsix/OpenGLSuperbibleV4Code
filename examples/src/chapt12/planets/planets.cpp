@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 ///////////////////////////////
 // Define object names
@@ -78,7 +78,7 @@ void RenderScene(void) {
   glPopMatrix();
 
   // Restore the matrix state
-  glPopMatrix(); // Modelview matrix
+  glPopMatrix();  // Modelview matrix
 
   glutSwapBuffers();
 }
@@ -88,29 +88,29 @@ void RenderScene(void) {
 // and displayed
 void ProcessPlanet(GLuint id) {
   switch (id) {
-  case SUN:
-    glutSetWindowTitle("You clicked on the Sun!");
-    break;
+    case SUN:
+      glutSetWindowTitle("You clicked on the Sun!");
+      break;
 
-  case MERCURY:
-    glutSetWindowTitle("You clicked on Mercury!");
-    break;
+    case MERCURY:
+      glutSetWindowTitle("You clicked on Mercury!");
+      break;
 
-  case VENUS:
-    glutSetWindowTitle("You clicked on Venus!");
-    break;
+    case VENUS:
+      glutSetWindowTitle("You clicked on Venus!");
+      break;
 
-  case EARTH:
-    glutSetWindowTitle("You clicked on Earth!");
-    break;
+    case EARTH:
+      glutSetWindowTitle("You clicked on Earth!");
+      break;
 
-  case MARS:
-    glutSetWindowTitle("You clicked on Mars!");
-    break;
+    case MARS:
+      glutSetWindowTitle("You clicked on Mars!");
+      break;
 
-  default:
-    glutSetWindowTitle("Nothing was clicked on!");
-    break;
+    default:
+      glutSetWindowTitle("Nothing was clicked on!");
+      break;
   }
 }
 
@@ -174,8 +174,7 @@ void ProcessSelection(int xPos, int yPos) {
 ///////////////////////////////////////////////////////////
 // Process the mouse click
 void MouseCallback(int button, int state, int x, int y) {
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    ProcessSelection(x, y);
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) ProcessSelection(x, y);
 }
 
 ///////////////////////////////////////////////////////////
@@ -188,9 +187,9 @@ void SetupRC() {
   GLfloat lightPos[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
   // Light values and coordinates
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate insides
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate insides
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -217,8 +216,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

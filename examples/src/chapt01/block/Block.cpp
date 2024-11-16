@@ -3,7 +3,7 @@
 // Demonstrates an assortment of basic 3D concepts
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include "../../shared/math3d.h"
 
@@ -54,7 +54,7 @@ void RenderScene(void) {
     glVertex3f(100.0f, -25.3f, -100.0f);
     glEnd();
   } else {
-    glColor3f(0.0f, 0.0f, 0.90f); // Blue
+    glColor3f(0.0f, 0.0f, 0.90f);  // Blue
     glBegin(GL_QUADS);
     glVertex3f(-100.0f, -25.3f, -100.0f);
     glVertex3f(-100.0f, -25.3f, 100.0f);
@@ -86,150 +86,150 @@ void RenderScene(void) {
   glTranslatef(-10.0f, 0.0f, 10.0f);
 
   switch (nStep) {
-  // Just draw the wire framed cube
-  case 0:
-    glutWireCube(50.0f);
-    break;
+    // Just draw the wire framed cube
+    case 0:
+      glutWireCube(50.0f);
+      break;
 
-  // Same wire cube with hidden line removal simulated
-  case 1:
-    // Front Face (before rotation)
-    glBegin(GL_LINES);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glVertex3f(25.0f, -25.0f, 25.0f);
+    // Same wire cube with hidden line removal simulated
+    case 1:
+      // Front Face (before rotation)
+      glBegin(GL_LINES);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glVertex3f(25.0f, -25.0f, 25.0f);
 
-    glVertex3f(25.0f, -25.0f, 25.0f);
-    glVertex3f(-25.0f, -25.0f, 25.0f);
+      glVertex3f(25.0f, -25.0f, 25.0f);
+      glVertex3f(-25.0f, -25.0f, 25.0f);
 
-    glVertex3f(-25.0f, -25.0f, 25.0f);
-    glVertex3f(-25.0f, 25.0f, 25.0f);
+      glVertex3f(-25.0f, -25.0f, 25.0f);
+      glVertex3f(-25.0f, 25.0f, 25.0f);
 
-    glVertex3f(-25.0f, 25.0f, 25.0f);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glEnd();
+      glVertex3f(-25.0f, 25.0f, 25.0f);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glEnd();
 
-    // Top of cube
-    glBegin(GL_LINES);
-    // Front Face
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glVertex3f(25.0f, 25.0f, -25.0f);
+      // Top of cube
+      glBegin(GL_LINES);
+      // Front Face
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glVertex3f(25.0f, 25.0f, -25.0f);
 
-    glVertex3f(25.0f, 25.0f, -25.0f);
-    glVertex3f(-25.0f, 25.0f, -25.0f);
+      glVertex3f(25.0f, 25.0f, -25.0f);
+      glVertex3f(-25.0f, 25.0f, -25.0f);
 
-    glVertex3f(-25.0f, 25.0f, -25.0f);
-    glVertex3f(-25.0f, 25.0f, 25.0f);
+      glVertex3f(-25.0f, 25.0f, -25.0f);
+      glVertex3f(-25.0f, 25.0f, 25.0f);
 
-    glVertex3f(-25.0f, 25.0f, 25.0f);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glEnd();
+      glVertex3f(-25.0f, 25.0f, 25.0f);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glEnd();
 
-    // Last two segments for effect
-    glBegin(GL_LINES);
-    glVertex3f(25.0f, 25.0f, -25.0f);
-    glVertex3f(25.0f, -25.0f, -25.0f);
+      // Last two segments for effect
+      glBegin(GL_LINES);
+      glVertex3f(25.0f, 25.0f, -25.0f);
+      glVertex3f(25.0f, -25.0f, -25.0f);
 
-    glVertex3f(25.0f, -25.0f, -25.0f);
-    glVertex3f(25.0f, -25.0f, 25.0f);
-    glEnd();
+      glVertex3f(25.0f, -25.0f, -25.0f);
+      glVertex3f(25.0f, -25.0f, 25.0f);
+      glEnd();
 
-    break;
+      break;
 
-  // Uniform colored surface, looks 2D and goofey
-  case 2:
-    glutSolidCube(50.0f);
-    break;
+    // Uniform colored surface, looks 2D and goofey
+    case 2:
+      glutSolidCube(50.0f);
+      break;
 
-  case 3:
-    glutSolidCube(50.0f);
-    break;
+    case 3:
+      glutSolidCube(50.0f);
+      break;
 
-  // Draw a shadow with some lighting
-  case 4:
-    glGetFloatv(GL_MODELVIEW_MATRIX, mCubeTransform);
-    glutSolidCube(50.0f);
-    glPopMatrix();
+    // Draw a shadow with some lighting
+    case 4:
+      glGetFloatv(GL_MODELVIEW_MATRIX, mCubeTransform);
+      glutSolidCube(50.0f);
+      glPopMatrix();
 
-    // Disable lighting, we'll just draw the shadow as black
-    glDisable(GL_LIGHTING);
+      // Disable lighting, we'll just draw the shadow as black
+      glDisable(GL_LIGHTING);
 
-    glPushMatrix();
+      glPushMatrix();
 
-    m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
-    m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
-    // MakeShadowMatrix(ground, lightpos, cubeXform);
-    glMultMatrixf(mCubeTransform);
+      m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
+      m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
+      // MakeShadowMatrix(ground, lightpos, cubeXform);
+      glMultMatrixf(mCubeTransform);
 
-    glTranslatef(-10.0f, 0.0f, 10.0f);
+      glTranslatef(-10.0f, 0.0f, 10.0f);
 
-    // Set drawing color to Black
-    glColor3f(0.0f, 0.0f, 0.0f);
+      // Set drawing color to Black
+      glColor3f(0.0f, 0.0f, 0.0f);
 
-    glutSolidCube(50.0f);
-    break;
+      glutSolidCube(50.0f);
+      break;
 
-  case 5:
-    glColor3ub(255, 255, 255);
-    glGetFloatv(GL_MODELVIEW_MATRIX, mCubeTransform);
+    case 5:
+      glColor3ub(255, 255, 255);
+      glGetFloatv(GL_MODELVIEW_MATRIX, mCubeTransform);
 
-    // Front Face (before rotation)
-    glBindTexture(GL_TEXTURE_2D, textures[1]);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(25.0f, -25.0f, 25.0f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-25.0f, -25.0f, 25.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-25.0f, 25.0f, 25.0f);
-    glEnd();
+      // Front Face (before rotation)
+      glBindTexture(GL_TEXTURE_2D, textures[1]);
+      glBegin(GL_QUADS);
+      glTexCoord2f(1.0f, 1.0f);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glTexCoord2f(1.0f, 0.0f);
+      glVertex3f(25.0f, -25.0f, 25.0f);
+      glTexCoord2f(0.0f, 0.0f);
+      glVertex3f(-25.0f, -25.0f, 25.0f);
+      glTexCoord2f(0.0f, 1.0f);
+      glVertex3f(-25.0f, 25.0f, 25.0f);
+      glEnd();
 
-    // Top of cube
-    glBindTexture(GL_TEXTURE_2D, textures[2]);
-    glBegin(GL_QUADS);
-    // Front Face
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(25.0f, 25.0f, -25.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-25.0f, 25.0f, -25.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-25.0f, 25.0f, 25.0f);
-    glEnd();
+      // Top of cube
+      glBindTexture(GL_TEXTURE_2D, textures[2]);
+      glBegin(GL_QUADS);
+      // Front Face
+      glTexCoord2f(0.0f, 0.0f);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glTexCoord2f(1.0f, 0.0f);
+      glVertex3f(25.0f, 25.0f, -25.0f);
+      glTexCoord2f(1.0f, 1.0f);
+      glVertex3f(-25.0f, 25.0f, -25.0f);
+      glTexCoord2f(0.0f, 1.0f);
+      glVertex3f(-25.0f, 25.0f, 25.0f);
+      glEnd();
 
-    // Last two segments for effect
-    glBindTexture(GL_TEXTURE_2D, textures[3]);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(25.0f, 25.0f, -25.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(25.0f, -25.0f, -25.0f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(25.0f, -25.0f, 25.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(25.0f, 25.0f, 25.0f);
-    glEnd();
+      // Last two segments for effect
+      glBindTexture(GL_TEXTURE_2D, textures[3]);
+      glBegin(GL_QUADS);
+      glTexCoord2f(1.0f, 1.0f);
+      glVertex3f(25.0f, 25.0f, -25.0f);
+      glTexCoord2f(1.0f, 0.0f);
+      glVertex3f(25.0f, -25.0f, -25.0f);
+      glTexCoord2f(0.0f, 0.0f);
+      glVertex3f(25.0f, -25.0f, 25.0f);
+      glTexCoord2f(0.0f, 1.0f);
+      glVertex3f(25.0f, 25.0f, 25.0f);
+      glEnd();
 
-    glPopMatrix();
+      glPopMatrix();
 
-    // Disable lighting, we'll just draw the shadow as black
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
+      // Disable lighting, we'll just draw the shadow as black
+      glDisable(GL_LIGHTING);
+      glDisable(GL_TEXTURE_2D);
 
-    glPushMatrix();
+      glPushMatrix();
 
-    m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
-    m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
-    glMultMatrixf(mCubeTransform);
+      m3dGetPlaneEquation(pPlane, ground[0], ground[1], ground[2]);
+      m3dMakePlanarShadowMatrix(mCubeTransform, pPlane, vLightPos);
+      glMultMatrixf(mCubeTransform);
 
-    glTranslatef(-10.0f, 0.0f, 10.0f);
+      glTranslatef(-10.0f, 0.0f, 10.0f);
 
-    // Set drawing color to Black
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glutSolidCube(50.0f);
-    break;
+      // Set drawing color to Black
+      glColor3f(0.0f, 0.0f, 0.0f);
+      glutSolidCube(50.0f);
+      break;
   }
 
   glPopMatrix();
@@ -297,8 +297,7 @@ void KeyPressFunc(unsigned char key, int x, int y) {
   if (key == 32) {
     nStep++;
 
-    if (nStep > 5)
-      nStep = 0;
+    if (nStep > 5) nStep = 0;
   }
 
   // Refresh the Window
@@ -312,8 +311,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Keep the square square
   if (w <= h) {

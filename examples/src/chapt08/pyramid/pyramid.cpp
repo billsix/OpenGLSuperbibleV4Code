@@ -2,9 +2,9 @@
 // Demonstrates Simple Texture Mapping
 // OpenGL SuperBible
 // Richard S. Wright Jr.
-#include "../../shared/gltools.h" // GLTools
+#include "../../shared/gltools.h"  // GLTools
 
-#include "../../shared/math3d.h" // 3D Math Library
+#include "../../shared/math3d.h"  // 3D Math Library
 
 #include <stdlib.h>
 
@@ -24,8 +24,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -57,9 +56,9 @@ void SetupRC() {
   GLfloat sourceLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
   GLfloat lightPos[] = {-10.f, 5.0f, 5.0f, 1.0f};
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -94,17 +93,13 @@ void SetupRC() {
 
 // Respond to arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
   xRot = (GLfloat)((const int)xRot % 360);
   yRot = (GLfloat)((const int)yRot % 360);
@@ -121,7 +116,6 @@ void TimerFunction(int value) {
 
 // Called to draw scene
 void RenderScene(void) {
-
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL2_NewFrame();
   ImGui_ImplGLUT_NewFrame();
@@ -136,22 +130,20 @@ void RenderScene(void) {
     // etc.)
     const char *items[] = {"Modulate", "Replace"};
     static const char *item_current =
-        items[0]; // Here our selection is a single pointer stored outside the
-                  // object.
+        items[0];  // Here our selection is a single pointer stored outside the
+                   // object.
     if (ImGui::BeginCombo("Texture Env Mode", item_current,
-                          0)) // The second parameter is the label previewed
-                              // before opening the combo.
+                          0))  // The second parameter is the label previewed
+                               // before opening the combo.
     {
-
       for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
         bool is_selected = (item_current == items[n]);
-        if (ImGui::Selectable(items[n], is_selected))
-          item_current = items[n];
+        if (ImGui::Selectable(items[n], is_selected)) item_current = items[n];
         if (is_selected)
-          ImGui::SetItemDefaultFocus(); // Set the initial focus when opening
-                                        // the combo (scrolling + for keyboard
-                                        // navigation support in the upcoming
-                                        // navigation branch)
+          ImGui::SetItemDefaultFocus();  // Set the initial focus when opening
+                                         // the combo (scrolling + for keyboard
+                                         // navigation support in the upcoming
+                                         // navigation branch)
       }
       if (item_current == items[0]) {
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -166,22 +158,20 @@ void RenderScene(void) {
     {
       const char *items[] = {"Linear", "Nearest"};
       static const char *item_current =
-          items[0]; // Here our selection is a single pointer stored outside the
-                    // object.
+          items[0];  // Here our selection is a single pointer stored outside
+                     // the object.
       if (ImGui::BeginCombo("Min Filter", item_current,
-                            0)) // The second parameter is the label previewed
-                                // before opening the combo.
+                            0))  // The second parameter is the label previewed
+                                 // before opening the combo.
       {
-
         for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
           bool is_selected = (item_current == items[n]);
-          if (ImGui::Selectable(items[n], is_selected))
-            item_current = items[n];
+          if (ImGui::Selectable(items[n], is_selected)) item_current = items[n];
           if (is_selected)
-            ImGui::SetItemDefaultFocus(); // Set the initial focus when opening
-                                          // the combo (scrolling + for keyboard
-                                          // navigation support in the upcoming
-                                          // navigation branch)
+            ImGui::SetItemDefaultFocus();  // Set the initial focus when opening
+                                           // the combo (scrolling + for
+                                           // keyboard navigation support in the
+                                           // upcoming navigation branch)
         }
         if (item_current == items[0]) {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -197,22 +187,20 @@ void RenderScene(void) {
     {
       const char *items[] = {"Linear", "Nearest"};
       static const char *item_current =
-          items[0]; // Here our selection is a single pointer stored outside the
-                    // object.
+          items[0];  // Here our selection is a single pointer stored outside
+                     // the object.
       if (ImGui::BeginCombo("Mag Filter", item_current,
-                            0)) // The second parameter is the label previewed
-                                // before opening the combo.
+                            0))  // The second parameter is the label previewed
+                                 // before opening the combo.
       {
-
         for (int n = 0; n < IM_ARRAYSIZE(items); n++) {
           bool is_selected = (item_current == items[n]);
-          if (ImGui::Selectable(items[n], is_selected))
-            item_current = items[n];
+          if (ImGui::Selectable(items[n], is_selected)) item_current = items[n];
           if (is_selected)
-            ImGui::SetItemDefaultFocus(); // Set the initial focus when opening
-                                          // the combo (scrolling + for keyboard
-                                          // navigation support in the upcoming
-                                          // navigation branch)
+            ImGui::SetItemDefaultFocus();  // Set the initial focus when opening
+                                           // the combo (scrolling + for
+                                           // keyboard navigation support in the
+                                           // upcoming navigation branch)
         }
         if (item_current == items[0]) {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -224,7 +212,9 @@ void RenderScene(void) {
         ImGui::EndCombo();
       }
     }
-    { ImGui::SliderFloat("Extra Camera Radius", &extraradius, -4.0f, 100.0f); }
+    {
+      ImGui::SliderFloat("Extra Camera Radius", &extraradius, -4.0f, 100.0f);
+    }
 
     ImGui::End();
   }
@@ -235,11 +225,11 @@ void RenderScene(void) {
   glEnable(GL_TEXTURE_2D);
 
   M3DVector3f vNormal;
-  M3DVector3f vCorners[5] = {{0.0f, .80f, 0.0f},   // Top           0
-                             {-0.5f, 0.0f, -.50f}, // Back left     1
-                             {0.5f, 0.0f, -0.50f}, // Back right    2
-                             {0.5f, 0.0f, 0.5f},   // Front right   3
-                             {-0.5f, 0.0f, 0.5f}}; // Front left    4
+  M3DVector3f vCorners[5] = {{0.0f, .80f, 0.0f},    // Top           0
+                             {-0.5f, 0.0f, -.50f},  // Back left     1
+                             {0.5f, 0.0f, -0.50f},  // Back right    2
+                             {0.5f, 0.0f, 0.5f},    // Front right   3
+                             {-0.5f, 0.0f, 0.5f}};  // Front left    4
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

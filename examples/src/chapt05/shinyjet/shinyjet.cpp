@@ -3,7 +3,7 @@
 // Demonstrates OpenGL Lighting
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // gltools library
+#include "../../shared/gltools.h"  // gltools library
 
 #include "../../shared/math3d.h"
 
@@ -13,7 +13,7 @@ static GLfloat yRot = 0.0f;
 
 // Called to draw scene
 void RenderScene(void) {
-  M3DVector3f vNormal; // Storeage for calculated surface normal
+  M3DVector3f vNormal;  // Storeage for calculated surface normal
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -222,9 +222,9 @@ void SetupRC() {
   GLfloat specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
   GLfloat specref[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -255,29 +255,21 @@ void SetupRC() {
 /////////////////////////////////////////////////////
 // Handle arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -290,8 +282,7 @@ void ChangeSize(int w, int h) {
   GLfloat lightPos[] = {-50.f, 50.0f, 100.0f, 1.0f};
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

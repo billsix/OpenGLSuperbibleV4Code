@@ -3,7 +3,7 @@
 // Demonstrates shadow mapping with FBOs
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include "../../shared/math3d.h"
 
@@ -11,24 +11,24 @@
 
 GLboolean ambientShadowAvailable = GL_FALSE;
 GLboolean npotTexturesAvailable = GL_FALSE;
-GLboolean controlCamera = GL_TRUE;  // xyz keys will control lightpos
-GLboolean noShadows = GL_FALSE;     // normal lighting
-GLboolean showShadowMap = GL_FALSE; // show the shadowmap texture
-GLboolean useFBO = GL_FALSE;        // Use FBO renderbuffer for shadow map
+GLboolean controlCamera = GL_TRUE;   // xyz keys will control lightpos
+GLboolean noShadows = GL_FALSE;      // normal lighting
+GLboolean showShadowMap = GL_FALSE;  // show the shadowmap texture
+GLboolean useFBO = GL_FALSE;         // Use FBO renderbuffer for shadow map
 
-GLfloat factor = 4.0f; // for polygon offset
+GLfloat factor = 4.0f;  // for polygon offset
 
-GLint windowWidth = 512; // window size
+GLint windowWidth = 512;  // window size
 GLint windowHeight = 512;
 
-GLint shadowWidth = 512; // set based on window size
+GLint shadowWidth = 512;  // set based on window size
 GLint shadowHeight = 512;
-GLuint shadowTextureID; // shadow map name
-GLint maxTexSize;       // maximum allowed size for 1D/2D texture
+GLuint shadowTextureID;  // shadow map name
+GLint maxTexSize;        // maximum allowed size for 1D/2D texture
 
-GLuint framebufferID;      // FBO name
-GLuint renderbufferID;     // renderbuffer object name
-GLint maxRenderbufferSize; // maximum allowed size for FBO renderbuffer
+GLuint framebufferID;       // FBO name
+GLuint renderbufferID;      // renderbuffer object name
+GLint maxRenderbufferSize;  // maximum allowed size for FBO renderbuffer
 
 GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
 GLfloat diffuseLight[] = {0.7f, 0.7f, 0.7f, 1.0f};
@@ -44,7 +44,7 @@ M3DMatrix44f textureMatrix;
 void DrawModels(GLboolean drawBasePlane) {
   if (drawBasePlane) {
     // Draw plane that the objects rest on
-    glColor3f(0.0f, 0.0f, 0.90f); // Blue
+    glColor3f(0.0f, 0.0f, 0.90f);  // Blue
     glNormal3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_QUADS);
     glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -93,7 +93,7 @@ void DrawModels(GLboolean drawBasePlane) {
 void RegenerateShadowMap(void) {
   GLfloat lightToSceneDistance, nearPlane, fieldOfView;
   GLfloat lightModelview[16], lightProjection[16];
-  GLfloat sceneBoundingRadius = 95.0f; // based on objects in scene
+  GLfloat sceneBoundingRadius = 95.0f;  // based on objects in scene
 
   // Save the depth precision for where it's useful
   lightToSceneDistance =
@@ -118,8 +118,7 @@ void RegenerateShadowMap(void) {
   glViewport(0, 0, shadowWidth, shadowHeight);
 
   // Redirect traffic to the FBO
-  if (useFBO)
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
+  if (useFBO) glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
 
   // Clear the depth buffer only
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -143,8 +142,7 @@ void RegenerateShadowMap(void) {
                    shadowHeight, 0);
 
   // Restore normal drawing state
-  if (useFBO)
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+  if (useFBO) glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
   glShadeModel(GL_SMOOTH);
   glEnable(GL_LIGHTING);
   glEnable(GL_COLOR_MATERIAL);
@@ -218,13 +216,13 @@ void RenderScene(void) {
     glVertex2f(((GLfloat)showShadowWidth / (GLfloat)windowWidth) * 2.0f - 1.0f,
                -1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex2f(((GLfloat)showShadowWidth / (GLfloat)windowWidth) * 2.0f - 1.0f,
-               ((GLfloat)showShadowHeight / (GLfloat)windowHeight) * 2.0f -
-                   1.0f);
+    glVertex2f(
+        ((GLfloat)showShadowWidth / (GLfloat)windowWidth) * 2.0f - 1.0f,
+        ((GLfloat)showShadowHeight / (GLfloat)windowHeight) * 2.0f - 1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex2f(-1.0f,
-               ((GLfloat)showShadowHeight / (GLfloat)windowHeight) * 2.0f -
-                   1.0f);
+    glVertex2f(
+        -1.0f,
+        ((GLfloat)showShadowHeight / (GLfloat)windowHeight) * 2.0f - 1.0f);
     glEnd();
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -288,8 +286,7 @@ void RenderScene(void) {
     glDisable(GL_TEXTURE_GEN_Q);
   }
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -302,8 +299,9 @@ void SetupRC() {
 
   // Make sure required functionality is available!
   if (!GLEE_VERSION_1_4 && !GLEE_ARB_shadow) {
-    fprintf(stderr, "Neither OpenGL 1.4 nor GL_ARB_shadow"
-                    " extension is available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.4 nor GL_ARB_shadow"
+            " extension is available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -417,14 +415,12 @@ void ChangeSize(int w, int h) {
 
     // Try each width until we get one that's too big
     i = 0;
-    while ((1 << i) <= shadowWidth)
-      i++;
+    while ((1 << i) <= shadowWidth) i++;
     shadowWidth = (1 << (i - 1));
 
     // Now for height
     i = 0;
-    while ((1 << i) <= shadowHeight)
-      i++;
+    while ((1 << i) <= shadowHeight) i++;
     shadowHeight = (1 << (i - 1));
   }
 
@@ -442,49 +438,51 @@ void ChangeSize(int w, int h) {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    noShadows = !noShadows;
-    showShadowMap = GL_FALSE;
-    if (noShadows) {
-      glutChangeToMenuEntry(1, "Toggle shadows (currently OFF)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle shadows (currently ON)", 1);
-    }
-    glutChangeToMenuEntry(2, "Toggle show shadowmap (currently OFF)", 2);
-    break;
-
-  case 2:
-    showShadowMap = !showShadowMap;
-    noShadows = GL_FALSE;
-    if (showShadowMap) {
-      glutChangeToMenuEntry(2, "Toggle show shadowmap (currently ON)", 2);
-    } else {
+    case 1:
+      noShadows = !noShadows;
+      showShadowMap = GL_FALSE;
+      if (noShadows) {
+        glutChangeToMenuEntry(1, "Toggle shadows (currently OFF)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle shadows (currently ON)", 1);
+      }
       glutChangeToMenuEntry(2, "Toggle show shadowmap (currently OFF)", 2);
-    }
-    glutChangeToMenuEntry(1, "Toggle shadows (currently ON)", 1);
-    break;
+      break;
 
-  case 3:
-    controlCamera = !controlCamera;
-    if (controlCamera) {
-      glutChangeToMenuEntry(3, "Switch to LIGHT control (currently CAMERA)", 3);
-    } else {
-      glutChangeToMenuEntry(3, "Switch to CAMERA control (currently LIGHT)", 3);
-    }
-    break;
+    case 2:
+      showShadowMap = !showShadowMap;
+      noShadows = GL_FALSE;
+      if (showShadowMap) {
+        glutChangeToMenuEntry(2, "Toggle show shadowmap (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle show shadowmap (currently OFF)", 2);
+      }
+      glutChangeToMenuEntry(1, "Toggle shadows (currently ON)", 1);
+      break;
 
-  case 4:
-    useFBO = !useFBO;
-    if (useFBO) {
-      glutChangeToMenuEntry(4, "Toggle FBO usage (currently ON)", 4);
-    } else {
-      glutChangeToMenuEntry(4, "Toggle FBO usage (currently OFF)", 4);
-    }
-    ChangeSize(windowWidth, windowHeight);
-    break;
+    case 3:
+      controlCamera = !controlCamera;
+      if (controlCamera) {
+        glutChangeToMenuEntry(3, "Switch to LIGHT control (currently CAMERA)",
+                              3);
+      } else {
+        glutChangeToMenuEntry(3, "Switch to CAMERA control (currently LIGHT)",
+                              3);
+      }
+      break;
 
-  default:
-    break;
+    case 4:
+      useFBO = !useFBO;
+      if (useFBO) {
+        glutChangeToMenuEntry(4, "Toggle FBO usage (currently ON)", 4);
+      } else {
+        glutChangeToMenuEntry(4, "Toggle FBO usage (currently OFF)", 4);
+      }
+      ChangeSize(windowWidth, windowHeight);
+      break;
+
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -493,62 +491,61 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'f':
-    factor++;
-    glPolygonOffset(factor, 0.0f);
-    RegenerateShadowMap();
-    break;
-  case 'F':
-    factor--;
-    glPolygonOffset(factor, 0.0f);
-    RegenerateShadowMap();
-    break;
-  case 'x':
-    if (controlCamera)
-      cameraPos[0] += 5.0f;
-    else
-      lightPos[0] += 5.0f;
-    break;
-  case 'X':
-    if (controlCamera)
-      cameraPos[0] -= 5.0f;
-    else
-      lightPos[0] -= 5.0f;
-    break;
-  case 'y':
-    if (controlCamera)
-      cameraPos[1] += 5.0f;
-    else
-      lightPos[1] += 5.0f;
-    break;
-  case 'Y':
-    if (controlCamera)
-      cameraPos[1] -= 5.0f;
-    else
-      lightPos[1] -= 5.0f;
-    break;
-  case 'z':
-    if (controlCamera)
-      cameraPos[2] += 5.0f;
-    else
-      lightPos[2] += 5.0f;
-    break;
-  case 'Z':
-    if (controlCamera)
-      cameraPos[2] -= 5.0f;
-    else
-      lightPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'f':
+      factor++;
+      glPolygonOffset(factor, 0.0f);
+      RegenerateShadowMap();
+      break;
+    case 'F':
+      factor--;
+      glPolygonOffset(factor, 0.0f);
+      RegenerateShadowMap();
+      break;
+    case 'x':
+      if (controlCamera)
+        cameraPos[0] += 5.0f;
+      else
+        lightPos[0] += 5.0f;
+      break;
+    case 'X':
+      if (controlCamera)
+        cameraPos[0] -= 5.0f;
+      else
+        lightPos[0] -= 5.0f;
+      break;
+    case 'y':
+      if (controlCamera)
+        cameraPos[1] += 5.0f;
+      else
+        lightPos[1] += 5.0f;
+      break;
+    case 'Y':
+      if (controlCamera)
+        cameraPos[1] -= 5.0f;
+      else
+        lightPos[1] -= 5.0f;
+      break;
+    case 'z':
+      if (controlCamera)
+        cameraPos[2] += 5.0f;
+      else
+        lightPos[2] += 5.0f;
+      break;
+    case 'Z':
+      if (controlCamera)
+        cameraPos[2] -= 5.0f;
+      else
+        lightPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // We don't need to regenerate the shadow map
   // if only the camera angle changes
-  if (!controlCamera)
-    RegenerateShadowMap();
+  if (!controlCamera) RegenerateShadowMap();
 
   // Refresh the Window
   glutPostRedisplay();
@@ -556,38 +553,37 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    if (controlCamera)
-      cameraPos[0] -= 5.0f;
-    else
-      lightPos[0] -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    if (controlCamera)
-      cameraPos[0] += 5.0f;
-    else
-      lightPos[0] += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    if (controlCamera)
-      cameraPos[2] -= 5.0f;
-    else
-      lightPos[2] -= 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    if (controlCamera)
-      cameraPos[2] += 5.0f;
-    else
-      lightPos[2] += 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      if (controlCamera)
+        cameraPos[0] -= 5.0f;
+      else
+        lightPos[0] -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      if (controlCamera)
+        cameraPos[0] += 5.0f;
+      else
+        lightPos[0] += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      if (controlCamera)
+        cameraPos[2] -= 5.0f;
+      else
+        lightPos[2] -= 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      if (controlCamera)
+        cameraPos[2] += 5.0f;
+      else
+        lightPos[2] += 5.0f;
+      break;
+    default:
+      break;
   }
 
   // We don't need to regenerate the shadow map
   // if only the camera angle changes
-  if (!controlCamera)
-    RegenerateShadowMap();
+  if (!controlCamera) RegenerateShadowMap();
 
   // Refresh the Window
   glutPostRedisplay();
@@ -616,10 +612,8 @@ int main(int argc, char *argv[]) {
   glutMainLoop();
 
   glDeleteTextures(1, &shadowTextureID);
-  if (glDeleteFramebuffersEXT)
-    glDeleteFramebuffersEXT(1, &framebufferID);
-  if (glDeleteRenderbuffersEXT)
-    glDeleteRenderbuffersEXT(1, &renderbufferID);
+  if (glDeleteFramebuffersEXT) glDeleteFramebuffersEXT(1, &framebufferID);
+  if (glDeleteRenderbuffersEXT) glDeleteRenderbuffersEXT(1, &renderbufferID);
 
   return 0;
 }

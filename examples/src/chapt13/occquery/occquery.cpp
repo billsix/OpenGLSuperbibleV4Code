@@ -5,16 +5,16 @@
 
 #include "../../shared/gltools.h"
 
-#include "../../shared/stopwatch.h" // General purpose stop watch class
+#include "../../shared/stopwatch.h"  // General purpose stop watch class
 
 #undef FREEGLUT_VERSION_2_0
 #define gltPrintf(a, b, c, d)
 #include <stdio.h>
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLint mainMenu, bboxMenu; // menu handles
+GLint mainMenu, bboxMenu;  // menu handles
 
 GLboolean showMenu = GL_TRUE;
 GLboolean occlusionDetection = GL_TRUE;
@@ -67,8 +67,7 @@ void DrawSphere(GLint sphereNum) {
 
     // Check if this sphere would be occluded
     glGetQueryObjectiv(queryIDs[sphereNum], GL_QUERY_RESULT, &passingSamples);
-    if (passingSamples == 0)
-      occluded = GL_TRUE;
+    if (passingSamples == 0) occluded = GL_TRUE;
   }
 
   if (!occluded) {
@@ -101,33 +100,32 @@ void DrawModels(void) {
     for (r = 0; r < 3; r++) {
       for (g = 0; g < 3; g++) {
         for (b = 0; b < 3; b++) {
-          if (showBoundingVolume)
-            glColor3f(r * 0.5f, g * 0.5f, b * 0.5f);
+          if (showBoundingVolume) glColor3f(r * 0.5f, g * 0.5f, b * 0.5f);
 
           glPushMatrix();
           glTranslatef(100.0f * r - 100.0f, 100.0f * g - 100.0f,
                        100.0f * b - 100.0f);
           glBeginQuery(GL_SAMPLES_PASSED, queryIDs[(r * 9) + (g * 3) + b]);
           switch (boundingVolume) {
-          case 0:
-            glutSolidCube(100.0f);
-            break;
-          case 1:
-            glScalef(150.0f, 150.0f, 150.0f);
-            glutSolidTetrahedron();
-            break;
-          case 2:
-            glScalef(90.0f, 90.0f, 90.0f);
-            glutSolidOctahedron();
-            break;
-          case 3:
-            glScalef(40.0f, 40.0f, 40.0f);
-            glutSolidDodecahedron();
-            break;
-          case 4:
-            glScalef(65.0f, 65.0f, 65.0f);
-            glutSolidIcosahedron();
-            break;
+            case 0:
+              glutSolidCube(100.0f);
+              break;
+            case 1:
+              glScalef(150.0f, 150.0f, 150.0f);
+              glutSolidTetrahedron();
+              break;
+            case 2:
+              glScalef(90.0f, 90.0f, 90.0f);
+              glutSolidOctahedron();
+              break;
+            case 3:
+              glScalef(40.0f, 40.0f, 40.0f);
+              glutSolidDodecahedron();
+              break;
+            case 4:
+              glScalef(65.0f, 65.0f, 65.0f);
+              glutSolidIcosahedron();
+              break;
           }
           glEndQuery(GL_SAMPLES_PASSED);
           glPopMatrix();
@@ -172,8 +170,8 @@ void DrawModels(void) {
 
 // Called to draw scene
 void RenderScene(void) {
-  static int iFrames = 0;       // Frame count
-  static CStopWatch frameTimer; // Render time
+  static int iFrames = 0;        // Frame count
+  static CStopWatch frameTimer;  // Render time
 
   // Reset the stopwatch on first time
   if (iFrames == 0) {
@@ -272,8 +270,9 @@ void SetupRC() {
 
   // Make sure required functionality is available!
   if (!GLEE_VERSION_1_5 && !GLEE_ARB_occlusion_query) {
-    fprintf(stderr, "Neither OpenGL 1.5 nor GL_ARB_occlusion_query"
-                    " extension is available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.5 nor GL_ARB_occlusion_query"
+            " extension is available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -338,50 +337,50 @@ void SetupRC() {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    occlusionDetection = !occlusionDetection;
-    if (occlusionDetection) {
-      glutChangeToMenuEntry(1, "Toggle occlusion culling (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle occlusion culling (currently OFF)", 1);
-    }
-    break;
-
-  case 2:
-    showBoundingVolume = !showBoundingVolume;
-    if (showBoundingVolume) {
-      glutChangeToMenuEntry(2, "Toggle bounding volume (currently ON)", 2);
-    } else {
-      glutChangeToMenuEntry(2, "Toggle bounding volume (currently OFF)", 2);
-    }
-    break;
-
-  default:
-    boundingVolume = value - 3;
-    glutSetMenu(mainMenu);
-    switch (boundingVolume) {
-    case 0:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently BOX)",
-                          bboxMenu);
-      break;
     case 1:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently TETRAHEDRON)",
-                          bboxMenu);
+      occlusionDetection = !occlusionDetection;
+      if (occlusionDetection) {
+        glutChangeToMenuEntry(1, "Toggle occlusion culling (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle occlusion culling (currently OFF)", 1);
+      }
       break;
+
     case 2:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently OCTAHEDRON)",
-                          bboxMenu);
+      showBoundingVolume = !showBoundingVolume;
+      if (showBoundingVolume) {
+        glutChangeToMenuEntry(2, "Toggle bounding volume (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle bounding volume (currently OFF)", 2);
+      }
       break;
-    case 3:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently DODECAHEDRON)",
-                          bboxMenu);
+
+    default:
+      boundingVolume = value - 3;
+      glutSetMenu(mainMenu);
+      switch (boundingVolume) {
+        case 0:
+          glutChangeToSubMenu(3, "Choose bounding volume (currently BOX)",
+                              bboxMenu);
+          break;
+        case 1:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently TETRAHEDRON)", bboxMenu);
+          break;
+        case 2:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently OCTAHEDRON)", bboxMenu);
+          break;
+        case 3:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently DODECAHEDRON)", bboxMenu);
+          break;
+        case 4:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently ICOSAHEDRON)", bboxMenu);
+          break;
+      }
       break;
-    case 4:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently ICOSAHEDRON)",
-                          bboxMenu);
-      break;
-    }
-    break;
   }
 
   // Refresh the Window
@@ -390,77 +389,77 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'b':
-  case 'B':
-    boundingVolume = (boundingVolume + 1) % 5;
-    glutSetMenu(mainMenu);
-    switch (boundingVolume) {
-    case 0:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently BOX)",
-                          bboxMenu);
+    case 'b':
+    case 'B':
+      boundingVolume = (boundingVolume + 1) % 5;
+      glutSetMenu(mainMenu);
+      switch (boundingVolume) {
+        case 0:
+          glutChangeToSubMenu(3, "Choose bounding volume (currently BOX)",
+                              bboxMenu);
+          break;
+        case 1:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently TETRAHEDRON)", bboxMenu);
+          break;
+        case 2:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently OCTAHEDRON)", bboxMenu);
+          break;
+        case 3:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently DODECAHEDRON)", bboxMenu);
+          break;
+        case 4:
+          glutChangeToSubMenu(
+              3, "Choose bounding volume (currently ICOSAHEDRON)", bboxMenu);
+          break;
+      }
       break;
-    case 1:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently TETRAHEDRON)",
-                          bboxMenu);
+    case 's':
+    case 'S':
+      showBoundingVolume = !showBoundingVolume;
+      if (showBoundingVolume) {
+        glutChangeToMenuEntry(2, "Toggle bounding volume (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle bounding volume (currently OFF)", 2);
+      }
       break;
-    case 2:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently OCTAHEDRON)",
-                          bboxMenu);
+    case 'o':
+    case 'O':
+      occlusionDetection = !occlusionDetection;
+      if (occlusionDetection) {
+        glutChangeToMenuEntry(1, "Toggle occlusion culling (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle occlusion culling (currently OFF)", 1);
+      }
       break;
-    case 3:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently DODECAHEDRON)",
-                          bboxMenu);
+    case 'm':
+    case 'M':
+      showMenu = !showMenu;
       break;
-    case 4:
-      glutChangeToSubMenu(3, "Choose bounding volume (currently ICOSAHEDRON)",
-                          bboxMenu);
+    case 'x':
+      cameraPos[0] += 5.0f;
       break;
-    }
-    break;
-  case 's':
-  case 'S':
-    showBoundingVolume = !showBoundingVolume;
-    if (showBoundingVolume) {
-      glutChangeToMenuEntry(2, "Toggle bounding volume (currently ON)", 2);
-    } else {
-      glutChangeToMenuEntry(2, "Toggle bounding volume (currently OFF)", 2);
-    }
-    break;
-  case 'o':
-  case 'O':
-    occlusionDetection = !occlusionDetection;
-    if (occlusionDetection) {
-      glutChangeToMenuEntry(1, "Toggle occlusion culling (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle occlusion culling (currently OFF)", 1);
-    }
-    break;
-  case 'm':
-  case 'M':
-    showMenu = !showMenu;
-    break;
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -469,20 +468,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    cameraPos[0] += 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    cameraPos[0] -= 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      cameraPos[0] += 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      cameraPos[0] -= 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -533,8 +532,7 @@ int main(int argc, char *argv[]) {
 
   glutMainLoop();
 
-  if (glDeleteQueries)
-    glDeleteQueries(27, queryIDs);
+  if (glDeleteQueries) glDeleteQueries(27, queryIDs);
 
   return 0;
 }

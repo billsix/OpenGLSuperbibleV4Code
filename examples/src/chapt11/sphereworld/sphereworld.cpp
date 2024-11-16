@@ -7,13 +7,13 @@
 
 #include <stdio.h>
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/math3d.h" // 3D Math Library
+#include "../../shared/math3d.h"  // 3D Math Library
 
-#include "../../shared/glframe.h" // Frame class
+#include "../../shared/glframe.h"  // Frame class
 
-#include "../../shared/stopwatch.h" // Timer class
+#include "../../shared/stopwatch.h"  // Timer class
 
 #include <math.h>
 
@@ -22,7 +22,7 @@ GLFrame spheres[NUM_SPHERES];
 GLFrame frameCamera;
 
 // Light and material Data
-GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f}; // Point source
+GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f};  // Point source
 GLfloat fNoLight[] = {0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat fLowLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
 GLfloat fBrightLight[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -40,7 +40,7 @@ const char *szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
 // Display list identifiers
 GLuint sphereList, groundList, torusList;
 
-int iMethod = 0; // Without display lists
+int iMethod = 0;  // Without display lists
 
 // Forward declaration
 void DrawGround(void);
@@ -188,11 +188,11 @@ void DrawGround(void) {
 
     for (iRun = fExtent; iRun >= -fExtent; iRun -= fStep) {
       glTexCoord2f(s, t);
-      glNormal3f(0.0f, 1.0f, 0.0f); // All Point up
+      glNormal3f(0.0f, 1.0f, 0.0f);  // All Point up
       glVertex3f(iStrip, y, iRun);
 
       glTexCoord2f(s + texStep, t);
-      glNormal3f(0.0f, 1.0f, 0.0f); // All Point up
+      glNormal3f(0.0f, 1.0f, 0.0f);  // All Point up
       glVertex3f(iStrip + fStep, y, iRun);
 
       t += texStep;
@@ -205,14 +205,14 @@ void DrawGround(void) {
 ///////////////////////////////////////////////////////////////////////
 // Draw random inhabitants and the rotating torus/sphere duo
 void DrawInhabitants(GLint nShadow) {
-  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  static GLfloat yRot = 0.0f;  // Rotation angle for animation
   GLint i;
 
   if (nShadow == 0) {
     yRot += 0.5f;
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   } else
-    glColor4f(0.00f, 0.00f, 0.00f, .6f); // Shadow color
+    glColor4f(0.00f, 0.00f, 0.00f, .6f);  // Shadow color
 
   // Draw the randomly located spheres
   glBindTexture(GL_TEXTURE_2D, textureObjects[SPHERE_TEXTURE]);
@@ -255,8 +255,8 @@ void DrawInhabitants(GLint nShadow) {
 
 // Called to draw scene
 void RenderScene(void) {
-  static int iFrames = 0;       // Frame count
-  static CStopWatch frameTimer; // Render time
+  static int iFrames = 0;        // Frame count
+  static CStopWatch frameTimer;  // Render time
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -323,17 +323,13 @@ void RenderScene(void) {
 
 // Respond to arrow keys by moving the camera frame of reference
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    frameCamera.MoveForward(0.1f);
+  if (key == GLUT_KEY_UP) frameCamera.MoveForward(0.1f);
 
-  if (key == GLUT_KEY_DOWN)
-    frameCamera.MoveForward(-0.1f);
+  if (key == GLUT_KEY_DOWN) frameCamera.MoveForward(-0.1f);
 
-  if (key == GLUT_KEY_LEFT)
-    frameCamera.RotateLocalY(0.1f);
+  if (key == GLUT_KEY_LEFT) frameCamera.RotateLocalY(0.1f);
 
-  if (key == GLUT_KEY_RIGHT)
-    frameCamera.RotateLocalY(-0.1f);
+  if (key == GLUT_KEY_RIGHT) frameCamera.RotateLocalY(-0.1f);
 
   // Refresh the Window
   glutPostRedisplay();
@@ -353,8 +349,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

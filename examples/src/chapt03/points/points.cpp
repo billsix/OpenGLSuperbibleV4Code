@@ -3,7 +3,7 @@
 // Demonstrates OpenGL Primative GL_POINTS
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -16,7 +16,7 @@ static GLfloat yRot = 0.0f;
 
 // Called to draw scene
 void RenderScene(void) {
-  GLfloat x, y, z, angle; // Storeage for coordinates and angles
+  GLfloat x, y, z, angle;  // Storeage for coordinates and angles
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT);
@@ -60,29 +60,21 @@ void SetupRC() {
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -92,8 +84,7 @@ void ChangeSize(int w, int h) {
   GLfloat nRange = 100.0f;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

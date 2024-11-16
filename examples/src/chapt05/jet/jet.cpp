@@ -4,7 +4,7 @@
 // Beginning of OpenGL lighting sample
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // System and OpenGL Stuff
+#include "../../shared/gltools.h"  // System and OpenGL Stuff
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
@@ -123,7 +123,7 @@ void RenderScene(void) {
   glVertex3f(-3.0f, 0.5f, -57.0f);
   glVertex3f(0.0f, 25.0f, -65.0f);
 
-  glEnd(); // Of Jet
+  glEnd();  // Of Jet
 
   glPopMatrix();
 
@@ -134,38 +134,30 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
 
   // Nice light blue
   glClearColor(0.0f, 0.0f, 05.f, 1.0f);
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -174,8 +166,7 @@ void SpecialKeys(int key, int x, int y) {
 void ChangeSize(int w, int h) {
   GLfloat nRange = 80.0f;
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

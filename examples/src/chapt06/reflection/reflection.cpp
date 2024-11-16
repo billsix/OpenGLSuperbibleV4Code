@@ -3,18 +3,18 @@
 // Demonstrates using blending/transparency
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
 // Light and material Data
-GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f}; // Point source
+GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f};  // Point source
 GLfloat fLightPosMirror[4] = {-100.0f, -100.0f, 50.0f, 1.0f};
 GLfloat fNoLight[] = {0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat fLowLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
 GLfloat fBrightLight[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-static GLfloat yRot = 0.0f; // Rotation angle for animation
+static GLfloat yRot = 0.0f;  // Rotation angle for animation
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
@@ -104,7 +104,7 @@ void RenderScene(void) {
   // Move light under floor to light the "reflected" world
   glLightfv(GL_LIGHT0, GL_POSITION, fLightPosMirror);
   glPushMatrix();
-  glFrontFace(GL_CW); // geometry is mirrored, swap orientation
+  glFrontFace(GL_CW);  // geometry is mirrored, swap orientation
   glScalef(1.0f, -1.0f, 1.0f);
   DrawWorld();
   glFrontFace(GL_CCW);
@@ -131,7 +131,7 @@ void RenderScene(void) {
 // Called by GLUT library when idle (window not being
 // resized or moved)
 void TimerFunction(int value) {
-  yRot += 1.0f; // Update Rotation
+  yRot += 1.0f;  // Update Rotation
 
   // Redraw the scene
   glutPostRedisplay();
@@ -145,8 +145,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

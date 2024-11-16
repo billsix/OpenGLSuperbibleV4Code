@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -16,8 +16,7 @@ void RenderScene(void) {
   // Clear blue window
   glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
 
-  if (dAngle == 0.0)
-    glClear(GL_COLOR_BUFFER_BIT);
+  if (dAngle == 0.0) glClear(GL_COLOR_BUFFER_BIT);
 
   glBegin(GL_POINTS);
   glVertex2d(dRadius * cos(dAngle), dRadius * sin(dAngle));
@@ -45,8 +44,7 @@ void Timer(int value) {
 // Set viewport and projection
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

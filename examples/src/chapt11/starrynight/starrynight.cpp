@@ -3,7 +3,7 @@
 // Demonstrates vertex arrays (with point sprites!)
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include "../../shared/glframe.h"
 
@@ -22,9 +22,9 @@ M3DVector2f vLargeStars[LARGE_STARS];
 #define SCREEN_X 800
 #define SCREEN_Y 600
 
-int drawMode = 1; // Normal points
+int drawMode = 1;  // Normal points
 
-GLuint textureObjects[2]; // Texture Objects
+GLuint textureObjects[2];  // Texture Objects
 
 ///////////////////////////////////////////////////////////////////////
 // Reset flags as appropriate in response to menu selections
@@ -32,38 +32,38 @@ void ProcessMenu(int value) {
   drawMode = value;
 
   switch (value) {
-  case 1:
-    // Turn off blending and all smoothing
-    glDisable(GL_BLEND);
-    glDisable(GL_LINE_SMOOTH);
-    glDisable(GL_POINT_SMOOTH);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_POINT_SPRITE);
-    break;
+    case 1:
+      // Turn off blending and all smoothing
+      glDisable(GL_BLEND);
+      glDisable(GL_LINE_SMOOTH);
+      glDisable(GL_POINT_SMOOTH);
+      glDisable(GL_TEXTURE_2D);
+      glDisable(GL_POINT_SPRITE);
+      break;
 
-  case 2:
-    // Turn on antialiasing, and give hint to do the best
-    // job possible.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glEnable(GL_POINT_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_LINE_SMOOTH);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_POINT_SPRITE);
-    break;
+    case 2:
+      // Turn on antialiasing, and give hint to do the best
+      // job possible.
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glEnable(GL_BLEND);
+      glEnable(GL_POINT_SMOOTH);
+      glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+      glEnable(GL_LINE_SMOOTH);
+      glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+      glDisable(GL_TEXTURE_2D);
+      glDisable(GL_POINT_SPRITE);
+      break;
 
-  case 3: // Point Sprites
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
-    glDisable(GL_LINE_SMOOTH);
-    glDisable(GL_POINT_SMOOTH);
-    glDisable(GL_POLYGON_SMOOTH);
-    break;
+    case 3:  // Point Sprites
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+      glDisable(GL_LINE_SMOOTH);
+      glDisable(GL_POINT_SMOOTH);
+      glDisable(GL_POLYGON_SMOOTH);
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   // Trigger a redraw
@@ -73,11 +73,11 @@ void ProcessMenu(int value) {
 ///////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void) {
-  int i;              // Loop variable
-  GLfloat x = 700.0f; // Location and radius of moon
+  int i;               // Loop variable
+  GLfloat x = 700.0f;  // Location and radius of moon
   GLfloat y = 500.0f;
   GLfloat r = 50.0f;
-  GLfloat angle = 0.0f; // Another looping variable
+  GLfloat angle = 0.0f;  // Another looping variable
 
   // Clear the window
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -95,7 +95,7 @@ void RenderScene(void) {
   glEnableClientState(GL_VERTEX_ARRAY);
 
   // Draw small stars
-  glPointSize(7.0f); // 1.0
+  glPointSize(7.0f);  // 1.0
   /*
   glBegin(GL_POINTS);
       for(i = 0; i < SMALL_STARS; i++)
@@ -106,7 +106,7 @@ void RenderScene(void) {
   glDrawArrays(GL_POINTS, 0, SMALL_STARS);
 
   // Draw medium sized stars
-  glPointSize(12.0f); // 3.0
+  glPointSize(12.0f);  // 3.0
   /*glBegin(GL_POINTS);
       for(i = 0; i< MEDIUM_STARS; i++)
           glVertex2fv(vMediumStars[i]);
@@ -116,7 +116,7 @@ void RenderScene(void) {
   glDrawArrays(GL_POINTS, 0, MEDIUM_STARS);
 
   // Draw largest stars
-  glPointSize(20.0f); // 5.5
+  glPointSize(20.0f);  // 5.5
   /*glBegin(GL_POINTS);
       for(i = 0; i < LARGE_STARS; i++)
           glVertex2fv(vLargeStars[i]);
@@ -238,8 +238,7 @@ void ShutdownRC(void) { glDeleteTextures(2, textureObjects); }
 
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

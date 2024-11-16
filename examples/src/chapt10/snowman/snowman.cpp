@@ -3,7 +3,7 @@
 // OpenGL SuperBible
 // Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
@@ -15,8 +15,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -43,9 +42,9 @@ void SetupRC() {
   GLfloat sourceLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
   GLfloat lightPos[] = {-10.f, 5.0f, 5.0f, 1.0f};
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -69,17 +68,13 @@ void SetupRC() {
 
 // Respond to arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
   xRot = (GLfloat)((const int)xRot % 360);
   yRot = (GLfloat)((const int)yRot % 360);
@@ -90,7 +85,7 @@ void SpecialKeys(int key, int x, int y) {
 
 // Called to draw scene
 void RenderScene(void) {
-  GLUquadricObj *pObj; // Quadric Object
+  GLUquadricObj *pObj;  // Quadric Object
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -109,12 +104,12 @@ void RenderScene(void) {
   // Main Body
   glPushMatrix();
   glColor3f(1.0f, 1.0f, 1.0f);
-  gluSphere(pObj, .40f, 26, 13); // Bottom
+  gluSphere(pObj, .40f, 26, 13);  // Bottom
 
-  glTranslatef(0.0f, .550f, 0.0f); // Mid section
+  glTranslatef(0.0f, .550f, 0.0f);  // Mid section
   gluSphere(pObj, .3f, 26, 13);
 
-  glTranslatef(0.0f, 0.45f, 0.0f); // Head
+  glTranslatef(0.0f, 0.45f, 0.0f);  // Head
   gluSphere(pObj, 0.24f, 26, 13);
 
   // Eyes

@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <string.h>
 
@@ -78,7 +78,7 @@ void RenderScene(void) {
   glPopMatrix();
 
   // Restore the matrix state
-  glPopMatrix(); // Modelview matrix
+  glPopMatrix();  // Modelview matrix
 
   glutSwapBuffers();
 }
@@ -99,29 +99,28 @@ void ProcessPlanet(GLuint *pSelectBuff) {
 
   // Select on earth or mars, whichever was picked
   switch (id) {
-  case EARTH:
-    strcpy(cMessage, "You clicked Earth.");
+    case EARTH:
+      strcpy(cMessage, "You clicked Earth.");
 
-    // If there is another name on the name stack,
-    // then it must be the moon that was selected
-    // This is what was actually clicked on
-    if (count == 2)
-      strcat(cMessage, " - Specifically the moon.");
+      // If there is another name on the name stack,
+      // then it must be the moon that was selected
+      // This is what was actually clicked on
+      if (count == 2) strcat(cMessage, " - Specifically the moon.");
 
-    break;
+      break;
 
-  case MARS:
-    strcpy(cMessage, "You clicked Mars.");
+    case MARS:
+      strcpy(cMessage, "You clicked Mars.");
 
-    // We know the name stack is only two deep. The precise
-    // moon that was selected will be here.
-    if (count == 2) {
-      if (pSelectBuff[4] == MOON1)
-        strcat(cMessage, " - Specifically Moon #1.");
-      else
-        strcat(cMessage, " - Specifically Moon #2.");
-    }
-    break;
+      // We know the name stack is only two deep. The precise
+      // moon that was selected will be here.
+      if (count == 2) {
+        if (pSelectBuff[4] == MOON1)
+          strcat(cMessage, " - Specifically Moon #1.");
+        else
+          strcat(cMessage, " - Specifically Moon #2.");
+      }
+      break;
   }
 
   // Display the message about planet and moon selection
@@ -133,7 +132,7 @@ void ProcessPlanet(GLuint *pSelectBuff) {
 // click at (xPos, yPos).
 #define BUFFER_LENGTH 64
 void ProcessSelection(int xPos, int yPos) {
-  GLfloat fAspect; // Screen aspect ratio
+  GLfloat fAspect;  // Screen aspect ratio
 
   // Space for selection buffer
   GLuint selectBuff[BUFFER_LENGTH];
@@ -190,8 +189,7 @@ void ProcessSelection(int xPos, int yPos) {
 ///////////////////////////////////////////////////////////
 // Process the mouse click
 void MouseCallback(int button, int state, int x, int y) {
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    ProcessSelection(x, y);
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) ProcessSelection(x, y);
 }
 
 ///////////////////////////////////////////////////////////
@@ -204,9 +202,9 @@ void SetupRC() {
   GLfloat lightPos[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
   // Light values and coordinates
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate insides
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate insides
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -230,11 +228,10 @@ void SetupRC() {
 ///////////////////////////////////////////////////////////
 // Window changed size, reset viewport and projection
 void ChangeSize(int w, int h) {
-  GLfloat fAspect; // Screen aspect ratio
+  GLfloat fAspect;  // Screen aspect ratio
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

@@ -6,44 +6,44 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Include Files
-#include <windows.h> // Win32 Framework (No MFC)
+#include <windows.h>  // Win32 Framework (No MFC)
 
-#include <stdio.h> // Standard IO (sprintf)
+#include <stdio.h>  // Standard IO (sprintf)
 
 #include "..\..\shared\glee.h"
 
-#include "..\..\shared\gltools.h" // GLTools library
+#include "..\..\shared\gltools.h"  // GLTools library
 
 #include "..\..\shared\glframe.h"
 
-#include "resource.h" // Dialog resources
+#include "resource.h"  // Dialog resources
 
 // Initial rendering options specified by the user.
 struct STARTUPOPTIONS {
-  DEVMODE devMode;    // Display mode to use
-  int nPixelFormat;   // Pixel format to use
-  int nPixelFormatMS; // Multisampled pixel format
-  BOOL bFullScreen;   // Full screen?
+  DEVMODE devMode;     // Display mode to use
+  int nPixelFormat;    // Pixel format to use
+  int nPixelFormatMS;  // Multisampled pixel format
+  BOOL bFullScreen;    // Full screen?
   BOOL bFSAA;
   BOOL bVerticalSync;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // Module globals
-static HINSTANCE ghInstance = NULL;           // Module Instance Handle
-static LPCTSTR lpszAppName = "SphereWorld32"; // Name of App
-static GLint nFontList;                       // Base display list for font
-static struct STARTUPOPTIONS startupOptions;  // Startup options info
+static HINSTANCE ghInstance = NULL;            // Module Instance Handle
+static LPCTSTR lpszAppName = "SphereWorld32";  // Name of App
+static GLint nFontList;                        // Base display list for font
+static struct STARTUPOPTIONS startupOptions;   // Startup options info
 static LARGE_INTEGER CounterFrequency;
 static LARGE_INTEGER FPSCount;
 static LARGE_INTEGER CameraTimer;
 
-#define NUM_SPHERES 30        // Number of Spheres
-GLFrame spheres[NUM_SPHERES]; // Location of spheres
-GLFrame frameCamera;          // Location and orientation of camera
+#define NUM_SPHERES 30         // Number of Spheres
+GLFrame spheres[NUM_SPHERES];  // Location of spheres
+GLFrame frameCamera;           // Location and orientation of camera
 
 // Light and material Data
-GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f}; // Point source
+GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f};  // Point source
 GLfloat fNoLight[] = {0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat fLowLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
 GLfloat fBrightLight[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -74,14 +74,14 @@ BOOL APIENTRY StartupDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 // Find the best available pixelformat, including if Multisample is available
 void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat);
 
-BOOL ShowStartupOptions(void);         // Initial startup dialog
-void ChangeSize(GLsizei w, GLsizei h); // Change projection and viewport
-void RenderScene(void);                // Draw everything
-void SetupRC(HDC hDC);                 // Set up the rendering context
-void ShutdownRC(void);                 // Shutdown the rendering context
-HPALETTE GetOpenGLPalette(HDC hDC);    // Create a 3-3-2 palette
-void DrawInhabitants(GLint nShadow);   // Draw inhabitants of the world
-void DrawGround(void);                 // Draw the ground
+BOOL ShowStartupOptions(void);          // Initial startup dialog
+void ChangeSize(GLsizei w, GLsizei h);  // Change projection and viewport
+void RenderScene(void);                 // Draw everything
+void SetupRC(HDC hDC);                  // Set up the rendering context
+void ShutdownRC(void);                  // Shutdown the rendering context
+HPALETTE GetOpenGLPalette(HDC hDC);     // Create a 3-3-2 palette
+void DrawInhabitants(GLint nShadow);    // Draw inhabitants of the world
+void DrawGround(void);                  // Draw the ground
 
 //////////////////////////////////////////////////////////////
 // Window has changed size. Reset to match window coordiantes
@@ -90,8 +90,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 
@@ -131,11 +130,11 @@ void DrawGround(void) {
 
     for (iRun = fExtent; iRun >= -fExtent; iRun -= fStep) {
       glTexCoord2f(s, t);
-      glNormal3f(0.0f, 1.0f, 0.0f); // All Point up
+      glNormal3f(0.0f, 1.0f, 0.0f);  // All Point up
       glVertex3f(iStrip, y, iRun);
 
       glTexCoord2f(s + texStep, t);
-      glNormal3f(0.0f, 1.0f, 0.0f); // All Point up
+      glNormal3f(0.0f, 1.0f, 0.0f);  // All Point up
       glVertex3f(iStrip + fStep, y, iRun);
 
       t += texStep;
@@ -148,14 +147,14 @@ void DrawGround(void) {
 ///////////////////////////////////////////////////////////////////////
 // Draw random inhabitants and the rotating torus/sphere duo
 void DrawInhabitants(GLint nShadow) {
-  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  static GLfloat yRot = 0.0f;  // Rotation angle for animation
   GLint i;
 
   if (nShadow == 0) {
     yRot += 0.5f;
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   } else
-    glColor4f(0.0f, 0.0f, .0f, .75f); // Shadow color
+    glColor4f(0.0f, 0.0f, .0f, .75f);  // Shadow color
 
   // Draw the randomly located spheres
   glBindTexture(GL_TEXTURE_2D, textureObjects[SPHERE_TEXTURE]);
@@ -190,8 +189,8 @@ void DrawInhabitants(GLint nShadow) {
 //////////////////////////////////////////////////
 // Draw everything
 void RenderScene(void) {
-  static int iFrames = 0;  // Count frames to calculate fps ever 100 frames
-  static float fps = 0.0f; // Calculated fps
+  static int iFrames = 0;   // Count frames to calculate fps ever 100 frames
+  static float fps = 0.0f;  // Calculated fps
 
   // Clear the window
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -326,7 +325,7 @@ void SetupRC(HDC hDC) {
   nFontList = glGenLists(128);
   wglUseFontBitmaps(hDC, 0, 128, nFontList);
 
-  DeleteObject(hFont); // Don't need original font anymore
+  DeleteObject(hFont);  // Don't need original font anymore
 
   // Grayish background
   glClearColor(fLowLight[0], fLowLight[1], fLowLight[2], fLowLight[3]);
@@ -437,20 +436,20 @@ void SetupRC(HDC hDC) {
 ///////////////////////////////////////////////////////////////////////////////
 // Shutdown the rendering context
 void ShutdownRC(void) {
-  glDeleteLists(nFontList, 128);                  // Delete font display list
-  glDeleteLists(lTorusList, 2);                   // Delete object display lists
-  glDeleteTextures(NUM_TEXTURES, textureObjects); // Release textures
+  glDeleteLists(nFontList, 128);  // Delete font display list
+  glDeleteLists(lTorusList, 2);   // Delete object display lists
+  glDeleteTextures(NUM_TEXTURES, textureObjects);  // Release textures
 }
 
 ///////////////////////////////////////////////////////////////////////
 // If necessary, creates a 3-3-2 palette for the device context listed.
 HPALETTE GetOpenGLPalette(HDC hDC) {
-  HPALETTE hRetPal = NULL;   // Handle to palette to be created
-  PIXELFORMATDESCRIPTOR pfd; // Pixel Format Descriptor
-  LOGPALETTE *pPal;          // Pointer to memory for logical palette
-  int nPixelFormat;          // Pixel format index
-  int nColors;               // Number of entries in palette
-  int i;                     // Counting variable
+  HPALETTE hRetPal = NULL;    // Handle to palette to be created
+  PIXELFORMATDESCRIPTOR pfd;  // Pixel Format Descriptor
+  LOGPALETTE *pPal;           // Pointer to memory for logical palette
+  int nPixelFormat;           // Pixel format index
+  int nColors;                // Number of entries in palette
+  int i;                      // Counting variable
   BYTE RedRange, GreenRange, BlueRange;
   // Range for each color entry (7,7,and 3)
 
@@ -460,8 +459,7 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
 
   // Does this pixel format require a palette?  If not, do not create a
   // palette and just return NULL
-  if (!(pfd.dwFlags & PFD_NEED_PALETTE))
-    return NULL;
+  if (!(pfd.dwFlags & PFD_NEED_PALETTE)) return NULL;
 
   // Number of entries in palette.  8 bits yeilds 256 entries
   nColors = 1 << pfd.cColorBits;
@@ -471,8 +469,8 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
       (LOGPALETTE *)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
   // Fill in palette header
-  pPal->palVersion = 0x300;      // Windows 3.0
-  pPal->palNumEntries = nColors; // table size
+  pPal->palVersion = 0x300;       // Windows 3.0
+  pPal->palNumEntries = nColors;  // table size
 
   // Build mask of all 1's.  This creates a number represented by having
   // the low order x bits set, where x = pfd.cRedBits, pfd.cGreenBits, and
@@ -519,16 +517,15 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
 // Entry point of all Windows programs
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow) {
-  MSG msg;     // Windows message structure
-  WNDCLASS wc; // Windows class structure
-  HWND hWnd;   // Storeage for window handle
+  MSG msg;      // Windows message structure
+  WNDCLASS wc;  // Windows class structure
+  HWND hWnd;    // Storeage for window handle
   UINT uiStyle, uiStyleX;
 
-  ghInstance = hInstance; // Save instance handle
+  ghInstance = hInstance;  // Save instance handle
 
   // Get startup options, or shutdown
-  if (ShowStartupOptions() == FALSE)
-    return 0;
+  if (ShowStartupOptions() == FALSE) return 0;
 
   if (startupOptions.bFullScreen == TRUE)
     if (ChangeDisplaySettings(&startupOptions.devMode, CDS_FULLSCREEN) !=
@@ -555,8 +552,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpszClassName = lpszAppName;
 
   // Register the window class
-  if (RegisterClass(&wc) == 0)
-    return FALSE;
+  if (RegisterClass(&wc) == 0) return FALSE;
 
   // Select window styles
   if (startupOptions.bFullScreen == TRUE) {
@@ -574,8 +570,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                         hInstance, NULL);
 
   // If window was not created, quit
-  if (hWnd == NULL)
-    return FALSE;
+  if (hWnd == NULL) return FALSE;
 
   // Make sure window manager stays hidden
   ShowWindow(hWnd, SW_SHOW);
@@ -588,8 +583,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   // Restore Display Settings
-  if (startupOptions.bFullScreen == TRUE)
-    ChangeDisplaySettings(NULL, 0);
+  if (startupOptions.bFullScreen == TRUE) ChangeDisplaySettings(NULL, 0);
 
   return msg.wParam;
 }
@@ -598,145 +592,141 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // Window procedure, handles all messages for this program
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
-  static HGLRC hRC; // Permenant Rendering context
-  static HDC hDC;   // Private GDI Device context
+  static HGLRC hRC;  // Permenant Rendering context
+  static HDC hDC;    // Private GDI Device context
 
   switch (message) {
-  // Window creation, setup for OpenGL
-  case WM_CREATE:
-    // Store the device context
-    hDC = GetDC(hWnd);
+    // Window creation, setup for OpenGL
+    case WM_CREATE:
+      // Store the device context
+      hDC = GetDC(hWnd);
 
-    // The screen and desktop may have changed, so do this again
-    FindBestPF(hDC, &startupOptions.nPixelFormat,
-               &startupOptions.nPixelFormatMS);
+      // The screen and desktop may have changed, so do this again
+      FindBestPF(hDC, &startupOptions.nPixelFormat,
+                 &startupOptions.nPixelFormatMS);
 
-    // Set pixelformat
-    if (startupOptions.bFSAA == TRUE && (startupOptions.nPixelFormatMS != 0))
-      SetPixelFormat(hDC, startupOptions.nPixelFormatMS, NULL);
-    else
-      SetPixelFormat(hDC, startupOptions.nPixelFormat, NULL);
+      // Set pixelformat
+      if (startupOptions.bFSAA == TRUE && (startupOptions.nPixelFormatMS != 0))
+        SetPixelFormat(hDC, startupOptions.nPixelFormatMS, NULL);
+      else
+        SetPixelFormat(hDC, startupOptions.nPixelFormat, NULL);
 
-    // Create the rendering context and make it current
-    hRC = wglCreateContext(hDC);
-    wglMakeCurrent(hDC, hRC);
+      // Create the rendering context and make it current
+      hRC = wglCreateContext(hDC);
+      wglMakeCurrent(hDC, hRC);
 
-    SetupRC(hDC);
+      SetupRC(hDC);
 
-    break;
+      break;
 
-  // Check for ESC key
-  case WM_CHAR:
-    if (wParam == 27)
-      DestroyWindow(hWnd);
-    break;
+    // Check for ESC key
+    case WM_CHAR:
+      if (wParam == 27) DestroyWindow(hWnd);
+      break;
 
-  // Window is either full screen, or not visible
-  case WM_ACTIVATE: {
-    // Ignore this altogether unless we are in full screen mode
-    if (startupOptions.bFullScreen == TRUE) {
-      // Construct windowplacement structure
-      WINDOWPLACEMENT wndPlacement;
-      wndPlacement.length = sizeof(WINDOWPLACEMENT);
-      wndPlacement.flags = WPF_RESTORETOMAXIMIZED;
-      wndPlacement.ptMaxPosition.x = 0;
-      wndPlacement.ptMaxPosition.y = 0;
-      wndPlacement.ptMinPosition.x = 0;
-      wndPlacement.ptMinPosition.y = 0;
-      wndPlacement.rcNormalPosition.bottom =
-          startupOptions.devMode.dmPelsHeight;
-      wndPlacement.rcNormalPosition.left = 0;
-      wndPlacement.rcNormalPosition.top = 0;
-      wndPlacement.rcNormalPosition.right = startupOptions.devMode.dmPelsWidth;
+    // Window is either full screen, or not visible
+    case WM_ACTIVATE: {
+      // Ignore this altogether unless we are in full screen mode
+      if (startupOptions.bFullScreen == TRUE) {
+        // Construct windowplacement structure
+        WINDOWPLACEMENT wndPlacement;
+        wndPlacement.length = sizeof(WINDOWPLACEMENT);
+        wndPlacement.flags = WPF_RESTORETOMAXIMIZED;
+        wndPlacement.ptMaxPosition.x = 0;
+        wndPlacement.ptMaxPosition.y = 0;
+        wndPlacement.ptMinPosition.x = 0;
+        wndPlacement.ptMinPosition.y = 0;
+        wndPlacement.rcNormalPosition.bottom =
+            startupOptions.devMode.dmPelsHeight;
+        wndPlacement.rcNormalPosition.left = 0;
+        wndPlacement.rcNormalPosition.top = 0;
+        wndPlacement.rcNormalPosition.right =
+            startupOptions.devMode.dmPelsWidth;
 
-      // Switching away from window
-      if (LOWORD(wParam) == WA_INACTIVE) {
-        wndPlacement.showCmd = SW_SHOWMINNOACTIVE;
-        SetWindowPlacement(hWnd, &wndPlacement);
-        ShowCursor(TRUE);
-      } else // Switching back to window
-      {
-        wndPlacement.showCmd = SW_RESTORE;
-        SetWindowPlacement(hWnd, &wndPlacement);
-        ShowCursor(FALSE);
+        // Switching away from window
+        if (LOWORD(wParam) == WA_INACTIVE) {
+          wndPlacement.showCmd = SW_SHOWMINNOACTIVE;
+          SetWindowPlacement(hWnd, &wndPlacement);
+          ShowCursor(TRUE);
+        } else  // Switching back to window
+        {
+          wndPlacement.showCmd = SW_RESTORE;
+          SetWindowPlacement(hWnd, &wndPlacement);
+          ShowCursor(FALSE);
+        }
       }
-    }
-  } break;
+    } break;
 
-  // Window is being destroyed, cleanup
-  case WM_DESTROY:
-    // Kill the timer that we created
-    KillTimer(hWnd, 101);
+    // Window is being destroyed, cleanup
+    case WM_DESTROY:
+      // Kill the timer that we created
+      KillTimer(hWnd, 101);
 
-    ShutdownRC();
+      ShutdownRC();
 
-    // Deselect the current rendering context and delete it
-    wglMakeCurrent(hDC, NULL);
-    wglDeleteContext(hRC);
+      // Deselect the current rendering context and delete it
+      wglMakeCurrent(hDC, NULL);
+      wglDeleteContext(hRC);
 
-    // Tell the application to terminate after the window
-    // is gone.
-    PostQuitMessage(0);
-    break;
+      // Tell the application to terminate after the window
+      // is gone.
+      PostQuitMessage(0);
+      break;
 
-  // Window is resized.
-  case WM_SIZE:
-    // Call our function which modifies the clipping
-    // volume and viewport
-    ChangeSize(LOWORD(lParam), HIWORD(lParam));
-    break;
+    // Window is resized.
+    case WM_SIZE:
+      // Call our function which modifies the clipping
+      // volume and viewport
+      ChangeSize(LOWORD(lParam), HIWORD(lParam));
+      break;
 
-  // The painting function.  This message sent by Windows
-  // whenever the screen needs updating.
-  case WM_PAINT: {
-    // Only poll keyboard when this window has focus
-    if (GetFocus() == hWnd) {
-      float fTime;
-      float fLinear, fAngular;
+    // The painting function.  This message sent by Windows
+    // whenever the screen needs updating.
+    case WM_PAINT: {
+      // Only poll keyboard when this window has focus
+      if (GetFocus() == hWnd) {
+        float fTime;
+        float fLinear, fAngular;
 
-      // Get the time since the last time we rendered a frame
-      LARGE_INTEGER lCurrent;
-      QueryPerformanceCounter(&lCurrent);
+        // Get the time since the last time we rendered a frame
+        LARGE_INTEGER lCurrent;
+        QueryPerformanceCounter(&lCurrent);
 
-      fTime = (float)(lCurrent.QuadPart - CameraTimer.QuadPart) /
-              (float)CounterFrequency.QuadPart;
+        fTime = (float)(lCurrent.QuadPart - CameraTimer.QuadPart) /
+                (float)CounterFrequency.QuadPart;
 
-      CameraTimer = lCurrent;
+        CameraTimer = lCurrent;
 
-      // Camera motion will be time based. This keeps the motion constant
-      // regardless of frame rate. Higher frame rates produce smoother
-      // animation and motion, they should not produce "faster" motion.
-      fLinear = fTime * 1.0f;
-      fAngular = (float)m3dDegToRad(60.0f * fTime);
+        // Camera motion will be time based. This keeps the motion constant
+        // regardless of frame rate. Higher frame rates produce smoother
+        // animation and motion, they should not produce "faster" motion.
+        fLinear = fTime * 1.0f;
+        fAngular = (float)m3dDegToRad(60.0f * fTime);
 
-      // Move the camera around, poll the keyboard
-      if (GetAsyncKeyState(VK_UP))
-        frameCamera.MoveForward(fLinear);
+        // Move the camera around, poll the keyboard
+        if (GetAsyncKeyState(VK_UP)) frameCamera.MoveForward(fLinear);
 
-      if (GetAsyncKeyState(VK_DOWN))
-        frameCamera.MoveForward(-fLinear);
+        if (GetAsyncKeyState(VK_DOWN)) frameCamera.MoveForward(-fLinear);
 
-      if (GetAsyncKeyState(VK_LEFT))
-        frameCamera.MoveForward(fAngular);
+        if (GetAsyncKeyState(VK_LEFT)) frameCamera.MoveForward(fAngular);
 
-      if (GetAsyncKeyState(VK_RIGHT))
-        frameCamera.MoveForward(-fAngular);
-    }
+        if (GetAsyncKeyState(VK_RIGHT)) frameCamera.MoveForward(-fAngular);
+      }
 
-    // Call OpenGL drawing code
-    RenderScene();
+      // Call OpenGL drawing code
+      RenderScene();
 
-    // Call function to swap the buffers
-    SwapBuffers(hDC);
+      // Call function to swap the buffers
+      SwapBuffers(hDC);
 
-    // Not validated on purpose, gives and endless series
-    // of paint messages... this is akin to having
-    // a rendering loop
-    // ValidateRect(hWnd,NULL);
-  } break;
+      // Not validated on purpose, gives and endless series
+      // of paint messages... this is akin to having
+      // a rendering loop
+      // ValidateRect(hWnd,NULL);
+    } break;
 
-  default: // Passes it on if unproccessed
-    return (DefWindowProc(hWnd, message, wParam, lParam));
+    default:  // Passes it on if unproccessed
+      return (DefWindowProc(hWnd, message, wParam, lParam));
   }
 
   return (0L);
@@ -747,152 +737,152 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 BOOL APIENTRY StartupDlgProc(HWND hDlg, UINT message, UINT wParam,
                              LONG lParam) {
   switch (message) {
-    // Initialize the dialog box
-  case WM_INITDIALOG: {
-    int nPF;
-    HDC hDC; // Dialogs device context
-    HGLRC hRC;
-    DEVMODE devMode;
-    unsigned int iMode;
-    unsigned int nWidth; // Current settings
-    unsigned int nHeight;
-    char cBuffer[64];
-    HWND hListBox;
+      // Initialize the dialog box
+    case WM_INITDIALOG: {
+      int nPF;
+      HDC hDC;  // Dialogs device context
+      HGLRC hRC;
+      DEVMODE devMode;
+      unsigned int iMode;
+      unsigned int nWidth;  // Current settings
+      unsigned int nHeight;
+      char cBuffer[64];
+      HWND hListBox;
 
-    PIXELFORMATDESCRIPTOR pfd = {
-        // Not going to be too picky
-        sizeof(PIXELFORMATDESCRIPTOR),
-        1,
-        PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
-        PFD_TYPE_RGBA, // Full color
-        32,            // Color depth
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0, // Ignored
-        0,
-        0,
-        0,
-        0,  // Accumulation buffer
-        16, // Depth bits
-        8,  // Stencil bits
-        0,
-        0,
-        0,
-        0,
-        0,
-        0}; // Some used, some not
+      PIXELFORMATDESCRIPTOR pfd = {
+          // Not going to be too picky
+          sizeof(PIXELFORMATDESCRIPTOR),
+          1,
+          PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
+          PFD_TYPE_RGBA,  // Full color
+          32,             // Color depth
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,  // Ignored
+          0,
+          0,
+          0,
+          0,   // Accumulation buffer
+          16,  // Depth bits
+          8,   // Stencil bits
+          0,
+          0,
+          0,
+          0,
+          0,
+          0};  // Some used, some not
 
-    // Initialize render options
-    startupOptions.bFSAA = FALSE;
-    startupOptions.bFullScreen = FALSE;
-    startupOptions.bVerticalSync = FALSE;
+      // Initialize render options
+      startupOptions.bFSAA = FALSE;
+      startupOptions.bFullScreen = FALSE;
+      startupOptions.bVerticalSync = FALSE;
 
-    // Create a "temporary" OpenGL rendering context
-    hDC = GetDC(hDlg);
+      // Create a "temporary" OpenGL rendering context
+      hDC = GetDC(hDlg);
 
-    // Set pixel format one time....
-    nPF = ChoosePixelFormat(hDC, &pfd);
-    SetPixelFormat(hDC, nPF, &pfd);
-    DescribePixelFormat(hDC, nPF, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
+      // Set pixel format one time....
+      nPF = ChoosePixelFormat(hDC, &pfd);
+      SetPixelFormat(hDC, nPF, &pfd);
+      DescribePixelFormat(hDC, nPF, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
-    // Create the GL context
-    hRC = wglCreateContext(hDC);
-    wglMakeCurrent(hDC, hRC);
+      // Create the GL context
+      hRC = wglCreateContext(hDC);
+      wglMakeCurrent(hDC, hRC);
 
-    // Set text in dialog
-    SetDlgItemText(hDlg, IDC_VENDOR, (const char *)glGetString(GL_VENDOR));
-    SetDlgItemText(hDlg, IDC_RENDERER, (const char *)glGetString(GL_RENDERER));
-    SetDlgItemText(hDlg, IDC_VERSION, (const char *)glGetString(GL_VERSION));
+      // Set text in dialog
+      SetDlgItemText(hDlg, IDC_VENDOR, (const char *)glGetString(GL_VENDOR));
+      SetDlgItemText(hDlg, IDC_RENDERER,
+                     (const char *)glGetString(GL_RENDERER));
+      SetDlgItemText(hDlg, IDC_VERSION, (const char *)glGetString(GL_VERSION));
 
-    // Vertical Sync off by default
-    if (gltIsExtSupported("WGL_EXT_swap_control"))
-      EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_CHECK), TRUE);
+      // Vertical Sync off by default
+      if (gltIsExtSupported("WGL_EXT_swap_control"))
+        EnableWindow(GetDlgItem(hDlg, IDC_VSYNC_CHECK), TRUE);
 
-    // Find a multisampled and non-multisampled pixel format
-    FindBestPF(hDC, &startupOptions.nPixelFormat,
-               &startupOptions.nPixelFormatMS);
+      // Find a multisampled and non-multisampled pixel format
+      FindBestPF(hDC, &startupOptions.nPixelFormat,
+                 &startupOptions.nPixelFormatMS);
 
-    // Done with GL context
-    wglMakeCurrent(hDC, NULL);
-    wglDeleteContext(hRC);
+      // Done with GL context
+      wglMakeCurrent(hDC, NULL);
+      wglDeleteContext(hRC);
 
-    // Enumerate display modes
-    iMode = 0;
-    nWidth = GetSystemMetrics(SM_CXSCREEN); // Current settings
-    nHeight = GetSystemMetrics(SM_CYSCREEN);
-    hListBox = GetDlgItem(hDlg, IDC_DISPLAY_COMBO);
-    while (EnumDisplaySettings(NULL, iMode, &devMode)) {
-      // if(devMode.dmBitsPerPel == pfd.cColorBits)
-      {
-        int iItem;
-        sprintf(cBuffer, "%d x %d x %dbpp @%dhz", devMode.dmPelsWidth,
-                devMode.dmPelsHeight, devMode.dmBitsPerPel,
-                devMode.dmDisplayFrequency);
+      // Enumerate display modes
+      iMode = 0;
+      nWidth = GetSystemMetrics(SM_CXSCREEN);  // Current settings
+      nHeight = GetSystemMetrics(SM_CYSCREEN);
+      hListBox = GetDlgItem(hDlg, IDC_DISPLAY_COMBO);
+      while (EnumDisplaySettings(NULL, iMode, &devMode)) {
+        // if(devMode.dmBitsPerPel == pfd.cColorBits)
+        {
+          int iItem;
+          sprintf(cBuffer, "%d x %d x %dbpp @%dhz", devMode.dmPelsWidth,
+                  devMode.dmPelsHeight, devMode.dmBitsPerPel,
+                  devMode.dmDisplayFrequency);
 
-        iItem = SendMessage(hListBox, CB_ADDSTRING, 0, (LPARAM)cBuffer);
-        SendMessage(hListBox, CB_SETITEMDATA, iItem, iMode);
+          iItem = SendMessage(hListBox, CB_ADDSTRING, 0, (LPARAM)cBuffer);
+          SendMessage(hListBox, CB_SETITEMDATA, iItem, iMode);
 
-        if (devMode.dmPelsHeight == nHeight && devMode.dmPelsWidth == nWidth)
-          SendMessage(hListBox, CB_SETCURSEL, iItem, 0);
+          if (devMode.dmPelsHeight == nHeight && devMode.dmPelsWidth == nWidth)
+            SendMessage(hListBox, CB_SETCURSEL, iItem, 0);
+        }
+        iMode++;
       }
-      iMode++;
-    }
 
-    // Set other defaults /////////////
-    // Windowed or full screen
-    CheckDlgButton(hDlg, IDC_FS_CHECK, BST_CHECKED);
+      // Set other defaults /////////////
+      // Windowed or full screen
+      CheckDlgButton(hDlg, IDC_FS_CHECK, BST_CHECKED);
 
-    // FSAA, but only if support detected
-    if (startupOptions.nPixelFormatMS != 0)
-      EnableWindow(GetDlgItem(hDlg, IDC_MULTISAMPLED_CHECK), TRUE);
+      // FSAA, but only if support detected
+      if (startupOptions.nPixelFormatMS != 0)
+        EnableWindow(GetDlgItem(hDlg, IDC_MULTISAMPLED_CHECK), TRUE);
 
-    return (TRUE);
-  } break;
+      return (TRUE);
+    } break;
 
-    // Process command messages
-  case WM_COMMAND: {
-    // Validate and Make the changes
-    if (LOWORD(wParam) == IDOK) {
-      // Read options ////////////////////////////////////////
-      // Display mode
-      HWND hListBox = GetDlgItem(hDlg, IDC_DISPLAY_COMBO);
-      int iMode = SendMessage(hListBox, CB_GETCURSEL, 0, 0);
-      iMode = SendMessage(hListBox, CB_GETITEMDATA, iMode, 0);
-      EnumDisplaySettings(NULL, iMode, &startupOptions.devMode);
+      // Process command messages
+    case WM_COMMAND: {
+      // Validate and Make the changes
+      if (LOWORD(wParam) == IDOK) {
+        // Read options ////////////////////////////////////////
+        // Display mode
+        HWND hListBox = GetDlgItem(hDlg, IDC_DISPLAY_COMBO);
+        int iMode = SendMessage(hListBox, CB_GETCURSEL, 0, 0);
+        iMode = SendMessage(hListBox, CB_GETITEMDATA, iMode, 0);
+        EnumDisplaySettings(NULL, iMode, &startupOptions.devMode);
 
-      // Full screen or windowed?
-      if (IsDlgButtonChecked(hDlg, IDC_FS_CHECK))
-        startupOptions.bFullScreen = TRUE;
-      else
-        startupOptions.bFullScreen = FALSE;
+        // Full screen or windowed?
+        if (IsDlgButtonChecked(hDlg, IDC_FS_CHECK))
+          startupOptions.bFullScreen = TRUE;
+        else
+          startupOptions.bFullScreen = FALSE;
 
-      // FSAA
-      if (IsDlgButtonChecked(hDlg, IDC_MULTISAMPLED_CHECK))
-        startupOptions.bFSAA = TRUE;
-      else
-        startupOptions.bFSAA = FALSE;
+        // FSAA
+        if (IsDlgButtonChecked(hDlg, IDC_MULTISAMPLED_CHECK))
+          startupOptions.bFSAA = TRUE;
+        else
+          startupOptions.bFSAA = FALSE;
 
-      // Vertical Sync.
-      if (IsDlgButtonChecked(hDlg, IDC_VSYNC_CHECK))
-        startupOptions.bVerticalSync = TRUE;
-      else
-        startupOptions.bVerticalSync = FALSE;
+        // Vertical Sync.
+        if (IsDlgButtonChecked(hDlg, IDC_VSYNC_CHECK))
+          startupOptions.bVerticalSync = TRUE;
+        else
+          startupOptions.bVerticalSync = FALSE;
 
-      EndDialog(hDlg, TRUE);
-    }
+        EndDialog(hDlg, TRUE);
+      }
 
-    if (LOWORD(wParam) == IDCANCEL)
-      EndDialog(hDlg, FALSE);
-  } break;
+      if (LOWORD(wParam) == IDCANCEL) EndDialog(hDlg, FALSE);
+    } break;
 
-  // Closed from sysbox
-  case WM_CLOSE:
-    EndDialog(hDlg, FALSE); // Same as cancel
-    break;
+    // Closed from sysbox
+    case WM_CLOSE:
+      EndDialog(hDlg, FALSE);  // Same as cancel
+      break;
   }
 
   return FALSE;
@@ -926,15 +916,15 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat) {
     int nBestMS = 0;
     int i;
     int iResults[9];
-    int iAttributes[9] = {WGL_SUPPORT_OPENGL_ARB, // 0
-                          WGL_ACCELERATION_ARB,   // 1
-                          WGL_DRAW_TO_WINDOW_ARB, // 2
-                          WGL_DOUBLE_BUFFER_ARB,  // 3
-                          WGL_PIXEL_TYPE_ARB,     // 4
-                          WGL_DEPTH_BITS_ARB,     // 5
-                          WGL_STENCIL_BITS_ARB,   // 6
-                          WGL_SAMPLE_BUFFERS_ARB, // 7
-                          WGL_SAMPLES_ARB};       // 8
+    int iAttributes[9] = {WGL_SUPPORT_OPENGL_ARB,  // 0
+                          WGL_ACCELERATION_ARB,    // 1
+                          WGL_DRAW_TO_WINDOW_ARB,  // 2
+                          WGL_DOUBLE_BUFFER_ARB,   // 3
+                          WGL_PIXEL_TYPE_ARB,      // 4
+                          WGL_DEPTH_BITS_ARB,      // 5
+                          WGL_STENCIL_BITS_ARB,    // 6
+                          WGL_SAMPLE_BUFFERS_ARB,  // 7
+                          WGL_SAMPLES_ARB};        // 8
 
     // How many pixelformats are there?
     int nFormatCount[] = {0};
@@ -949,20 +939,20 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat) {
       // Match? Must support OpenGL AND be Accelerated AND draw to Window
       if (iResults[0] == 1 && iResults[1] == WGL_FULL_ACCELERATION_ARB &&
           iResults[2] == 1)
-        if (iResults[3] == 1)                   // Double buffered
-          if (iResults[4] == WGL_TYPE_RGBA_ARB) // Full Color
-            if (iResults[5] >= 16)              // Any Depth greater than 16
-              if (iResults[6] > 0)              // Any Stencil depth (not zero)
+        if (iResults[3] == 1)                    // Double buffered
+          if (iResults[4] == WGL_TYPE_RGBA_ARB)  // Full Color
+            if (iResults[5] >= 16)               // Any Depth greater than 16
+              if (iResults[6] > 0)               // Any Stencil depth (not zero)
               {
                 // We have a candidate, look for most samples if multisampled
-                if (iResults[7] == 1) // Multisampled
+                if (iResults[7] == 1)  // Multisampled
                 {
-                  if (iResults[8] > nBestMS) // Look for most samples
+                  if (iResults[8] > nBestMS)  // Look for most samples
                   {
-                    *nMSFormat = i;        // Multisamples
-                    nBestMS = iResults[8]; // Looking for the best
+                    *nMSFormat = i;         // Multisamples
+                    nBestMS = iResults[8];  // Looking for the best
                   }
-                } else // Not multisampled
+                } else  // Not multisampled
                 {
                   // Good enough for "regular". This will fall through
                   *nRegularFormat = i;
@@ -972,31 +962,31 @@ void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat) {
   } else {
     // Old fashioned way...
     // or multisample
-    PIXELFORMATDESCRIPTOR pfd = {sizeof(PIXELFORMATDESCRIPTOR),
-                                 1,
-                                 PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
-                                     PFD_DOUBLEBUFFER,
-                                 PFD_TYPE_RGBA, // Full color
-                                 32,            // Color depth
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 0, // Ignored
-                                 0,
-                                 0,
-                                 0,
-                                 0,  // Accumulation buffer
-                                 24, // Depth bits
-                                 8,  // Stencil bits
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 0,
-                                 0}; // Some used, some not
+    PIXELFORMATDESCRIPTOR pfd = {
+        sizeof(PIXELFORMATDESCRIPTOR),
+        1,
+        PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
+        PFD_TYPE_RGBA,  // Full color
+        32,             // Color depth
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,  // Ignored
+        0,
+        0,
+        0,
+        0,   // Accumulation buffer
+        24,  // Depth bits
+        8,   // Stencil bits
+        0,
+        0,
+        0,
+        0,
+        0,
+        0};  // Some used, some not
 
     *nRegularFormat = ChoosePixelFormat(hDC, &pfd);
   }

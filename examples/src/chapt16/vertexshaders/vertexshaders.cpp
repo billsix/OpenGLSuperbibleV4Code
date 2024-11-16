@@ -3,9 +3,9 @@
 // Demonstrates vertex shaders
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -21,20 +21,20 @@
 #define STRETCH 9
 #define TOTAL_SHADERS 10
 
-GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS]; // shader object names
+GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
 char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
                                     "texspec", "3lights", "fogcoord", "fog",
                                     "ptsize",  "stretch"};
 
-GLint whichShader = SIMPLE; // current shader
+GLint whichShader = SIMPLE;  // current shader
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLint mainMenu, shaderMenu; // menu handles
+GLint mainMenu, shaderMenu;  // menu handles
 
-GLint maxTexSize; // maximum allowed size for 1D/2D texture
+GLint maxTexSize;  // maximum allowed size for 1D/2D texture
 
 GLfloat cameraPos[] = {100.0f, 75.0f, 150.0f, 1.0f};
 GLdouble cameraZoom = 0.4;
@@ -192,7 +192,7 @@ void DrawModels(void) {
   }
 
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -306,8 +306,7 @@ void RenderScene(void) {
   // Draw objects in the scene
   DrawModels();
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -333,8 +332,9 @@ void SetupRC() {
   if (!GLEE_VERSION_1_3 &&
       (!GLEE_ARB_multitexture || !GLEE_ARB_texture_cube_map ||
        !GLEE_ARB_texture_env_add)) {
-    fprintf(stderr, "Neither OpenGL 1.3 nor necessary"
-                    " extensions are available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.3 nor necessary"
+            " extensions are available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -472,46 +472,46 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    if (whichShader == STRETCH)
-      squashStretch[0] += 0.01f;
-    else
-      cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    if (whichShader == STRETCH)
-      squashStretch[0] -= 0.01f;
-    else
-      cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    if (whichShader == STRETCH)
-      squashStretch[1] += 0.01f;
-    else
-      cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    if (whichShader == STRETCH)
-      squashStretch[1] -= 0.01f;
-    else
-      cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    if (whichShader == STRETCH)
-      squashStretch[2] += 0.01f;
-    else
-      cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    if (whichShader == STRETCH)
-      squashStretch[2] -= 0.01f;
-    else
-      cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      if (whichShader == STRETCH)
+        squashStretch[0] += 0.01f;
+      else
+        cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      if (whichShader == STRETCH)
+        squashStretch[0] -= 0.01f;
+      else
+        cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      if (whichShader == STRETCH)
+        squashStretch[1] += 0.01f;
+      else
+        cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      if (whichShader == STRETCH)
+        squashStretch[1] -= 0.01f;
+      else
+        cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      if (whichShader == STRETCH)
+        squashStretch[2] += 0.01f;
+      else
+        cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      if (whichShader == STRETCH)
+        squashStretch[2] -= 0.01f;
+      else
+        cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -520,30 +520,29 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    if ((whichShader == FOGCOORD) || (whichShader == FOG))
-      density -= 0.0005f;
-    else
-      lightRotation -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    if ((whichShader == FOGCOORD) || (whichShader == FOG))
-      density += 0.0005f;
-    else
-      lightRotation += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      if ((whichShader == FOGCOORD) || (whichShader == FOG))
+        density -= 0.0005f;
+      else
+        lightRotation -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      if ((whichShader == FOGCOORD) || (whichShader == FOG))
+        density += 0.0005f;
+      else
+        lightRotation += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
-  if (density < 0.0f)
-    density = 0.0f;
+  if (density < 0.0f) density = 0.0f;
 
   // Refresh the Window
   glutPostRedisplay();

@@ -3,7 +3,7 @@
 // Demonstrates rendering a sample model with indexed vertex arrays
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -30,8 +30,8 @@ GLuint bodyList, glassList;
 void DrawBody(void) {
   int iFace, iPoint;
   glBegin(GL_TRIANGLES);
-  for (iFace = 0; iFace < 3704; iFace++)   // Each new triangle starts here
-    for (iPoint = 0; iPoint < 3; iPoint++) // Each vertex specified here
+  for (iFace = 0; iFace < 3704; iFace++)    // Each new triangle starts here
+    for (iPoint = 0; iPoint < 3; iPoint++)  // Each vertex specified here
     {
       // Lookup the texture value
       glTexCoord2fv(textures[face_indicies[iFace][iPoint + 6]]);
@@ -50,8 +50,8 @@ void DrawBody(void) {
 void DrawGlass(void) {
   int iFace, iPoint;
   glBegin(GL_TRIANGLES);
-  for (iFace = 0; iFace < 352; iFace++)    // Each new triangle starts here
-    for (iPoint = 0; iPoint < 3; iPoint++) // Each vertex specified here
+  for (iFace = 0; iFace < 352; iFace++)     // Each new triangle starts here
+    for (iPoint = 0; iPoint < 3; iPoint++)  // Each vertex specified here
     {
       // Lookup the texture value
       glTexCoord2fv(texturesGlass[face_indiciesGlass[iFace][iPoint + 6]]);
@@ -170,7 +170,7 @@ void RenderScene(void) {
   glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
   glBindTexture(GL_TEXTURE_2D, textureObjects[BODY_TEXTURE]);
   glScalef(.01, .01, .01);
-  glCallList(bodyList); // DrawBody();
+  glCallList(bodyList);  // DrawBody();
   glPopMatrix();
 
   glEnable(GL_BLEND);
@@ -180,9 +180,9 @@ void RenderScene(void) {
 
   glScalef(0.01, 0.01, 0.01);
   glFrontFace(GL_CW);
-  glCallList(glassList); // DrawGlass();
+  glCallList(glassList);  // DrawGlass();
   glFrontFace(GL_CCW);
-  glCallList(glassList); // DrawGlass();
+  glCallList(glassList);  // DrawGlass();
   glDisable(GL_BLEND);
 
   glPopMatrix();
@@ -207,8 +207,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

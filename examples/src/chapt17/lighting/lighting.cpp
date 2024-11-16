@@ -3,9 +3,9 @@
 // Demonstrates vertex and fragment shaders together
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -15,19 +15,19 @@
 #define THREELIGHTS 3
 #define TOTAL_SHADER_SETS 4
 
-GLuint fShader[TOTAL_SHADER_SETS]; // shader object names
+GLuint fShader[TOTAL_SHADER_SETS];  // shader object names
 GLuint vShader[TOTAL_SHADER_SETS];
 GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
 char *shaderNames[TOTAL_SHADER_SETS] = {"simple", "diffuse", "specular",
                                         "3lights"};
 
-GLint whichShader = SIMPLE; // current shader
+GLint whichShader = SIMPLE;  // current shader
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLint mainMenu, shaderMenu; // menu handles
+GLint mainMenu, shaderMenu;  // menu handles
 
 GLfloat cameraPos[] = {100.0f, 75.0f, 150.0f, 1.0f};
 GLdouble cameraZoom = 0.4;
@@ -173,7 +173,7 @@ void DrawModels(void) {
   }
 
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -264,8 +264,7 @@ void RenderScene(void) {
   // Draw objects in the scene
   DrawModels();
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -329,28 +328,28 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -359,20 +358,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    lightRotation -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    lightRotation += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      lightRotation -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      lightRotation += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window

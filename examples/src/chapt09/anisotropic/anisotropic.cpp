@@ -3,7 +3,7 @@
 // OpenGL SuperBible
 // Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // GLTools
+#include "../../shared/gltools.h"  // GLTools
 
 // Rotation amounts
 static GLfloat zPos = -60.0f;
@@ -27,42 +27,42 @@ void ProcessMenu(int value) {
     glBindTexture(GL_TEXTURE_2D, textures[iLoop]);
 
     switch (value) {
-    case 0:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      break;
+      case 0:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        break;
 
-    case 1:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      break;
+      case 1:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        break;
 
-    case 2:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                      GL_NEAREST_MIPMAP_NEAREST);
-      break;
+      case 2:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_NEAREST_MIPMAP_NEAREST);
+        break;
 
-    case 3:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                      GL_NEAREST_MIPMAP_LINEAR);
-      break;
+      case 3:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_NEAREST_MIPMAP_LINEAR);
+        break;
 
-    case 4:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                      GL_LINEAR_MIPMAP_NEAREST);
-      break;
+      case 4:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_LINEAR_MIPMAP_NEAREST);
+        break;
 
-    case 5:
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                      GL_LINEAR_MIPMAP_LINEAR);
-      break;
+      case 5:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_LINEAR_MIPMAP_LINEAR);
+        break;
 
-    case 6:
-      glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fLargest);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fLargest);
-      break;
+      case 6:
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fLargest);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fLargest);
+        break;
 
-    case 7:
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
-      break;
+      case 7:
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+        break;
     }
   }
 
@@ -117,11 +117,9 @@ void ShutdownRC(void) { glDeleteTextures(TEXTURE_COUNT, textures); }
 // Respond to arrow keys, move the viewpoint back
 // and forth
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    zPos += 1.0f;
+  if (key == GLUT_KEY_UP) zPos += 1.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    zPos -= 1.0f;
+  if (key == GLUT_KEY_DOWN) zPos -= 1.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -133,8 +131,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

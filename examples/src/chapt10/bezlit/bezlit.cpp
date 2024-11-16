@@ -2,7 +2,7 @@
 // OpenGL SuperBible
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // The number of control points for this curve
 GLint nNumPoints = 3;
@@ -16,7 +16,7 @@ GLfloat ctrlPoints[3][3][3] = {
 
 // This function is used to superimpose the control points over the curve
 void DrawPoints(void) {
-  int i, j; // Counting variables
+  int i, j;  // Counting variables
 
   // Set point size larger to make more visible
   glPointSize(5.0f);
@@ -24,8 +24,7 @@ void DrawPoints(void) {
   // Loop through all control points for this example
   glBegin(GL_POINTS);
   for (i = 0; i < nNumPoints; i++)
-    for (j = 0; j < 3; j++)
-      glVertex3fv(ctrlPoints[i][j]);
+    for (j = 0; j < 3; j++) glVertex3fv(ctrlPoints[i][j]);
   glEnd();
 }
 
@@ -45,16 +44,16 @@ void RenderScene(void) {
   // Sets up the bezier
   // This actually only needs to be called once and could go in
   // the setup function
-  glMap2f(GL_MAP2_VERTEX_3,      // Type of data generated
-          0.0f,                  // Lower u range
-          10.0f,                 // Upper u range
-          3,                     // Distance between points in the data
-          3,                     // Dimension in u direction (order)
-          0.0f,                  // Lover v range
-          10.0f,                 // Upper v range
-          9,                     // Distance between points in the data
-          3,                     // Dimension in v direction (order)
-          &ctrlPoints[0][0][0]); // array of control points
+  glMap2f(GL_MAP2_VERTEX_3,       // Type of data generated
+          0.0f,                   // Lower u range
+          10.0f,                  // Upper u range
+          3,                      // Distance between points in the data
+          3,                      // Dimension in u direction (order)
+          0.0f,                   // Lover v range
+          10.0f,                  // Upper v range
+          9,                      // Distance between points in the data
+          3,                      // Dimension in v direction (order)
+          &ctrlPoints[0][0][0]);  // array of control points
 
   // Enable the evaluator
   glEnable(GL_MAP2_VERTEX_3);
@@ -86,7 +85,7 @@ void SetupRC() {
   // Clear Window to white
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -114,8 +113,7 @@ void SetupRC() {
 
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

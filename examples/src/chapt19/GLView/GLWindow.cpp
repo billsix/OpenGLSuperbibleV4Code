@@ -14,16 +14,15 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
-  HINSTANCE hInstance; // Instance Handle
-  HANDLE hBitmap;      // Handle to bitmap resource
+  HINSTANCE hInstance;  // Instance Handle
+  HANDLE hBitmap;       // Handle to bitmap resource
   BITMAPINFO bmInfo;
 
   // Find the bitmap resource
   hInstance = GetModuleHandle(NULL);
   hBitmap = LoadBitmap(hInstance, MAKEINTRESOURCE(nResource));
 
-  if (hBitmap == NULL)
-    return NULL;
+  if (hBitmap == NULL) return NULL;
 
   GetObject(hBitmap, sizeof(BITMAPINFO), &bmInfo);
   DeleteObject(hBitmap);
@@ -32,14 +31,13 @@ BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
       hInstance,
       ::FindResource(hInstance, MAKEINTRESOURCE(nResource), RT_BITMAP));
 
-  if (hBitmap == NULL)
-    return NULL;
+  if (hBitmap == NULL) return NULL;
 
   BYTE *pData = (BYTE *)LockResource(hBitmap);
   pData += sizeof(BITMAPINFO) - 1;
 
-  *nWidth = bmInfo.bmiHeader.biWidth;   // bm.bmWidth;
-  *nHeight = bmInfo.bmiHeader.biHeight; // bm.bmHeight;
+  *nWidth = bmInfo.bmiHeader.biWidth;    // bm.bmWidth;
+  *nHeight = bmInfo.bmiHeader.biHeight;  // bm.bmHeight;
 
   return pData;
 }
@@ -80,11 +78,9 @@ void CGLWindow::OnPaint() {
     fX += 1.0f;
     fY += 1.0f;
 
-    if (fX > 360.0f)
-      fX = 0.015f;
+    if (fX > 360.0f) fX = 0.015f;
 
-    if (fY > 360.0f)
-      fY = 0.01f;
+    if (fY > 360.0f) fY = 0.01f;
 
     glPushMatrix();
     glRotatef(fX, 1.0f, 0.0f, 0.0f);
@@ -180,7 +176,7 @@ void CGLWindow::OnPaint() {
     else
       SwapBuffers(m_hDC);
   } else {
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  // device context for painting
 
     RECT rect;
     GetClientRect(&rect);
@@ -207,8 +203,7 @@ void CGLWindow::OnPaint() {
 }
 
 int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-  if (CWnd::OnCreate(lpCreateStruct) == -1)
-    return -1;
+  if (CWnd::OnCreate(lpCreateStruct) == -1) return -1;
 
   // Get the device context
   m_hDC = ::GetDC(this->m_hWnd);
@@ -219,8 +214,7 @@ int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   // Create the rendering context and make it current
   m_hRC = wglCreateContext(m_hDC);
 
-  if (m_hRC != NULL)
-    wglMakeCurrent(m_hDC, m_hRC);
+  if (m_hRC != NULL) wglMakeCurrent(m_hDC, m_hRC);
 
   // Setup the context
   if (m_hRC != NULL) {
@@ -321,8 +315,7 @@ void CGLWindow::OnSize(UINT nType, int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   fAspect = (GLfloat)w / (GLfloat)h;
 

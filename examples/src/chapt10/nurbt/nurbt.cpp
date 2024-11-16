@@ -2,7 +2,7 @@
 // OpenGL SuperBible
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <string.h>
 
@@ -10,31 +10,31 @@
 GLUnurbsObj *pNurb = NULL;
 
 // The number of control points for this curve
-GLint nNumPoints = 4; // 4 X 4
+GLint nNumPoints = 4;  // 4 X 4
 
 // Mesh extends four units -6 to +6 along x and y axis
 // Lies in Z plane
 //                 u  v  (x,y,z)
 GLfloat ctrlPoints[4][4][3] = {
-    {{-6.0f, -6.0f, 0.0f}, // u = 0,	v = 0
-     {-6.0f, -2.0f, 0.0f}, //			v = 1
-     {-6.0f, 2.0f, 0.0f},  //			v = 2
-     {-6.0f, 6.0f, 0.0f}}, //			v = 3
+    {{-6.0f, -6.0f, 0.0f},  // u = 0,	v = 0
+     {-6.0f, -2.0f, 0.0f},  //			v = 1
+     {-6.0f, 2.0f, 0.0f},   //			v = 2
+     {-6.0f, 6.0f, 0.0f}},  //			v = 3
 
-    {{-2.0f, -6.0f, 0.0f}, // u = 1	v = 0
-     {-2.0f, -2.0f, 8.0f}, //			v = 1
-     {-2.0f, 2.0f, 8.0f},  //			v = 2
-     {-2.0f, 6.0f, 0.0f}}, //			v = 3
+    {{-2.0f, -6.0f, 0.0f},  // u = 1	v = 0
+     {-2.0f, -2.0f, 8.0f},  //			v = 1
+     {-2.0f, 2.0f, 8.0f},   //			v = 2
+     {-2.0f, 6.0f, 0.0f}},  //			v = 3
 
-    {{2.0f, -6.0f, 0.0f}, // u =2		v = 0
-     {2.0f, -2.0f, 8.0f}, //			v = 1
-     {2.0f, 2.0f, 8.0f},  //			v = 2
-     {2.0f, 6.0f, 0.0f}}, //			v = 3
+    {{2.0f, -6.0f, 0.0f},  // u =2		v = 0
+     {2.0f, -2.0f, 8.0f},  //			v = 1
+     {2.0f, 2.0f, 8.0f},   //			v = 2
+     {2.0f, 6.0f, 0.0f}},  //			v = 3
 
-    {{6.0f, -6.0f, 0.0f},  // u = 3	v = 0
-     {6.0f, -2.0f, 0.0f},  //			v = 1
-     {6.0f, 2.0f, 0.0f},   //			v = 2
-     {6.0f, 6.0f, 0.0f}}}; //			v = 3
+    {{6.0f, -6.0f, 0.0f},   // u = 3	v = 0
+     {6.0f, -2.0f, 0.0f},   //			v = 1
+     {6.0f, 2.0f, 0.0f},    //			v = 2
+     {6.0f, 6.0f, 0.0f}}};  //			v = 3
 
 // Knont sequence for the NURB
 GLfloat Knots[8] = {0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -58,8 +58,7 @@ void DrawPoints(void) {
   // Draw all the points in the array
   glBegin(GL_POINTS);
   for (i = 0; i < 4; i++)
-    for (j = 0; j < 4; j++)
-      glVertex3fv(ctrlPoints[i][j]);
+    for (j = 0; j < 4; j++) glVertex3fv(ctrlPoints[i][j]);
   glEnd();
 }
 
@@ -95,14 +94,14 @@ void RenderScene(void) {
   gluBeginSurface(pNurb);
 
   // Evaluate the surface
-  gluNurbsSurface(pNurb,    // pointer to NURBS renderer
-                  8, Knots, // No. of knots and knot array u direction
-                  8, Knots, // No. of knots and knot array v direction
-                  4 * 3,    // Distance between control points in u dir.
-                  3,        // Distance between control points in v dir.
-                  &ctrlPoints[0][0][0], // Control points
-                  4, 4,                 // u and v order of surface
-                  GL_MAP2_VERTEX_3);    // Type of surface
+  gluNurbsSurface(pNurb,     // pointer to NURBS renderer
+                  8, Knots,  // No. of knots and knot array u direction
+                  8, Knots,  // No. of knots and knot array v direction
+                  4 * 3,     // Distance between control points in u dir.
+                  3,         // Distance between control points in v dir.
+                  &ctrlPoints[0][0][0],  // Control points
+                  4, 4,                  // u and v order of surface
+                  GL_MAP2_VERTEX_3);     // Type of surface
 
   // Outer area, include entire curve
   gluBeginTrim(pNurb);
@@ -159,8 +158,7 @@ void SetupRC() {
 
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

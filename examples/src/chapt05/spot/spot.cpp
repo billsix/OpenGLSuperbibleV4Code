@@ -3,7 +3,7 @@
 // Demonstrates OpenGL Spotlight
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // System and OpenGL Stuff
+#include "../../shared/gltools.h"  // System and OpenGL Stuff
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
@@ -30,26 +30,26 @@ int iTess = MODE_VERYLOW;
 // Reset flags as appropriate in response to menu selections
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    iShade = MODE_FLAT;
-    break;
+    case 1:
+      iShade = MODE_FLAT;
+      break;
 
-  case 2:
-    iShade = MODE_SMOOTH;
-    break;
+    case 2:
+      iShade = MODE_SMOOTH;
+      break;
 
-  case 3:
-    iTess = MODE_VERYLOW;
-    break;
+    case 3:
+      iTess = MODE_VERYLOW;
+      break;
 
-  case 4:
-    iTess = MODE_MEDIUM;
-    break;
+    case 4:
+      iTess = MODE_MEDIUM;
+      break;
 
-  case 5:
-  default:
-    iTess = MODE_VERYHIGH;
-    break;
+    case 5:
+    default:
+      iTess = MODE_VERYHIGH;
+      break;
   }
 
   glutPostRedisplay();
@@ -59,7 +59,7 @@ void ProcessMenu(int value) {
 void RenderScene(void) {
   if (iShade == MODE_FLAT)
     glShadeModel(GL_FLAT);
-  else // 	iShade = MODE_SMOOTH;
+  else  // 	iShade = MODE_SMOOTH;
     glShadeModel(GL_SMOOTH);
 
   // Clear the window with current clearing color
@@ -106,7 +106,7 @@ void RenderScene(void) {
     glutSolidSphere(30.0f, 7, 7);
   else if (iTess == MODE_MEDIUM)
     glutSolidSphere(30.0f, 15, 15);
-  else //  iTess = MODE_MEDIUM;
+  else  //  iTess = MODE_MEDIUM;
     glutSolidSphere(30.0f, 50, 50);
 
   // Display the results
@@ -116,9 +116,9 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not try to display the back sides
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not try to display the back sides
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -155,29 +155,21 @@ void SetupRC() {
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -187,8 +179,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

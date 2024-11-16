@@ -31,8 +31,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   fAspect = (GLfloat)w / (GLfloat)h;
 
@@ -71,7 +70,7 @@ void RenderScene(void) {
 void SetupRC(HDC hDC) {
   // Setup the Font characteristics
   HFONT hFont;
-  GLYPHMETRICSFLOAT agmf[128]; // Throw away
+  GLYPHMETRICSFLOAT agmf[128];  // Throw away
   LOGFONT logfont;
 
   logfont.lfHeight = -10;
@@ -101,7 +100,7 @@ void SetupRC(HDC hDC) {
 
   DeleteObject(hFont);
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
   glEnable(GL_COLOR_MATERIAL);
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -120,12 +119,12 @@ void SetupRC(HDC hDC) {
 
 // If necessary, creates a 3-3-2 palette for the device context listed.
 HPALETTE GetOpenGLPalette(HDC hDC) {
-  HPALETTE hRetPal = NULL;   // Handle to palette to be created
-  PIXELFORMATDESCRIPTOR pfd; // Pixel Format Descriptor
-  LOGPALETTE *pPal;          // Pointer to memory for logical palette
-  int nPixelFormat;          // Pixel format index
-  int nColors;               // Number of entries in palette
-  int i;                     // Counting variable
+  HPALETTE hRetPal = NULL;    // Handle to palette to be created
+  PIXELFORMATDESCRIPTOR pfd;  // Pixel Format Descriptor
+  LOGPALETTE *pPal;           // Pointer to memory for logical palette
+  int nPixelFormat;           // Pixel format index
+  int nColors;                // Number of entries in palette
+  int i;                      // Counting variable
   BYTE RedRange, GreenRange, BlueRange;
   // Range for each color entry (7,7,and 3)
 
@@ -135,8 +134,7 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
 
   // Does this pixel format require a palette?  If not, do not create a
   // palette and just return NULL
-  if (!(pfd.dwFlags & PFD_NEED_PALETTE))
-    return NULL;
+  if (!(pfd.dwFlags & PFD_NEED_PALETTE)) return NULL;
 
   // Number of entries in palette.  8 bits yeilds 256 entries
   nColors = 1 << pfd.cColorBits;
@@ -146,8 +144,8 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
       (LOGPALETTE *)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
   // Fill in palette header
-  pPal->palVersion = 0x300;      // Windows 3.0
-  pPal->palNumEntries = nColors; // table size
+  pPal->palVersion = 0x300;       // Windows 3.0
+  pPal->palNumEntries = nColors;  // table size
 
   // Build mask of all 1's.  This creates a number represented by having
   // the low order x bits set, where x = pfd.cRedBits, pfd.cGreenBits, and
@@ -195,34 +193,34 @@ void SetDCPixelFormat(HDC hDC) {
   int nPixelFormat;
 
   static PIXELFORMATDESCRIPTOR pfd = {
-      sizeof(PIXELFORMATDESCRIPTOR), // Size of this structure
-      1,                             // Version of this structure
-      PFD_DRAW_TO_WINDOW |           // Draw to Window (not to bitmap)
-          PFD_SUPPORT_OPENGL |       // Support OpenGL calls in window
-          PFD_DOUBLEBUFFER,          // Double buffered mode
-      PFD_TYPE_RGBA,                 // RGBA Color mode
-      32,                            // Want 32 bit color
+      sizeof(PIXELFORMATDESCRIPTOR),  // Size of this structure
+      1,                              // Version of this structure
+      PFD_DRAW_TO_WINDOW |            // Draw to Window (not to bitmap)
+          PFD_SUPPORT_OPENGL |        // Support OpenGL calls in window
+          PFD_DOUBLEBUFFER,           // Double buffered mode
+      PFD_TYPE_RGBA,                  // RGBA Color mode
+      32,                             // Want 32 bit color
       0,
-      0,
-      0,
-      0,
-      0,
-      0, // Not used to select mode
-      0,
-      0, // Not used to select mode
       0,
       0,
       0,
       0,
       0,  // Not used to select mode
-      16, // Size of depth buffer
-      0,  // Not used to select mode
-      0,  // Not used to select mode
-      0,  // Draw in main plane
+      0,
       0,  // Not used to select mode
       0,
       0,
-      0}; // Not used to select mode
+      0,
+      0,
+      0,   // Not used to select mode
+      16,  // Size of depth buffer
+      0,   // Not used to select mode
+      0,   // Not used to select mode
+      0,   // Draw in main plane
+      0,   // Not used to select mode
+      0,
+      0,
+      0};  // Not used to select mode
 
   // Choose a pixel format that best matches that described in pfd
   nPixelFormat = ChoosePixelFormat(hDC, &pfd);
@@ -234,9 +232,9 @@ void SetDCPixelFormat(HDC hDC) {
 // Entry point of all Windows programs
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow) {
-  MSG msg;     // Windows message structure
-  WNDCLASS wc; // Windows class structure
-  HWND hWnd;   // Storeage for window handle
+  MSG msg;      // Windows message structure
+  WNDCLASS wc;  // Windows class structure
+  HWND hWnd;    // Storeage for window handle
 
   // Register Window style
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -254,8 +252,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpszClassName = lpszAppName;
 
   // Register the window class
-  if (RegisterClass(&wc) == 0)
-    return FALSE;
+  if (RegisterClass(&wc) == 0) return FALSE;
 
   // Create the main application window
   hWnd = CreateWindow(lpszAppName, lpszAppName,
@@ -267,8 +264,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       100, 100, 250, 250, NULL, NULL, hInstance, NULL);
 
   // If window was not created, quit
-  if (hWnd == NULL)
-    return FALSE;
+  if (hWnd == NULL) return FALSE;
 
   // Display the window
   ShowWindow(hWnd, SW_SHOW);
@@ -286,111 +282,110 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // Window procedure, handles all messages for this program
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
-  static HGLRC hRC; // Permenant Rendering context
-  static HDC hDC;   // Private GDI Device context
+  static HGLRC hRC;  // Permenant Rendering context
+  static HDC hDC;    // Private GDI Device context
 
   switch (message) {
-  // Window creation, setup for OpenGL
-  case WM_CREATE:
-    // Store the device context
-    hDC = GetDC(hWnd);
+    // Window creation, setup for OpenGL
+    case WM_CREATE:
+      // Store the device context
+      hDC = GetDC(hWnd);
 
-    // Select the pixel format
-    SetDCPixelFormat(hDC);
+      // Select the pixel format
+      SetDCPixelFormat(hDC);
 
-    // Create the rendering context and make it current
-    hRC = wglCreateContext(hDC);
-    wglMakeCurrent(hDC, hRC);
+      // Create the rendering context and make it current
+      hRC = wglCreateContext(hDC);
+      wglMakeCurrent(hDC, hRC);
 
-    // Create the palette
-    hPalette = GetOpenGLPalette(hDC);
+      // Create the palette
+      hPalette = GetOpenGLPalette(hDC);
 
-    SetupRC(hDC);
+      SetupRC(hDC);
 
-    break;
+      break;
 
-  // Window is being destroyed, cleanup
-  case WM_DESTROY:
-    // Kill the timer that we created
-    KillTimer(hWnd, 101);
+    // Window is being destroyed, cleanup
+    case WM_DESTROY:
+      // Kill the timer that we created
+      KillTimer(hWnd, 101);
 
-    glDeleteLists(nFontList, 128);
+      glDeleteLists(nFontList, 128);
 
-    // Deselect the current rendering context and delete it
-    wglMakeCurrent(hDC, NULL);
-    wglDeleteContext(hRC);
+      // Deselect the current rendering context and delete it
+      wglMakeCurrent(hDC, NULL);
+      wglDeleteContext(hRC);
 
-    // Delete the palette
-    if (hPalette != NULL)
-      DeleteObject(hPalette);
+      // Delete the palette
+      if (hPalette != NULL) DeleteObject(hPalette);
 
-    // Tell the application to terminate after the window
-    // is gone.
-    PostQuitMessage(0);
-    break;
+      // Tell the application to terminate after the window
+      // is gone.
+      PostQuitMessage(0);
+      break;
 
-  // Window is resized.
-  case WM_SIZE:
-    // Call our function which modifies the clipping
-    // volume and viewport
-    ChangeSize(LOWORD(lParam), HIWORD(lParam));
-    break;
+    // Window is resized.
+    case WM_SIZE:
+      // Call our function which modifies the clipping
+      // volume and viewport
+      ChangeSize(LOWORD(lParam), HIWORD(lParam));
+      break;
 
-  // The painting function.  This message sent by Windows
-  // whenever the screen needs updating.
-  case WM_PAINT: {
-    // Call OpenGL drawing code
-    RenderScene();
+    // The painting function.  This message sent by Windows
+    // whenever the screen needs updating.
+    case WM_PAINT: {
+      // Call OpenGL drawing code
+      RenderScene();
 
-    // Call function to swap the buffers
-    SwapBuffers(hDC);
+      // Call function to swap the buffers
+      SwapBuffers(hDC);
 
-    ValidateRect(hWnd, NULL);
-  } break;
+      ValidateRect(hWnd, NULL);
+    } break;
 
-  // Windows is telling the application that it may modify
-  // the system palette.  This message in essance asks the
-  // application for a new palette.
-  case WM_QUERYNEWPALETTE:
-    // If the palette was created.
-    if (hPalette) {
-      int nRet;
+    // Windows is telling the application that it may modify
+    // the system palette.  This message in essance asks the
+    // application for a new palette.
+    case WM_QUERYNEWPALETTE:
+      // If the palette was created.
+      if (hPalette) {
+        int nRet;
 
-      // Selects the palette into the current device context
-      SelectPalette(hDC, hPalette, FALSE);
+        // Selects the palette into the current device context
+        SelectPalette(hDC, hPalette, FALSE);
 
-      // Map entries from the currently selected palette to
-      // the system palette.  The return value is the number
-      // of palette entries modified.
-      nRet = RealizePalette(hDC);
+        // Map entries from the currently selected palette to
+        // the system palette.  The return value is the number
+        // of palette entries modified.
+        nRet = RealizePalette(hDC);
 
-      // Repaint, forces remap of palette in current window
-      InvalidateRect(hWnd, NULL, FALSE);
+        // Repaint, forces remap of palette in current window
+        InvalidateRect(hWnd, NULL, FALSE);
 
-      return nRet;
-    }
-    break;
+        return nRet;
+      }
+      break;
 
-  // This window may set the palette, even though it is not the
-  // currently active window.
-  case WM_PALETTECHANGED:
-    // Don't do anything if the palette does not exist, or if
-    // this is the window that changed the palette.
-    if ((hPalette != NULL) && ((HWND)wParam != hWnd)) {
-      // Select the palette into the device context
-      SelectPalette(hDC, hPalette, FALSE);
+    // This window may set the palette, even though it is not the
+    // currently active window.
+    case WM_PALETTECHANGED:
+      // Don't do anything if the palette does not exist, or if
+      // this is the window that changed the palette.
+      if ((hPalette != NULL) && ((HWND)wParam != hWnd)) {
+        // Select the palette into the device context
+        SelectPalette(hDC, hPalette, FALSE);
 
-      // Map entries to system palette
-      RealizePalette(hDC);
+        // Map entries to system palette
+        RealizePalette(hDC);
 
-      // Remap the current colors to the newly realized palette
-      UpdateColors(hDC);
-      return 0;
-    }
-    break;
+        // Remap the current colors to the newly realized palette
+        UpdateColors(hDC);
+        return 0;
+      }
+      break;
 
-  default: // Passes it on if unproccessed
-    return (DefWindowProc(hWnd, message, wParam, lParam));
+    default:  // Passes it on if unproccessed
+      return (DefWindowProc(hWnd, message, wParam, lParam));
   }
 
   return (0L);

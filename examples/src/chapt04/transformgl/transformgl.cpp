@@ -3,9 +3,9 @@
 // Demonstrates letting OpenGL do the transformations
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/math3d.h" // Math3D Library
+#include "../../shared/math3d.h"  // Math3D Library
 
 #include <math.h>
 
@@ -13,7 +13,7 @@
 void RenderScene(void) {
   M3DMatrix44f rotationMatrix, translationMatrix, transformationMatrix;
 
-  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  static GLfloat yRot = 0.0f;  // Rotation angle for animation
   yRot += 0.5f;
 
   // Clear the window with current clearing color
@@ -58,8 +58,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

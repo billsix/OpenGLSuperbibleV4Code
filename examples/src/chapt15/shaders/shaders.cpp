@@ -17,10 +17,9 @@
 #include <GL/freeglut.h>
 #endif
 
-
 #undef FREEGLUT_VERSION_2_0
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
 GLboolean useVertexShader = GL_TRUE;
@@ -53,15 +52,13 @@ void Link(GLboolean firstTime) {
     exit(0);
   }
 
-  if (firstTime)
-    glUseProgram(progObj);
+  if (firstTime) glUseProgram(progObj);
 
   // Find out where the flicker constant lives
   flickerLocation = glGetUniformLocation(progObj, "flickerFactor");
 
   // Initially set the blink parameter to 1 (no flicker)
-  if (flickerLocation != -1)
-    glUniform1f(flickerLocation, 1.0f);
+  if (flickerLocation != -1) glUniform1f(flickerLocation, 1.0f);
 
   // Program object has changed, so we should revalidate
   needsValidation = GL_TRUE;
@@ -78,8 +75,7 @@ void my_display_code() {
   // 1. Show the big demo window (Most of the sample code is in
   // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
   // ImGui!).
-  if (show_demo_window)
-    ImGui::ShowDemoWindow(&show_demo_window);
+  if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
 
   // 2. Show a simple window that we create ourselves. We use a Begin/End pair
   // to created a named window.
@@ -116,7 +112,7 @@ void my_display_code() {
 // Called to draw scene objects
 void DrawModels(void) {
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -189,10 +185,8 @@ void RenderScene(void) {
   if (doBlink && (flickerLocation != -1)) {
     // Pick a random flicker factor
     flickerFactor += ((((GLfloat)rand()) / ((GLfloat)RAND_MAX)) - 0.5f) * 0.1f;
-    if (flickerFactor > 1.0f)
-      flickerFactor = 1.0f;
-    if (flickerFactor < 0.0f)
-      flickerFactor = 0.0f;
+    if (flickerFactor > 1.0f) flickerFactor = 1.0f;
+    if (flickerFactor < 0.0f) flickerFactor = 0.0f;
     glUniform1f(flickerLocation, flickerFactor);
   }
 
@@ -250,8 +244,7 @@ void RenderScene(void) {
   // Flush drawing commands
   glutSwapBuffers();
 
-  if (doBlink && (flickerLocation != -1))
-    glutPostRedisplay();
+  if (doBlink && (flickerLocation != -1)) glutPostRedisplay();
 }
 
 ///////////////////////////////////////////////////////////
@@ -290,17 +283,18 @@ void SetupRC() {
       "    gl_FrontSecondaryColor = (ndc * 0.5) + 0.5;\n"
       "}\n";
 
-  GLchar fsString[] = "uniform float flickerFactor;\n"
-                      "\n"
-                      "void main(void)\n"
-                      "{\n"
-                      "    // Mix primary and secondary colors, 50/50\n"
-                      "    vec4 temp = mix(gl_Color, "
-                      "vec4(vec3(gl_SecondaryColor), 1.0), 0.5);\n"
-                      "\n"
-                      "    // Multiply by flicker factor\n"
-                      "    gl_FragColor = temp * flickerFactor;\n"
-                      "}\n";
+  GLchar fsString[] =
+      "uniform float flickerFactor;\n"
+      "\n"
+      "void main(void)\n"
+      "{\n"
+      "    // Mix primary and secondary colors, 50/50\n"
+      "    vec4 temp = mix(gl_Color, "
+      "vec4(vec3(gl_SecondaryColor), 1.0), 0.5);\n"
+      "\n"
+      "    // Multiply by flicker factor\n"
+      "    gl_FragColor = temp * flickerFactor;\n"
+      "}\n";
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
@@ -369,55 +363,53 @@ void SetupRC() {
 
   // Create program object, attach shaders, then link
   progObj = glCreateProgram();
-  if (useVertexShader)
-    glAttachShader(progObj, vShader);
-  if (useFragmentShader)
-    glAttachShader(progObj, fShader);
+  if (useVertexShader) glAttachShader(progObj, vShader);
+  if (useFragmentShader) glAttachShader(progObj, fShader);
 
   Link(GL_TRUE);
 }
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    useVertexShader = !useVertexShader;
-    if (useVertexShader) {
-      glutChangeToMenuEntry(1, "Toggle vertex shader (currently ON)", 1);
-      glAttachShader(progObj, vShader);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle vertex shader (currently OFF)", 1);
-      glDetachShader(progObj, vShader);
-    }
+    case 1:
+      useVertexShader = !useVertexShader;
+      if (useVertexShader) {
+        glutChangeToMenuEntry(1, "Toggle vertex shader (currently ON)", 1);
+        glAttachShader(progObj, vShader);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle vertex shader (currently OFF)", 1);
+        glDetachShader(progObj, vShader);
+      }
 
-    Relink();
-    break;
+      Relink();
+      break;
 
-  case 2:
-    useFragmentShader = !useFragmentShader;
-    if (useFragmentShader) {
-      glutChangeToMenuEntry(2, "Toggle fragment shader (currently ON)", 2);
-      glAttachShader(progObj, fShader);
-    } else {
-      glutChangeToMenuEntry(2, "Toggle fragment shader (currently OFF)", 2);
-      glDetachShader(progObj, fShader);
-    }
+    case 2:
+      useFragmentShader = !useFragmentShader;
+      if (useFragmentShader) {
+        glutChangeToMenuEntry(2, "Toggle fragment shader (currently ON)", 2);
+        glAttachShader(progObj, fShader);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle fragment shader (currently OFF)", 2);
+        glDetachShader(progObj, fShader);
+      }
 
-    Relink();
-    break;
+      Relink();
+      break;
 
-  case 3:
-    doBlink = !doBlink;
-    if (doBlink) {
-      glutChangeToMenuEntry(3, "Toggle flicker (currently ON)", 3);
-    } else {
-      glutChangeToMenuEntry(3, "Toggle flicker (currently OFF)", 3);
-    }
-    if (!doBlink && (flickerLocation != -1))
-      glUniform1f(flickerLocation, 1.0f);
-    break;
+    case 3:
+      doBlink = !doBlink;
+      if (doBlink) {
+        glutChangeToMenuEntry(3, "Toggle flicker (currently ON)", 3);
+      } else {
+        glutChangeToMenuEntry(3, "Toggle flicker (currently OFF)", 3);
+      }
+      if (!doBlink && (flickerLocation != -1))
+        glUniform1f(flickerLocation, 1.0f);
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -428,31 +420,31 @@ void KeyPressFunc(unsigned char key, int x, int y) {
   ImGui_ImplGLUT_KeyboardFunc(key, x, y);
 
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
 #ifdef FREEGLUT_VERSION_2_0
-    glutLeaveMainLoop();
+      glutLeaveMainLoop();
 #else
-    exit(0);
+      exit(0);
 #endif
   }
 
@@ -463,20 +455,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 void SpecialKeys(int key, int x, int y) {
   ImGui_ImplGLUT_SpecialFunc(key, x, y);
   switch (key) {
-  case GLUT_KEY_LEFT:
-    cameraPos[0] -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    cameraPos[0] += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      cameraPos[0] -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      cameraPos[0] += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window

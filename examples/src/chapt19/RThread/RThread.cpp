@@ -19,22 +19,22 @@
 // typedef int (APIENTRY * PFNWGLSWAPINTERVALEXTPROC) (int);
 // PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 
-static HGLRC hRC = NULL; // Permenant Rendering context
-static HDC hDC = NULL;   // Private GDI Device context
+static HGLRC hRC = NULL;  // Permenant Rendering context
+static HDC hDC = NULL;    // Private GDI Device context
 static HWND hMainWindow = NULL;
 static GLUquadricObj *pSphere = NULL;
 
 // Shared rendering state information
 struct RENDER_STATE {
-  unsigned int uiFrames; // Running Frame count
-  BOOL bResize;          // Flag that window was resized
-  BOOL bTerminate;       // Flag to terminate rendering loop
-  BOOL bFatalError;      // Fatal error has occured in render thread
-  BOOL bModifyFlag;      // Flag set whenever something changes
+  unsigned int uiFrames;  // Running Frame count
+  BOOL bResize;           // Flag that window was resized
+  BOOL bTerminate;        // Flag to terminate rendering loop
+  BOOL bFatalError;       // Fatal error has occured in render thread
+  BOOL bModifyFlag;       // Flag set whenever something changes
 };
 
-CRITICAL_SECTION csThreadSafe;    // Critical section
-struct RENDER_STATE rsRenderData; // Communication between threads
+CRITICAL_SECTION csThreadSafe;     // Critical section
+struct RENDER_STATE rsRenderData;  // Communication between threads
 
 // Rendering Thread Entry Point
 void RenderingThreadEntryPoint(void *pVoid);
@@ -50,8 +50,8 @@ void SetDCPixelFormat(HDC hDC);
 ///////////////////////////////////////////////////////////////////////////////
 // Load a Bitmaps bits from a resource file. Only works with 24-bit images
 BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
-  HINSTANCE hInstance; // Instance Handle
-  HANDLE hBitmap;      // Handle to bitmap resource
+  HINSTANCE hInstance;  // Instance Handle
+  HANDLE hBitmap;       // Handle to bitmap resource
   BITMAPINFO bmInfo;
   BYTE *pData;
 
@@ -59,8 +59,7 @@ BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
   hInstance = GetModuleHandle(NULL);
   hBitmap = LoadBitmap(hInstance, MAKEINTRESOURCE(nResource));
 
-  if (hBitmap == NULL)
-    return NULL;
+  if (hBitmap == NULL) return NULL;
 
   GetObject(hBitmap, sizeof(BITMAPINFO), &bmInfo);
   DeleteObject(hBitmap);
@@ -69,14 +68,13 @@ BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
       hInstance,
       FindResource(hInstance, MAKEINTRESOURCE(nResource), RT_BITMAP));
 
-  if (hBitmap == NULL)
-    return NULL;
+  if (hBitmap == NULL) return NULL;
 
   pData = (BYTE *)LockResource(hBitmap);
   pData += sizeof(BITMAPINFO) - 1;
 
-  *nWidth = bmInfo.bmiHeader.biWidth;   // bm.bmWidth;
-  *nHeight = bmInfo.bmiHeader.biHeight; // bm.bmHeight;
+  *nWidth = bmInfo.bmiHeader.biWidth;    // bm.bmWidth;
+  *nHeight = bmInfo.bmiHeader.biHeight;  // bm.bmHeight;
 
   return pData;
 }
@@ -86,8 +84,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -125,12 +122,10 @@ BOOL CheckStates() {
 
   if (rsRenderData.bModifyFlag) {
     // Flag set to terminate
-    if (rsRenderData.bTerminate)
-      bRet = TRUE;
+    if (rsRenderData.bTerminate) bRet = TRUE;
 
     // Window resized
-    if (rsRenderData.bResize)
-      ResetViewport();
+    if (rsRenderData.bResize) ResetViewport();
 
     // Reset the modify flag and exit
     rsRenderData.bModifyFlag = FALSE;
@@ -199,34 +194,34 @@ void SetDCPixelFormat(HDC hDC) {
   int nPixelFormat;
 
   static PIXELFORMATDESCRIPTOR pfd = {
-      sizeof(PIXELFORMATDESCRIPTOR), // Size of this structure
-      1,                             // Version of this structure
-      PFD_DRAW_TO_WINDOW |           // Draw to Window (not to bitmap)
-          PFD_SUPPORT_OPENGL |       // Support OpenGL calls in window
-          PFD_DOUBLEBUFFER,          // Double buffered mode
-      PFD_TYPE_RGBA,                 // RGBA Color mode
-      32,                            // Want 32 bit color
+      sizeof(PIXELFORMATDESCRIPTOR),  // Size of this structure
+      1,                              // Version of this structure
+      PFD_DRAW_TO_WINDOW |            // Draw to Window (not to bitmap)
+          PFD_SUPPORT_OPENGL |        // Support OpenGL calls in window
+          PFD_DOUBLEBUFFER,           // Double buffered mode
+      PFD_TYPE_RGBA,                  // RGBA Color mode
+      32,                             // Want 32 bit color
       0,
-      0,
-      0,
-      0,
-      0,
-      0, // Not used to select mode
-      0,
-      0, // Not used to select mode
       0,
       0,
       0,
       0,
       0,  // Not used to select mode
-      16, // Size of depth buffer
-      0,  // Not used to select mode
-      0,  // Not used to select mode
-      0,  // Not used to select mode
+      0,
       0,  // Not used to select mode
       0,
       0,
-      0}; // Not used to select mode
+      0,
+      0,
+      0,   // Not used to select mode
+      16,  // Size of depth buffer
+      0,   // Not used to select mode
+      0,   // Not used to select mode
+      0,   // Not used to select mode
+      0,   // Not used to select mode
+      0,
+      0,
+      0};  // Not used to select mode
 
   // Choose a pixel format that best matches that described in pfd
   nPixelFormat = ChoosePixelFormat(hDC, &pfd);
@@ -238,9 +233,9 @@ void SetDCPixelFormat(HDC hDC) {
 // Entry point of all Windows programs
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow) {
-  MSG msg;     // Windows message structure
-  WNDCLASS wc; // Windows class structure
-  HWND hWnd;   // Storeage for window handle
+  MSG msg;      // Windows message structure
+  WNDCLASS wc;  // Windows class structure
+  HWND hWnd;    // Storeage for window handle
 
   // Register Window style
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -258,8 +253,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpszClassName = lpszAppName;
 
   // Register the window class
-  if (RegisterClass(&wc) == 0)
-    return FALSE;
+  if (RegisterClass(&wc) == 0) return FALSE;
 
   // Create the main application window
   hWnd = CreateWindow(lpszAppName, lpszAppName,
@@ -271,8 +265,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       100, 100, 400, 400, NULL, NULL, hInstance, NULL);
 
   // If window was not created, quit
-  if (hWnd == NULL)
-    return FALSE;
+  if (hWnd == NULL) return FALSE;
 
   // Display the window
   ShowWindow(hWnd, SW_SHOW);
@@ -296,60 +289,60 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
   static int nLastFrames = 0;
 
   switch (message) {
-  // Window creation, setup for OpenGL
-  case WM_CREATE:
-    // Store the device context
-    hDC = GetDC(hWnd);
+    // Window creation, setup for OpenGL
+    case WM_CREATE:
+      // Store the device context
+      hDC = GetDC(hWnd);
 
-    // Initialize the critical section
-    InitializeCriticalSection(&csThreadSafe);
+      // Initialize the critical section
+      InitializeCriticalSection(&csThreadSafe);
 
-    // Initialize interthread communication
-    rsRenderData.uiFrames = 0;
-    rsRenderData.bResize = FALSE;
-    rsRenderData.bTerminate = FALSE;
-    rsRenderData.bFatalError = FALSE;
-    rsRenderData.bModifyFlag = TRUE;
+      // Initialize interthread communication
+      rsRenderData.uiFrames = 0;
+      rsRenderData.bResize = FALSE;
+      rsRenderData.bTerminate = FALSE;
+      rsRenderData.bFatalError = FALSE;
+      rsRenderData.bModifyFlag = TRUE;
 
-    // Create the rendering thread
-    hThreadHandle = (HANDLE)_beginthread(RenderingThreadEntryPoint, 0, hDC);
-    break;
+      // Create the rendering thread
+      hThreadHandle = (HANDLE)_beginthread(RenderingThreadEntryPoint, 0, hDC);
+      break;
 
-  // Tell the application to terminate after the window
-  // is gone.
-  case WM_DESTROY: {
-    // Tell the rendering loop to terminate itself
-    EnterCriticalSection(&csThreadSafe);
-    rsRenderData.bTerminate = TRUE;
-    rsRenderData.bModifyFlag = TRUE;
-    LeaveCriticalSection(&csThreadSafe);
+    // Tell the application to terminate after the window
+    // is gone.
+    case WM_DESTROY: {
+      // Tell the rendering loop to terminate itself
+      EnterCriticalSection(&csThreadSafe);
+      rsRenderData.bTerminate = TRUE;
+      rsRenderData.bModifyFlag = TRUE;
+      LeaveCriticalSection(&csThreadSafe);
 
-    // Need to wait for rendering thread to terminate so it can clean
-    // up. Wait for the thread handle to become signaled. Give it five
-    // seconds, then terminate anyway if it hasn't yet (it's probably
-    // stuck if it hasn't terminated by now)
-    WaitForSingleObject(hThreadHandle, 5000);
+      // Need to wait for rendering thread to terminate so it can clean
+      // up. Wait for the thread handle to become signaled. Give it five
+      // seconds, then terminate anyway if it hasn't yet (it's probably
+      // stuck if it hasn't terminated by now)
+      WaitForSingleObject(hThreadHandle, 5000);
 
-    DeleteCriticalSection(&csThreadSafe);
+      DeleteCriticalSection(&csThreadSafe);
 
-    ReleaseDC(hWnd, hDC);
-    PostQuitMessage(0);
-  } break;
+      ReleaseDC(hWnd, hDC);
+      PostQuitMessage(0);
+    } break;
 
-  case WM_MOVE:
-  case WM_SIZE:
-    EnterCriticalSection(&csThreadSafe);
-    rsRenderData.bResize = TRUE;
-    rsRenderData.bModifyFlag = TRUE;
-    LeaveCriticalSection(&csThreadSafe);
-    break;
+    case WM_MOVE:
+    case WM_SIZE:
+      EnterCriticalSection(&csThreadSafe);
+      rsRenderData.bResize = TRUE;
+      rsRenderData.bModifyFlag = TRUE;
+      LeaveCriticalSection(&csThreadSafe);
+      break;
 
-  case WM_ERASEBKGND:
-    return 1L; // Return handled to prevent erasing background
-    break;
+    case WM_ERASEBKGND:
+      return 1L;  // Return handled to prevent erasing background
+      break;
 
-  default: // Passes it on if unproccessed
-    return (DefWindowProc(hWnd, message, wParam, lParam));
+    default:  // Passes it on if unproccessed
+      return (DefWindowProc(hWnd, message, wParam, lParam));
   }
 
   return (0L);
@@ -363,8 +356,7 @@ void RenderingThreadEntryPoint(void *pVoid) {
 
   while (1) {
     // Check rendering state info, terminate if flagged
-    if (CheckStates())
-      break;
+    if (CheckStates()) break;
 
     RenderScene();
 
@@ -380,5 +372,5 @@ void RenderingThreadEntryPoint(void *pVoid) {
   wglMakeCurrent(hDC, NULL);
   wglDeleteContext(hRC);
 
-  _endthread(); // Terminate the thread nicely
+  _endthread();  // Terminate the thread nicely
 }

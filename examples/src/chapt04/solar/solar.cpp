@@ -4,7 +4,7 @@
 // and perspective
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -52,18 +52,16 @@ void RenderScene(void) {
   glRotatef(fMoonRot, 0.0f, 1.0f, 0.0f);
   glTranslatef(30.0f, 0.0f, 0.0f);
   fMoonRot += 15.0f;
-  if (fMoonRot > 360.0f)
-    fMoonRot = 0.0f;
+  if (fMoonRot > 360.0f) fMoonRot = 0.0f;
 
   glutSolidSphere(6.0f, 30, 17);
 
   // Restore the matrix state
-  glPopMatrix(); // Modelview matrix
+  glPopMatrix();  // Modelview matrix
 
   // Step earth orbit 5 degrees
   fEarthRot += 5.0f;
-  if (fEarthRot > 360.0f)
-    fEarthRot = 0.0f;
+  if (fEarthRot > 360.0f) fEarthRot = 0.0f;
 
   // Show the image
   glutSwapBuffers();
@@ -73,9 +71,9 @@ void RenderScene(void) {
 // context.
 void SetupRC() {
   // Light values and coordinates
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -105,8 +103,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

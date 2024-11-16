@@ -3,9 +3,9 @@
 // Demonstrates convolution via fragment shaders
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -19,24 +19,24 @@
 #define PREWITT 7
 #define TOTAL_SHADERS 8
 
-GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS]; // shader object names
+GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
 char *shaderNames[TOTAL_SHADERS] = {"passthrough", "blur",    "sharpen",
                                     "dilation",    "erosion", "laplacian",
                                     "sobel",       "prewitt"};
 
-GLint whichShader = PASS_THROUGH; // current shader
+GLint whichShader = PASS_THROUGH;  // current shader
 
 GLboolean npotTexturesAvailable = GL_FALSE;
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 512;
-GLint textureWidth = 1024; // texture size
+GLint textureWidth = 1024;  // texture size
 GLint textureHeight = 512;
 
-GLint mainMenu, shaderMenu, passMenu; // menu handles
+GLint mainMenu, shaderMenu, passMenu;  // menu handles
 
-GLint maxTexSize; // maximum allowed size for 1D/2D texture
+GLint maxTexSize;  // maximum allowed size for 1D/2D texture
 
 GLfloat cameraPos[] = {100.0f, 75.0f, 150.0f, 1.0f};
 GLdouble cameraZoom = 0.3;
@@ -148,7 +148,7 @@ void DrawModels(void) {
   glPopMatrix();
 
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -286,8 +286,7 @@ void RenderScene(void) {
 
   glUseProgram(0);
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -315,16 +314,18 @@ void SetupRC() {
     fprintf(
         stderr,
         "Neither OpenGL 2.0 nor GL_ARB_texture_non_power_of_two extension\n");
-    fprintf(stderr, "is available!  Shadow map will be lower resolution (lower "
-                    "quality).\n\n");
+    fprintf(stderr,
+            "is available!  Shadow map will be lower resolution (lower "
+            "quality).\n\n");
     Sleep(2000);
   }
 
   // Make sure we have multitexture and cube maps!
   if (!GLEE_VERSION_1_3 &&
       (!GLEE_ARB_multitexture || !GLEE_ARB_texture_cube_map)) {
-    fprintf(stderr, "Neither OpenGL 1.3 nor necessary"
-                    " extensions are available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.3 nor necessary"
+            " extensions are available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -369,30 +370,30 @@ void SetupRC() {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-    numPasses = value;
-    {
-      char menuEntry[128];
-      sprintf(menuEntry, "Choose number of passes (currently %d)", numPasses);
-      glutSetMenu(mainMenu);
-      glutChangeToSubMenu(2, menuEntry, passMenu);
-    }
-    break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      numPasses = value;
+      {
+        char menuEntry[128];
+        sprintf(menuEntry, "Choose number of passes (currently %d)", numPasses);
+        glutSetMenu(mainMenu);
+        glutChangeToSubMenu(2, menuEntry, passMenu);
+      }
+      break;
 
-  default:
-    whichShader = value - 6;
-    {
-      char menuEntry[128];
-      sprintf(menuEntry, "Choose fragment shader (currently \"%s\")",
-              shaderNames[whichShader]);
-      glutSetMenu(mainMenu);
-      glutChangeToSubMenu(1, menuEntry, shaderMenu);
-    }
-    break;
+    default:
+      whichShader = value - 6;
+      {
+        char menuEntry[128];
+        sprintf(menuEntry, "Choose fragment shader (currently \"%s\")",
+                shaderNames[whichShader]);
+        glutSetMenu(mainMenu);
+        glutChangeToSubMenu(1, menuEntry, shaderMenu);
+      }
+      break;
   }
 
   // Refresh the Window
@@ -401,28 +402,28 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -431,20 +432,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    lightRotation -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    lightRotation += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[1] += 5.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[1] -= 5.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      lightRotation -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      lightRotation += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[1] += 5.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[1] -= 5.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -464,14 +465,12 @@ void ChangeSize(int w, int h) {
 
     // Try each width until we get one that's too big
     i = 0;
-    while ((1 << i) <= textureWidth)
-      i++;
+    while ((1 << i) <= textureWidth) i++;
     textureWidth = (1 << (i - 1));
 
     // Now for height
     i = 0;
-    while ((1 << i) <= textureHeight)
-      i++;
+    while ((1 << i) <= textureHeight) i++;
     textureHeight = (1 << (i - 1));
   }
 

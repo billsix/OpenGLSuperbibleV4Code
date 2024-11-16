@@ -3,7 +3,7 @@
 // Demonstrates Imaging Operations
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -43,7 +43,7 @@ void ShutdownRC(void) {
 void ProcessMenu(int value) {
   // For historgram, do not change render mode, just set
   // histogram flag to true
-  if (value == 6) // Histogram
+  if (value == 6)  // Histogram
   {
     bHistogram = GL_TRUE;
     glutPostRedisplay();
@@ -64,11 +64,11 @@ void ProcessMenu(int value) {
 ///////////////////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void) {
-  GLint i;            // Looping variable
-  GLint iViewport[4]; // Viewport
-  GLint iLargest;     // Largest histogram value
+  GLint i;             // Looping variable
+  GLint iViewport[4];  // Viewport
+  GLint iLargest;      // Largest histogram value
 
-  static GLubyte invertTable[256][3]; // Inverted color table
+  static GLubyte invertTable[256][3];  // Inverted color table
 
   // Do a black and white scaling
   static GLfloat lumMat[16] = {0.30f, 0.30f, 0.30f, 0.0f,  0.59f, 0.59f,
@@ -85,7 +85,7 @@ void RenderScene(void) {
                                   {0.0f, -1.0f, 0.0f},
                                   {0.0f, 0.0f, -1.0f}};
 
-  static GLint histoGram[256]; // Storeage for histogram statistics
+  static GLint histoGram[256];  // Storeage for histogram statistics
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT);
@@ -96,7 +96,7 @@ void RenderScene(void) {
   glPixelZoom((GLfloat)iViewport[2] / (GLfloat)iWidth,
               (GLfloat)iViewport[3] / (GLfloat)iHeight);
 
-  if (bHistogram == GL_TRUE) // Collect Historgram data
+  if (bHistogram == GL_TRUE)  // Collect Historgram data
   {
     // We are collecting luminance data, use our conversion formula
     // instead of OpenGL's (which just adds color components together)
@@ -111,43 +111,43 @@ void RenderScene(void) {
 
   // Do image operation, depending on rendermode index
   switch (iRenderMode) {
-  case 5: // Sharpen image
-    glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
-                          GL_FLOAT, mSharpen);
-    glEnable(GL_CONVOLUTION_2D);
-    break;
+    case 5:  // Sharpen image
+      glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
+                            GL_FLOAT, mSharpen);
+      glEnable(GL_CONVOLUTION_2D);
+      break;
 
-  case 4: // Emboss image
-    glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
-                          GL_FLOAT, mEmboss);
-    glEnable(GL_CONVOLUTION_2D);
-    glMatrixMode(GL_COLOR);
-    glLoadMatrixf(lumMat);
-    glMatrixMode(GL_MODELVIEW);
-    break;
+    case 4:  // Emboss image
+      glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
+                            GL_FLOAT, mEmboss);
+      glEnable(GL_CONVOLUTION_2D);
+      glMatrixMode(GL_COLOR);
+      glLoadMatrixf(lumMat);
+      glMatrixMode(GL_MODELVIEW);
+      break;
 
-  case 3: // Invert Image
-    for (i = 0; i < 255; i++) {
-      invertTable[i][0] = (GLubyte)(255 - i);
-      invertTable[i][1] = (GLubyte)(255 - i);
-      invertTable[i][2] = (GLubyte)(255 - i);
-    }
+    case 3:  // Invert Image
+      for (i = 0; i < 255; i++) {
+        invertTable[i][0] = (GLubyte)(255 - i);
+        invertTable[i][1] = (GLubyte)(255 - i);
+        invertTable[i][2] = (GLubyte)(255 - i);
+      }
 
-    glColorTable(GL_COLOR_TABLE, GL_RGB, 256, GL_RGB, GL_UNSIGNED_BYTE,
-                 invertTable);
-    glEnable(GL_COLOR_TABLE);
-    break;
+      glColorTable(GL_COLOR_TABLE, GL_RGB, 256, GL_RGB, GL_UNSIGNED_BYTE,
+                   invertTable);
+      glEnable(GL_COLOR_TABLE);
+      break;
 
-  case 2: // Brighten Image
-    glMatrixMode(GL_COLOR);
-    glScalef(1.25f, 1.25f, 1.25f);
-    glMatrixMode(GL_MODELVIEW);
-    break;
+    case 2:  // Brighten Image
+      glMatrixMode(GL_COLOR);
+      glScalef(1.25f, 1.25f, 1.25f);
+      glMatrixMode(GL_MODELVIEW);
+      break;
 
-  case 1: // Just do a plain old image copy
-  default:
-    // This line intentially left blank
-    break;
+    case 1:  // Just do a plain old image copy
+    default:
+      // This line intentially left blank
+      break;
   }
 
   // Do the pixel draw
@@ -161,8 +161,7 @@ void RenderScene(void) {
     // Find largest value for scaling graph down
     iLargest = 0;
     for (i = 0; i < 255; i++)
-      if (iLargest < histoGram[i])
-        iLargest = histoGram[i];
+      if (iLargest < histoGram[i]) iLargest = histoGram[i];
 
     // White lines
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -190,8 +189,7 @@ void RenderScene(void) {
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 
@@ -236,11 +234,11 @@ int main(int argc, char *argv[]) {
 
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 
-  SetupRC(); // Do setup
+  SetupRC();  // Do setup
 
-  glutMainLoop(); // Main program loop
+  glutMainLoop();  // Main program loop
 
-  ShutdownRC(); // Do shutdown
+  ShutdownRC();  // Do shutdown
 
   return 0;
 }

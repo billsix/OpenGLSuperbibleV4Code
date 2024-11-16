@@ -3,30 +3,30 @@
 // Demonstrates environment mapping with FBOs
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/stopwatch.h" // General purpose stop watch class
+#include "../../shared/stopwatch.h"  // General purpose stop watch class
 
 #include <assert.h>
 
 #include <stdio.h>
 
 GLboolean npotTexturesAvailable = GL_FALSE;
-GLboolean useEnvMap = GL_TRUE;   // just basemap
-GLboolean showEnvMap = GL_FALSE; // show the envmap texture
-GLboolean useFBO = GL_FALSE;     // Use FBO texture image for envmap
+GLboolean useEnvMap = GL_TRUE;    // just basemap
+GLboolean showEnvMap = GL_FALSE;  // show the envmap texture
+GLboolean useFBO = GL_FALSE;      // Use FBO texture image for envmap
 
-GLint windowWidth = 512; // window size
+GLint windowWidth = 512;  // window size
 GLint windowHeight = 512;
 
-GLint envMapSize = 512;  // set based on window size
-GLuint wallTextureID[5]; // textures for walls + 1 for displaying envmap
-GLuint envMapTextureID;  // envmap name
-GLint maxCubeTexSize;    // maximum allowed size for cube map texture
+GLint envMapSize = 512;   // set based on window size
+GLuint wallTextureID[5];  // textures for walls + 1 for displaying envmap
+GLuint envMapTextureID;   // envmap name
+GLint maxCubeTexSize;     // maximum allowed size for cube map texture
 
-GLuint framebufferID;      // FBO name
-GLuint renderbufferID;     // renderbuffer object name
-GLint maxRenderbufferSize; // maximum allowed size for FBO renderbuffer
+GLuint framebufferID;       // FBO name
+GLuint renderbufferID;      // renderbuffer object name
+GLint maxRenderbufferSize;  // maximum allowed size for FBO renderbuffer
 
 GLfloat ambientLight[] = {0.4f, 0.4f, 0.4f, 1.0f};
 GLfloat diffuseLight[] = {0.6f, 0.6f, 0.6f, 1.0f};
@@ -36,12 +36,12 @@ GLfloat lightPos[] = {0.0f, 125.0f, 0.0f, 1.0f};
 GLfloat cameraPos[] = {50.0f, 50.0f, 100.0f, 1.0f};
 GLdouble cameraZoom = 1.5;
 
-GLfloat animationAngle = 0.0f; // used to spin objects
+GLfloat animationAngle = 0.0f;  // used to spin objects
 
 // Called to draw scene objects
 void DrawModels(GLboolean drawTeapot) {
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -104,7 +104,7 @@ void DrawModels(GLboolean drawTeapot) {
   glDisable(GL_TEXTURE_2D);
 
   // Draw ceiling
-  glColor3f(1.0f, 0.6f, 0.6f); // pale red
+  glColor3f(1.0f, 0.6f, 0.6f);  // pale red
   glNormal3f(0.0f, -1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, 125.0f, -100.0f);
@@ -209,8 +209,7 @@ void RegenerateEnvMap(void) {
   gluPerspective(90.0f, 1.0f, 1.0f, 125.0f);
   glViewport(0, 0, envMapSize, envMapSize);
 
-  if (useFBO)
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
+  if (useFBO) glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
 
   for (GLenum i = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
        i < GL_TEXTURE_CUBE_MAP_POSITIVE_X + 6; i++) {
@@ -218,33 +217,33 @@ void RegenerateEnvMap(void) {
     glLoadIdentity();
 
     switch (i) {
-    case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-      // +X
-      gluLookAt(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
-      break;
-    case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-      // -X
-      gluLookAt(0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
-      break;
-    case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-      // +Y
-      gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-      break;
-    case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-      // -Y
-      gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f);
-      break;
-    case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      // +Z
-      gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f);
-      break;
-    case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-      // -Z
-      gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
-      break;
-    default:
-      assert(0);
-      break;
+      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        // +X
+        gluLookAt(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
+        break;
+      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        // -X
+        gluLookAt(0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
+        break;
+      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        // +Y
+        gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        break;
+      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        // -Y
+        gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f);
+        break;
+      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        // +Z
+        gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f);
+        break;
+      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+        // -Z
+        gluLookAt(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
+        break;
+      default:
+        assert(0);
+        break;
     }
 
     if (useFBO)
@@ -274,8 +273,8 @@ void RegenerateEnvMap(void) {
 
 // Called to draw scene
 void RenderScene(void) {
-  static int iFrames = 0;       // Frame count
-  static CStopWatch frameTimer; // Render time
+  static int iFrames = 0;        // Frame count
+  static CStopWatch frameTimer;  // Render time
 
   // Reset the stopwatch on first time
   if (iFrames == 0) {
@@ -285,12 +284,10 @@ void RenderScene(void) {
 
   // spin objects
   animationAngle += 1.0f;
-  if (animationAngle == 360.0f)
-    animationAngle = 0.0f;
+  if (animationAngle == 360.0f) animationAngle = 0.0f;
 
   // generate the environment map
-  if (useEnvMap)
-    RegenerateEnvMap();
+  if (useEnvMap) RegenerateEnvMap();
 
   // Track camera angle
   glMatrixMode(GL_PROJECTION);
@@ -306,18 +303,12 @@ void RenderScene(void) {
   }
 
   // Keep the camera inside the room
-  if (cameraPos[0] > 99.0f)
-    cameraPos[0] = 99.0f;
-  if (cameraPos[0] < -99.0f)
-    cameraPos[0] = -99.0f;
-  if (cameraPos[1] > 120.0f)
-    cameraPos[1] = 120.0f;
-  if (cameraPos[1] < -20.0f)
-    cameraPos[1] = -20.0f;
-  if (cameraPos[2] > 99.0f)
-    cameraPos[2] = 99.0f;
-  if (cameraPos[2] < -99.0f)
-    cameraPos[2] = -99.0f;
+  if (cameraPos[0] > 99.0f) cameraPos[0] = 99.0f;
+  if (cameraPos[0] < -99.0f) cameraPos[0] = -99.0f;
+  if (cameraPos[1] > 120.0f) cameraPos[1] = 120.0f;
+  if (cameraPos[1] < -20.0f) cameraPos[1] = -20.0f;
+  if (cameraPos[2] > 99.0f) cameraPos[2] = 99.0f;
+  if (cameraPos[2] < -99.0f) cameraPos[2] = -99.0f;
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -358,27 +349,27 @@ void RenderScene(void) {
 
       // position the cube face for display
       switch (i) {
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-        glTranslatef(0.25f, 0.0f, 0.0f);
-        break;
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-        glTranslatef(-0.75f, 0.0f, 0.0f);
-        break;
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-        glTranslatef(-0.25f, -0.5f, 0.0f);
-        break;
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-        glTranslatef(-0.25f, 0.5f, 0.0f);
-        break;
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-        glTranslatef(-0.25f, 0.0f, 0.0f);
-        break;
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        glTranslatef(+0.75f, 0.0f, 0.0f);
-        break;
-      default:
-        assert(0);
-        break;
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+          glTranslatef(0.25f, 0.0f, 0.0f);
+          break;
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+          glTranslatef(-0.75f, 0.0f, 0.0f);
+          break;
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+          glTranslatef(-0.25f, -0.5f, 0.0f);
+          break;
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+          glTranslatef(-0.25f, 0.5f, 0.0f);
+          break;
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+          glTranslatef(-0.25f, 0.0f, 0.0f);
+          break;
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+          glTranslatef(+0.75f, 0.0f, 0.0f);
+          break;
+        default:
+          assert(0);
+          break;
       }
 
       glScalef(0.25f, 0.25f, 0.25f);
@@ -411,8 +402,7 @@ void RenderScene(void) {
     DrawModels(GL_TRUE);
   }
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -447,20 +437,20 @@ void SetupTextures(void) {
 
   for (int i = 0; i < 4; i++) {
     switch (i) {
-    case 0:
-      texels = gltLoadTGA("WRHS.tga", &w, &h, &c, &format);
-      break;
-    case 1:
-      texels = gltLoadTGA("MAMS.tga", &w, &h, &c, &format);
-      break;
-    case 2:
-      texels = gltLoadTGA("WPI.tga", &w, &h, &c, &format);
-      break;
-    case 3:
-      texels = gltLoadTGA("Babson.tga", &w, &h, &c, &format);
-      break;
-    default:
-      break;
+      case 0:
+        texels = gltLoadTGA("WRHS.tga", &w, &h, &c, &format);
+        break;
+      case 1:
+        texels = gltLoadTGA("MAMS.tga", &w, &h, &c, &format);
+        break;
+      case 2:
+        texels = gltLoadTGA("WPI.tga", &w, &h, &c, &format);
+        break;
+      case 3:
+        texels = gltLoadTGA("Babson.tga", &w, &h, &c, &format);
+        break;
+      default:
+        break;
     }
 
     assert(c == GL_RGB8);
@@ -608,8 +598,7 @@ void ChangeSize(int w, int h) {
 
     // Try each size until we get one that's too big
     i = 0;
-    while ((1 << i) <= envMapSize)
-      i++;
+    while ((1 << i) <= envMapSize) i++;
     envMapSize = (1 << (i - 1));
   }
 
@@ -631,40 +620,40 @@ void ChangeSize(int w, int h) {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    useEnvMap = !useEnvMap;
-    showEnvMap = GL_FALSE;
-    if (useEnvMap) {
-      glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle envmap (currently OFF)", 1);
-    }
-    glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
-    break;
-
-  case 2:
-    showEnvMap = !showEnvMap;
-    useEnvMap = GL_TRUE;
-    if (showEnvMap) {
-      glutChangeToMenuEntry(2, "Toggle show envmap (currently ON)", 2);
-    } else {
+    case 1:
+      useEnvMap = !useEnvMap;
+      showEnvMap = GL_FALSE;
+      if (useEnvMap) {
+        glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle envmap (currently OFF)", 1);
+      }
       glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
-    }
-    glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
-    break;
+      break;
 
-  case 3:
-    useFBO = !useFBO;
-    if (useFBO) {
-      glutChangeToMenuEntry(3, "Toggle FBO usage (currently ON)", 3);
-    } else {
-      glutChangeToMenuEntry(3, "Toggle FBO usage (currently OFF)", 3);
-    }
-    ChangeSize(windowWidth, windowHeight);
-    break;
+    case 2:
+      showEnvMap = !showEnvMap;
+      useEnvMap = GL_TRUE;
+      if (showEnvMap) {
+        glutChangeToMenuEntry(2, "Toggle show envmap (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
+      }
+      glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
+      break;
 
-  default:
-    break;
+    case 3:
+      useFBO = !useFBO;
+      if (useFBO) {
+        glutChangeToMenuEntry(3, "Toggle FBO usage (currently ON)", 3);
+      } else {
+        glutChangeToMenuEntry(3, "Toggle FBO usage (currently OFF)", 3);
+      }
+      ChangeSize(windowWidth, windowHeight);
+      break;
+
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -673,60 +662,60 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 1.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 1.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 1.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 1.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 1.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 1.0f;
-    break;
-  case 'e':
-  case 'E':
-    useEnvMap = !useEnvMap;
-    showEnvMap = GL_FALSE;
-    if (useEnvMap) {
-      glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle envmap (currently OFF)", 1);
-    }
-    glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
-    break;
-  case 'f':
-  case 'F':
-    useFBO = !useFBO;
-    if (useFBO) {
-      glutChangeToMenuEntry(3, "Toggle FBO usage (currently ON)", 3);
-    } else {
-      glutChangeToMenuEntry(3, "Toggle FBO usage (currently OFF)", 3);
-    }
-    ChangeSize(windowWidth, windowHeight);
-    break;
-  case 's':
-  case 'S':
-    showEnvMap = !showEnvMap;
-    useEnvMap = GL_TRUE;
-    if (showEnvMap) {
-      glutChangeToMenuEntry(2, "Toggle show envmap (currently ON)", 2);
-    } else {
+    case 'x':
+      cameraPos[0] += 1.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 1.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 1.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 1.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 1.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 1.0f;
+      break;
+    case 'e':
+    case 'E':
+      useEnvMap = !useEnvMap;
+      showEnvMap = GL_FALSE;
+      if (useEnvMap) {
+        glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle envmap (currently OFF)", 1);
+      }
       glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
-    }
-    glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+      break;
+    case 'f':
+    case 'F':
+      useFBO = !useFBO;
+      if (useFBO) {
+        glutChangeToMenuEntry(3, "Toggle FBO usage (currently ON)", 3);
+      } else {
+        glutChangeToMenuEntry(3, "Toggle FBO usage (currently OFF)", 3);
+      }
+      ChangeSize(windowWidth, windowHeight);
+      break;
+    case 's':
+    case 'S':
+      showEnvMap = !showEnvMap;
+      useEnvMap = GL_TRUE;
+      if (showEnvMap) {
+        glutChangeToMenuEntry(2, "Toggle show envmap (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle show envmap (currently OFF)", 2);
+      }
+      glutChangeToMenuEntry(1, "Toggle envmap (currently ON)", 1);
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -735,20 +724,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    cameraPos[0] -= 1.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    cameraPos[0] += 1.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[2] -= 1.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[2] += 1.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      cameraPos[0] -= 1.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      cameraPos[0] += 1.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[2] -= 1.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[2] += 1.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -779,10 +768,8 @@ int main(int argc, char *argv[]) {
 
   glDeleteTextures(1, &envMapTextureID);
   glDeleteTextures(5, wallTextureID);
-  if (glDeleteFramebuffersEXT)
-    glDeleteFramebuffersEXT(1, &framebufferID);
-  if (glDeleteRenderbuffersEXT)
-    glDeleteRenderbuffersEXT(1, &renderbufferID);
+  if (glDeleteFramebuffersEXT) glDeleteFramebuffersEXT(1, &framebufferID);
+  if (glDeleteRenderbuffersEXT) glDeleteRenderbuffersEXT(1, &renderbufferID);
 
   return 0;
 }

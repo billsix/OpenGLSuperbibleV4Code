@@ -3,12 +3,12 @@
 // Demonstrates Motion Blur with the Accumulation buffer
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
 // Light and material Data
-GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f}; // Point source
+GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f};  // Point source
 GLfloat fLightPosMirror[4] = {-100.0f, -100.0f, 50.0f, 1.0f};
 GLfloat fNoLight[] = {0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat fLowLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
@@ -107,7 +107,7 @@ void RenderScene(void) {
   yRot = 35.0f;
 
   for (fPass = 0.0f; fPass < fPasses; fPass += 1.0f) {
-    yRot += .75f; // 1.0f / (fPass+1.0f);
+    yRot += .75f;  // 1.0f / (fPass+1.0f);
 
     // Draw sphere
     DrawGeometry();
@@ -130,8 +130,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

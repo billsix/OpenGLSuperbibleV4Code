@@ -3,7 +3,7 @@
 // Demonstrates OpenGL Primative GL_POINTS with point size
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -26,26 +26,26 @@ GLboolean bEdgeFlag = GL_TRUE;
 // Reset flags as appropriate in response to menu selections
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    iMode = MODE_SOLID;
-    break;
+    case 1:
+      iMode = MODE_SOLID;
+      break;
 
-  case 2:
-    iMode = MODE_LINE;
-    break;
+    case 2:
+      iMode = MODE_LINE;
+      break;
 
-  case 3:
-    iMode = MODE_POINT;
-    break;
+    case 3:
+      iMode = MODE_POINT;
+      break;
 
-  case 4:
-    bEdgeFlag = GL_TRUE;
-    break;
+    case 4:
+      bEdgeFlag = GL_TRUE;
+      break;
 
-  case 5:
-  default:
-    bEdgeFlag = GL_FALSE;
-    break;
+    case 5:
+    default:
+      bEdgeFlag = GL_FALSE;
+      break;
   }
 
   glutPostRedisplay();
@@ -57,14 +57,11 @@ void RenderScene(void) {
   glClear(GL_COLOR_BUFFER_BIT);
 
   // Draw back side as a polygon only, if flag is set
-  if (iMode == MODE_LINE)
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  if (iMode == MODE_LINE) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-  if (iMode == MODE_POINT)
-    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+  if (iMode == MODE_POINT) glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-  if (iMode == MODE_SOLID)
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  if (iMode == MODE_SOLID) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
   // Save matrix state and do the rotation
   glPushMatrix();
@@ -130,29 +127,21 @@ void SetupRC() {
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -162,8 +151,7 @@ void ChangeSize(int w, int h) {
   GLfloat nRange = 100.0f;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

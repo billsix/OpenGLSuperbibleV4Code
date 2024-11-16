@@ -37,8 +37,7 @@ void SetDCPixelFormat(HDC hDC);
 void ChangeSize(GLsizei w, GLsizei h) {
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set the viewport to be the entire window
   glViewport(0, 0, w, h);
@@ -64,21 +63,17 @@ void ChangeSize(GLsizei w, GLsizei h) {
 // Called by timer routine to effect movement of the rectangle.
 void IdleFunction(void) {
   // Reverse direction when you reach left or right edge
-  if (x1 > windowWidth - rsize || x1 < 0)
-    xstep = -xstep;
+  if (x1 > windowWidth - rsize || x1 < 0) xstep = -xstep;
 
   // Reverse direction when you reach top or bottom edge
-  if (y1 > windowHeight - rsize || y1 < 0)
-    ystep = -ystep;
+  if (y1 > windowHeight - rsize || y1 < 0) ystep = -ystep;
 
   // Check bounds.  This is incase the window is made
   // smaller and the rectangle is outside the new
   // clipping volume
-  if (x1 > windowWidth - rsize)
-    x1 = windowWidth - rsize - 1;
+  if (x1 > windowWidth - rsize) x1 = windowWidth - rsize - 1;
 
-  if (y1 > windowHeight - rsize)
-    y1 = windowHeight - rsize - 1;
+  if (y1 > windowHeight - rsize) y1 = windowHeight - rsize - 1;
 
   // Actually move the square
   x1 += xstep;
@@ -106,34 +101,34 @@ void SetDCPixelFormat(HDC hDC) {
   int nPixelFormat;
 
   static PIXELFORMATDESCRIPTOR pfd = {
-      sizeof(PIXELFORMATDESCRIPTOR), // Size of this structure
-      1,                             // Version of this structure
-      PFD_DRAW_TO_WINDOW |           // Draw to Window (not to bitmap)
-          PFD_SUPPORT_OPENGL |       // Support OpenGL calls in window
-          PFD_DOUBLEBUFFER,          // Double buffered mode
-      PFD_TYPE_RGBA,                 // RGBA Color mode
-      32,                            // Want 32 bit color
+      sizeof(PIXELFORMATDESCRIPTOR),  // Size of this structure
+      1,                              // Version of this structure
+      PFD_DRAW_TO_WINDOW |            // Draw to Window (not to bitmap)
+          PFD_SUPPORT_OPENGL |        // Support OpenGL calls in window
+          PFD_DOUBLEBUFFER,           // Double buffered mode
+      PFD_TYPE_RGBA,                  // RGBA Color mode
+      32,                             // Want 32 bit color
       0,
-      0,
-      0,
-      0,
-      0,
-      0, // Not used to select mode
-      0,
-      0, // Not used to select mode
       0,
       0,
       0,
       0,
       0,  // Not used to select mode
-      16, // Size of depth buffer
-      0,  // Not used
-      0,  // Not used
-      0,  // Not used
-      0,  // Not used
+      0,
+      0,  // Not used to select mode
       0,
       0,
-      0}; // Not used
+      0,
+      0,
+      0,   // Not used to select mode
+      16,  // Size of depth buffer
+      0,   // Not used
+      0,   // Not used
+      0,   // Not used
+      0,   // Not used
+      0,
+      0,
+      0};  // Not used
 
   // Choose a pixel format that best matches that described in pfd
   nPixelFormat = ChoosePixelFormat(hDC, &pfd);
@@ -146,9 +141,9 @@ void SetDCPixelFormat(HDC hDC) {
 // Entry point of all Windows programs
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow) {
-  MSG msg;     // Windows message structure
-  WNDCLASS wc; // Windows class structure
-  HWND hWnd;   // Storeage for window handle
+  MSG msg;      // Windows message structure
+  WNDCLASS wc;  // Windows class structure
+  HWND hWnd;    // Storeage for window handle
 
   // Register Window style
   wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -166,8 +161,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpszClassName = lpszAppName;
 
   // Register the window class
-  if (RegisterClass(&wc) == 0)
-    return FALSE;
+  if (RegisterClass(&wc) == 0) return FALSE;
 
   // Create the main application window
   hWnd = CreateWindow(lpszAppName, lpszAppName,
@@ -179,8 +173,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                       100, 100, 250, 250, NULL, NULL, hInstance, NULL);
 
   // If window was not created, quit
-  if (hWnd == NULL)
-    return FALSE;
+  if (hWnd == NULL) return FALSE;
 
   // Display the window
   ShowWindow(hWnd, SW_SHOW);
@@ -199,71 +192,71 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // Window procedure, handles all messages for this program
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
-  static HGLRC hRC = NULL; // Permenant Rendering context
-  static HDC hDC = NULL;   // Private GDI Device context
+  static HGLRC hRC = NULL;  // Permenant Rendering context
+  static HDC hDC = NULL;    // Private GDI Device context
 
   switch (message) {
-  // Window creation, setup for OpenGL
-  case WM_CREATE:
-    // Store the device context
-    hDC = GetDC(hWnd);
+    // Window creation, setup for OpenGL
+    case WM_CREATE:
+      // Store the device context
+      hDC = GetDC(hWnd);
 
-    // Select the pixel format
-    SetDCPixelFormat(hDC);
+      // Select the pixel format
+      SetDCPixelFormat(hDC);
 
-    // Create the rendering context and make it current
-    hRC = wglCreateContext(hDC);
-    wglMakeCurrent(hDC, hRC);
+      // Create the rendering context and make it current
+      hRC = wglCreateContext(hDC);
+      wglMakeCurrent(hDC, hRC);
 
-    // Create a timer that fires 30 times a second
-    SetTimer(hWnd, 33, 1, NULL);
-    break;
+      // Create a timer that fires 30 times a second
+      SetTimer(hWnd, 33, 1, NULL);
+      break;
 
-  // Window is being destroyed, cleanup
-  case WM_DESTROY:
-    // Kill the timer that we created
-    KillTimer(hWnd, 101);
+    // Window is being destroyed, cleanup
+    case WM_DESTROY:
+      // Kill the timer that we created
+      KillTimer(hWnd, 101);
 
-    // Deselect the current rendering context and delete it
-    wglMakeCurrent(hDC, NULL);
-    wglDeleteContext(hRC);
+      // Deselect the current rendering context and delete it
+      wglMakeCurrent(hDC, NULL);
+      wglDeleteContext(hRC);
 
-    // Tell the application to terminate after the window
-    // is gone.
-    PostQuitMessage(0);
-    break;
+      // Tell the application to terminate after the window
+      // is gone.
+      PostQuitMessage(0);
+      break;
 
-  // Window is resized.
-  case WM_SIZE:
-    // Call our function which modifies the clipping
-    // volume and viewport
-    ChangeSize(LOWORD(lParam), HIWORD(lParam));
-    break;
+    // Window is resized.
+    case WM_SIZE:
+      // Call our function which modifies the clipping
+      // volume and viewport
+      ChangeSize(LOWORD(lParam), HIWORD(lParam));
+      break;
 
-  // Timer, moves and bounces the rectangle, simply calls
-  // our previous OnIdle function, then invalidates the
-  // window so it will be redrawn.
-  case WM_TIMER: {
-    IdleFunction();
+    // Timer, moves and bounces the rectangle, simply calls
+    // our previous OnIdle function, then invalidates the
+    // window so it will be redrawn.
+    case WM_TIMER: {
+      IdleFunction();
 
-    InvalidateRect(hWnd, NULL, FALSE);
-  } break;
+      InvalidateRect(hWnd, NULL, FALSE);
+    } break;
 
-  // The painting function.  This message sent by Windows
-  // whenever the screen needs updating.
-  case WM_PAINT: {
-    // Call OpenGL drawing code
-    RenderScene();
+    // The painting function.  This message sent by Windows
+    // whenever the screen needs updating.
+    case WM_PAINT: {
+      // Call OpenGL drawing code
+      RenderScene();
 
-    // Call function to swap the buffers
-    SwapBuffers(hDC);
+      // Call function to swap the buffers
+      SwapBuffers(hDC);
 
-    // Validate the newly painted client area
-    ValidateRect(hWnd, NULL);
-  } break;
+      // Validate the newly painted client area
+      ValidateRect(hWnd, NULL);
+    } break;
 
-  default: // Passes it on if unproccessed
-    return (DefWindowProc(hWnd, message, wParam, lParam));
+    default:  // Passes it on if unproccessed
+      return (DefWindowProc(hWnd, message, wParam, lParam));
   }
 
   return (0L);

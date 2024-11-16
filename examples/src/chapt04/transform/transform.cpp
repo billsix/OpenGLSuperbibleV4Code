@@ -3,9 +3,9 @@
 // Demonstrates manual transformations
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/math3d.h" // 3D Math Library
+#include "../../shared/math3d.h"  // 3D Math Library
 
 #include <math.h>
 
@@ -15,8 +15,8 @@ void DrawTorus(M3DMatrix44f mTransform) {
   GLfloat minorRadius = 0.15f;
   GLint numMajor = 40;
   GLint numMinor = 20;
-  M3DVector3f objectVertex;      // Vertex in object/eye space
-  M3DVector3f transformedVertex; // New Transformed vertex
+  M3DVector3f objectVertex;       // Vertex in object/eye space
+  M3DVector3f transformedVertex;  // New Transformed vertex
   double majorStep = 2.0f * M3D_PI / numMajor;
   double minorStep = 2.0f * M3D_PI / numMinor;
   int i, j;
@@ -56,8 +56,8 @@ void DrawTorus(M3DMatrix44f mTransform) {
 
 // Called to draw scene
 void RenderScene(void) {
-  M3DMatrix44f transformationMatrix; // Storeage for rotation matrix
-  static GLfloat yRot = 0.0f;        // Rotation angle for animation
+  M3DMatrix44f transformationMatrix;  // Storeage for rotation matrix
+  static GLfloat yRot = 0.0f;         // Rotation angle for animation
   yRot += 0.5f;
 
   // Clear the window with current clearing color
@@ -100,8 +100,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

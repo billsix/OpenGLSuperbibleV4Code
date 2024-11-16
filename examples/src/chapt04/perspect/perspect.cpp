@@ -2,7 +2,7 @@
 // Demonstrates Perspective Projection
 // OpenGL SuperBible
 // Richard S. Wright Jr.
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
@@ -13,8 +13,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -41,9 +40,9 @@ void SetupRC() {
   GLfloat sourceLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
   GLfloat lightPos[] = {-50.f, 25.0f, 250.0f, 0.0f};
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // Enable lighting
   glEnable(GL_LIGHTING);
@@ -67,17 +66,13 @@ void SetupRC() {
 
 // Respond to arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
   xRot = (GLfloat)((const int)xRot % 360);
   yRot = (GLfloat)((const int)yRot % 360);
@@ -164,7 +159,7 @@ void RenderScene(void) {
   glVertex3f(-50.0f, -50.0f, fZ);
   glEnd();
 
-  glFrontFace(GL_CW); // clock-wise polygons face out
+  glFrontFace(GL_CW);  // clock-wise polygons face out
 
   glBegin(GL_QUADS);
   // Back section
@@ -227,7 +222,7 @@ void RenderScene(void) {
   glVertex3f(35.0f, 35.0f, bZ);
   glEnd();
 
-  glFrontFace(GL_CCW); // Counter clock-wise polygons face out
+  glFrontFace(GL_CCW);  // Counter clock-wise polygons face out
 
   // Restore the matrix state
   glPopMatrix();

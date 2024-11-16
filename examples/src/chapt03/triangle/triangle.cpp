@@ -2,7 +2,7 @@
 // OpenGL SuperBible
 // Demonstrates OpenGL Triangle Fans, backface culling, and depth testing
 // Program by Richard S. Wright Jr.
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -23,18 +23,18 @@ int iDepth = 0;
 // Reset flags as appropriate in response to menu selections
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    iDepth = !iDepth;
-    break;
+    case 1:
+      iDepth = !iDepth;
+      break;
 
-  case 2:
-    iCull = !iCull;
-    break;
+    case 2:
+      iCull = !iCull;
+      break;
 
-  case 3:
-    iOutline = !iOutline;
-  default:
-    break;
+    case 3:
+      iOutline = !iOutline;
+    default:
+      break;
   }
 
   glutPostRedisplay();
@@ -42,8 +42,8 @@ void ProcessMenu(int value) {
 
 // Called to draw scene
 void RenderScene(void) {
-  GLfloat x, y, angle; // Storage for coordinates and angles
-  int iPivot = 1;      // Used to flag alternating colors
+  GLfloat x, y, angle;  // Storage for coordinates and angles
+  int iPivot = 1;       // Used to flag alternating colors
 
   // Clear the window and the depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,29 +151,21 @@ void SetupRC() {
 }
 
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -183,8 +175,7 @@ void ChangeSize(int w, int h) {
   GLfloat nRange = 100.0f;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

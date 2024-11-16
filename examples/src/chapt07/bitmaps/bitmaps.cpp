@@ -3,7 +3,7 @@
 // Demonstrates loading and displaying bitmaps
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // Bitmap of camp fire
 GLubyte fire[128] = {
@@ -32,8 +32,7 @@ void SetupRC() {
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

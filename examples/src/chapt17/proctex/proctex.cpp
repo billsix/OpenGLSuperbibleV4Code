@@ -3,9 +3,9 @@
 // Demonstrates procedural texture mapping
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -14,18 +14,18 @@
 #define TOYBALL 2
 #define TOTAL_SHADER_SETS 3
 
-GLuint fShader[TOTAL_SHADER_SETS]; // shader object names
+GLuint fShader[TOTAL_SHADER_SETS];  // shader object names
 GLuint vShader[TOTAL_SHADER_SETS];
 GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
 char *shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
 
-GLint whichShader = CHECKERBOARD; // current shader
+GLint whichShader = CHECKERBOARD;  // current shader
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLint mainMenu, shaderMenu; // menu handles
+GLint mainMenu, shaderMenu;  // menu handles
 
 GLfloat cameraPos[] = {50.0f, 50.0f, 150.0f, 1.0f};
 GLdouble cameraZoom = 0.4;
@@ -214,8 +214,7 @@ void RenderScene(void) {
   // Draw objects in the scene
   DrawModels();
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -280,28 +279,28 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -310,22 +309,21 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    lightRotation -= 5.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    lightRotation += 5.0f;
-    break;
-  case GLUT_KEY_UP:
-    tess += 5;
-    break;
-  case GLUT_KEY_DOWN:
-    tess -= 5;
-    if (tess < 5)
-      tess = 5;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      lightRotation -= 5.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      lightRotation += 5.0f;
+      break;
+    case GLUT_KEY_UP:
+      tess += 5;
+      break;
+    case GLUT_KEY_DOWN:
+      tess -= 5;
+      if (tess < 5) tess = 5;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window

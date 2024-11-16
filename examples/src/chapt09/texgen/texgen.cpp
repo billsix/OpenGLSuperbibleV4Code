@@ -3,14 +3,14 @@
 // Demonstrates OpenGL Texture Coordinate Generation
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // gltools library
+#include "../../shared/gltools.h"  // gltools library
 
 // Rotation amounts
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
 
-GLuint toTextures[2]; // Two texture objects
-int iRenderMode = 3;  // Sphere Mapped is default
+GLuint toTextures[2];  // Two texture objects
+int iRenderMode = 3;   // Sphere Mapped is default
 
 ///////////////////////////////////////////////////////////////////////////////
 // Reset flags as appropriate in response to menu selections
@@ -23,31 +23,31 @@ void ProcessMenu(int value) {
 
   // Set up textgen based on menu selection
   switch (value) {
-  case 1:
-    // Object Linear
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGenfv(GL_S, GL_OBJECT_PLANE, zPlane);
-    glTexGenfv(GL_T, GL_OBJECT_PLANE, zPlane);
-    break;
+    case 1:
+      // Object Linear
+      glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+      glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+      glTexGenfv(GL_S, GL_OBJECT_PLANE, zPlane);
+      glTexGenfv(GL_T, GL_OBJECT_PLANE, zPlane);
+      break;
 
-  case 2:
-    // Eye Linear
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, zPlane);
-    glTexGenfv(GL_T, GL_EYE_PLANE, zPlane);
-    break;
+    case 2:
+      // Eye Linear
+      glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+      glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+      glTexGenfv(GL_S, GL_EYE_PLANE, zPlane);
+      glTexGenfv(GL_T, GL_EYE_PLANE, zPlane);
+      break;
 
-  case 3:
-  default:
-    // Sphere Map
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-    break;
+    case 3:
+    default:
+      // Sphere Map
+      glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+      glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+      break;
   }
 
-  glutPostRedisplay(); // Redisplay
+  glutPostRedisplay();  // Redisplay
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ void RenderScene(void) {
   gluOrtho2D(0.0f, 1.0f, 0.0f, 1.0f);
 
   glMatrixMode(GL_MODELVIEW);
-  glBindTexture(GL_TEXTURE_2D, toTextures[1]); // Background texture
+  glBindTexture(GL_TEXTURE_2D, toTextures[1]);  // Background texture
 
   // We will specify texture coordinates
   glDisable(GL_TEXTURE_GEN_S);
@@ -98,8 +98,7 @@ void RenderScene(void) {
   glDepthMask(GL_TRUE);
 
   // May need to swtich to stripe texture
-  if (iRenderMode != 3)
-    glBindTexture(GL_TEXTURE_2D, toTextures[0]);
+  if (iRenderMode != 3) glBindTexture(GL_TEXTURE_2D, toTextures[0]);
 
   // Save the matrix state and do the rotations
   glPushMatrix();
@@ -121,13 +120,13 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  GLbyte *pBytes;                     // Texture bytes
-  GLint iComponents, iWidth, iHeight; // Texture sizes
-  GLenum eFormat;                     // Texture format
+  GLbyte *pBytes;                      // Texture bytes
+  GLint iComponents, iWidth, iHeight;  // Texture sizes
+  GLenum eFormat;                      // Texture format
 
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
-  glEnable(GL_CULL_FACE);  // Do not calculate inside of jet
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
+  glEnable(GL_CULL_FACE);   // Do not calculate inside of jet
 
   // White background
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -179,29 +178,21 @@ void SetupRC() {
 /////////////////////////////////////////////////////
 // Handle arrow keys
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    xRot -= 5.0f;
+  if (key == GLUT_KEY_UP) xRot -= 5.0f;
 
-  if (key == GLUT_KEY_DOWN)
-    xRot += 5.0f;
+  if (key == GLUT_KEY_DOWN) xRot += 5.0f;
 
-  if (key == GLUT_KEY_LEFT)
-    yRot -= 5.0f;
+  if (key == GLUT_KEY_LEFT) yRot -= 5.0f;
 
-  if (key == GLUT_KEY_RIGHT)
-    yRot += 5.0f;
+  if (key == GLUT_KEY_RIGHT) yRot += 5.0f;
 
-  if (key > 356.0f)
-    xRot = 0.0f;
+  if (key > 356.0f) xRot = 0.0f;
 
-  if (key < -1.0f)
-    xRot = 355.0f;
+  if (key < -1.0f) xRot = 355.0f;
 
-  if (key > 356.0f)
-    yRot = 0.0f;
+  if (key > 356.0f) yRot = 0.0f;
 
-  if (key < -1.0f)
-    yRot = 355.0f;
+  if (key < -1.0f) yRot = 355.0f;
 
   // Refresh the Window
   glutPostRedisplay();
@@ -213,8 +204,7 @@ void ChangeSize(int w, int h) {
   GLfloat fAspect;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

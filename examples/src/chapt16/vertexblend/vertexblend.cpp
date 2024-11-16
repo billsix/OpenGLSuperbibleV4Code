@@ -3,9 +3,9 @@
 // Demonstrates vertex blending
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // OpenGL toolkit
+#include "../../shared/glframe.h"  // OpenGL toolkit
 
 #include <stdio.h>
 
@@ -13,19 +13,19 @@ GLboolean useBlending = GL_TRUE;
 GLboolean showBones = GL_FALSE;
 
 #define TOTAL_SHADERS 1
-GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS]; // shader object names
+GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
 char *shaderNames[TOTAL_SHADERS] = {"skinning"};
 
-GLint lightPosLoc, mv2Loc, mv2ITLoc; // locations for uniforms
-GLint weightLoc;                     // locations for attribs
+GLint lightPosLoc, mv2Loc, mv2ITLoc;  // locations for uniforms
+GLint weightLoc;                      // locations for attribs
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLint mainMenu; // menu handles
+GLint mainMenu;  // menu handles
 
-GLint maxTexSize; // maximum allowed size for 1D/2D texture
+GLint maxTexSize;  // maximum allowed size for 1D/2D texture
 
 GLfloat cameraPos[] = {50.0f, 75.0f, 50.0f, 1.0f};
 GLdouble cameraZoom = 0.4;
@@ -33,7 +33,7 @@ GLdouble cameraZoom = 0.4;
 GLfloat lightPos[] = {-50.0f, 100.0f, 50.0f, 1.0f};
 
 GLfloat elbowBend = 45.0f;
-GLfloat sphereOfInfluence = 1.0f; // how much of each limb gets blended
+GLfloat sphereOfInfluence = 1.0f;  // how much of each limb gets blended
 
 #define MAX_INFO_LOG_SIZE 2048
 
@@ -284,7 +284,7 @@ void DrawModels(void) {
   glUniformMatrix3fv(mv2ITLoc, 1, GL_TRUE, mv2IT_3x3);
 
   // Draw upper arm cylinder
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   // 50 long, 10 shoulder, 9 elbow, with weights applied to second half
   DrawCylinder(50.0f, 15.0f, 9.0f, 1.0f, 0.5f);
 
@@ -306,7 +306,7 @@ void DrawModels(void) {
   glUniformMatrix3fv(mv2ITLoc, 1, GL_TRUE, mv2IT_3x3);
 
   // Draw forearm cylinder
-  glColor3f(0.9f, 0.0f, 0.0f); // Red
+  glColor3f(0.9f, 0.0f, 0.0f);  // Red
   // 40 long, 9 elbow, 5 wrist, with weights applied to first half
   DrawCylinder(40.0f, 9.0f, 5.0f, 0.5f, 1.0f);
 }
@@ -356,8 +356,7 @@ void RenderScene(void) {
   // Draw objects in the scene
   DrawModels();
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -383,8 +382,9 @@ void SetupRC() {
   if (!GLEE_VERSION_1_3 &&
       (!GLEE_ARB_multitexture || !GLEE_ARB_texture_cube_map ||
        !GLEE_ARB_texture_env_add)) {
-    fprintf(stderr, "Neither OpenGL 1.3 nor necessary"
-                    " extensions are available!\n");
+    fprintf(stderr,
+            "Neither OpenGL 1.3 nor necessary"
+            " extensions are available!\n");
     Sleep(2000);
     exit(0);
   }
@@ -433,26 +433,26 @@ void SetupRC() {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    useBlending = !useBlending;
-    if (useBlending) {
-      glutChangeToMenuEntry(1, "Toggle vertex blending (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle vertex blending (currently OFF)", 1);
-    }
-    break;
+    case 1:
+      useBlending = !useBlending;
+      if (useBlending) {
+        glutChangeToMenuEntry(1, "Toggle vertex blending (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle vertex blending (currently OFF)", 1);
+      }
+      break;
 
-  case 2:
-    showBones = !showBones;
-    if (showBones) {
-      glutChangeToMenuEntry(2, "Show bones (currently ON)", 2);
-    } else {
-      glutChangeToMenuEntry(2, "Show bones (currently OFF)", 2);
-    }
-    break;
+    case 2:
+      showBones = !showBones;
+      if (showBones) {
+        glutChangeToMenuEntry(2, "Show bones (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Show bones (currently OFF)", 2);
+      }
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -461,28 +461,28 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 5.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 5.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 5.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 5.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 5.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 5.0f;
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 5.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 5.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 5.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 5.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 5.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 5.0f;
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -491,28 +491,24 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    sphereOfInfluence -= 0.05f;
-    if (sphereOfInfluence < 0.05f)
-      sphereOfInfluence = 0.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    sphereOfInfluence += 0.05f;
-    if (sphereOfInfluence > 0.95f)
-      sphereOfInfluence = 1.0f;
-    break;
-  case GLUT_KEY_UP:
-    elbowBend += 5.0f;
-    if (elbowBend > 150.0f)
-      elbowBend = 150.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    elbowBend -= 5.0f;
-    if (elbowBend < -150.0f)
-      elbowBend = -150.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      sphereOfInfluence -= 0.05f;
+      if (sphereOfInfluence < 0.05f) sphereOfInfluence = 0.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      sphereOfInfluence += 0.05f;
+      if (sphereOfInfluence > 0.95f) sphereOfInfluence = 1.0f;
+      break;
+    case GLUT_KEY_UP:
+      elbowBend += 5.0f;
+      if (elbowBend > 150.0f) elbowBend = 150.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      elbowBend -= 5.0f;
+      if (elbowBend < -150.0f) elbowBend = -150.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window

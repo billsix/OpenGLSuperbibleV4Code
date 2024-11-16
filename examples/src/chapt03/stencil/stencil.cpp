@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // Initial square position and size
 GLfloat x = 0.0f;
@@ -22,8 +22,8 @@ GLfloat windowHeight;
 ///////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void) {
-  GLdouble dRadius = 0.1; // Initial radius of spiral
-  GLdouble dAngle;        // Looping variable
+  GLdouble dRadius = 0.1;  // Initial radius of spiral
+  GLdouble dAngle;         // Looping variable
 
   // Clear blue window
   glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
@@ -71,22 +71,18 @@ void RenderScene(void) {
 // resized or moved)
 void TimerFunction(int value) {
   // Reverse direction when you reach left or right edge
-  if (x > windowWidth - rsize || x < -windowWidth)
-    xstep = -xstep;
+  if (x > windowWidth - rsize || x < -windowWidth) xstep = -xstep;
 
   // Reverse direction when you reach top or bottom edge
-  if (y > windowHeight || y < -windowHeight + rsize)
-    ystep = -ystep;
+  if (y > windowHeight || y < -windowHeight + rsize) ystep = -ystep;
 
   // Check bounds. This is in case the window is made
   // smaller while the rectangle is bouncing and the
   // rectangle suddenly finds itself outside the new
   // clipping volume
-  if (x > windowWidth - rsize)
-    x = windowWidth - rsize - 1;
+  if (x > windowWidth - rsize) x = windowWidth - rsize - 1;
 
-  if (y > windowHeight)
-    y = windowHeight - 1;
+  if (y > windowHeight) y = windowHeight - 1;
 
   // Actually move the square
   x += xstep;
@@ -103,8 +99,7 @@ void ChangeSize(int w, int h) {
   GLfloat aspectRatio;
 
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

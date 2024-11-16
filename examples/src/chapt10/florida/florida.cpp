@@ -3,7 +3,7 @@
 // Demonstrates polygon tesselation
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -31,7 +31,7 @@ GLdouble vLake[LAKE_POINTS][3] = {{10.0, -20.0, 0.0},
 #define DRAW_LOOPS 0
 #define DRAW_CONCAVE 1
 #define DRAW_COMPLEX 2
-int iMethod = DRAW_LOOPS; // Default, draw line loops
+int iMethod = DRAW_LOOPS;  // Default, draw line loops
 
 ////////////////////////////////////////////////////////////////////
 // Reset flags as appropriate in response to menu selections
@@ -56,119 +56,117 @@ void tessError(GLenum error) {
 ///////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void) {
-  int i; // Loop variable
+  int i;  // Loop variable
 
   // Clear the window
   glClear(GL_COLOR_BUFFER_BIT);
 
   switch (iMethod) {
-  case DRAW_LOOPS: // Draw line loops
-  {
-    glColor3f(0.0f, 0.0f, 0.0f); // Just black outline
+    case DRAW_LOOPS:  // Draw line loops
+    {
+      glColor3f(0.0f, 0.0f, 0.0f);  // Just black outline
 
-    // Line loop with coastline shape
-    glBegin(GL_LINE_LOOP);
-    for (i = 0; i < COAST_POINTS; i++)
-      glVertex3dv(vCoast[i]);
-    glEnd();
+      // Line loop with coastline shape
+      glBegin(GL_LINE_LOOP);
+      for (i = 0; i < COAST_POINTS; i++) glVertex3dv(vCoast[i]);
+      glEnd();
 
-    // Line loop with shape of interior lake
-    glBegin(GL_LINE_LOOP);
-    for (i = 0; i < LAKE_POINTS; i++)
-      glVertex3dv(vLake[i]);
-    glEnd();
-  } break;
+      // Line loop with shape of interior lake
+      glBegin(GL_LINE_LOOP);
+      for (i = 0; i < LAKE_POINTS; i++) glVertex3dv(vLake[i]);
+      glEnd();
+    } break;
 
-  case DRAW_CONCAVE: // Tesselate concave polygon
-  {
-    // Tesselator object
-    GLUtesselator *pTess;
+    case DRAW_CONCAVE:  // Tesselate concave polygon
+    {
+      // Tesselator object
+      GLUtesselator *pTess;
 
-    // Green polygon
-    glColor3f(0.0f, 1.0f, 0.0f);
+      // Green polygon
+      glColor3f(0.0f, 1.0f, 0.0f);
 
-    // Create the tesselator object
-    pTess = gluNewTess();
+      // Create the tesselator object
+      pTess = gluNewTess();
 
-    // Set callback functions
-    // Just call glBegin at begining of triangle batch
-    gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
+      // Set callback functions
+      // Just call glBegin at begining of triangle batch
+      gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
 
-    // Just call glEnd at end of triangle batch
-    gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
+      // Just call glEnd at end of triangle batch
+      gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
 
-    // Just call glVertex3dv for each  vertex
-    gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
+      // Just call glVertex3dv for each  vertex
+      gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
 
-    // Register error callback
-    gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
+      // Register error callback
+      gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
 
-    // Begin the polygon
-    gluTessBeginPolygon(pTess, NULL);
+      // Begin the polygon
+      gluTessBeginPolygon(pTess, NULL);
 
-    // Gegin the one and only contour
-    gluTessBeginContour(pTess);
+      // Gegin the one and only contour
+      gluTessBeginContour(pTess);
 
-    // Feed in the list of vertices
-    for (i = 0; i < COAST_POINTS; i++)
-      gluTessVertex(pTess, vCoast[i], vCoast[i]); // Can't be NULL
+      // Feed in the list of vertices
+      for (i = 0; i < COAST_POINTS; i++)
+        gluTessVertex(pTess, vCoast[i], vCoast[i]);  // Can't be NULL
 
-    // Close contour and polygon
-    gluTessEndContour(pTess);
-    gluTessEndPolygon(pTess);
+      // Close contour and polygon
+      gluTessEndContour(pTess);
+      gluTessEndPolygon(pTess);
 
-    // All done with tesselator object
-    gluDeleteTess(pTess);
-  } break;
+      // All done with tesselator object
+      gluDeleteTess(pTess);
+    } break;
 
-  case DRAW_COMPLEX: // Tesselate, but with hole cut out
-  {
-    // Tesselator object
-    GLUtesselator *pTess;
+    case DRAW_COMPLEX:  // Tesselate, but with hole cut out
+    {
+      // Tesselator object
+      GLUtesselator *pTess;
 
-    // Green polygon
-    glColor3f(0.0f, 1.0f, 0.0f);
+      // Green polygon
+      glColor3f(0.0f, 1.0f, 0.0f);
 
-    // Create the tesselator object
-    pTess = gluNewTess();
+      // Create the tesselator object
+      pTess = gluNewTess();
 
-    // Set callback functions
-    // Just call glBegin at begining of triangle batch
-    gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
+      // Set callback functions
+      // Just call glBegin at begining of triangle batch
+      gluTessCallback(pTess, GLU_TESS_BEGIN, (CallBack)glBegin);
 
-    // Just call glEnd at end of triangle batch
-    gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
+      // Just call glEnd at end of triangle batch
+      gluTessCallback(pTess, GLU_TESS_END, (CallBack)glEnd);
 
-    // Just call glVertex3dv for each  vertex
-    gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
+      // Just call glVertex3dv for each  vertex
+      gluTessCallback(pTess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
 
-    // Register error callback
-    gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
+      // Register error callback
+      gluTessCallback(pTess, GLU_TESS_ERROR, (CallBack)tessError);
 
-    // How to count filled and open areas
-    gluTessProperty(pTess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
+      // How to count filled and open areas
+      gluTessProperty(pTess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
 
-    // Begin the polygon
-    gluTessBeginPolygon(pTess, NULL); // No user data
+      // Begin the polygon
+      gluTessBeginPolygon(pTess, NULL);  // No user data
 
-    // First contour, outline of state
-    gluTessBeginContour(pTess);
-    for (i = 0; i < COAST_POINTS; i++)
-      gluTessVertex(pTess, vCoast[i], vCoast[i]);
-    gluTessEndContour(pTess);
+      // First contour, outline of state
+      gluTessBeginContour(pTess);
+      for (i = 0; i < COAST_POINTS; i++)
+        gluTessVertex(pTess, vCoast[i], vCoast[i]);
+      gluTessEndContour(pTess);
 
-    // Second contour, outline of lake
-    gluTessBeginContour(pTess);
-    for (i = 0; i < LAKE_POINTS; i++)
-      gluTessVertex(pTess, vLake[i], vLake[i]);
-    gluTessEndContour(pTess);
+      // Second contour, outline of lake
+      gluTessBeginContour(pTess);
+      for (i = 0; i < LAKE_POINTS; i++)
+        gluTessVertex(pTess, vLake[i], vLake[i]);
+      gluTessEndContour(pTess);
 
-    // All done with polygon
-    gluTessEndPolygon(pTess);
+      // All done with polygon
+      gluTessEndPolygon(pTess);
 
-    // No longer need tessellator object
-    gluDeleteTess(pTess);
-  } break;
+      // No longer need tessellator object
+      gluDeleteTess(pTess);
+    } break;
   }
 
   // Swap buffers
@@ -192,8 +190,7 @@ void SetupRC() {
 // Reset projection
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

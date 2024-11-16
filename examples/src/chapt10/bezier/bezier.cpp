@@ -3,27 +3,26 @@
 // Demonstrates OpenGL evaluators to draw bezier curve
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 // The number of control points for this curve
 GLint nNumPoints = 4;
 
-GLfloat ctrlPoints[4][3] = {{-4.0f, 0.0f, 0.0f}, // End Point
-                            {-6.0f, 4.0f, 0.0f}, // Control Point
-                            {6.0f, -4.0f, 0.0f}, // Control Point
-                            {4.0f, 0.0f, 0.0f}}; // End Point
+GLfloat ctrlPoints[4][3] = {{-4.0f, 0.0f, 0.0f},  // End Point
+                            {-6.0f, 4.0f, 0.0f},  // Control Point
+                            {6.0f, -4.0f, 0.0f},  // Control Point
+                            {4.0f, 0.0f, 0.0f}};  // End Point
 
 // This function is used to superimpose the control points over the curve
 void DrawPoints(void) {
-  int i; // Counting variable
+  int i;  // Counting variable
 
   // Set point size larger to make more visible
   glPointSize(5.0f);
 
   // Loop through all control points for this example
   glBegin(GL_POINTS);
-  for (i = 0; i < nNumPoints; i++)
-    glVertex2fv(ctrlPoints[i]);
+  for (i = 0; i < nNumPoints; i++) glVertex2fv(ctrlPoints[i]);
   glEnd();
 }
 
@@ -37,12 +36,12 @@ void RenderScene(void) {
   // Sets up the bezier
   // This actually only needs to be called once and could go in
   // the setup function
-  glMap1f(GL_MAP1_VERTEX_3,   // Type of data generated
-          0.0f,               // Lower u range
-          100.0f,             // Upper u range
-          3,                  // Distance between points in the data
-          nNumPoints,         // number of control points
-          &ctrlPoints[0][0]); // array of control points
+  glMap1f(GL_MAP1_VERTEX_3,    // Type of data generated
+          0.0f,                // Lower u range
+          100.0f,              // Upper u range
+          3,                   // Distance between points in the data
+          nNumPoints,          // number of control points
+          &ctrlPoints[0][0]);  // array of control points
 
   // Enable the evaluator
   glEnable(GL_MAP1_VERTEX_3);
@@ -86,8 +85,7 @@ void SetupRC() {
 // Set 2D Projection Ð negative 10 to positive 10 in X and Y
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);

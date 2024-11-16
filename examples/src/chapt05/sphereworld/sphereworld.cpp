@@ -5,7 +5,7 @@
 // and shadows.
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include "../../shared/math3d.h"
 
@@ -20,7 +20,7 @@ GLFrame spheres[NUM_SPHERES];
 GLFrame frameCamera;
 
 // Light and material Data
-GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f}; // Point source
+GLfloat fLightPos[4] = {-100.0f, 100.0f, 50.0f, 1.0f};  // Point source
 GLfloat fNoLight[] = {0.0f, 0.0f, 0.0f, 0.0f};
 GLfloat fLowLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
 GLfloat fBrightLight[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -83,7 +83,7 @@ void DrawGround(void) {
 
   for (iStrip = -fExtent; iStrip <= fExtent; iStrip += fStep) {
     glBegin(GL_TRIANGLE_STRIP);
-    glNormal3f(0.0f, 1.0f, 0.0f); // All Point up
+    glNormal3f(0.0f, 1.0f, 0.0f);  // All Point up
 
     for (iRun = fExtent; iRun >= -fExtent; iRun -= fStep) {
       glVertex3f(iStrip, y, iRun);
@@ -96,7 +96,7 @@ void DrawGround(void) {
 ///////////////////////////////////////////////////////////////////////
 // Draw random inhabitants and the rotating torus/sphere duo
 void DrawInhabitants(GLint nShadow) {
-  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  static GLfloat yRot = 0.0f;  // Rotation angle for animation
   GLint i;
 
   if (nShadow == 0)
@@ -105,8 +105,7 @@ void DrawInhabitants(GLint nShadow) {
     glColor3f(0.0f, 0.0f, 0.0f);
 
   // Draw the randomly located spheres
-  if (nShadow == 0)
-    glColor3f(0.0f, 1.0f, 0.0f);
+  if (nShadow == 0) glColor3f(0.0f, 1.0f, 0.0f);
 
   for (i = 0; i < NUM_SPHERES; i++) {
     glPushMatrix();
@@ -118,8 +117,7 @@ void DrawInhabitants(GLint nShadow) {
   glPushMatrix();
   glTranslatef(0.0f, 0.1f, -2.5f);
 
-  if (nShadow == 0)
-    glColor3f(0.0f, 0.0f, 1.0f);
+  if (nShadow == 0) glColor3f(0.0f, 0.0f, 1.0f);
 
   glPushMatrix();
   glRotatef(-yRot * 2.0f, 0.0f, 1.0f, 0.0f);
@@ -176,17 +174,13 @@ void RenderScene(void) {
 
 // Respond to arrow keys by moving the camera frame of reference
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    frameCamera.MoveForward(0.1f);
+  if (key == GLUT_KEY_UP) frameCamera.MoveForward(0.1f);
 
-  if (key == GLUT_KEY_DOWN)
-    frameCamera.MoveForward(-0.1f);
+  if (key == GLUT_KEY_DOWN) frameCamera.MoveForward(-0.1f);
 
-  if (key == GLUT_KEY_LEFT)
-    frameCamera.RotateLocalY(0.1);
+  if (key == GLUT_KEY_LEFT) frameCamera.RotateLocalY(0.1);
 
-  if (key == GLUT_KEY_RIGHT)
-    frameCamera.RotateLocalY(-0.1);
+  if (key == GLUT_KEY_RIGHT) frameCamera.RotateLocalY(-0.1);
 
   // Refresh the Window
   glutPostRedisplay();
@@ -206,8 +200,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

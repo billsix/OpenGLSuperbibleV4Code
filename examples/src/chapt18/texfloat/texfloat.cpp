@@ -3,9 +3,9 @@
 // Demonstrates use of floating-point textures
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include <ImfRgbaFile.h> // OpenEXR headers
+#include <ImfRgbaFile.h>  // OpenEXR headers
 
 #include <ImfArray.h>
 
@@ -19,14 +19,14 @@
 
 #include <stdio.h>
 
-GLint windowWidth = 1024; // window size
+GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLfloat *fTexels; // read back the framebuffer to here
+GLfloat *fTexels;  // read back the framebuffer to here
 
-GLfloat fCursorX = 0.0f; // float cursor position [-1,1]
+GLfloat fCursorX = 0.0f;  // float cursor position [-1,1]
 GLfloat fCursorY = 0.0f;
-GLint iCursorX = 0; // integer cursor position [0,w/h]
+GLint iCursorX = 0;  // integer cursor position [0,w/h]
 GLint iCursorY = 0;
 
 GLfloat maxR = 0.0f;
@@ -39,19 +39,19 @@ GLfloat maxB = 0.0f;
 #define WHITEBALANCE 3
 #define TOTAL_SHADERS 4
 
-GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS]; // shader object names
+GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
 char *shaderNames[TOTAL_SHADERS] = {"clamped", "trivial", "iris",
                                     "whitebalance"};
 int currentShader = TRIVIAL;
 
-GLint npotTextureWidth, npotTextureHeight; // texture size
+GLint npotTextureWidth, npotTextureHeight;  // texture size
 GLint potTextureWidth, potTextureHeight;
 GLint maxTexSize;
 GLboolean npotTexturesAvailable = GL_FALSE;
-GLfloat xAspect, yAspect; // aspect ratio of quad surface
+GLfloat xAspect, yAspect;  // aspect ratio of quad surface
 
-GLint mainMenu; // menu handles
+GLint mainMenu;  // menu handles
 GLint shaderMenu;
 GLint textureMenu;
 
@@ -220,8 +220,7 @@ void RenderScene(void) {
     glEnd();
   }
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -255,33 +254,33 @@ void SetupTextures(int whichEXR) {
   char name[256];
 
   switch (whichEXR) {
-  case 0:
-    strcpy(name, "openexr-images/Blobbies.exr");
-    break;
-  case 1:
-    strcpy(name, "openexr-images/Desk.exr");
-    break;
-  case 2:
-    strcpy(name, "openexr-images/GoldenGate.exr");
-    break;
-  case 3:
-    strcpy(name, "openexr-images/MtTamWest.exr");
-    break;
-  case 4:
-    strcpy(name, "openexr-images/Ocean.exr");
-    break;
-  case 5:
-    strcpy(name, "openexr-images/Spirals.exr");
-    break;
-  case 6:
-    strcpy(name, "openexr-images/StillLife.exr");
-    break;
-  case 7:
-    strcpy(name, "openexr-images/Tree.exr");
-    break;
-  default:
-    assert(0);
-    break;
+    case 0:
+      strcpy(name, "openexr-images/Blobbies.exr");
+      break;
+    case 1:
+      strcpy(name, "openexr-images/Desk.exr");
+      break;
+    case 2:
+      strcpy(name, "openexr-images/GoldenGate.exr");
+      break;
+    case 3:
+      strcpy(name, "openexr-images/MtTamWest.exr");
+      break;
+    case 4:
+      strcpy(name, "openexr-images/Ocean.exr");
+      break;
+    case 5:
+      strcpy(name, "openexr-images/Spirals.exr");
+      break;
+    case 6:
+      strcpy(name, "openexr-images/StillLife.exr");
+      break;
+    case 7:
+      strcpy(name, "openexr-images/Tree.exr");
+      break;
+    default:
+      assert(0);
+      break;
   }
   RgbaInputFile file(name);
   Box2i dw = file.dataWindow();
@@ -299,10 +298,8 @@ void SetupTextures(int whichEXR) {
   potTextureHeight = npotTextureHeight;
 
   if (!npotTexturesAvailable) {
-    while (potTextureWidth & (potTextureWidth - 1))
-      potTextureWidth++;
-    while (potTextureHeight & (potTextureHeight - 1))
-      potTextureHeight++;
+    while (potTextureWidth & (potTextureWidth - 1)) potTextureWidth++;
+    while (potTextureHeight & (potTextureHeight - 1)) potTextureHeight++;
   }
 
   if ((potTextureWidth > maxTexSize) || (potTextureHeight > maxTexSize)) {
@@ -311,8 +308,7 @@ void SetupTextures(int whichEXR) {
     exit(0);
   }
 
-  if (fTexels)
-    free(fTexels);
+  if (fTexels) free(fTexels);
   fTexels = (GLfloat *)malloc(potTextureWidth * potTextureHeight * 3 *
                               sizeof(GLfloat));
   GLfloat *ptr = fTexels;
@@ -324,7 +320,7 @@ void SetupTextures(int whichEXR) {
         ptr[2] = 0.0f;
       } else {
         Rgba texel =
-            pixels[npotTextureHeight - v - 1][u]; // inverted vertically
+            pixels[npotTextureHeight - v - 1][u];  // inverted vertically
         ptr[0] = texel.r;
         ptr[1] = texel.g;
         ptr[2] = texel.b;
@@ -405,25 +401,25 @@ void SetupRC() {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    currentShader = CLAMPED;
-    break;
+    case 1:
+      currentShader = CLAMPED;
+      break;
 
-  case 2:
-    currentShader = TRIVIAL;
-    break;
+    case 2:
+      currentShader = TRIVIAL;
+      break;
 
-  case 3:
-    currentShader = IRIS;
-    break;
+    case 3:
+      currentShader = IRIS;
+      break;
 
-  case 4:
-    currentShader = WHITEBALANCE;
-    break;
+    case 4:
+      currentShader = WHITEBALANCE;
+      break;
 
-  default:
-    SetupTextures(value - 5);
-    break;
+    default:
+      SetupTextures(value - 5);
+      break;
   }
 
   // Refresh the Window
@@ -432,10 +428,10 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -473,24 +469,24 @@ void SpecialKeys(int key, int x, int y) {
   // as this is compatible with the input from MouseMotion
 
   switch (key) {
-  case GLUT_KEY_UP:
-    iCursorY--;
-    iCursorY = (iCursorY < 0) ? 0 : iCursorY;
-    break;
-  case GLUT_KEY_RIGHT:
-    iCursorX++;
-    iCursorX = (iCursorX >= windowWidth) ? (windowWidth - 1) : iCursorX;
-    break;
-  case GLUT_KEY_DOWN:
-    iCursorY++;
-    iCursorY = (iCursorY >= windowHeight) ? (windowHeight - 1) : iCursorY;
-    break;
-  case GLUT_KEY_LEFT:
-    iCursorX--;
-    iCursorX = (iCursorX < 0) ? 0 : iCursorX;
-    break;
-  default:
-    break;
+    case GLUT_KEY_UP:
+      iCursorY--;
+      iCursorY = (iCursorY < 0) ? 0 : iCursorY;
+      break;
+    case GLUT_KEY_RIGHT:
+      iCursorX++;
+      iCursorX = (iCursorX >= windowWidth) ? (windowWidth - 1) : iCursorX;
+      break;
+    case GLUT_KEY_DOWN:
+      iCursorY++;
+      iCursorY = (iCursorY >= windowHeight) ? (windowHeight - 1) : iCursorY;
+      break;
+    case GLUT_KEY_LEFT:
+      iCursorX--;
+      iCursorX = (iCursorX < 0) ? 0 : iCursorX;
+      break;
+    default:
+      break;
   }
 
   MouseMotion(iCursorX, iCursorY);

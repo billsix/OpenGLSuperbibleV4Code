@@ -3,7 +3,7 @@
 // Richard S. Wright Jr.
 // rwright@starstonesoftware.com
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <math.h>
 
@@ -19,9 +19,9 @@ struct Rectangle {
 #define TORUS 1
 #define SPHERE 2
 
-struct Rectangle boundingRect; // Bounding rectangle
-GLuint selectedObject = 0;     // Who is selected
-float fAspect;                 // Display aspect ratio
+struct Rectangle boundingRect;  // Bounding rectangle
+GLuint selectedObject = 0;      // Who is selected
+float fAspect;                  // Display aspect ratio
 
 #if !defined(M_PI)
 #define M_PI 3.14159265f
@@ -107,7 +107,7 @@ void DrawObjects(void) {
   DrawSphere(0.5f);
 
   // Restore the matrix state
-  glPopMatrix(); // Modelview matrix
+  glPopMatrix();  // Modelview matrix
 }
 
 ///////////////////////////////////////////////////////////
@@ -192,10 +192,10 @@ void MakeSelection(int nChoice) {
           // Just get the polygons
           if (feedBackBuff[i] == GL_POLYGON_TOKEN) {
             // Get all the values for this polygon
-            count = (int)feedBackBuff[++i]; // How many vertices
+            count = (int)feedBackBuff[++i];  // How many vertices
             i++;
 
-            for (j = 0; j < count; j++) // Loop for each vertex
+            for (j = 0; j < count; j++)  // Loop for each vertex
             {
               // Min and Max X
               if (feedBackBuff[i] > boundingRect.right)
@@ -214,7 +214,7 @@ void MakeSelection(int nChoice) {
               i++;
             }
           } else
-            i++; // Get next index and keep looking
+            i++;  // Get next index and keep looking
         }
         break;
       }
@@ -291,8 +291,8 @@ void SetupRC() {
   GLfloat lightPos[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
   // Light values and coordinates
-  glEnable(GL_DEPTH_TEST); // Hidden surface removal
-  glFrontFace(GL_CCW);     // Counter clock-wise polygons face out
+  glEnable(GL_DEPTH_TEST);  // Hidden surface removal
+  glFrontFace(GL_CCW);      // Counter clock-wise polygons face out
   // glEnable(GL_CULL_FACE);		// Do not calculate insides
 
   // Enable lighting
@@ -319,8 +319,7 @@ void SetupRC() {
 // Set viewport and projection
 void ChangeSize(int w, int h) {
   // Prevent a divide by zero
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, w, h);
@@ -343,8 +342,7 @@ void ChangeSize(int w, int h) {
 ///////////////////////////////////////////////////////////
 // Process the mouse click
 void MouseCallback(int button, int state, int x, int y) {
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    ProcessSelection(x, y);
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) ProcessSelection(x, y);
 }
 
 ///////////////////////////////////////////////////////////

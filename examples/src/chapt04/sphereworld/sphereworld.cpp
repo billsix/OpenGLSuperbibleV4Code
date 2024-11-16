@@ -4,9 +4,9 @@
 // and a camera.
 // Program by Richard S. Wright Jr.
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
-#include "../../shared/glframe.h" // Frame Class
+#include "../../shared/glframe.h"  // Frame Class
 
 #include <math.h>
 
@@ -47,7 +47,7 @@ void DrawGround(void) {
 
   glBegin(GL_LINES);
   for (iLine = -fExtent; iLine <= fExtent; iLine += fStep) {
-    glVertex3f(iLine, y, fExtent); // Draw Z lines
+    glVertex3f(iLine, y, fExtent);  // Draw Z lines
     glVertex3f(iLine, y, -fExtent);
 
     glVertex3f(fExtent, y, iLine);
@@ -60,7 +60,7 @@ void DrawGround(void) {
 // Called to draw scene
 void RenderScene(void) {
   int i;
-  static GLfloat yRot = 0.0f; // Rotation angle for animation
+  static GLfloat yRot = 0.0f;  // Rotation angle for animation
   yRot += 0.5f;
 
   // Clear the window with current clearing color
@@ -100,17 +100,13 @@ void RenderScene(void) {
 
 // Respond to arrow keys by moving the camera frame of reference
 void SpecialKeys(int key, int x, int y) {
-  if (key == GLUT_KEY_UP)
-    frameCamera.MoveForward(0.1f);
+  if (key == GLUT_KEY_UP) frameCamera.MoveForward(0.1f);
 
-  if (key == GLUT_KEY_DOWN)
-    frameCamera.MoveForward(-0.1f);
+  if (key == GLUT_KEY_DOWN) frameCamera.MoveForward(-0.1f);
 
-  if (key == GLUT_KEY_LEFT)
-    frameCamera.RotateLocalY(0.1f);
+  if (key == GLUT_KEY_LEFT) frameCamera.RotateLocalY(0.1f);
 
-  if (key == GLUT_KEY_RIGHT)
-    frameCamera.RotateLocalY(-0.1f);
+  if (key == GLUT_KEY_RIGHT) frameCamera.RotateLocalY(-0.1f);
 
   // Refresh the Window
   glutPostRedisplay();
@@ -130,8 +126,7 @@ void ChangeSize(int w, int h) {
 
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if (h == 0)
-    h = 1;
+  if (h == 0) h = 1;
 
   glViewport(0, 0, w, h);
 

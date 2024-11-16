@@ -119,6 +119,6 @@ BOOL GLViewPixFormatDlg::OnInitDialog() {
              pFormatDesc->bReserved >> 4);
   SetDlgItemText(IDC_ED_RESERVEDTEXT, str);
 
-  return TRUE; // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;  // return TRUE unless you set the focus to a control
+                // EXCEPTION: OCX Property Pages should return FALSE
 }

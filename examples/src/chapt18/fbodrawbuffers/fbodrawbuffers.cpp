@@ -3,38 +3,38 @@
 // Demonstrates multiple render targets with FBOs
 // Program by Benjamin Lipchak
 
-#include "../../shared/gltools.h" // OpenGL toolkit
+#include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include <assert.h>
 
 #include <stdio.h>
 
 GLboolean npotTexturesAvailable = GL_FALSE;
-GLboolean useDrawBuffers = GL_TRUE; // Use FBOs + drawbuffers vs. multipass
-GLboolean doProcessing = GL_TRUE;   // Show scene using FBOs and post-processing
+GLboolean useDrawBuffers = GL_TRUE;  // Use FBOs + drawbuffers vs. multipass
+GLboolean doProcessing = GL_TRUE;  // Show scene using FBOs and post-processing
 
-GLint windowWidth = 512; // window size
+GLint windowWidth = 512;  // window size
 GLint windowHeight = 512;
 
-GLint fboWidth = 0; // set based on window size
+GLint fboWidth = 0;  // set based on window size
 GLint fboHeight = 0;
-GLuint wallTextureID[4];   // textures for walls
-GLuint renderTextureID[5]; // 1 in 1st pass and up to 4 simultaneous render
-                           // targets in 2nd
-GLint maxTexSize;          // maximum allowed size for our 2D textures
-GLint maxTexUnits;         // maximum number of texture image units
-GLint maxDrawBuffers;      // maximum number of drawbuffers supported
-GLint maxColorAttachments; // maximum number of FBO color attachments
+GLuint wallTextureID[4];    // textures for walls
+GLuint renderTextureID[5];  // 1 in 1st pass and up to 4 simultaneous render
+                            // targets in 2nd
+GLint maxTexSize;           // maximum allowed size for our 2D textures
+GLint maxTexUnits;          // maximum number of texture image units
+GLint maxDrawBuffers;       // maximum number of drawbuffers supported
+GLint maxColorAttachments;  // maximum number of FBO color attachments
 
 #define TOTAL_SHADERS 6
-GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS]; // shader object names
+GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
 char *shaderNames[TOTAL_SHADERS] = {"multirender", "combine",   "blur",
                                     "laplacian",   "grayscale", "colorinvert"};
 
-GLuint framebufferID[2];   // FBO names
-GLuint renderbufferID;     // renderbuffer object name
-GLint maxRenderbufferSize; // maximum allowed size for FBO renderbuffer
+GLuint framebufferID[2];    // FBO names
+GLuint renderbufferID;      // renderbuffer object name
+GLint maxRenderbufferSize;  // maximum allowed size for FBO renderbuffer
 GLfloat texCoordOffsets[18];
 
 GLfloat ambientLight[] = {0.4f, 0.4f, 0.4f, 1.0f};
@@ -45,7 +45,7 @@ GLfloat lightPos[] = {0.0f, 125.0f, 0.0f, 1.0f};
 GLfloat cameraPos[] = {50.0f, 50.0f, 100.0f, 1.0f};
 GLdouble cameraZoom = 1.5;
 
-GLfloat animationAngle = 0.0f; // used to spin objects
+GLfloat animationAngle = 0.0f;  // used to spin objects
 
 #define MAX_INFO_LOG_SIZE 2048
 
@@ -135,7 +135,7 @@ void PrepareShader(GLint shaderNum) {
 // Called to draw scene objects
 void DrawModels(GLboolean drawTeapot) {
   // Draw plane that the objects rest on
-  glColor3f(0.0f, 0.0f, 0.90f); // Blue
+  glColor3f(0.0f, 0.0f, 0.90f);  // Blue
   glNormal3f(0.0f, 1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, -25.0f, -100.0f);
@@ -198,7 +198,7 @@ void DrawModels(GLboolean drawTeapot) {
   glDisable(GL_TEXTURE_2D);
 
   // Draw ceiling
-  glColor3f(1.0f, 0.6f, 0.6f); // pale red
+  glColor3f(1.0f, 0.6f, 0.6f);  // pale red
   glNormal3f(0.0f, -1.0f, 0.0f);
   glBegin(GL_QUADS);
   glVertex3f(-100.0f, 125.0f, -100.0f);
@@ -254,8 +254,7 @@ void DrawModels(GLboolean drawTeapot) {
 void RenderScene(void) {
   // spin objects
   animationAngle += 1.0f;
-  if (animationAngle == 360.0f)
-    animationAngle = 0.0f;
+  if (animationAngle == 360.0f) animationAngle = 0.0f;
 
   // Track camera angle
   glMatrixMode(GL_PROJECTION);
@@ -271,18 +270,12 @@ void RenderScene(void) {
   }
 
   // Keep the camera inside the room
-  if (cameraPos[0] > 99.0f)
-    cameraPos[0] = 99.0f;
-  if (cameraPos[0] < -99.0f)
-    cameraPos[0] = -99.0f;
-  if (cameraPos[1] > 120.0f)
-    cameraPos[1] = 120.0f;
-  if (cameraPos[1] < -20.0f)
-    cameraPos[1] = -20.0f;
-  if (cameraPos[2] > 99.0f)
-    cameraPos[2] = 99.0f;
-  if (cameraPos[2] < -99.0f)
-    cameraPos[2] = -99.0f;
+  if (cameraPos[0] > 99.0f) cameraPos[0] = 99.0f;
+  if (cameraPos[0] < -99.0f) cameraPos[0] = -99.0f;
+  if (cameraPos[1] > 120.0f) cameraPos[1] = 120.0f;
+  if (cameraPos[1] < -20.0f) cameraPos[1] = -20.0f;
+  if (cameraPos[2] > 99.0f) cameraPos[2] = 99.0f;
+  if (cameraPos[2] < -99.0f) cameraPos[2] = -99.0f;
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -431,8 +424,7 @@ void RenderScene(void) {
     glUseProgram(0);
   }
 
-  if (glGetError() != GL_NO_ERROR)
-    fprintf(stderr, "GL Error!\n");
+  if (glGetError() != GL_NO_ERROR) fprintf(stderr, "GL Error!\n");
 
   // Flush drawing commands
   glutSwapBuffers();
@@ -448,20 +440,20 @@ void SetupTextures(void) {
 
   for (int i = 0; i < 4; i++) {
     switch (i) {
-    case 0:
-      texels = gltLoadTGA("WRHS.tga", &w, &h, &c, &format);
-      break;
-    case 1:
-      texels = gltLoadTGA("MAMS.tga", &w, &h, &c, &format);
-      break;
-    case 2:
-      texels = gltLoadTGA("WPI.tga", &w, &h, &c, &format);
-      break;
-    case 3:
-      texels = gltLoadTGA("Babson.tga", &w, &h, &c, &format);
-      break;
-    default:
-      break;
+      case 0:
+        texels = gltLoadTGA("WRHS.tga", &w, &h, &c, &format);
+        break;
+      case 1:
+        texels = gltLoadTGA("MAMS.tga", &w, &h, &c, &format);
+        break;
+      case 2:
+        texels = gltLoadTGA("WPI.tga", &w, &h, &c, &format);
+        break;
+      case 3:
+        texels = gltLoadTGA("Babson.tga", &w, &h, &c, &format);
+        break;
+      default:
+        break;
     }
 
     assert(c == GL_RGB8);
@@ -483,8 +475,7 @@ void SetupTextures(void) {
   glGenTextures(5, renderTextureID);
 
   for (GLint i = 0; i < maxDrawBuffers + 1; i++) {
-    if (i > 0)
-      glActiveTexture(GL_TEXTURE0 + i - 1);
+    if (i > 0) glActiveTexture(GL_TEXTURE0 + i - 1);
     glBindTexture(GL_TEXTURE_2D, renderTextureID[i]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -633,13 +624,11 @@ void ChangeSize(int w, int h) {
   if (!npotTexturesAvailable) {
     // Try each size until we get one larger than the window
     i = 0;
-    while ((1 << i) <= windowWidth)
-      i++;
+    while ((1 << i) <= windowWidth) i++;
     fboWidth = (1 << i);
 
     i = 0;
-    while ((1 << i) <= windowHeight)
-      i++;
+    while ((1 << i) <= windowHeight) i++;
     fboHeight = (1 << i);
   }
 
@@ -678,26 +667,27 @@ void ChangeSize(int w, int h) {
 
 void ProcessMenu(int value) {
   switch (value) {
-  case 1:
-    useDrawBuffers = !useDrawBuffers;
-    if (useDrawBuffers) {
-      glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently OFF)", 1);
-    }
-    break;
+    case 1:
+      useDrawBuffers = !useDrawBuffers;
+      if (useDrawBuffers) {
+        glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently OFF)",
+                              1);
+      }
+      break;
 
-  case 2:
-    doProcessing = !doProcessing;
-    if (doProcessing) {
-      glutChangeToMenuEntry(2, "Toggle post-processing (currently ON)", 2);
-    } else {
-      glutChangeToMenuEntry(2, "Toggle post-processing (currently OFF)", 2);
-    }
-    break;
+    case 2:
+      doProcessing = !doProcessing;
+      if (doProcessing) {
+        glutChangeToMenuEntry(2, "Toggle post-processing (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle post-processing (currently OFF)", 2);
+      }
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -706,46 +696,47 @@ void ProcessMenu(int value) {
 
 void KeyPressFunc(unsigned char key, int x, int y) {
   switch (key) {
-  case 'x':
-    cameraPos[0] += 1.0f;
-    break;
-  case 'X':
-    cameraPos[0] -= 1.0f;
-    break;
-  case 'y':
-    cameraPos[1] += 1.0f;
-    break;
-  case 'Y':
-    cameraPos[1] -= 1.0f;
-    break;
-  case 'z':
-    cameraPos[2] += 1.0f;
-    break;
-  case 'Z':
-    cameraPos[2] -= 1.0f;
-    break;
-  case 'd':
-  case 'D':
-    useDrawBuffers = !useDrawBuffers;
-    if (useDrawBuffers) {
-      glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently ON)", 1);
-    } else {
-      glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently OFF)", 1);
-    }
-    break;
-  case 'p':
-  case 'P':
-    doProcessing = !doProcessing;
-    if (doProcessing) {
-      glutChangeToMenuEntry(2, "Toggle post-processing (currently ON)", 2);
-    } else {
-      glutChangeToMenuEntry(2, "Toggle post-processing (currently OFF)", 2);
-    }
-    break;
-  case 'q':
-  case 'Q':
-  case 27: /* ESC */
-    exit(0);
+    case 'x':
+      cameraPos[0] += 1.0f;
+      break;
+    case 'X':
+      cameraPos[0] -= 1.0f;
+      break;
+    case 'y':
+      cameraPos[1] += 1.0f;
+      break;
+    case 'Y':
+      cameraPos[1] -= 1.0f;
+      break;
+    case 'z':
+      cameraPos[2] += 1.0f;
+      break;
+    case 'Z':
+      cameraPos[2] -= 1.0f;
+      break;
+    case 'd':
+    case 'D':
+      useDrawBuffers = !useDrawBuffers;
+      if (useDrawBuffers) {
+        glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently ON)", 1);
+      } else {
+        glutChangeToMenuEntry(1, "Toggle draw buffers usage (currently OFF)",
+                              1);
+      }
+      break;
+    case 'p':
+    case 'P':
+      doProcessing = !doProcessing;
+      if (doProcessing) {
+        glutChangeToMenuEntry(2, "Toggle post-processing (currently ON)", 2);
+      } else {
+        glutChangeToMenuEntry(2, "Toggle post-processing (currently OFF)", 2);
+      }
+      break;
+    case 'q':
+    case 'Q':
+    case 27: /* ESC */
+      exit(0);
   }
 
   // Refresh the Window
@@ -754,20 +745,20 @@ void KeyPressFunc(unsigned char key, int x, int y) {
 
 void SpecialKeys(int key, int x, int y) {
   switch (key) {
-  case GLUT_KEY_LEFT:
-    cameraPos[0] -= 1.0f;
-    break;
-  case GLUT_KEY_RIGHT:
-    cameraPos[0] += 1.0f;
-    break;
-  case GLUT_KEY_UP:
-    cameraPos[2] -= 1.0f;
-    break;
-  case GLUT_KEY_DOWN:
-    cameraPos[2] += 1.0f;
-    break;
-  default:
-    break;
+    case GLUT_KEY_LEFT:
+      cameraPos[0] -= 1.0f;
+      break;
+    case GLUT_KEY_RIGHT:
+      cameraPos[0] += 1.0f;
+      break;
+    case GLUT_KEY_UP:
+      cameraPos[2] -= 1.0f;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraPos[2] += 1.0f;
+      break;
+    default:
+      break;
   }
 
   // Refresh the Window
@@ -797,10 +788,8 @@ int main(int argc, char *argv[]) {
 
   glDeleteTextures(5, renderTextureID);
   glDeleteTextures(4, wallTextureID);
-  if (glDeleteFramebuffersEXT)
-    glDeleteFramebuffersEXT(2, framebufferID);
-  if (glDeleteRenderbuffersEXT)
-    glDeleteRenderbuffersEXT(1, &renderbufferID);
+  if (glDeleteFramebuffersEXT) glDeleteFramebuffersEXT(2, framebufferID);
+  if (glDeleteRenderbuffersEXT) glDeleteRenderbuffersEXT(1, &renderbufferID);
 
   return 0;
 }

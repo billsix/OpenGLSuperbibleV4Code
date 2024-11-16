@@ -4,18 +4,18 @@
 #if !defined(AFX_GLVIEWDLG_H__D85222E9_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_)
 #define AFX_GLVIEWDLG_H__D85222E9_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_
 
-#include "GLWindow.h" // Added by ClassView
+#include "GLWindow.h"  // Added by ClassView
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 /////////////////////////////////////////////////////////////////////////////
 // CGLViewDlg dialog
 
 class CGLViewDlg : public CDialog {
   // Construction
-public:
-  CGLViewDlg(CWnd *pParent = NULL); // standard constructor
+ public:
+  CGLViewDlg(CWnd *pParent = NULL);  // standard constructor
 
   // Dialog Data
   //{{AFX_DATA(CGLViewDlg)
@@ -27,12 +27,12 @@ public:
 
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CGLViewDlg)
-protected:
-  virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV support
-                                                   //}}AFX_VIRTUAL
+ protected:
+  virtual void DoDataExchange(CDataExchange *pDX);  // DDX/DDV support
+                                                    //}}AFX_VIRTUAL
 
   // Implementation
-protected:
+ protected:
   CGLWindow m_glWnd;
   HICON m_hIcon;
   CRect newRect;
@@ -46,7 +46,7 @@ protected:
   afx_msg void OnSelchangeList();
   //}}AFX_MSG
   DECLARE_MESSAGE_MAP()
-public:
+ public:
   afx_msg void OnBnClickedButton1();
   afx_msg void OnLbnDblclkList();
   afx_msg void OnBnClickedButton2();
@@ -56,4 +56,4 @@ public:
 // Microsoft Visual C++ will insert additional declarations immediately before
 // the previous line.
 
-#endif // !defined(AFX_GLVIEWDLG_H__D85222E9_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_)
+#endif  // !defined(AFX_GLVIEWDLG_H__D85222E9_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_)

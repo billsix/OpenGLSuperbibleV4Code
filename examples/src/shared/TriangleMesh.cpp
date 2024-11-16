@@ -69,7 +69,7 @@ void CTriangleMesh::BeginMesh(GLuint nMaxVerts) {
 // array and the vertex array grows by one as well.
 void CTriangleMesh::AddTriangle(M3DVector3f verts[3], M3DVector3f vNorms[3],
                                 M3DVector2f vTexCoords[3]) {
-  const float e = 0.000001; // How small a difference to equate
+  const float e = 0.000001;  // How small a difference to equate
 
   // First thing we do is make sure the normals are unit length!
   // It's almost always a good idea to work with pre-normalized normals

@@ -402,16 +402,16 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_ARB_texture_env_add GLeeEnabled(&_GLEE_ARB_texture_env_add)
 #define GLEE_ARB_texture_cube_map GLeeEnabled(&_GLEE_ARB_texture_cube_map)
 #define GLEE_ARB_texture_compression GLeeEnabled(&_GLEE_ARB_texture_compression)
-#define GLEE_ARB_texture_border_clamp                                          \
+#define GLEE_ARB_texture_border_clamp \
   GLeeEnabled(&_GLEE_ARB_texture_border_clamp)
 #define GLEE_ARB_point_parameters GLeeEnabled(&_GLEE_ARB_point_parameters)
 #define GLEE_ARB_vertex_blend GLeeEnabled(&_GLEE_ARB_vertex_blend)
 #define GLEE_ARB_matrix_palette GLeeEnabled(&_GLEE_ARB_matrix_palette)
 #define GLEE_ARB_texture_env_combine GLeeEnabled(&_GLEE_ARB_texture_env_combine)
-#define GLEE_ARB_texture_env_crossbar                                          \
+#define GLEE_ARB_texture_env_crossbar \
   GLeeEnabled(&_GLEE_ARB_texture_env_crossbar)
 #define GLEE_ARB_texture_env_dot3 GLeeEnabled(&_GLEE_ARB_texture_env_dot3)
-#define GLEE_ARB_texture_mirrored_repeat                                       \
+#define GLEE_ARB_texture_mirrored_repeat \
   GLeeEnabled(&_GLEE_ARB_texture_mirrored_repeat)
 #define GLEE_ARB_depth_texture GLeeEnabled(&_GLEE_ARB_depth_texture)
 #define GLEE_ARB_shadow GLeeEnabled(&_GLEE_ARB_shadow)
@@ -419,18 +419,18 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_ARB_window_pos GLeeEnabled(&_GLEE_ARB_window_pos)
 #define GLEE_ARB_vertex_program GLeeEnabled(&_GLEE_ARB_vertex_program)
 #define GLEE_ARB_fragment_program GLeeEnabled(&_GLEE_ARB_fragment_program)
-#define GLEE_ARB_vertex_buffer_object                                          \
+#define GLEE_ARB_vertex_buffer_object \
   GLeeEnabled(&_GLEE_ARB_vertex_buffer_object)
 #define GLEE_ARB_occlusion_query GLeeEnabled(&_GLEE_ARB_occlusion_query)
 #define GLEE_ARB_shader_objects GLeeEnabled(&_GLEE_ARB_shader_objects)
 #define GLEE_ARB_vertex_shader GLeeEnabled(&_GLEE_ARB_vertex_shader)
 #define GLEE_ARB_fragment_shader GLeeEnabled(&_GLEE_ARB_fragment_shader)
-#define GLEE_ARB_shading_language_100                                          \
+#define GLEE_ARB_shading_language_100 \
   GLeeEnabled(&_GLEE_ARB_shading_language_100)
-#define GLEE_ARB_texture_non_power_of_two                                      \
+#define GLEE_ARB_texture_non_power_of_two \
   GLeeEnabled(&_GLEE_ARB_texture_non_power_of_two)
 #define GLEE_ARB_point_sprite GLeeEnabled(&_GLEE_ARB_point_sprite)
-#define GLEE_ARB_fragment_program_shadow                                       \
+#define GLEE_ARB_fragment_program_shadow \
   GLeeEnabled(&_GLEE_ARB_fragment_program_shadow)
 #define GLEE_ARB_draw_buffers GLeeEnabled(&_GLEE_ARB_draw_buffers)
 #define GLEE_ARB_texture_rectangle GLeeEnabled(&_GLEE_ARB_texture_rectangle)
@@ -468,7 +468,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_SGIX_clipmap GLeeEnabled(&_GLEE_SGIX_clipmap)
 #define GLEE_SGIX_shadow GLeeEnabled(&_GLEE_SGIX_shadow)
 #define GLEE_SGIS_texture_edge_clamp GLeeEnabled(&_GLEE_SGIS_texture_edge_clamp)
-#define GLEE_SGIS_texture_border_clamp                                         \
+#define GLEE_SGIS_texture_border_clamp \
   GLeeEnabled(&_GLEE_SGIS_texture_border_clamp)
 #define GLEE_EXT_blend_minmax GLeeEnabled(&_GLEE_EXT_blend_minmax)
 #define GLEE_EXT_blend_subtract GLeeEnabled(&_GLEE_EXT_blend_subtract)
@@ -477,7 +477,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_SGIX_pixel_tiles GLeeEnabled(&_GLEE_SGIX_pixel_tiles)
 #define GLEE_SGIS_texture_select GLeeEnabled(&_GLEE_SGIS_texture_select)
 #define GLEE_SGIX_sprite GLeeEnabled(&_GLEE_SGIX_sprite)
-#define GLEE_SGIX_texture_multi_buffer                                         \
+#define GLEE_SGIX_texture_multi_buffer \
   GLeeEnabled(&_GLEE_SGIX_texture_multi_buffer)
 #define GLEE_EXT_point_parameters GLeeEnabled(&_GLEE_EXT_point_parameters)
 #define GLEE_SGIS_point_parameters GLeeEnabled(&_GLEE_SGIS_point_parameters)
@@ -493,7 +493,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_SGIS_fog_function GLeeEnabled(&_GLEE_SGIS_fog_function)
 #define GLEE_SGIX_fog_offset GLeeEnabled(&_GLEE_SGIX_fog_offset)
 #define GLEE_HP_image_transform GLeeEnabled(&_GLEE_HP_image_transform)
-#define GLEE_HP_convolution_border_modes                                       \
+#define GLEE_HP_convolution_border_modes \
   GLeeEnabled(&_GLEE_HP_convolution_border_modes)
 #define GLEE_INGR_palette_buffer GLeeEnabled(&_GLEE_INGR_palette_buffer)
 #define GLEE_SGIX_texture_add_env GLeeEnabled(&_GLEE_SGIX_texture_add_env)
@@ -504,7 +504,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_EXT_clip_volume_hint GLeeEnabled(&_GLEE_EXT_clip_volume_hint)
 #define GLEE_SGIX_list_priority GLeeEnabled(&_GLEE_SGIX_list_priority)
 #define GLEE_SGIX_ir_instrument1 GLeeEnabled(&_GLEE_SGIX_ir_instrument1)
-#define GLEE_SGIX_calligraphic_fragment                                        \
+#define GLEE_SGIX_calligraphic_fragment \
   GLeeEnabled(&_GLEE_SGIX_calligraphic_fragment)
 #define GLEE_SGIX_texture_lod_bias GLeeEnabled(&_GLEE_SGIX_texture_lod_bias)
 #define GLEE_SGIX_shadow_ambient GLeeEnabled(&_GLEE_SGIX_shadow_ambient)
@@ -512,7 +512,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_EXT_index_material GLeeEnabled(&_GLEE_EXT_index_material)
 #define GLEE_EXT_index_func GLeeEnabled(&_GLEE_EXT_index_func)
 #define GLEE_EXT_index_array_formats GLeeEnabled(&_GLEE_EXT_index_array_formats)
-#define GLEE_EXT_compiled_vertex_array                                         \
+#define GLEE_EXT_compiled_vertex_array \
   GLeeEnabled(&_GLEE_EXT_compiled_vertex_array)
 #define GLEE_EXT_cull_vertex GLeeEnabled(&_GLEE_EXT_cull_vertex)
 #define GLEE_SGIX_ycrcb GLeeEnabled(&_GLEE_SGIX_ycrcb)
@@ -524,7 +524,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_WIN_specular_fog GLeeEnabled(&_GLEE_WIN_specular_fog)
 #define GLEE_EXT_light_texture GLeeEnabled(&_GLEE_EXT_light_texture)
 #define GLEE_SGIX_blend_alpha_minmax GLeeEnabled(&_GLEE_SGIX_blend_alpha_minmax)
-#define GLEE_SGIX_impact_pixel_texture                                         \
+#define GLEE_SGIX_impact_pixel_texture \
   GLeeEnabled(&_GLEE_SGIX_impact_pixel_texture)
 #define GLEE_EXT_bgra GLeeEnabled(&_GLEE_EXT_bgra)
 #define GLEE_SGIX_async GLeeEnabled(&_GLEE_SGIX_async)
@@ -534,14 +534,14 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_INTEL_parallel_arrays GLeeEnabled(&_GLEE_INTEL_parallel_arrays)
 #define GLEE_HP_occlusion_test GLeeEnabled(&_GLEE_HP_occlusion_test)
 #define GLEE_EXT_pixel_transform GLeeEnabled(&_GLEE_EXT_pixel_transform)
-#define GLEE_EXT_pixel_transform_color_table                                   \
+#define GLEE_EXT_pixel_transform_color_table \
   GLeeEnabled(&_GLEE_EXT_pixel_transform_color_table)
-#define GLEE_EXT_shared_texture_palette                                        \
+#define GLEE_EXT_shared_texture_palette \
   GLeeEnabled(&_GLEE_EXT_shared_texture_palette)
-#define GLEE_EXT_separate_specular_color                                       \
+#define GLEE_EXT_separate_specular_color \
   GLeeEnabled(&_GLEE_EXT_separate_specular_color)
 #define GLEE_EXT_secondary_color GLeeEnabled(&_GLEE_EXT_secondary_color)
-#define GLEE_EXT_texture_perturb_normal                                        \
+#define GLEE_EXT_texture_perturb_normal \
   GLeeEnabled(&_GLEE_EXT_texture_perturb_normal)
 #define GLEE_EXT_multi_draw_arrays GLeeEnabled(&_GLEE_EXT_multi_draw_arrays)
 #define GLEE_EXT_fog_coord GLeeEnabled(&_GLEE_EXT_fog_coord)
@@ -562,11 +562,11 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_EXT_422_pixels GLeeEnabled(&_GLEE_EXT_422_pixels)
 #define GLEE_NV_texgen_reflection GLeeEnabled(&_GLEE_NV_texgen_reflection)
 #define GLEE_EXT_texture_cube_map GLeeEnabled(&_GLEE_EXT_texture_cube_map)
-#define GLEE_SUN_convolution_border_modes                                      \
+#define GLEE_SUN_convolution_border_modes \
   GLeeEnabled(&_GLEE_SUN_convolution_border_modes)
 #define GLEE_EXT_texture_env_add GLeeEnabled(&_GLEE_EXT_texture_env_add)
 #define GLEE_EXT_texture_lod_bias GLeeEnabled(&_GLEE_EXT_texture_lod_bias)
-#define GLEE_EXT_texture_filter_anisotropic                                    \
+#define GLEE_EXT_texture_filter_anisotropic \
   GLeeEnabled(&_GLEE_EXT_texture_filter_anisotropic)
 #define GLEE_EXT_vertex_weighting GLeeEnabled(&_GLEE_EXT_vertex_weighting)
 #define GLEE_NV_light_max_exponent GLeeEnabled(&_GLEE_NV_light_max_exponent)
@@ -578,24 +578,24 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_NV_texture_env_combine4 GLeeEnabled(&_GLEE_NV_texture_env_combine4)
 #define GLEE_MESA_resize_buffers GLeeEnabled(&_GLEE_MESA_resize_buffers)
 #define GLEE_MESA_window_pos GLeeEnabled(&_GLEE_MESA_window_pos)
-#define GLEE_EXT_texture_compression_s3tc                                      \
+#define GLEE_EXT_texture_compression_s3tc \
   GLeeEnabled(&_GLEE_EXT_texture_compression_s3tc)
 #define GLEE_IBM_cull_vertex GLeeEnabled(&_GLEE_IBM_cull_vertex)
-#define GLEE_IBM_multimode_draw_arrays                                         \
+#define GLEE_IBM_multimode_draw_arrays \
   GLeeEnabled(&_GLEE_IBM_multimode_draw_arrays)
 #define GLEE_IBM_vertex_array_lists GLeeEnabled(&_GLEE_IBM_vertex_array_lists)
 #define GLEE_SGIX_subsample GLeeEnabled(&_GLEE_SGIX_subsample)
 #define GLEE_SGIX_ycrcb_subsample GLeeEnabled(&_GLEE_SGIX_ycrcb_subsample)
 #define GLEE_SGIX_ycrcba GLeeEnabled(&_GLEE_SGIX_ycrcba)
-#define GLEE_SGI_depth_pass_instrument                                         \
+#define GLEE_SGI_depth_pass_instrument \
   GLeeEnabled(&_GLEE_SGI_depth_pass_instrument)
-#define GLEE_3DFX_texture_compression_FXT1                                     \
+#define GLEE_3DFX_texture_compression_FXT1 \
   GLeeEnabled(&_GLEE_3DFX_texture_compression_FXT1)
 #define GLEE_3DFX_multisample GLeeEnabled(&_GLEE_3DFX_multisample)
 #define GLEE_3DFX_tbuffer GLeeEnabled(&_GLEE_3DFX_tbuffer)
 #define GLEE_EXT_multisample GLeeEnabled(&_GLEE_EXT_multisample)
 #define GLEE_SGIX_vertex_preclip GLeeEnabled(&_GLEE_SGIX_vertex_preclip)
-#define GLEE_SGIX_convolution_accuracy                                         \
+#define GLEE_SGIX_convolution_accuracy \
   GLeeEnabled(&_GLEE_SGIX_convolution_accuracy)
 #define GLEE_SGIX_resample GLeeEnabled(&_GLEE_SGIX_resample)
 #define GLEE_SGIS_point_line_texgen GLeeEnabled(&_GLEE_SGIS_point_line_texgen)
@@ -603,19 +603,19 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_EXT_texture_env_dot3 GLeeEnabled(&_GLEE_EXT_texture_env_dot3)
 #define GLEE_ATI_texture_mirror_once GLeeEnabled(&_GLEE_ATI_texture_mirror_once)
 #define GLEE_NV_fence GLeeEnabled(&_GLEE_NV_fence)
-#define GLEE_IBM_texture_mirrored_repeat                                       \
+#define GLEE_IBM_texture_mirrored_repeat \
   GLeeEnabled(&_GLEE_IBM_texture_mirrored_repeat)
 #define GLEE_NV_evaluators GLeeEnabled(&_GLEE_NV_evaluators)
 #define GLEE_NV_packed_depth_stencil GLeeEnabled(&_GLEE_NV_packed_depth_stencil)
 #define GLEE_NV_register_combiners2 GLeeEnabled(&_GLEE_NV_register_combiners2)
-#define GLEE_NV_texture_compression_vtc                                        \
+#define GLEE_NV_texture_compression_vtc \
   GLeeEnabled(&_GLEE_NV_texture_compression_vtc)
 #define GLEE_NV_texture_rectangle GLeeEnabled(&_GLEE_NV_texture_rectangle)
 #define GLEE_NV_texture_shader GLeeEnabled(&_GLEE_NV_texture_shader)
 #define GLEE_NV_texture_shader2 GLeeEnabled(&_GLEE_NV_texture_shader2)
 #define GLEE_NV_vertex_array_range2 GLeeEnabled(&_GLEE_NV_vertex_array_range2)
 #define GLEE_NV_vertex_program GLeeEnabled(&_GLEE_NV_vertex_program)
-#define GLEE_SGIX_texture_coordinate_clamp                                     \
+#define GLEE_SGIX_texture_coordinate_clamp \
   GLeeEnabled(&_GLEE_SGIX_texture_coordinate_clamp)
 #define GLEE_SGIX_scalebias_hint GLeeEnabled(&_GLEE_SGIX_scalebias_hint)
 #define GLEE_OML_interlace GLeeEnabled(&_GLEE_OML_interlace)
@@ -631,7 +631,7 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_ATI_element_array GLeeEnabled(&_GLEE_ATI_element_array)
 #define GLEE_SUN_mesh_array GLeeEnabled(&_GLEE_SUN_mesh_array)
 #define GLEE_SUN_slice_accum GLeeEnabled(&_GLEE_SUN_slice_accum)
-#define GLEE_NV_multisample_filter_hint                                        \
+#define GLEE_NV_multisample_filter_hint \
   GLeeEnabled(&_GLEE_NV_multisample_filter_hint)
 #define GLEE_NV_depth_clamp GLeeEnabled(&_GLEE_NV_depth_clamp)
 #define GLEE_NV_occlusion_query GLeeEnabled(&_GLEE_NV_occlusion_query)
@@ -640,20 +640,20 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_NV_vertex_program1_1 GLeeEnabled(&_GLEE_NV_vertex_program1_1)
 #define GLEE_EXT_shadow_funcs GLeeEnabled(&_GLEE_EXT_shadow_funcs)
 #define GLEE_EXT_stencil_two_side GLeeEnabled(&_GLEE_EXT_stencil_two_side)
-#define GLEE_ATI_text_fragment_shader                                          \
+#define GLEE_ATI_text_fragment_shader \
   GLeeEnabled(&_GLEE_ATI_text_fragment_shader)
 #define GLEE_APPLE_client_storage GLeeEnabled(&_GLEE_APPLE_client_storage)
 #define GLEE_APPLE_element_array GLeeEnabled(&_GLEE_APPLE_element_array)
 #define GLEE_APPLE_fence GLeeEnabled(&_GLEE_APPLE_fence)
-#define GLEE_APPLE_vertex_array_object                                         \
+#define GLEE_APPLE_vertex_array_object \
   GLeeEnabled(&_GLEE_APPLE_vertex_array_object)
-#define GLEE_APPLE_vertex_array_range                                          \
+#define GLEE_APPLE_vertex_array_range \
   GLeeEnabled(&_GLEE_APPLE_vertex_array_range)
 #define GLEE_APPLE_ycbcr_422 GLeeEnabled(&_GLEE_APPLE_ycbcr_422)
 #define GLEE_S3_s3tc GLeeEnabled(&_GLEE_S3_s3tc)
 #define GLEE_ATI_draw_buffers GLeeEnabled(&_GLEE_ATI_draw_buffers)
 #define GLEE_ATI_pixel_format_float GLeeEnabled(&_GLEE_ATI_pixel_format_float)
-#define GLEE_ATI_texture_env_combine3                                          \
+#define GLEE_ATI_texture_env_combine3 \
   GLeeEnabled(&_GLEE_ATI_texture_env_combine3)
 #define GLEE_ATI_texture_float GLeeEnabled(&_GLEE_ATI_texture_float)
 #define GLEE_NV_float_buffer GLeeEnabled(&_GLEE_NV_float_buffer)
@@ -661,80 +661,80 @@ GLEE_EXTERN GLboolean _GLEE_SGIX_texture_range;
 #define GLEE_NV_half_float GLeeEnabled(&_GLEE_NV_half_float)
 #define GLEE_NV_pixel_data_range GLeeEnabled(&_GLEE_NV_pixel_data_range)
 #define GLEE_NV_primitive_restart GLeeEnabled(&_GLEE_NV_primitive_restart)
-#define GLEE_NV_texture_expand_normal                                          \
+#define GLEE_NV_texture_expand_normal \
   GLeeEnabled(&_GLEE_NV_texture_expand_normal)
 #define GLEE_NV_vertex_program2 GLeeEnabled(&_GLEE_NV_vertex_program2)
 #define GLEE_ATI_map_object_buffer GLeeEnabled(&_GLEE_ATI_map_object_buffer)
 #define GLEE_ATI_separate_stencil GLeeEnabled(&_GLEE_ATI_separate_stencil)
-#define GLEE_ATI_vertex_attrib_array_object                                    \
+#define GLEE_ATI_vertex_attrib_array_object \
   GLeeEnabled(&_GLEE_ATI_vertex_attrib_array_object)
 #define GLEE_OES_read_format GLeeEnabled(&_GLEE_OES_read_format)
 #define GLEE_EXT_depth_bounds_test GLeeEnabled(&_GLEE_EXT_depth_bounds_test)
-#define GLEE_EXT_texture_mirror_clamp                                          \
+#define GLEE_EXT_texture_mirror_clamp \
   GLeeEnabled(&_GLEE_EXT_texture_mirror_clamp)
-#define GLEE_EXT_blend_equation_separate                                       \
+#define GLEE_EXT_blend_equation_separate \
   GLeeEnabled(&_GLEE_EXT_blend_equation_separate)
 #define GLEE_MESA_pack_invert GLeeEnabled(&_GLEE_MESA_pack_invert)
 #define GLEE_MESA_ycbcr_texture GLeeEnabled(&_GLEE_MESA_ycbcr_texture)
 #define GLEE_EXT_pixel_buffer_object GLeeEnabled(&_GLEE_EXT_pixel_buffer_object)
-#define GLEE_NV_fragment_program_option                                        \
+#define GLEE_NV_fragment_program_option \
   GLeeEnabled(&_GLEE_NV_fragment_program_option)
 #define GLEE_NV_fragment_program2 GLeeEnabled(&_GLEE_NV_fragment_program2)
-#define GLEE_NV_vertex_program2_option                                         \
+#define GLEE_NV_vertex_program2_option \
   GLeeEnabled(&_GLEE_NV_vertex_program2_option)
 #define GLEE_NV_vertex_program3 GLeeEnabled(&_GLEE_NV_vertex_program3)
 #define GLEE_EXT_framebuffer_object GLeeEnabled(&_GLEE_EXT_framebuffer_object)
 #define GLEE_GREMEDY_string_marker GLeeEnabled(&_GLEE_GREMEDY_string_marker)
 #define GLEE_EXT_Cg_shader GLeeEnabled(&_GLEE_EXT_Cg_shader)
 #define GLEE_EXT_timer_query GLeeEnabled(&_GLEE_EXT_timer_query)
-#define GLEE_EXT_texture_buffer_object                                         \
+#define GLEE_EXT_texture_buffer_object \
   GLeeEnabled(&_GLEE_EXT_texture_buffer_object)
 #define GLEE_EXT_gpu_shader4 GLeeEnabled(&_GLEE_EXT_gpu_shader4)
 #define GLEE_EXT_geometry_shader4 GLeeEnabled(&_GLEE_EXT_geometry_shader4)
 #define GLEE_EXT_bindable_uniform GLeeEnabled(&_GLEE_EXT_bindable_uniform)
 #define GLEE_EXT_framebuffer_sRGB GLeeEnabled(&_GLEE_EXT_framebuffer_sRGB)
-#define GLEE_EXT_texture_shared_exponent                                       \
+#define GLEE_EXT_texture_shared_exponent \
   GLeeEnabled(&_GLEE_EXT_texture_shared_exponent)
 #define GLEE_EXT_packed_float GLeeEnabled(&_GLEE_EXT_packed_float)
 #define GLEE_EXT_texture_array GLeeEnabled(&_GLEE_EXT_texture_array)
 #define GLEE_EXT_texture_integer GLeeEnabled(&_GLEE_EXT_texture_integer)
 #define GLEE_NV_depth_buffer_float GLeeEnabled(&_GLEE_NV_depth_buffer_float)
-#define GLEE_EXT_texture_compression_latc                                      \
+#define GLEE_EXT_texture_compression_latc \
   GLeeEnabled(&_GLEE_EXT_texture_compression_latc)
 #define GLEE_NV_transform_feedback GLeeEnabled(&_GLEE_NV_transform_feedback)
 #define GLEE_NV_geometry_program4 GLeeEnabled(&_GLEE_NV_geometry_program4)
 #define GLEE_NV_gpu_program4 GLeeEnabled(&_GLEE_NV_gpu_program4)
-#define GLEE_NV_framebuffer_multisample_coverage                               \
+#define GLEE_NV_framebuffer_multisample_coverage \
   GLeeEnabled(&_GLEE_NV_framebuffer_multisample_coverage)
-#define GLEE_EXT_framebuffer_multisample                                       \
+#define GLEE_EXT_framebuffer_multisample \
   GLeeEnabled(&_GLEE_EXT_framebuffer_multisample)
 #define GLEE_EXT_framebuffer_blit GLeeEnabled(&_GLEE_EXT_framebuffer_blit)
-#define GLEE_EXT_texture_compression_rgtc                                      \
+#define GLEE_EXT_texture_compression_rgtc \
   GLeeEnabled(&_GLEE_EXT_texture_compression_rgtc)
 #define GLEE_EXT_color_matrix GLeeEnabled(&_GLEE_EXT_color_matrix)
 #define GLEE_SGIX_texture_select GLeeEnabled(&_GLEE_SGIX_texture_select)
-#define GLEE_INGR_blend_func_separate                                          \
+#define GLEE_INGR_blend_func_separate \
   GLeeEnabled(&_GLEE_INGR_blend_func_separate)
-#define GLEE_SGIX_depth_pass_instrument                                        \
+#define GLEE_SGIX_depth_pass_instrument \
   GLeeEnabled(&_GLEE_SGIX_depth_pass_instrument)
 #define GLEE_SGIX_igloo_interface GLeeEnabled(&_GLEE_SGIX_igloo_interface)
 #define GLEE_EXT_draw_buffers2 GLeeEnabled(&_GLEE_EXT_draw_buffers2)
-#define GLEE_NV_parameter_buffer_object                                        \
+#define GLEE_NV_parameter_buffer_object \
   GLeeEnabled(&_GLEE_NV_parameter_buffer_object)
 #define GLEE_EXT_draw_instanced GLeeEnabled(&_GLEE_EXT_draw_instanced)
 #define GLEE_EXT_fragment_lighting GLeeEnabled(&_GLEE_EXT_fragment_lighting)
-#define GLEE_EXT_packed_depth_stencil                                          \
+#define GLEE_EXT_packed_depth_stencil \
   GLeeEnabled(&_GLEE_EXT_packed_depth_stencil)
 #define GLEE_EXT_scene_marker GLeeEnabled(&_GLEE_EXT_scene_marker)
 #define GLEE_EXT_stencil_clear_tag GLeeEnabled(&_GLEE_EXT_stencil_clear_tag)
-#define GLEE_EXT_texture_compression_dxt1                                      \
+#define GLEE_EXT_texture_compression_dxt1 \
   GLeeEnabled(&_GLEE_EXT_texture_compression_dxt1)
 #define GLEE_EXT_texture_env GLeeEnabled(&_GLEE_EXT_texture_env)
 #define GLEE_EXT_texture_sRGB GLeeEnabled(&_GLEE_EXT_texture_sRGB)
 #define GLEE_IBM_static_data GLeeEnabled(&_GLEE_IBM_static_data)
 #define GLEE_MESAX_texture_stack GLeeEnabled(&_GLEE_MESAX_texture_stack)
 #define GLEE_OES_byte_coordinates GLeeEnabled(&_GLEE_OES_byte_coordinates)
-#define GLEE_OES_compressed_paletted_texture                                   \
+#define GLEE_OES_compressed_paletted_texture \
   GLeeEnabled(&_GLEE_OES_compressed_paletted_texture)
 #define GLEE_OES_single_precision GLeeEnabled(&_GLEE_OES_single_precision)
 #define GLEE_SGIX_pixel_texture_bits GLeeEnabled(&_GLEE_SGIX_pixel_texture_bits)
@@ -6380,43 +6380,43 @@ GLEE_EXTERN PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC
 #define glTexCoord2fColor3fVertex3fvSUN pglTexCoord2fColor3fVertex3fvSUN
 #define glTexCoord2fNormal3fVertex3fSUN pglTexCoord2fNormal3fVertex3fSUN
 #define glTexCoord2fNormal3fVertex3fvSUN pglTexCoord2fNormal3fVertex3fvSUN
-#define glTexCoord2fColor4fNormal3fVertex3fSUN                                 \
+#define glTexCoord2fColor4fNormal3fVertex3fSUN \
   pglTexCoord2fColor4fNormal3fVertex3fSUN
-#define glTexCoord2fColor4fNormal3fVertex3fvSUN                                \
+#define glTexCoord2fColor4fNormal3fVertex3fvSUN \
   pglTexCoord2fColor4fNormal3fVertex3fvSUN
-#define glTexCoord4fColor4fNormal3fVertex4fSUN                                 \
+#define glTexCoord4fColor4fNormal3fVertex4fSUN \
   pglTexCoord4fColor4fNormal3fVertex4fSUN
-#define glTexCoord4fColor4fNormal3fVertex4fvSUN                                \
+#define glTexCoord4fColor4fNormal3fVertex4fvSUN \
   pglTexCoord4fColor4fNormal3fVertex4fvSUN
 #define glReplacementCodeuiVertex3fSUN pglReplacementCodeuiVertex3fSUN
 #define glReplacementCodeuiVertex3fvSUN pglReplacementCodeuiVertex3fvSUN
-#define glReplacementCodeuiColor4ubVertex3fSUN                                 \
+#define glReplacementCodeuiColor4ubVertex3fSUN \
   pglReplacementCodeuiColor4ubVertex3fSUN
-#define glReplacementCodeuiColor4ubVertex3fvSUN                                \
+#define glReplacementCodeuiColor4ubVertex3fvSUN \
   pglReplacementCodeuiColor4ubVertex3fvSUN
-#define glReplacementCodeuiColor3fVertex3fSUN                                  \
+#define glReplacementCodeuiColor3fVertex3fSUN \
   pglReplacementCodeuiColor3fVertex3fSUN
-#define glReplacementCodeuiColor3fVertex3fvSUN                                 \
+#define glReplacementCodeuiColor3fVertex3fvSUN \
   pglReplacementCodeuiColor3fVertex3fvSUN
-#define glReplacementCodeuiNormal3fVertex3fSUN                                 \
+#define glReplacementCodeuiNormal3fVertex3fSUN \
   pglReplacementCodeuiNormal3fVertex3fSUN
-#define glReplacementCodeuiNormal3fVertex3fvSUN                                \
+#define glReplacementCodeuiNormal3fVertex3fvSUN \
   pglReplacementCodeuiNormal3fVertex3fvSUN
-#define glReplacementCodeuiColor4fNormal3fVertex3fSUN                          \
+#define glReplacementCodeuiColor4fNormal3fVertex3fSUN \
   pglReplacementCodeuiColor4fNormal3fVertex3fSUN
-#define glReplacementCodeuiColor4fNormal3fVertex3fvSUN                         \
+#define glReplacementCodeuiColor4fNormal3fVertex3fvSUN \
   pglReplacementCodeuiColor4fNormal3fVertex3fvSUN
-#define glReplacementCodeuiTexCoord2fVertex3fSUN                               \
+#define glReplacementCodeuiTexCoord2fVertex3fSUN \
   pglReplacementCodeuiTexCoord2fVertex3fSUN
-#define glReplacementCodeuiTexCoord2fVertex3fvSUN                              \
+#define glReplacementCodeuiTexCoord2fVertex3fvSUN \
   pglReplacementCodeuiTexCoord2fVertex3fvSUN
-#define glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN                       \
+#define glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN \
   pglReplacementCodeuiTexCoord2fNormal3fVertex3fSUN
-#define glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN                      \
+#define glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN \
   pglReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN
-#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN                \
+#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN \
   pglReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN
-#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN               \
+#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN \
   pglReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN
 #endif
 
@@ -6740,9 +6740,9 @@ GLEE_EXTERN PFNGLGETFINALCOMBINERINPUTPARAMETERIVNVPROC
 #define glGetCombinerInputParameterivNV pglGetCombinerInputParameterivNV
 #define glGetCombinerOutputParameterfvNV pglGetCombinerOutputParameterfvNV
 #define glGetCombinerOutputParameterivNV pglGetCombinerOutputParameterivNV
-#define glGetFinalCombinerInputParameterfvNV                                   \
+#define glGetFinalCombinerInputParameterfvNV \
   pglGetFinalCombinerInputParameterfvNV
-#define glGetFinalCombinerInputParameterivNV                                   \
+#define glGetFinalCombinerInputParameterivNV \
   pglGetFinalCombinerInputParameterivNV
 #endif
 
@@ -9676,7 +9676,7 @@ GLEE_EXTERN PFNGLGENERATEMIPMAPEXTPROC pglGenerateMipmapEXT;
 #define glFramebufferTexture2DEXT pglFramebufferTexture2DEXT
 #define glFramebufferTexture3DEXT pglFramebufferTexture3DEXT
 #define glFramebufferRenderbufferEXT pglFramebufferRenderbufferEXT
-#define glGetFramebufferAttachmentParameterivEXT                               \
+#define glGetFramebufferAttachmentParameterivEXT \
   pglGetFramebufferAttachmentParameterivEXT
 #define glGenerateMipmapEXT pglGenerateMipmapEXT
 #endif
@@ -10360,7 +10360,7 @@ typedef void(APIENTRYP PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC)(
     GLenum internalformat, GLsizei width, GLsizei height);
 GLEE_EXTERN PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC
     pglRenderbufferStorageMultisampleCoverageNV;
-#define glRenderbufferStorageMultisampleCoverageNV                             \
+#define glRenderbufferStorageMultisampleCoverageNV \
   pglRenderbufferStorageMultisampleCoverageNV
 #endif
 
@@ -10895,44 +10895,44 @@ GLEE_EXTERN GLboolean _GLEE_WGL_3DL_stereo_control;
 
 #define GLEE_WGL_ARB_buffer_region GLeeEnabled(&_GLEE_WGL_ARB_buffer_region)
 #define GLEE_WGL_ARB_multisample GLeeEnabled(&_GLEE_WGL_ARB_multisample)
-#define GLEE_WGL_ARB_extensions_string                                         \
+#define GLEE_WGL_ARB_extensions_string \
   GLeeEnabled(&_GLEE_WGL_ARB_extensions_string)
 #define GLEE_WGL_ARB_pixel_format GLeeEnabled(&_GLEE_WGL_ARB_pixel_format)
-#define GLEE_WGL_ARB_make_current_read                                         \
+#define GLEE_WGL_ARB_make_current_read \
   GLeeEnabled(&_GLEE_WGL_ARB_make_current_read)
 #define GLEE_WGL_ARB_pbuffer GLeeEnabled(&_GLEE_WGL_ARB_pbuffer)
 #define GLEE_WGL_ARB_render_texture GLeeEnabled(&_GLEE_WGL_ARB_render_texture)
-#define GLEE_WGL_ARB_pixel_format_float                                        \
+#define GLEE_WGL_ARB_pixel_format_float \
   GLeeEnabled(&_GLEE_WGL_ARB_pixel_format_float)
-#define GLEE_WGL_EXT_make_current_read                                         \
+#define GLEE_WGL_EXT_make_current_read \
   GLeeEnabled(&_GLEE_WGL_EXT_make_current_read)
 #define GLEE_WGL_EXT_pixel_format GLeeEnabled(&_GLEE_WGL_EXT_pixel_format)
 #define GLEE_WGL_EXT_pbuffer GLeeEnabled(&_GLEE_WGL_EXT_pbuffer)
 #define GLEE_WGL_EXT_depth_float GLeeEnabled(&_GLEE_WGL_EXT_depth_float)
 #define GLEE_WGL_3DFX_multisample GLeeEnabled(&_GLEE_WGL_3DFX_multisample)
 #define GLEE_WGL_EXT_multisample GLeeEnabled(&_GLEE_WGL_EXT_multisample)
-#define GLEE_WGL_I3D_digital_video_control                                     \
+#define GLEE_WGL_I3D_digital_video_control \
   GLeeEnabled(&_GLEE_WGL_I3D_digital_video_control)
 #define GLEE_WGL_I3D_gamma GLeeEnabled(&_GLEE_WGL_I3D_gamma)
 #define GLEE_WGL_I3D_genlock GLeeEnabled(&_GLEE_WGL_I3D_genlock)
 #define GLEE_WGL_I3D_image_buffer GLeeEnabled(&_GLEE_WGL_I3D_image_buffer)
 #define GLEE_WGL_I3D_swap_frame_lock GLeeEnabled(&_GLEE_WGL_I3D_swap_frame_lock)
-#define GLEE_WGL_NV_render_depth_texture                                       \
+#define GLEE_WGL_NV_render_depth_texture \
   GLeeEnabled(&_GLEE_WGL_NV_render_depth_texture)
-#define GLEE_WGL_NV_render_texture_rectangle                                   \
+#define GLEE_WGL_NV_render_texture_rectangle \
   GLeeEnabled(&_GLEE_WGL_NV_render_texture_rectangle)
-#define GLEE_WGL_ATI_pixel_format_float                                        \
+#define GLEE_WGL_ATI_pixel_format_float \
   GLeeEnabled(&_GLEE_WGL_ATI_pixel_format_float)
 #define GLEE_WGL_NV_float_buffer GLeeEnabled(&_GLEE_WGL_NV_float_buffer)
-#define GLEE_WGL_EXT_display_color_table                                       \
+#define GLEE_WGL_EXT_display_color_table \
   GLeeEnabled(&_GLEE_WGL_EXT_display_color_table)
-#define GLEE_WGL_EXT_extensions_string                                         \
+#define GLEE_WGL_EXT_extensions_string \
   GLeeEnabled(&_GLEE_WGL_EXT_extensions_string)
 #define GLEE_WGL_EXT_swap_control GLeeEnabled(&_GLEE_WGL_EXT_swap_control)
-#define GLEE_WGL_NV_vertex_array_range                                         \
+#define GLEE_WGL_NV_vertex_array_range \
   GLeeEnabled(&_GLEE_WGL_NV_vertex_array_range)
 #define GLEE_WGL_OML_sync_control GLeeEnabled(&_GLEE_WGL_OML_sync_control)
-#define GLEE_WGL_I3D_swap_frame_usage                                          \
+#define GLEE_WGL_I3D_swap_frame_usage \
   GLeeEnabled(&_GLEE_WGL_I3D_swap_frame_usage)
 #define GLEE_WGL_3DL_stereo_control GLeeEnabled(&_GLEE_WGL_3DL_stereo_control)
 
@@ -11720,7 +11720,7 @@ GLEE_EXTERN GLboolean _GLEE_GLX_EXT_scene_marker;
 #define GLEE_GLX_EXT_visual_info GLeeEnabled(&_GLEE_GLX_EXT_visual_info)
 #define GLEE_GLX_SGI_swap_control GLeeEnabled(&_GLEE_GLX_SGI_swap_control)
 #define GLEE_GLX_SGI_video_sync GLeeEnabled(&_GLEE_GLX_SGI_video_sync)
-#define GLEE_GLX_SGI_make_current_read                                         \
+#define GLEE_GLX_SGI_make_current_read \
   GLeeEnabled(&_GLEE_GLX_SGI_make_current_read)
 #define GLEE_GLX_EXT_visual_rating GLeeEnabled(&_GLEE_GLX_EXT_visual_rating)
 #define GLEE_GLX_EXT_import_context GLeeEnabled(&_GLEE_GLX_EXT_import_context)
@@ -11730,21 +11730,21 @@ GLEE_EXTERN GLboolean _GLEE_GLX_EXT_scene_marker;
 #define GLEE_GLX_SGIX_video_resize GLeeEnabled(&_GLEE_GLX_SGIX_video_resize)
 #define GLEE_GLX_SGIX_swap_group GLeeEnabled(&_GLEE_GLX_SGIX_swap_group)
 #define GLEE_GLX_SGIX_swap_barrier GLeeEnabled(&_GLEE_GLX_SGIX_swap_barrier)
-#define GLEE_GLX_SGIS_blended_overlay                                          \
+#define GLEE_GLX_SGIS_blended_overlay \
   GLeeEnabled(&_GLEE_GLX_SGIS_blended_overlay)
-#define GLEE_GLX_SGIS_shared_multisample                                       \
+#define GLEE_GLX_SGIS_shared_multisample \
   GLeeEnabled(&_GLEE_GLX_SGIS_shared_multisample)
-#define GLEE_GLX_SUN_get_transparent_index                                     \
+#define GLEE_GLX_SUN_get_transparent_index \
   GLeeEnabled(&_GLEE_GLX_SUN_get_transparent_index)
 #define GLEE_GLX_3DFX_multisample GLeeEnabled(&_GLEE_GLX_3DFX_multisample)
-#define GLEE_GLX_MESA_copy_sub_buffer                                          \
+#define GLEE_GLX_MESA_copy_sub_buffer \
   GLeeEnabled(&_GLEE_GLX_MESA_copy_sub_buffer)
-#define GLEE_GLX_MESA_pixmap_colormap                                          \
+#define GLEE_GLX_MESA_pixmap_colormap \
   GLeeEnabled(&_GLEE_GLX_MESA_pixmap_colormap)
-#define GLEE_GLX_MESA_release_buffers                                          \
+#define GLEE_GLX_MESA_release_buffers \
   GLeeEnabled(&_GLEE_GLX_MESA_release_buffers)
 #define GLEE_GLX_MESA_set_3dfx_mode GLeeEnabled(&_GLEE_GLX_MESA_set_3dfx_mode)
-#define GLEE_GLX_SGIX_visual_select_group                                      \
+#define GLEE_GLX_SGIX_visual_select_group \
   GLeeEnabled(&_GLEE_GLX_SGIX_visual_select_group)
 #define GLEE_GLX_OML_swap_method GLeeEnabled(&_GLEE_GLX_OML_swap_method)
 #define GLEE_GLX_OML_sync_control GLeeEnabled(&_GLEE_GLX_OML_sync_control)

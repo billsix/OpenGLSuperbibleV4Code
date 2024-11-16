@@ -17,23 +17,23 @@
 // compatibility of data files (more likely) that contain such structures across
 // compilers/platforms. Arrays are always tightly packed, and are more efficient
 // for moving blocks of data around (usually).
-typedef float M3DVector3f[3];  // Vector of three floats (x, y, z)
-typedef double M3DVector3d[3]; // Vector of three doubles (x, y, z)
+typedef float M3DVector3f[3];   // Vector of three floats (x, y, z)
+typedef double M3DVector3d[3];  // Vector of three doubles (x, y, z)
 
-typedef float M3DVector4f[4];  // Lesser used... Do we really need these?
-typedef double M3DVector4d[4]; // Yes, occasionaly
+typedef float M3DVector4f[4];   // Lesser used... Do we really need these?
+typedef double M3DVector4d[4];  // Yes, occasionaly
 
-typedef float M3DVector2f[2];  // 3D points = 3D Vectors, but we need a
-typedef double M3DVector2d[2]; // 2D representations sometimes... (x,y) order
+typedef float M3DVector2f[2];   // 3D points = 3D Vectors, but we need a
+typedef double M3DVector2d[2];  // 2D representations sometimes... (x,y) order
 
 // 3x3 matrix - column major. X vector is 0, 1, 2, etc.
 //		0	3	6
 //		1	4	7
 //		2	5	8
 typedef float
-    M3DMatrix33f[9]; // A 3 x 3 matrix, column major (floats) - OpenGL Style
+    M3DMatrix33f[9];  // A 3 x 3 matrix, column major (floats) - OpenGL Style
 typedef double
-    M3DMatrix33d[9]; // A 3 x 3 matrix, column major (doubles) - OpenGL Style
+    M3DMatrix33d[9];  // A 3 x 3 matrix, column major (doubles) - OpenGL Style
 
 // 4x4 matrix - column major. X vector is 0, 1, 2, etc.
 //	0	4	8	12
@@ -41,9 +41,9 @@ typedef double
 //	2	6	10	14
 //	3	7	11	15
 typedef float
-    M3DMatrix44f[16]; // A 4 X 4 matrix, column major (floats) - OpenGL style
+    M3DMatrix44f[16];  // A 4 X 4 matrix, column major (floats) - OpenGL style
 typedef double
-    M3DMatrix44d[16]; // A 4 x 4 matrix, column major (doubles) - OpenGL style
+    M3DMatrix44d[16];  // A 4 x 4 matrix, column major (doubles) - OpenGL style
 
 ///////////////////////////////////////////////////////////////////////////////
 // Useful constants
@@ -55,8 +55,8 @@ typedef double
 ///////////////////////////////////////////////////////////////////////////////
 // Useful shortcuts and macros
 // Radians are king... but we need a way to swap back and forth
-#define m3dDegToRad(x) ((x)*M3D_PI_DIV_180)
-#define m3dRadToDeg(x) ((x)*M3D_INV_PI_DIV_180)
+#define m3dDegToRad(x) ((x) * M3D_PI_DIV_180)
+#define m3dRadToDeg(x) ((x) * M3D_INV_PI_DIV_180)
 
 // Hour angles
 #define m3dHrToDeg(x) ((x) * (1.0 / 15.0))
@@ -72,8 +72,7 @@ typedef double
 inline unsigned int m3dIsPOW2(unsigned int iValue) {
   unsigned int nPow2 = 1;
 
-  while (iValue > nPow2)
-    nPow2 = (nPow2 << 1);
+  while (iValue > nPow2) nPow2 = (nPow2 << 1);
 
   return nPow2;
 }
@@ -496,16 +495,16 @@ inline double m3dGetMatrixRowCol44(const M3DMatrix44d m, int row, int col) {
 // Extract a rotation matrix from a 4x4 matrix
 // Extracts the rotation matrix (3x3) from a 4x4 matrix
 inline void m3dExtractRotation(M3DMatrix33f dst, const M3DMatrix44f src) {
-  memcpy(dst, src, sizeof(float) * 3);         // X column
-  memcpy(dst + 3, src + 4, sizeof(float) * 3); // Y column
-  memcpy(dst + 6, src + 8, sizeof(float) * 3); // Z column
+  memcpy(dst, src, sizeof(float) * 3);          // X column
+  memcpy(dst + 3, src + 4, sizeof(float) * 3);  // Y column
+  memcpy(dst + 6, src + 8, sizeof(float) * 3);  // Z column
 }
 
 // Ditto above, but for doubles
 inline void m3dExtractRotation(M3DMatrix33d dst, const M3DMatrix44d src) {
-  memcpy(dst, src, sizeof(double) * 3);         // X column
-  memcpy(dst + 3, src + 4, sizeof(double) * 3); // Y column
-  memcpy(dst + 6, src + 8, sizeof(double) * 3); // Z column
+  memcpy(dst, src, sizeof(double) * 3);          // X column
+  memcpy(dst + 3, src + 4, sizeof(double) * 3);  // Y column
+  memcpy(dst + 6, src + 8, sizeof(double) * 3);  // Z column
 }
 
 // Inject Rotation (3x3) into a full 4x4 matrix...
@@ -541,23 +540,25 @@ void m3dMatrixMultiply33(M3DMatrix33d product, const M3DMatrix33d a,
 // memory. I'm experimenting with this....
 __inline void m3dTransformVector3(M3DVector3f vOut, const M3DVector3f v,
                                   const M3DMatrix44f m) {
-  vOut[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12]; // * v[3];
-  vOut[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13]; // * v[3];
-  vOut[2] = m[2] * v[0] + m[6] * v[1] + m[10] * v[2] +
-            m[14]; // * v[3];
-                   // vOut[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15]
-                   // * v[3];
+  vOut[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12];  // * v[3];
+  vOut[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13];  // * v[3];
+  vOut[2] =
+      m[2] * v[0] + m[6] * v[1] + m[10] * v[2] +
+      m[14];  // * v[3];
+              // vOut[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15]
+              // * v[3];
 }
 
 // Ditto above, but for doubles
 __inline void m3dTransformVector3(M3DVector3d vOut, const M3DVector3d v,
                                   const M3DMatrix44d m) {
-  vOut[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12]; // * v[3];
-  vOut[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13]; // * v[3];
-  vOut[2] = m[2] * v[0] + m[6] * v[1] + m[10] * v[2] +
-            m[14]; // * v[3];
-                   // vOut[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15]
-                   // * v[3];
+  vOut[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12];  // * v[3];
+  vOut[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13];  // * v[3];
+  vOut[2] =
+      m[2] * v[0] + m[6] * v[1] + m[10] * v[2] +
+      m[14];  // * v[3];
+              // vOut[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15]
+              // * v[3];
 }
 
 __inline void m3dTransformVector4(M3DVector4f vOut, const M3DVector4f v,
@@ -599,23 +600,19 @@ __inline void m3dRotateVector(M3DVector3d vOut, const M3DVector3d p,
 // unrolled... but eh... if you find this is a bottleneck,
 // then you should unroll it yourself
 inline void m3dScaleMatrix33(M3DMatrix33f m, float scale) {
-  for (int i = 8; i >= 0; i--)
-    m[i] *= scale;
+  for (int i = 8; i >= 0; i--) m[i] *= scale;
 }
 
 inline void m3dScaleMatrix33(M3DMatrix33d m, double scale) {
-  for (int i = 8; i >= 0; i--)
-    m[i] *= scale;
+  for (int i = 8; i >= 0; i--) m[i] *= scale;
 }
 
 inline void m3dScaleMatrix44(M3DMatrix44f m, float scale) {
-  for (int i = 15; i >= 0; i--)
-    m[i] *= scale;
+  for (int i = 15; i >= 0; i--) m[i] *= scale;
 }
 
 inline void m3dScaleMatrix44(M3DMatrix44d m, double scale) {
-  for (int i = 15; i >= 0; i--)
-    m[i] *= scale;
+  for (int i = 15; i >= 0; i--) m[i] *= scale;
 }
 
 // Create a Rotation matrix
@@ -672,13 +669,13 @@ inline void m3dScaleMatrix44(M3DMatrix44d m, double x, double y, double z) {
 }
 
 // Transpose/Invert - Only 4x4 matricies supported
-#define TRANSPOSE44(dst, src)                                                  \
-  {                                                                            \
-    for (int j = 0; j < 4; j++) {                                              \
-      for (int i = 0; i < 4; i++) {                                            \
-        dst[(j * 4) + i] = src[(i * 4) + j];                                   \
-      }                                                                        \
-    }                                                                          \
+#define TRANSPOSE44(dst, src)                \
+  {                                          \
+    for (int j = 0; j < 4; j++) {            \
+      for (int i = 0; i < 4; i++) {          \
+        dst[(j * 4) + i] = src[(i * 4) + j]; \
+      }                                      \
+    }                                        \
   }
 inline void m3dTransposeMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
   TRANSPOSE44(dst, src);

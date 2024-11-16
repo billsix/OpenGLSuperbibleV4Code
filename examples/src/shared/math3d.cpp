@@ -144,7 +144,6 @@ void m3dMatrixMultiply44(M3DMatrix33d product, const M3DMatrix33d a,
 // Creates a 3x3 rotation matrix, takes radians NOT degrees
 void m3dRotationMatrix33(M3DMatrix33f m, float angle, float x, float y,
                          float z) {
-
   float mag, s, c;
   float xx, yy, zz, xy, yz, zx, xs, ys, zs, one_c;
 
@@ -366,13 +365,13 @@ void m3dRotationMatrix44(M3DMatrix44d m, double angle, double x, double y,
  * Return GL_TRUE for success, GL_FALSE for failure (singular matrix)
  */
 bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
-#define SWAP_ROWS(a, b)                                                        \
-  {                                                                            \
-    float *_tmp = a;                                                           \
-    (a) = (b);                                                                 \
-    (b) = _tmp;                                                                \
+#define SWAP_ROWS(a, b) \
+  {                     \
+    float *_tmp = a;    \
+    (a) = (b);          \
+    (b) = _tmp;         \
   }
-#define MAT(m, r, c) (m)[(c)*4 + (r)]
+#define MAT(m, r, c) (m)[(c) * 4 + (r)]
 
   float wtmp[4][8];
   float m0, m1, m2, m3, s;
@@ -393,14 +392,10 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
   r3[3] = MAT(src, 3, 3), r3[7] = 1.0, r3[4] = r3[5] = r3[6] = 0.0;
 
   /* choose pivot - or die */
-  if (fabs(r3[0]) > fabs(r2[0]))
-    SWAP_ROWS(r3, r2);
-  if (fabs(r2[0]) > fabs(r1[0]))
-    SWAP_ROWS(r2, r1);
-  if (fabs(r1[0]) > fabs(r0[0]))
-    SWAP_ROWS(r1, r0);
-  if (0.0 == r0[0])
-    return false;
+  if (fabs(r3[0]) > fabs(r2[0])) SWAP_ROWS(r3, r2);
+  if (fabs(r2[0]) > fabs(r1[0])) SWAP_ROWS(r2, r1);
+  if (fabs(r1[0]) > fabs(r0[0])) SWAP_ROWS(r1, r0);
+  if (0.0 == r0[0]) return false;
 
   /* eliminate first variable     */
   m1 = r1[0] / r0[0];
@@ -444,12 +439,9 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
   }
 
   /* choose pivot - or die */
-  if (fabs(r3[1]) > fabs(r2[1]))
-    SWAP_ROWS(r3, r2);
-  if (fabs(r2[1]) > fabs(r1[1]))
-    SWAP_ROWS(r2, r1);
-  if (0.0 == r1[1])
-    return false;
+  if (fabs(r3[1]) > fabs(r2[1])) SWAP_ROWS(r3, r2);
+  if (fabs(r2[1]) > fabs(r1[1])) SWAP_ROWS(r2, r1);
+  if (0.0 == r1[1]) return false;
 
   /* eliminate second variable */
   m2 = r2[1] / r1[1];
@@ -480,10 +472,8 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
   }
 
   /* choose pivot - or die */
-  if (fabs(r3[2]) > fabs(r2[2]))
-    SWAP_ROWS(r3, r2);
-  if (0.0 == r2[2])
-    return false;
+  if (fabs(r3[2]) > fabs(r2[2])) SWAP_ROWS(r3, r2);
+  if (0.0 == r2[2]) return false;
 
   /* eliminate third variable */
   m3 = r3[2] / r2[2];
@@ -491,8 +481,7 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
       r3[6] -= m3 * r2[6], r3[7] -= m3 * r2[7];
 
   /* last check */
-  if (0.0 == r3[3])
-    return false;
+  if (0.0 == r3[3]) return false;
 
   s = 1.0f / r3[3]; /* now back substitute row 3 */
   r3[4] *= s;
@@ -542,13 +531,13 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
 
 // Ditto above, but for doubles
 bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
-#define SWAP_ROWS(a, b)                                                        \
-  {                                                                            \
-    double *_tmp = a;                                                          \
-    (a) = (b);                                                                 \
-    (b) = _tmp;                                                                \
+#define SWAP_ROWS(a, b) \
+  {                     \
+    double *_tmp = a;   \
+    (a) = (b);          \
+    (b) = _tmp;         \
   }
-#define MAT(m, r, c) (m)[(c)*4 + (r)]
+#define MAT(m, r, c) (m)[(c) * 4 + (r)]
 
   double wtmp[4][8];
   double m0, m1, m2, m3, s;
@@ -569,14 +558,10 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
   r3[3] = MAT(src, 3, 3), r3[7] = 1.0, r3[4] = r3[5] = r3[6] = 0.0;
 
   // choose pivot - or die
-  if (fabs(r3[0]) > fabs(r2[0]))
-    SWAP_ROWS(r3, r2);
-  if (fabs(r2[0]) > fabs(r1[0]))
-    SWAP_ROWS(r2, r1);
-  if (fabs(r1[0]) > fabs(r0[0]))
-    SWAP_ROWS(r1, r0);
-  if (0.0 == r0[0])
-    return false;
+  if (fabs(r3[0]) > fabs(r2[0])) SWAP_ROWS(r3, r2);
+  if (fabs(r2[0]) > fabs(r1[0])) SWAP_ROWS(r2, r1);
+  if (fabs(r1[0]) > fabs(r0[0])) SWAP_ROWS(r1, r0);
+  if (0.0 == r0[0]) return false;
 
   // eliminate first variable
   m1 = r1[0] / r0[0];
@@ -620,12 +605,9 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
   }
 
   // choose pivot - or die
-  if (fabs(r3[1]) > fabs(r2[1]))
-    SWAP_ROWS(r3, r2);
-  if (fabs(r2[1]) > fabs(r1[1]))
-    SWAP_ROWS(r2, r1);
-  if (0.0 == r1[1])
-    return false;
+  if (fabs(r3[1]) > fabs(r2[1])) SWAP_ROWS(r3, r2);
+  if (fabs(r2[1]) > fabs(r1[1])) SWAP_ROWS(r2, r1);
+  if (0.0 == r1[1]) return false;
 
   // eliminate second variable
   m2 = r2[1] / r1[1];
@@ -656,10 +638,8 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
   }
 
   // choose pivot - or die
-  if (fabs(r3[2]) > fabs(r2[2]))
-    SWAP_ROWS(r3, r2);
-  if (0.0 == r2[2])
-    return false;
+  if (fabs(r3[2]) > fabs(r2[2])) SWAP_ROWS(r3, r2);
+  if (0.0 == r2[2]) return false;
 
   // eliminate third variable
   m3 = r3[2] / r2[2];
@@ -667,16 +647,15 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
       r3[6] -= m3 * r2[6], r3[7] -= m3 * r2[7];
 
   // last check
-  if (0.0 == r3[3])
-    return false;
+  if (0.0 == r3[3]) return false;
 
-  s = 1.0f / r3[3]; // now back substitute row 3
+  s = 1.0f / r3[3];  // now back substitute row 3
   r3[4] *= s;
   r3[5] *= s;
   r3[6] *= s;
   r3[7] *= s;
 
-  m2 = r2[3]; // now back substitute row 2
+  m2 = r2[3];  // now back substitute row 2
   s = 1.0f / r2[2];
   r2[4] = s * (r2[4] - r3[4] * m2), r2[5] = s * (r2[5] - r3[5] * m2),
   r2[6] = s * (r2[6] - r3[6] * m2), r2[7] = s * (r2[7] - r3[7] * m2);
@@ -687,7 +666,7 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
   r0[4] -= r3[4] * m0, r0[5] -= r3[5] * m0, r0[6] -= r3[6] * m0,
       r0[7] -= r3[7] * m0;
 
-  m1 = r1[2]; // now back substitute row 1
+  m1 = r1[2];  // now back substitute row 1
   s = 1.0f / r1[1];
   r1[4] = s * (r1[4] - r2[4] * m1), r1[5] = s * (r1[5] - r2[5] * m1),
   r1[6] = s * (r1[6] - r2[6] * m1), r1[7] = s * (r1[7] - r2[7] * m1);
@@ -695,7 +674,7 @@ bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
   r0[4] -= r2[4] * m0, r0[5] -= r2[5] * m0, r0[6] -= r2[6] * m0,
       r0[7] -= r2[7] * m0;
 
-  m0 = r0[1]; // now back substitute row 0
+  m0 = r0[1];  // now back substitute row 0
   s = 1.0f / r0[0];
   r0[4] = s * (r0[4] - r1[4] * m0), r0[5] = s * (r0[5] - r1[5] * m0),
   r0[6] = s * (r0[6] - r1[6] * m0), r0[7] = s * (r0[7] - r1[7] * m0);
@@ -783,7 +762,7 @@ void m3dProjectXYZ(const M3DMatrix44f mModelView,
 // triangle is assumed to be wound counter clockwise.
 void m3dFindNormal(M3DVector3f result, const M3DVector3f point1,
                    const M3DVector3f point2, const M3DVector3f point3) {
-  M3DVector3f v1, v2; // Temporary vectors
+  M3DVector3f v1, v2;  // Temporary vectors
 
   // Calculate two vectors from the three points. Assumes counter clockwise
   // winding!
@@ -803,7 +782,7 @@ void m3dFindNormal(M3DVector3f result, const M3DVector3f point1,
 // Ditto above, but for doubles
 void m3dFindNormal(M3DVector3d result, const M3DVector3d point1,
                    const M3DVector3d point2, const M3DVector3d point3) {
-  M3DVector3d v1, v2; // Temporary vectors
+  M3DVector3d v1, v2;  // Temporary vectors
 
   // Calculate two vectors from the three points. Assumes counter clockwise
   // winding!
@@ -936,7 +915,7 @@ double m3dRaySphereTest(const M3DVector3d point, const M3DVector3d ray,
                         const M3DVector3d sphereCenter, double sphereRadius) {
   // m3dNormalizeVector(ray);	// Make sure ray is unit length
 
-  M3DVector3d rayToCenter; // Ray to center of sphere
+  M3DVector3d rayToCenter;  // Ray to center of sphere
   rayToCenter[0] = sphereCenter[0] - point[0];
   rayToCenter[1] = sphereCenter[1] - point[1];
   rayToCenter[2] = sphereCenter[2] - point[2];
@@ -945,11 +924,11 @@ double m3dRaySphereTest(const M3DVector3d point, const M3DVector3d ray,
   double a = m3dDotProduct(rayToCenter, ray);
 
   // Distance to center of sphere
-  double distance2 = m3dDotProduct(rayToCenter, rayToCenter); // Or length
+  double distance2 = m3dDotProduct(rayToCenter, rayToCenter);  // Or length
 
   double dRet = (sphereRadius * sphereRadius) - distance2 + (a * a);
 
-  if (dRet > 0.0) // Return distance to intersection
+  if (dRet > 0.0)  // Return distance to intersection
     dRet = a - sqrt(dRet);
 
   return dRet;
@@ -962,7 +941,7 @@ float m3dRaySphereTest(const M3DVector3f point, const M3DVector3f ray,
                        const M3DVector3f sphereCenter, float sphereRadius) {
   // m3dNormalizeVectorf(ray);	// Make sure ray is unit length
 
-  M3DVector3f rayToCenter; // Ray to center of sphere
+  M3DVector3f rayToCenter;  // Ray to center of sphere
   rayToCenter[0] = sphereCenter[0] - point[0];
   rayToCenter[1] = sphereCenter[1] - point[1];
   rayToCenter[2] = sphereCenter[2] - point[2];
@@ -971,11 +950,11 @@ float m3dRaySphereTest(const M3DVector3f point, const M3DVector3f ray,
   float a = m3dDotProduct(rayToCenter, ray);
 
   // Distance to center of sphere
-  float distance2 = m3dDotProduct(rayToCenter, rayToCenter); // Or length
+  float distance2 = m3dDotProduct(rayToCenter, rayToCenter);  // Or length
 
   float dRet = (sphereRadius * sphereRadius) - distance2 + (a * a);
 
-  if (dRet > 0.0) // Return distance to intersection
+  if (dRet > 0.0)  // Return distance to intersection
     dRet = a - sqrtf(dRet);
 
   return dRet;
@@ -1007,7 +986,7 @@ void m3dCalculateTangentBasis(const M3DVector3f vTriangle[3],
 
   m3dSubtractVectors3(vTangent, dv2v1, dv3v1);
   m3dScaleVector3(vTangent,
-                  M); // This potentially changes the direction of the vector
+                  M);  // This potentially changes the direction of the vector
   m3dNormalizeVector(vTangent);
 
   M3DVector3f B;
@@ -1021,11 +1000,9 @@ void m3dCalculateTangentBasis(const M3DVector3f vTriangle[3],
 double m3dSmoothStep(double edge1, double edge2, double x) {
   double t;
   t = (x - edge1) / (edge2 - edge1);
-  if (t > 1.0)
-    t = 1.0;
+  if (t > 1.0) t = 1.0;
 
-  if (t < 0.0)
-    t = 0.0f;
+  if (t < 0.0) t = 0.0f;
 
   return t * t * (3.0 - 2.0 * t);
 }
@@ -1035,11 +1012,9 @@ double m3dSmoothStep(double edge1, double edge2, double x) {
 float m3dSmoothStep(float edge1, float edge2, float x) {
   float t;
   t = (x - edge1) / (edge2 - edge1);
-  if (t > 1.0f)
-    t = 1.0f;
+  if (t > 1.0f) t = 1.0f;
 
-  if (t < 0.0)
-    t = 0.0f;
+  if (t < 0.0) t = 0.0f;
 
   return t * t * (3.0f - 2.0f * t);
 }

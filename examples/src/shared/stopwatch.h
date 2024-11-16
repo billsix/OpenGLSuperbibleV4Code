@@ -22,8 +22,8 @@
 // Pretty self-explanitory....
 // Reset(), or GetElapsedSeconds().
 class CStopWatch {
-public:
-  CStopWatch(void) // Constructor
+ public:
+  CStopWatch(void)  // Constructor
   {
 #ifdef WIN32
     QueryPerformanceFrequency(&m_CounterFrequency);
@@ -61,7 +61,7 @@ public:
 #endif
   }
 
-protected:
+ protected:
 #ifdef WIN32
   LARGE_INTEGER m_CounterFrequency;
   LARGE_INTEGER m_LastCount;

@@ -6,13 +6,13 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
 #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h" // main symbols
+#include "resource.h"  // main symbols
 
 /////////////////////////////////////////////////////////////////////////////
 // CGLViewApp:
@@ -20,13 +20,13 @@
 //
 
 class CGLViewApp : public CWinApp {
-public:
+ public:
   CGLViewApp();
 
   // Overrides
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CGLViewApp)
-public:
+ public:
   virtual BOOL InitInstance();
   //}}AFX_VIRTUAL
 
@@ -45,4 +45,4 @@ public:
 // Microsoft Visual C++ will insert additional declarations immediately before
 // the previous line.
 
-#endif // !defined(AFX_GLVIEW_H__D85222E7_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_)
+#endif  // !defined(AFX_GLVIEW_H__D85222E7_6DEE_11D3_8A92_00A0CC2492EC__INCLUDED_)

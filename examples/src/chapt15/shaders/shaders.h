@@ -6,7 +6,7 @@
 #include "../../shared/SuperbibleSample.h"
 
 class Shaders : public SuperbibleSample {
-private:
+ private:
   GLboolean useVertexShader;
   GLboolean useFragmentShader;
   GLboolean doBlink;
@@ -15,7 +15,7 @@ private:
 
   GLint flickerLocation;
 
-public:
+ public:
   GLuint vShader, fShader, progObj;
 
   Shaders();

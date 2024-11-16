@@ -46,8 +46,7 @@ int gltIsExtSupported(const char *extension) {
   GLubyte *where, *terminator;
 
   where = (GLubyte *)strchr(extension, ' ');
-  if (where || *extension == '\0')
-    return 0;
+  if (where || *extension == '\0') return 0;
 
   extensions = (GLubyte *)glGetString(GL_EXTENSIONS);
 
@@ -55,14 +54,12 @@ int gltIsExtSupported(const char *extension) {
   for (;;) {
     where = (GLubyte *)strstr((const char *)start, extension);
 
-    if (!where)
-      break;
+    if (!where) break;
 
     terminator = where + strlen(extension);
 
     if (where == start || *(where - 1) == ' ') {
-      if (*terminator == ' ' || *terminator == '\0')
-        return 1;
+      if (*terminator == ' ' || *terminator == '\0') return 1;
     }
     start = terminator;
   }
@@ -83,12 +80,10 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
   wglGetExtensionsStringARB =
       (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress(
           "wglGetExtensionsStringARB");
-  if (wglGetExtensionsStringARB == NULL)
-    return 0;
+  if (wglGetExtensionsStringARB == NULL) return 0;
 
   where = (GLubyte *)strchr(szExtension, ' ');
-  if (where || *szExtension == '\0')
-    return 0;
+  if (where || *szExtension == '\0') return 0;
 
   extensions = (GLubyte *)wglGetExtensionsStringARB(hDC);
 
@@ -96,14 +91,12 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
   for (;;) {
     where = (GLubyte *)strstr((const char *)start, szExtension);
 
-    if (!where)
-      break;
+    if (!where) break;
 
     terminator = where + strlen(szExtension);
 
     if (where == start || *(where - 1) == ' ') {
-      if (*terminator == ' ' || *terminator == '\0')
-        return 1;
+      if (*terminator == ' ' || *terminator == '\0') return 1;
     }
     start = terminator;
   }
@@ -119,7 +112,7 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
 // be lit. These are all built using the quadric shapes. For best
 // results, put this in a display list.
 void gltDrawUnitAxes(void) {
-  GLUquadricObj *pObj; // Temporary, used for quadrics
+  GLUquadricObj *pObj;  // Temporary, used for quadrics
 
   // Measurements
   float fAxisRadius = 0.025f;
@@ -238,7 +231,7 @@ void gltDrawSphere(GLfloat fRadius, GLint iSlices, GLint iStacks) {
   GLfloat dt = 1.0f / (GLfloat)iStacks;
   GLfloat t = 1.0f;
   GLfloat s = 0.0f;
-  GLint i, j; // Looping variables
+  GLint i, j;  // Looping variables
 
   for (i = 0; i < iStacks; i++) {
     GLfloat rho = (GLfloat)i * drho;
@@ -282,18 +275,18 @@ void gltDrawSphere(GLfloat fRadius, GLint iSlices, GLint iStacks) {
 // Define targa header. This is only used locally.
 #pragma pack(1)
 typedef struct {
-  GLbyte identsize;    // Size of ID field that follows header (0)
-  GLbyte colorMapType; // 0 = None, 1 = paletted
-  GLbyte imageType;    // 0 = none, 1 = indexed, 2 = rgb, 3 = grey, +8=rle
-  unsigned short colorMapStart;  // First colour map entry
-  unsigned short colorMapLength; // Number of colors
-  unsigned char colorMapBits;    // bits per palette entry
-  unsigned short xstart;         // image x origin
-  unsigned short ystart;         // image y origin
-  unsigned short width;          // width in pixels
-  unsigned short height;         // height in pixels
-  GLbyte bits;                   // bits per pixel (8 16, 24, 32)
-  GLbyte descriptor;             // image descriptor
+  GLbyte identsize;     // Size of ID field that follows header (0)
+  GLbyte colorMapType;  // 0 = None, 1 = paletted
+  GLbyte imageType;     // 0 = none, 1 = indexed, 2 = rgb, 3 = grey, +8=rle
+  unsigned short colorMapStart;   // First colour map entry
+  unsigned short colorMapLength;  // Number of colors
+  unsigned char colorMapBits;     // bits per palette entry
+  unsigned short xstart;          // image x origin
+  unsigned short ystart;          // image y origin
+  unsigned short width;           // width in pixels
+  unsigned short height;          // height in pixels
+  GLbyte bits;                    // bits per pixel (8 16, 24, 32)
+  GLbyte descriptor;              // image descriptor
 } TGAHEADER;
 #pragma pack(8)
 
@@ -303,12 +296,12 @@ typedef struct {
 // glFinish for single buffered contexts before calling this function.
 // Returns 0 if an error occurs, or 1 on success.
 GLint gltWriteTGA(const char *szFileName) {
-  FILE *pFile;              // File pointer
-  TGAHEADER tgaHeader;      // TGA file header
-  unsigned long lImageSize; // Size in bytes of image
-  GLbyte *pBits = NULL;     // Pointer to bits
-  GLint iViewport[4];       // Viewport in pixels
-  GLenum lastBuffer;        // Storage for the current read buffer setting
+  FILE *pFile;               // File pointer
+  TGAHEADER tgaHeader;       // TGA file header
+  unsigned long lImageSize;  // Size in bytes of image
+  GLbyte *pBits = NULL;      // Pointer to bits
+  GLint iViewport[4];        // Viewport in pixels
+  GLenum lastBuffer;         // Storage for the current read buffer setting
 
   // Get the viewport dimensions
   glGetIntegerv(GL_VIEWPORT, iViewport);
@@ -318,8 +311,7 @@ GLint gltWriteTGA(const char *szFileName) {
 
   // Allocate block. If this doesn't work, go home
   pBits = (GLbyte *)malloc(lImageSize);
-  if (pBits == NULL)
-    return 0;
+  if (pBits == NULL) return 0;
 
   // Read bits from color buffer
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -363,7 +355,7 @@ GLint gltWriteTGA(const char *szFileName) {
   // Attempt to open the file
   pFile = fopen(szFileName, "wb");
   if (pFile == NULL) {
-    free(pBits); // Free buffer and return error
+    free(pBits);  // Free buffer and return error
     return 0;
   }
 
@@ -389,11 +381,11 @@ GLint gltWriteTGA(const char *szFileName) {
 // only, no palettes, no RLE encoding.
 GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
                    GLint *iComponents, GLenum *eFormat) {
-  FILE *pFile;              // File pointer
-  TGAHEADER tgaHeader;      // TGA file header
-  unsigned long lImageSize; // Size in bytes of image
-  short sDepth;             // Pixel depth;
-  GLbyte *pBits = NULL;     // Pointer to bits
+  FILE *pFile;               // File pointer
+  TGAHEADER tgaHeader;       // TGA file header
+  unsigned long lImageSize;  // Size in bytes of image
+  short sDepth;              // Pixel depth;
+  GLbyte *pBits = NULL;      // Pointer to bits
 
   // Default/Failed values
   *iWidth = 0;
@@ -403,8 +395,7 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
 
   // Attempt to open the fil
   pFile = fopen(szFileName, "rb");
-  if (pFile == NULL)
-    return NULL;
+  if (pFile == NULL) return NULL;
 
   // Read in header (binary)
   fread(&tgaHeader, 18 /* sizeof(TGAHEADER)*/, 1, pFile);
@@ -426,8 +417,7 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
 
   // Allocate memory and check for success
   pBits = (GLbyte *)malloc(lImageSize * sizeof(GLbyte));
-  if (pBits == NULL)
-    return NULL;
+  if (pBits == NULL) return NULL;
 
   // Read in the bits
   // Check for read error. This should catch RLE or other
@@ -439,18 +429,18 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
 
   // Set OpenGL format expected
   switch (sDepth) {
-  case 3: // Most likely case
-    *eFormat = GL_BGR_EXT;
-    *iComponents = GL_RGB8;
-    break;
-  case 4:
-    *eFormat = GL_BGRA_EXT;
-    *iComponents = GL_RGBA8;
-    break;
-  case 1:
-    *eFormat = GL_LUMINANCE;
-    *iComponents = GL_LUMINANCE8;
-    break;
+    case 3:  // Most likely case
+      *eFormat = GL_BGR_EXT;
+      *iComponents = GL_RGB8;
+      break;
+    case 4:
+      *eFormat = GL_BGRA_EXT;
+      *iComponents = GL_RGBA8;
+      break;
+    case 1:
+      *eFormat = GL_LUMINANCE;
+      *iComponents = GL_LUMINANCE8;
+      break;
   };
 
   // Done with File
@@ -466,7 +456,7 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
 // used again after program initialization. Where-as mallocing different size
 // shader blocks could lead to heap fragmentation, which would actually be
 // worse.
-//#define MAX_SHADER_LENGTH   4096  -> This is defined in gltools.h
+// #define MAX_SHADER_LENGTH   4096  -> This is defined in gltools.h
 static GLubyte shaderText[MAX_SHADER_LENGTH];
 
 ////////////////////////////////////////////////////////////////
@@ -481,11 +471,10 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader) {
   fp = fopen(szFile, "r");
   if (fp != NULL) {
     // See how long the file s
-    while (fgetc(fp) != EOF)
-      shaderLength++;
+    while (fgetc(fp) != EOF) shaderLength++;
 
     // Allocate a block of memory to send in the shader
-    assert(shaderLength < MAX_SHADER_LENGTH); // make me bigger!
+    assert(shaderLength < MAX_SHADER_LENGTH);  // make me bigger!
     if (shaderLength > MAX_SHADER_LENGTH) {
       fclose(fp);
       return false;
@@ -495,8 +484,7 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader) {
     rewind(fp);
 
     // Read the whole file in
-    if (shaderText != NULL)
-      fread(shaderText, 1, shaderLength, fp);
+    if (shaderText != NULL) fread(shaderText, 1, shaderLength, fp);
 
     // Make sure it is null terminated and close the file
     shaderText[shaderLength] = '\0';

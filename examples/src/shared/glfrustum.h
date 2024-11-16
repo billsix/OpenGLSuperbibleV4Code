@@ -13,8 +13,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 class GLFrustum {
-public:
-  GLFrustum(void) // Set some Reasonable Defaults
+ public:
+  GLFrustum(void)  // Set some Reasonable Defaults
   {
     Set(30.0f, 1.0, 1.0, 10.0);
   }
@@ -27,8 +27,8 @@ public:
   // Calculates the corners of the Frustum and sets the projection matrix.
   // Switches to projection matrix before returning
   void Set(float fFov, float fAspect, float fNear, float fFar) {
-    float xmin, xmax, ymin, ymax;     // Dimensions of near clipping plane
-    float xFmin, xFmax, yFmin, yFmax; // Dimensions of far clipping plane
+    float xmin, xmax, ymin, ymax;      // Dimensions of near clipping plane
+    float xFmin, xFmax, yFmin, yFmax;  // Dimensions of far clipping plane
 
     // Do the Math for the near clipping plane
     ymax = fNear * float(tan(fFov * M3D_PI / 360.0));
@@ -195,34 +195,28 @@ public:
 
     // Near Plane - See if it is behind me
     fDist = m3dGetDistanceToPlanef(vPoint, nearPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     // Distance to far plane
     fDist = m3dGetDistanceToPlanef(vPoint, farPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     fDist = m3dGetDistanceToPlanef(vPoint, leftPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     fDist = m3dGetDistanceToPlanef(vPoint, rightPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     fDist = m3dGetDistanceToPlanef(vPoint, bottomPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     fDist = m3dGetDistanceToPlanef(vPoint, topPlane);
-    if (fDist + fRadius <= 0.0)
-      return false;
+    if (fDist + fRadius <= 0.0) return false;
 
     return true;
   }
 
-protected:
+ protected:
   // Untransformed corners of the frustum
   M3DVector4f nearUL, nearLL, nearUR, nearLR;
   M3DVector4f farUL, farLL, farUR, farLR;

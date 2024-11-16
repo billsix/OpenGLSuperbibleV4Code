@@ -19,7 +19,7 @@
 #include "math3d.h"
 
 class CTriangleMesh {
-public:
+ public:
   CTriangleMesh(void);
   ~CTriangleMesh(void);
 
@@ -35,8 +35,7 @@ public:
 
   // In place scale of the vertices
   void Scale(GLfloat fScaleValue) {
-    for (int i = 0; i < nNumVerts; i++)
-      m3dScaleVector3(pVerts[i], fScaleValue);
+    for (int i = 0; i < nNumVerts; i++) m3dScaleVector3(pVerts[i], fScaleValue);
   }
 
   // Draw - make sure you call glEnableClientState for these arrays
@@ -50,13 +49,13 @@ public:
     glDrawElements(GL_TRIANGLES, nNumIndexes, GL_UNSIGNED_SHORT, pIndexes);
   }
 
-protected:
-  GLushort *pIndexes;      // Array of indexes
-  M3DVector3f *pVerts;     // Array of vertices
-  M3DVector3f *pNorms;     // Array of normals
-  M3DVector2f *pTexCoords; // Array of texture coordinates
+ protected:
+  GLushort *pIndexes;       // Array of indexes
+  M3DVector3f *pVerts;      // Array of vertices
+  M3DVector3f *pNorms;      // Array of normals
+  M3DVector2f *pTexCoords;  // Array of texture coordinates
 
-  GLuint nMaxIndexes; // Maximum workspace
-  GLuint nNumIndexes; // Number of indexes currently used
-  GLuint nNumVerts;   //
+  GLuint nMaxIndexes;  // Maximum workspace
+  GLuint nNumIndexes;  // Number of indexes currently used
+  GLuint nNumVerts;    //
 };

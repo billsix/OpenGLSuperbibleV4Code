@@ -10,25 +10,25 @@
 #ifndef __GLTOOLS__LIBRARY
 #define __GLTOOLS__LIBRARY
 
-//#define FREEGLUT_STATIC
+// #define FREEGLUT_STATIC
 
 // Bring in OpenGL
 // Windows
 #ifdef WIN32
-#include "glee.h"    // OpenGL Extension "autoloader"
-#include <gl\gl.h>   // Microsoft OpenGL headers (version 1.1 by themselves)
-#include <gl\glu.h>  // OpenGL Utilities
-#include <gl\glut.h> // Glut (Free-Glut on Windows)
-#include <windows.h> // Must have for Windows platform builds
+#include "glee.h"     // OpenGL Extension "autoloader"
+#include <gl\gl.h>    // Microsoft OpenGL headers (version 1.1 by themselves)
+#include <gl\glu.h>   // OpenGL Utilities
+#include <gl\glut.h>  // Glut (Free-Glut on Windows)
+#include <windows.h>  // Must have for Windows platform builds
 #endif
 
 // Mac OS X
 #ifdef __APPLE__
-#include "GLee.h"          // OpenGL Extension "autoloader"
-#include <Carbon/Carbon.h> // Brings in most Apple specific stuff
-#include <GLUT/glut.h>     // Apples Implementation of GLUT
-#include <OpenGL/gl.h> // Apple OpenGL haders (version depends on OS X SDK version)
-#include <OpenGL/glu.h> // OpenGL Utilities
+#include "GLee.h"           // OpenGL Extension "autoloader"
+#include <Carbon/Carbon.h>  // Brings in most Apple specific stuff
+#include <GLUT/glut.h>      // Apples Implementation of GLUT
+#include <OpenGL/gl.h>  // Apple OpenGL haders (version depends on OS X SDK version)
+#include <OpenGL/glu.h>  // OpenGL Utilities
 
 // Just ignore sleep on Apple
 #define Sleep(x)
@@ -51,9 +51,9 @@ typedef GLvoid (*CallBack)();
 #else
 
 #ifndef WIN32
-typedef GLvoid (*CallBack)(...); //  XCode (GNU) style
+typedef GLvoid (*CallBack)(...);  //  XCode (GNU) style
 #else
-typedef GLvoid(_stdcall *CallBack)(); // Visual C++ style
+typedef GLvoid(_stdcall *CallBack)();  // Visual C++ style
 #endif
 
 #endif

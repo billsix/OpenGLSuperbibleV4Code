@@ -3,7 +3,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 // GLWindow.h : header file
 //
 
@@ -12,27 +12,27 @@
 
 class CGLWindow : public CWnd {
   // Construction
-public:
+ public:
   CGLWindow();
 
   // Attributes
-public:
+ public:
   // Operations
-public:
+ public:
   // Overrides
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CGLWindow)
   //}}AFX_VIRTUAL
 
   // Implementation
-public:
+ public:
   int m_nPixelFormat;
   HGLRC m_hRC;
   HDC m_hDC;
   virtual ~CGLWindow();
 
   // Generated message map functions
-protected:
+ protected:
   GLuint m_Sides[6];
   //{{AFX_MSG(CGLWindow)
   afx_msg void OnPaint();
@@ -50,4 +50,4 @@ protected:
 // Microsoft Visual C++ will insert additional declarations immediately before
 // the previous line.
 
-#endif // !defined(AFX_GLWINDOW_H__048D92C6_6DF2_11D3_8A92_00A0CC2492EC__INCLUDED_)
+#endif  // !defined(AFX_GLWINDOW_H__048D92C6_6DF2_11D3_8A92_00A0CC2492EC__INCLUDED_)

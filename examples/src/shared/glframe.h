@@ -11,12 +11,12 @@
 // The GLFrame (OrthonormalFrame) class. Possibly the most useful little piece
 // of 3D graphics code for OpenGL immersive environments. Richard S. Wright Jr.
 class GLFrame {
-protected:
-  M3DVector3f vOrigin;  // Where am I?
-  M3DVector3f vForward; // Where am I going?
-  M3DVector3f vUp;      // Which way is up?
+ protected:
+  M3DVector3f vOrigin;   // Where am I?
+  M3DVector3f vForward;  // Where am I going?
+  M3DVector3f vUp;       // Which way is up?
 
-public:
+ public:
   // Default position and orientation. At the origin, looking
   // down the positive Z axis (right handed coordinate system).
   GLFrame(void) {
@@ -218,8 +218,7 @@ public:
     glMultMatrixf(m);
 
     // If Rotation only, then do not do the translation
-    if (!bRotOnly)
-      glTranslatef(-vOrigin[0], -vOrigin[1], -vOrigin[2]);
+    if (!bRotOnly) glTranslatef(-vOrigin[0], -vOrigin[1], -vOrigin[2]);
 
     /*gluLookAt(vOrigin[0], vOrigin[1], vOrigin[2],
                             vOrigin[0] + vForward[0],
@@ -406,20 +405,20 @@ public:
   // Transform a point by frame matrix
   void TransformPoint(M3DVector3f vPointSrc, M3DVector3f vPointDst) {
     M3DMatrix44f m;
-    GetMatrix(m, false); // Rotate and translate
+    GetMatrix(m, false);  // Rotate and translate
     vPointDst[0] = m[0] * vPointSrc[0] + m[4] * vPointSrc[1] +
-                   m[8] * vPointSrc[2] + m[12]; // * v[3];
+                   m[8] * vPointSrc[2] + m[12];  // * v[3];
     vPointDst[1] = m[1] * vPointSrc[0] + m[5] * vPointSrc[1] +
-                   m[9] * vPointSrc[2] + m[13]; // * v[3];
+                   m[9] * vPointSrc[2] + m[13];  // * v[3];
     vPointDst[2] = m[2] * vPointSrc[0] + m[6] * vPointSrc[1] +
-                   m[10] * vPointSrc[2] + m[14]; // * v[3];
+                   m[10] * vPointSrc[2] + m[14];  // * v[3];
   }
 
   ////////////////////////////////////////////////////////////////////////////
   // Rotate a vector by frame matrix
   void RotateVector(M3DVector3f vVectorSrc, M3DVector3f vVectorDst) {
     M3DMatrix44f m;
-    GetMatrix(m, true); // Rotate only
+    GetMatrix(m, true);  // Rotate only
 
     vVectorDst[0] =
         m[0] * vVectorSrc[0] + m[4] * vVectorSrc[1] + m[8] * vVectorSrc[2];

@@ -4,8 +4,8 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "resource.h"
 
-#endif // !defined(AFX_RTHREAD_H__45FBF448_92BF_4856_BC96_26D5091D1764__INCLUDED_)
+#endif  // !defined(AFX_RTHREAD_H__45FBF448_92BF_4856_BC96_26D5091D1764__INCLUDED_)

@@ -3,6 +3,8 @@
 // Demonstrates letting OpenGL do the transformations
 // Program by Richard S. Wright Jr.
 
+#include <windows.h>
+
 #include "../../shared/gltools.h"  // OpenGL toolkit
 
 #include "../../shared/math3d.h"  // Math3D Library

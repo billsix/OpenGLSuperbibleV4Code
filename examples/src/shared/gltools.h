@@ -15,11 +15,11 @@
 // Bring in OpenGL
 // Windows
 #ifdef WIN32
+#include <windows.h>  // Must have for Windows platform builds
 #include "glee.h"     // OpenGL Extension "autoloader"
 #include <gl\gl.h>    // Microsoft OpenGL headers (version 1.1 by themselves)
 #include <gl\glu.h>   // OpenGL Utilities
 #include <gl\glut.h>  // Glut (Free-Glut on Windows)
-#include <windows.h>  // Must have for Windows platform builds
 #endif
 
 // Mac OS X

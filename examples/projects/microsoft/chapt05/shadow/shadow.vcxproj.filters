@@ -21,12 +21,6 @@
     <ClCompile Include="..\..\..\..\src\chapt05\shadow\shadow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\shared\GLee.c">
-      <Filter>Source Files\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\shared\gltools.cpp">
-      <Filter>Source Files\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\shared\math3d.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>

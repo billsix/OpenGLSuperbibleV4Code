@@ -2,6 +2,8 @@
 
 **Status:** complete (study + reference set) — 2026-08-02. The follow-on **C++-vs-mvp-port
 comparison** (starting with `chapt18/pixbufobj`) is the enabled next step, tracked separately.
+**Priority:** 10
+**Difficulty:** 7
 **Created:** 2026-08-02
 
 ## Done 2026-08-02 — the reference set

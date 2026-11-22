@@ -189,10 +189,19 @@ commit, and `CLAUDE.md` updated to index them:
 and `contrib/imgui`), so fan out readers by area (chapters 1 to 6, 7 to 12, 13 to 18, 19 to 22,
 `shared/`, the three project trees, `contrib/`, and the git history) and have them return
 structured, `file:line`-anchored reports; synthesize the documents from those. Verify by running
-anything a document claims about "builds" or "runs": that is a measurement, not a reading. Use
-a throwaway container for the Linux measurements and do not leave build output in the tree
-(the working tree currently has an untracked built binary at
-`examples/projects/linux/chapt18/pixbufobj/pixbufobj`; leave it alone or ask).
+anything a document claims about "builds" or "runs": that is a measurement, not a reading.
+
+**Container first (maintainer's answer, 2026-11-22).** The repo has no `Dockerfile`, `Makefile` or
+`entrypoint/` yet. Before any measurement, add the maintainer's container-per-project template
+(Fedora, Podman, `make image`, `make shell`, `make shell-exec`, `make format`, with `-it` only on
+the targets that need a terminal) and run every Linux build and Xvfb run through it, nested, so no
+build output lands in the tree. The image carries the build dependencies (`freeglut-devel`,
+`mesa-libGL-devel`, `mesa-libGLU-devel`, `OpenEXR-devel`, X11 headers, `xorg-x11-server-Xvfb`,
+`mesa-dri-drivers`, `cmake`, `ninja-build`, `clang-tools-extra`). This is a prerequisite of the audit
+and the first commit of the task's work. The template is `ai-coding-conventions.personal.template.md`
+("Makefile contract", "Dockerfile contract", "entrypoint contract", "Quick conformance check");
+follow it rather than inventing a layout. The untracked binary at
+`examples/projects/linux/chapt18/pixbufobj/pixbufobj` is the maintainer's; leave it alone.
 
 ## Stage 2: the CMake build (starting after the audit summary is answered)
 
@@ -268,12 +277,18 @@ a throwaway container for the Linux measurements and do not leave build output i
 
 ## Open questions
 
-None blocking. The GLUT-vs-GLFW choice and GLee-vs-glad choice are decided by what fails in
+None blocking. Answered 2026-11-22: the Linux measurements run in the project's container (the
+normal Makefile/Dockerfile contract, added as the task's first step); the first error from a modern
+Visual Studio build is requested when the audit reaches `windows-build-history.md`, not before.
+
+Not blocking either: The GLUT-vs-GLFW choice and GLee-vs-glad choice are decided by what fails in
 steps 4 and 5, not by a preference now.
 
 ## History
 
 - 2026-11-22: created at the maintainer's request.
+- 2026-11-22: the maintainer answered two questions (use the normal Makefile/Dockerfile contract for
+  the Linux runs; give the Visual Studio error when the audit gets there) and committed the task.
 - 2026-11-22: the maintainer added a second message: do a full audit of the source and of the git
   history first, with reference documents as the deliverables; keep the callback-based book
   structure, allow consistent reformatting, free GUI controls and any extension loader. The task

@@ -7,16 +7,42 @@
 
 ## BLUF
 
-Keep the demo C/C++ (`examples/src/`) as close to the original as possible, and replace the three
-hand-maintained build trees (Linux Makefiles, Xcode projects, Visual Studio projects) with a single
-`CMakeLists.txt` tree that builds on Linux, macOS and Windows. Done means: one `cmake -B build &&
-cmake --build build` builds every demo that can build on the platform; Linux is verified here in a
-container; macOS and Windows are verified by the maintainer after the push, so those two get
-the most careful, most conservative configuration. If a dependency is too old (GLee, the
-freeglut NuGet package), the fallback is GLFW with a GLUT-shaped shim, so the demo sources keep
-their `glut*` calls.
+Two stages. **Stage 1 is a full audit** of the source tree and of how it changed over the git
+history; its deliverables are reference documents under `tasks/reference/`, not code changes.
+**Stage 2 replaces the three hand-maintained build trees** (Linux Makefiles, Xcode projects,
+Visual Studio projects) with one `CMakeLists.txt` tree that builds on Linux, macOS and Windows,
+using the audit's findings. The demos keep the book's shape: callback-based GLUT-style programs.
+Done means: the audit documents exist and are indexed from `CLAUDE.md`; one `cmake -B build &&
+cmake --build build` builds every demo that can build on the platform; Linux is verified here in
+a container; macOS and Windows are verified by the maintainer after the push, so those two get
+the most conservative configuration.
 
-## Maintainer quote (2026-11-22)
+## Maintainer's constraints (2026-11-22, second message)
+
+> before we do it, we should do a full audit of the source code, and changes over time. for
+> context, it was from a book, and I had manually updated some of the code and project files
+> over time. I tried to put in some IMGUI controls to some, I don't remember if I succeeded or
+> not. I want to keep as a general gist, the code as it was in the book as much as possible,
+> but formatting doesn't have to stay the same (I do want consistent formatting btw), GUI
+> controls don't have to stay the same, but the callback based approach does even though I
+> prefer SDL/GLFW over glut. glad doesn't have to be the loader, anything else could work. But
+> I will want the full repo audit, even over git commits, where the deliverables and findings
+> are for reference documents, not necessarily code changes itself, but keeping in mind that our
+> immediate goal is the build system update.
+
+What that fixes, as rules for the work below:
+
+- **Kept:** the book's program structure: `main` registers callbacks (`display`, `reshape`,
+  `keyboard`, `special`, `timer`, mouse) and hands control to a loop. A backend may be GLFW or
+  SDL, but the demos still read as callback programs (so a GLUT-shaped shim over GLFW or SDL is
+  allowed, a rewrite into polling loops is not).
+- **Free to change:** formatting (but one consistent style, enforced by a `.clang-format` and a
+  check), GUI controls (the right-click GLUT menus and the ImGui retrofits may be replaced or
+  completed), and the extension loader (GLee, glad, GLEW or anything else that works).
+- **Audit first, and its output is documents.** Findings that suggest code changes become
+  proposals in the documents or follow-on tasks; they do not change code during the audit.
+
+## Maintainer quote (2026-11-22, first message)
 
 > keep the C/C++ code as much the same as possible, but update the build system to use cmake in
 > a crossplatform way. I will be able to verify on macos linux and windows, but I'll only be able
@@ -99,11 +125,79 @@ dependency; the GLUT loop becomes a GLFW polling loop. Its `_primitives.py` has 
 has the shared window and timer plumbing. In committed docs refer to it as
 `github.com/billsix/modelviewprojection` (the mount name `modelviewprojection` matches the repo).
 
-## Proposed approach
+## Stage 1: the audit (reference documents, no code changes)
 
-1. **Inventory what builds today on Linux.** Run the existing `build` script in a container and
-   record which of the ~95 demos compile and run headless-ish (Xvfb + llvmpipe). That is the
-   baseline: after CMake, the same set must still build. Record it in this task.
+Goal: know exactly what is in the tree, what the maintainer changed and when, and what state each
+demo is in, before choosing a build layout. The existing `tasks/reference/` set (2026-08-02) is
+the starting point and is checked against the code again, not trusted.
+
+**Deliverables**, each a `tasks/reference/<slug>.md` file, each claim anchored to `file:line` or a
+commit, and `CLAUDE.md` updated to index them:
+
+1. **`source-audit.md`: a per-demo state table.** One row for each demo directory in
+   `examples/src/chapt01` to `chapt22` (about 95 demos): what it teaches, which GLUT calls it
+   uses, which extensions and shared files it needs, whether it includes `imgui`, whether it has
+   a Linux Makefile, an Xcode project and a Visual Studio project, whether the three agree on
+   file lists, and whether it **builds and runs on Linux today** (measured: build in a container,
+   run a few frames under Xvfb with llvmpipe; record the first error for each failure).
+   Include the dead and orphaned files (`shared/glfrustum.h` is already known) and files in the
+   source tree that no project references.
+2. **`imgui-retrofit-status.md`: did the ImGui work succeed?** For each of the four known
+   retrofits (`chapt02/bounce`, `chapt05/ambient`, `chapt08/pyramid`, `chapt15/shaders`), and any
+   others a search finds (`grep -rl imgui`, and the commits `d6defd8` "Updated demo with IMGUI
+   controls. The glut ones were failing", `3b6f3b3` "added IMGUI controls to pyramid", `17d5297`
+   "added imgui files to the project. Inputs are not working though"):
+   does it build on Linux, does it run, do the controls respond (`17d5297` says inputs did not
+   work at first; test whether mouse and keyboard input reach ImGui through
+   `imgui_impl_glut`), and which GLUT callbacks does it replace or wrap. Include a screenshot
+   or a pixel check from the Xvfb run if feasible. End with a recommendation for the build
+   stage: keep, replace with a backend-independent overlay, or drop.
+3. **`history-audit.md`: the change history, commit by commit.** Walk all 42 commits (`git log
+   --stat --follow` per area). For each commit: date, what it changed in the sources, in each
+   platform's project files, in `contrib/`, and whether it changed behavior or only build or
+   format. Group into eras (the verbatim upstream import `e802274`; the VS2019/NuGet pass
+   `8a04619`; the Makefile and ImGui commits; the Xcode regeneration series; the 2025 Windows
+   package swap `b8e9cea`; the ImGui vendoring `c74bbd6`). Record every **source** change
+   against the upstream import as a diff summary: the delta is the maintainer's work, and the
+   audit separates behavior changes (the two chapt16 specular fixes, the `ortho` fix `e43b649`,
+   the bounce changes) from formatting churn (clang-format and dos2unix: `eb7a0b3`, `73f58ea`,
+   `638345d`, `02e83be`). Produce one table of "what a demo looked like in the book" against
+   "what it does now" for each behavior change, so Stage 2 can keep the book's behavior.
+4. **`windows-build-history.md`: what was tried and why it failed.** From the Visual Studio
+   commits (`8a04619`, `498c5ca`, `bb01dd2`, `b8e9cea`): the toolsets, NuGet packages and versions
+   used in each project file, how project files were edited (by hand or by bulk script), which
+   packages are dead, and what the maintainer reports about the current failure (ask for the
+   first error message from a modern Visual Studio, and record it; this is the one fact the
+   audit cannot get from the repository).
+5. **`dependency-and-portability-audit.md`: what the code needs from the platform.** The GLUT
+   calls with counts and which are freeglut-only (a first table exists in this task's Context;
+   the audit rechecks it with `rg`), the OpenGL features and extensions used (fixed function
+   against GLSL, which extensions GLee must provide, which GL version the demos need), the
+   platform headers and `#ifdef` branches (`__APPLE__`, `WIN32`, X11), the use of `GLee`
+   across the shared library, deprecated or non-portable C++ (VLAs, `windows.h` order,
+   `<glut.h>` against `<GL/freeglut.h>`, `gl\gl.h` backslashes, `long` sizes), and
+   **a candidate list of loaders** (GLee, glad, GLEW, libepoxy, `glbinding`, GLFW's own
+   function loading) with what each would need changed in `gltools.h`.
+6. **`formatting-audit.md`: current formatting state.** Which files are clang-format clean under
+   which style, which are not, line endings and tabs, and a proposed `.clang-format` plus how to
+   enforce it (a `make format-check` target). Formatting may change; the audit decides one style.
+7. **A short `audit-summary.md`**: the findings that change Stage 2's plan, and a revised
+   Stage 2 plan if the audit contradicts anything below. The audit is not finished until the
+   maintainer has read this and answered its numbered questions.
+
+**Method.** The tree is large (2066 tracked files, mostly Xcode, Visual Studio, textures
+and `contrib/imgui`), so fan out readers by area (chapters 1 to 6, 7 to 12, 13 to 18, 19 to 22,
+`shared/`, the three project trees, `contrib/`, and the git history) and have them return
+structured, `file:line`-anchored reports; synthesize the documents from those. Verify by running
+anything a document claims about "builds" or "runs": that is a measurement, not a reading. Use
+a throwaway container for the Linux measurements and do not leave build output in the tree
+(the working tree currently has an untracked built binary at
+`examples/projects/linux/chapt18/pixbufobj/pixbufobj`; leave it alone or ask).
+
+## Stage 2: the CMake build (starting after the audit summary is answered)
+
+1. **Baseline from the audit.** `source-audit.md` records which of the ~95 demos build and run on
+   Linux today. After CMake, the same set must still build and run.
 2. **Layout.** One top-level `CMakeLists.txt`, a `cmake/` directory for find-modules, and
    `examples/CMakeLists.txt` that does `add_subdirectory` per chapter, each with an
    `add_demo(name SOURCES … [IMGUI] [OPENEXR])` helper. A static library target `gltools`
@@ -125,11 +219,11 @@ has the shared window and timer plumbing. In committed docs refer to it as
    first target (`chapt01/block`), have the maintainer build it, then widen.
 5. **The extension loader.** `GLee` predates core profiles and may not load on current drivers
    or compile on current compilers. Check on Linux first (it builds today). If GLee fails on
-   Windows or macOS, replace it behind the same header name with a generated `glad` loader
+   Windows or macOS, replace it behind the same header name with a loader chosen from the audit's candidate list (`glad` generated for GL 2.1 compatibility is the default guess; GLEW or libepoxy are as good)
    (GL 2.1 compatibility profile plus the extensions the demos use), so no demo source changes.
    A `glad` generated in the container and committed under `examples/src/shared/` is acceptable;
    record the generator version and command.
-6. **The GLUT shim, only if freeglut is not workable.** A header `glut_shim.h` plus
+6. **The GLUT shim, only if freeglut is not workable.** The shim may sit on GLFW or SDL (the maintainer prefers either to GLUT; decide by the audit's portability findings), and it must keep the callback model. A header `glut_shim.h` plus
    `glut_shim.cpp` exposing the `glut*` functions listed under Context on top of GLFW, with
    menus rendered by ImGui (the Python port does exactly this) and `glutSolid*` ported from
    the Python `_primitives.py`. Put it behind `-DUSE_GLFW_GLUT_SHIM=ON`, and include it through the
@@ -180,3 +274,7 @@ steps 4 and 5, not by a preference now.
 ## History
 
 - 2026-11-22: created at the maintainer's request.
+- 2026-11-22: the maintainer added a second message: do a full audit of the source and of the git
+  history first, with reference documents as the deliverables; keep the callback-based book
+  structure, allow consistent reformatting, free GUI controls and any extension loader. The task
+  was split into Stage 1 (audit) and Stage 2 (CMake).

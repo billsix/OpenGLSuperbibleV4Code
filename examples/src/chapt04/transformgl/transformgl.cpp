@@ -3,7 +3,9 @@
 // Demonstrates letting OpenGL do the transformations
 // Program by Richard S. Wright Jr.
 
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include "../../shared/gltools.h"  // OpenGL toolkit
 
@@ -77,7 +79,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

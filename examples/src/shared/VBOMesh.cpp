@@ -189,8 +189,8 @@ void CVBOMesh::Draw(void) {
 // into client memory, then back again
 void CVBOMesh::Scale(GLfloat fScaleValue) {
   glBindBuffer(GL_ARRAY_BUFFER, bufferObjects[VERTEX_DATA]);
-  M3DVector3f *pVertexData =
-      (M3DVector3f *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+  M3DVector3f* pVertexData =
+      (M3DVector3f*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 
   if (pVertexData != NULL) {
     for (int i = 0; i < nNumVerts; i++)

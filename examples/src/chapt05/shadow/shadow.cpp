@@ -257,7 +257,7 @@ void RenderScene(void) {
   glPushMatrix();
 
   // Multiply by shadow projection matrix
-  glMultMatrixf((GLfloat *)shadowMat);
+  glMultMatrixf((GLfloat*)shadowMat);
 
   // Now rotate the jet around in the new flattend space
   glRotatef(xRot, 1.0f, 0.0f, 0.0f);
@@ -371,7 +371,7 @@ void ChangeSize(int w, int h) {
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

@@ -12,12 +12,12 @@
 // GLViewPixFormatDlg dialog
 
 IMPLEMENT_DYNAMIC(GLViewPixFormatDlg, CDialog)
-GLViewPixFormatDlg::GLViewPixFormatDlg(CWnd *pParent /*=NULL*/)
+GLViewPixFormatDlg::GLViewPixFormatDlg(CWnd* pParent /*=NULL*/)
     : CDialog(GLViewPixFormatDlg::IDD, pParent) {}
 
 GLViewPixFormatDlg::~GLViewPixFormatDlg() {}
 
-void GLViewPixFormatDlg::DoDataExchange(CDataExchange *pDX) {
+void GLViewPixFormatDlg::DoDataExchange(CDataExchange* pDX) {
   CDialog::DoDataExchange(pDX);
 }
 
@@ -73,36 +73,36 @@ BOOL GLViewPixFormatDlg::OnInitDialog() {
   str.Format("%08X", pFormatDesc->dwFlags);
   SetDlgItemText(IDC_ED_FLAGS, str);
 
-  ((CButton *)GetDlgItem(IDC_CH_DOUBLEBUFFER))
+  ((CButton*)GetDlgItem(IDC_CH_DOUBLEBUFFER))
       ->SetCheck(pFormatDesc->dwFlags & PFD_DOUBLEBUFFER);
-  ((CButton *)GetDlgItem(IDC_CH_STEREO))
+  ((CButton*)GetDlgItem(IDC_CH_STEREO))
       ->SetCheck(pFormatDesc->dwFlags & PFD_STEREO);
-  ((CButton *)GetDlgItem(IDC_CH_DRAW_TO_WINDOW))
+  ((CButton*)GetDlgItem(IDC_CH_DRAW_TO_WINDOW))
       ->SetCheck(pFormatDesc->dwFlags & PFD_DRAW_TO_WINDOW);
-  ((CButton *)GetDlgItem(IDC_CH_DRAW_TO_BITMAP))
+  ((CButton*)GetDlgItem(IDC_CH_DRAW_TO_BITMAP))
       ->SetCheck(pFormatDesc->dwFlags & PFD_DRAW_TO_BITMAP);
-  ((CButton *)GetDlgItem(IDC_CH_SUPPORT_GDI))
+  ((CButton*)GetDlgItem(IDC_CH_SUPPORT_GDI))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SUPPORT_GDI);
-  ((CButton *)GetDlgItem(IDC_CH_SUPPORT_OPENGL))
+  ((CButton*)GetDlgItem(IDC_CH_SUPPORT_OPENGL))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SUPPORT_OPENGL);
-  ((CButton *)GetDlgItem(IDC_CH_GENERIC_FORMAT))
+  ((CButton*)GetDlgItem(IDC_CH_GENERIC_FORMAT))
       ->SetCheck(pFormatDesc->dwFlags & PFD_GENERIC_FORMAT);
-  ((CButton *)GetDlgItem(IDC_CH_NEED_PALETTE))
+  ((CButton*)GetDlgItem(IDC_CH_NEED_PALETTE))
       ->SetCheck(pFormatDesc->dwFlags & PFD_NEED_PALETTE);
-  ((CButton *)GetDlgItem(IDC_CH_NEED_SYSTEM_PALETTE))
+  ((CButton*)GetDlgItem(IDC_CH_NEED_SYSTEM_PALETTE))
       ->SetCheck(pFormatDesc->dwFlags & PFD_NEED_SYSTEM_PALETTE);
-  ((CButton *)GetDlgItem(IDC_CH_SWAP_EXCHANGE))
+  ((CButton*)GetDlgItem(IDC_CH_SWAP_EXCHANGE))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SWAP_EXCHANGE);
-  ((CButton *)GetDlgItem(IDC_CH_SWAP_COPY))
+  ((CButton*)GetDlgItem(IDC_CH_SWAP_COPY))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SWAP_COPY);
-  ((CButton *)GetDlgItem(IDC_CH_SWAP_LAYER_BUFFERS))
+  ((CButton*)GetDlgItem(IDC_CH_SWAP_LAYER_BUFFERS))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SWAP_LAYER_BUFFERS);
-  ((CButton *)GetDlgItem(IDC_CH_GENERIC_ACCELERATED))
+  ((CButton*)GetDlgItem(IDC_CH_GENERIC_ACCELERATED))
       ->SetCheck(pFormatDesc->dwFlags & PFD_GENERIC_ACCELERATED);
-  ((CButton *)GetDlgItem(IDC_CH_SUPPORT_DIRECTDRAW))
+  ((CButton*)GetDlgItem(IDC_CH_SUPPORT_DIRECTDRAW))
       ->SetCheck(pFormatDesc->dwFlags & PFD_SUPPORT_DIRECTDRAW);
 
-  ((CButton *)GetDlgItem(IDC_CH_INVALID_BITS))
+  ((CButton*)GetDlgItem(IDC_CH_INVALID_BITS))
       ->SetCheck(pFormatDesc->dwFlags & 0xffffc000L);
 
   // SetDlgItemInt(IDC_ED_FLAGS,      pFormatDesc->iLayerType,      0);

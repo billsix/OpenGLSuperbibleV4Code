@@ -367,7 +367,7 @@ void m3dRotationMatrix44(M3DMatrix44d m, double angle, double x, double y,
 bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
 #define SWAP_ROWS(a, b) \
   {                     \
-    float *_tmp = a;    \
+    float* _tmp = a;    \
     (a) = (b);          \
     (b) = _tmp;         \
   }
@@ -533,7 +533,7 @@ bool m3dInvertMatrix44(M3DMatrix44f dst, const M3DMatrix44f src) {
 bool m3dInvertMatrix44(M3DMatrix44d dst, const M3DMatrix44d src) {
 #define SWAP_ROWS(a, b) \
   {                     \
-    double *_tmp = a;   \
+    double* _tmp = a;   \
     (a) = (b);          \
     (b) = _tmp;         \
   }

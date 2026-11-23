@@ -30,7 +30,7 @@ class CAboutDlg : public CDialog {
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CAboutDlg)
  protected:
-  virtual void DoDataExchange(CDataExchange *pDX);  // DDX/DDV support
+  virtual void DoDataExchange(CDataExchange* pDX);  // DDX/DDV support
                                                     //}}AFX_VIRTUAL
 
   // Implementation
@@ -45,7 +45,7 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD) {
   //}}AFX_DATA_INIT
 }
 
-void CAboutDlg::DoDataExchange(CDataExchange *pDX) {
+void CAboutDlg::DoDataExchange(CDataExchange* pDX) {
   CDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CAboutDlg)
   //}}AFX_DATA_MAP
@@ -60,7 +60,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CGLViewDlg dialog
 
-CGLViewDlg::CGLViewDlg(CWnd *pParent /*=NULL*/)
+CGLViewDlg::CGLViewDlg(CWnd* pParent /*=NULL*/)
     : CDialog(CGLViewDlg::IDD, pParent) {
   //{{AFX_DATA_INIT(CGLViewDlg)
   // NOTE: the ClassWizard will add member initialization here
@@ -69,7 +69,7 @@ CGLViewDlg::CGLViewDlg(CWnd *pParent /*=NULL*/)
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CGLViewDlg::DoDataExchange(CDataExchange *pDX) {
+void CGLViewDlg::DoDataExchange(CDataExchange* pDX) {
   CDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CGLViewDlg)
   DDX_Control(pDX, IDC_LST_EXT2, m_lbWGLExtensions);
@@ -109,7 +109,7 @@ BOOL CGLViewDlg::OnInitDialog() {
   ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
   ASSERT(IDM_ABOUTBOX < 0xF000);
 
-  CMenu *pSysMenu = GetSystemMenu(FALSE);
+  CMenu* pSysMenu = GetSystemMenu(FALSE);
   if (pSysMenu != NULL) {
     CString strAboutMenu;
     strAboutMenu.LoadString(IDS_ABOUTBOX);
@@ -281,20 +281,20 @@ void CGLViewDlg::OnSelchangeList() {
   m_lbGLExtensions.ResetContent();
 
   // Update String info
-  SetDlgItemText(IDC_VENDOR, (const char *)glGetString(GL_VENDOR));
-  SetDlgItemText(IDC_RENDERER, (const char *)glGetString(GL_RENDERER));
-  SetDlgItemText(IDC_VERSION, (const char *)glGetString(GL_VERSION));
+  SetDlgItemText(IDC_VENDOR, (const char*)glGetString(GL_VENDOR));
+  SetDlgItemText(IDC_RENDERER, (const char*)glGetString(GL_RENDERER));
+  SetDlgItemText(IDC_VERSION, (const char*)glGetString(GL_VERSION));
 
   // Display GLU Driver/Implementation info.
-  SetDlgItemText(IDC_GLUVERSION, (const char *)gluGetString(GLU_VERSION));
+  SetDlgItemText(IDC_GLUVERSION, (const char*)gluGetString(GLU_VERSION));
 
   //////////////////////////////////////////////////////////////////////
   // Put all GL Extensions in the list box
-  char *szTemp = NULL;
-  char *szStringTemp = NULL;
+  char* szTemp = NULL;
+  char* szStringTemp = NULL;
   m_lbGLExtensions.ResetContent();
   if (glGetString(GL_EXTENSIONS) != NULL) {
-    szStringTemp = strdup((const char *)glGetString(GL_EXTENSIONS));
+    szStringTemp = strdup((const char*)glGetString(GL_EXTENSIONS));
 
     szTemp = strtok(szStringTemp, " ");
     while (szTemp != NULL) {
@@ -306,7 +306,7 @@ void CGLViewDlg::OnSelchangeList() {
 
     // Put all wgl extensions in the list box
     m_lbWGLExtensions.ResetContent();
-    if (strstr((char *)glGetString(GL_EXTENSIONS),
+    if (strstr((char*)glGetString(GL_EXTENSIONS),
                "WGL_EXT_extensions_string") != NULL) {
       // Get function pointer to wglExtension string
       PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
@@ -316,7 +316,7 @@ void CGLViewDlg::OnSelchangeList() {
 
       if (wglGetExtensionsStringARB != NULL) {
         szStringTemp =
-            strdup((const char *)wglGetExtensionsStringARB(m_glWnd.m_hDC));
+            strdup((const char*)wglGetExtensionsStringARB(m_glWnd.m_hDC));
 
         szTemp = strtok(szStringTemp, " ");
         while (szTemp != NULL) {

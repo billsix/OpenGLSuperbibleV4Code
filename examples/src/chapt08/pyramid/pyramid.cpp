@@ -47,7 +47,7 @@ void ChangeSize(int w, int h) {
 // context.  Here it sets up and initializes the lighting for
 // the scene.
 void SetupRC() {
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
 
@@ -128,8 +128,8 @@ void RenderScene(void) {
     // and display type. (your selection data could be an index, a pointer to
     // the object, an id for the object, a flag stored in the object itself,
     // etc.)
-    const char *items[] = {"Modulate", "Replace"};
-    static const char *item_current =
+    const char* items[] = {"Modulate", "Replace"};
+    static const char* item_current =
         items[0];  // Here our selection is a single pointer stored outside the
                    // object.
     if (ImGui::BeginCombo("Texture Env Mode", item_current,
@@ -156,8 +156,8 @@ void RenderScene(void) {
     }
 
     {
-      const char *items[] = {"Linear", "Nearest"};
-      static const char *item_current =
+      const char* items[] = {"Linear", "Nearest"};
+      static const char* item_current =
           items[0];  // Here our selection is a single pointer stored outside
                      // the object.
       if (ImGui::BeginCombo("Min Filter", item_current,
@@ -185,8 +185,8 @@ void RenderScene(void) {
     }
 
     {
-      const char *items[] = {"Linear", "Nearest"};
-      static const char *item_current =
+      const char* items[] = {"Linear", "Nearest"};
+      static const char* item_current =
           items[0];  // Here our selection is a single pointer stored outside
                      // the object.
       if (ImGui::BeginCombo("Mag Filter", item_current,
@@ -312,7 +312,7 @@ void RenderScene(void) {
 
   // Rendering
   ImGui::Render();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
@@ -320,7 +320,7 @@ void RenderScene(void) {
   glutSwapBuffers();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutInitWindowSize(800, 600);
@@ -334,7 +334,7 @@ int main(int argc, char *argv[]) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   (void)io;
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable
   // Keyboard Controls

@@ -11,7 +11,7 @@
 
 //////////////////////////////////////////////////////////////////
 // Module globals to save source image data
-static GLbyte *pImage = NULL;
+static GLbyte* pImage = NULL;
 static GLint iWidth, iHeight, iComponents;
 static GLenum eFormat;
 
@@ -53,7 +53,7 @@ void ProcessMenu(int value) {
 // Called to draw scene
 void RenderScene(void) {
   GLint iViewport[4];
-  GLbyte *pModifiedBytes = NULL;
+  GLbyte* pModifiedBytes = NULL;
   GLfloat invertMap[256];
   GLint i;
 
@@ -99,7 +99,7 @@ void RenderScene(void) {
       glDrawPixels(iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pImage);
 
       // Allocate space for the luminance map
-      pModifiedBytes = (GLbyte *)malloc(iWidth * iHeight);
+      pModifiedBytes = (GLbyte*)malloc(iWidth * iHeight);
 
       // Scale colors according to NSTC standard
       glPixelTransferf(GL_RED_SCALE, 0.3f);
@@ -173,7 +173,7 @@ void ChangeSize(int w, int h) {
 
 /////////////////////////////////////////////////////////////
 // Main program entrypoint
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GL_DOUBLE);
   glutInitWindowSize(800, 600);

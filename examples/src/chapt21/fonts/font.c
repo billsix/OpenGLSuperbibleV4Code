@@ -3,16 +3,17 @@
 // OpenGL SuperBible, 4th Edition
 // Nick Haemel
 
-#include "GL/gl.h" // System and OpenGL Stuff
+#include "GL/gl.h"  // System and OpenGL Stuff
 #include "GL/glut.h"
 #include <X11/Xlib.h>
+#include <GL/glx.h>
 #include <string.h>
 
 GLuint uiDListStart;
-XFontStruct *xFont;
+XFontStruct* xFont;
 
 void RenderScene(void) {
-  char *szString = "GLX Fonts";
+  char* szString = "GLX Fonts";
 
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -27,7 +28,7 @@ void RenderScene(void) {
 
   // Now call the appropriate lists for the characters
   // in the string
-  glCallLists(strlen(szString), GL_UNSIGNED_BYTE, (GLubyte *)szString);
+  glCallLists(strlen(szString), GL_UNSIGNED_BYTE, (GLubyte*)szString);
 
   // Restore the display list bit
   glPopAttrib();
@@ -37,13 +38,13 @@ void RenderScene(void) {
 }
 
 void SetupRC(void) {
-  Display *dpy = (Display *)glXGetCurrentDisplay();
+  Display* dpy = (Display*)glXGetCurrentDisplay();
 
   // Set clear color to green
   glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 
   // Load a courier font with size 48pix.
-  XFontStruct *xFont =
+  XFontStruct* xFont =
       XLoadQueryFont(dpy, "-*-courier-bold-r-normal--48-*-*-*-*-*-*-*");
 
   // Generate display list names
@@ -57,8 +58,7 @@ void ChangeSize(int nW, int nH) {
   GLfloat fAspectRatio;
 
   // Prevent a divide by zero
-  if (nH == 0)
-    nH = 1;
+  if (nH == 0) nH = 1;
 
   // Set Viewport to window dimensions
   glViewport(0, 0, nW, nH);
@@ -76,7 +76,7 @@ void ChangeSize(int nW, int nH) {
   glTranslatef(-500.0f, -50.0f, -400.0f);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
   glutInitWindowSize(500, 60);

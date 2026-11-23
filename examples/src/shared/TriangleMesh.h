@@ -50,10 +50,10 @@ class CTriangleMesh {
   }
 
  protected:
-  GLushort *pIndexes;       // Array of indexes
-  M3DVector3f *pVerts;      // Array of vertices
-  M3DVector3f *pNorms;      // Array of normals
-  M3DVector2f *pTexCoords;  // Array of texture coordinates
+  GLushort* pIndexes;       // Array of indexes
+  M3DVector3f* pVerts;      // Array of vertices
+  M3DVector3f* pNorms;      // Array of normals
+  M3DVector2f* pTexCoords;  // Array of texture coordinates
 
   GLuint nMaxIndexes;  // Maximum workspace
   GLuint nNumIndexes;  // Number of indexes currently used

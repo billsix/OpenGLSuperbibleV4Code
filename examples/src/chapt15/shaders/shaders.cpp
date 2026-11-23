@@ -237,7 +237,7 @@ void RenderScene(void) {
 
   // Rendering
   ImGui::Render();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -260,8 +260,8 @@ void TimerFunction(int value) {
 // context.
 void SetupRC() {
   GLint success;
-  const GLchar *vsStringPtr[1];
-  const GLchar *fsStringPtr[1];
+  const GLchar* vsStringPtr[1];
+  const GLchar* fsStringPtr[1];
 
   GLchar vsString[] =
       "void main(void)\n"
@@ -488,7 +488,7 @@ void MouseWheel(int wheel_number, int direction, int x, int y) {
   glutPostRedisplay();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutInitWindowSize(windowWidth, windowHeight);
@@ -516,7 +516,7 @@ int main(int argc, char *argv[]) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   (void)io;
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable
   // Keyboard Controls

@@ -70,7 +70,7 @@ void DrawGlass(void) {
 void SetupRC() {
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
-  GLbyte *pBytes;
+  GLbyte* pBytes;
 
   GLfloat fAmbLight[] = {0.1f, 0.1f, 0.1f, 0.0f};
   GLfloat fDiffLight[] = {1.0f, 1.0f, 1.0f, 0.0f};
@@ -92,7 +92,7 @@ void SetupRC() {
   glBindTexture(GL_TEXTURE_2D, textureObjects[BODY_TEXTURE]);
   pBytes = gltLoadTGA("body.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   GLfloat fLargest;
@@ -107,7 +107,7 @@ void SetupRC() {
   glBindTexture(GL_TEXTURE_2D, textureObjects[GLASS_TEXTURE]);
   pBytes = gltLoadTGA("glass.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -224,7 +224,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

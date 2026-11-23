@@ -7,7 +7,7 @@
 #include <string.h>
 
 // NURBS object pointer
-GLUnurbsObj *pNurb = NULL;
+GLUnurbsObj* pNurb = NULL;
 
 // The number of control points for this curve
 GLint nNumPoints = 4;  // 4 X 4
@@ -29,13 +29,12 @@ GLfloat ctrlPoints[4][4][3] = {
      //                            v = 2
      {-2.0f, 6.0f, 0.0f}},  //			v = 3
 
-    {
-        {2.0f, -6.0f, 0.0f},  // u =2		v = 0
-        {2.0f, -2.0f, 8.0f},  //			v = 1
-        {2.0f, 2.0f, 8.0f},   //			v = 2
-        //                            {    2.0f, -2.0f, 0.0f }, //
-        //                            v = 1 {    2.0f,  2.0f, 0.0f },	// v = 2
-        {2.0f, 6.0f, 0.0f}},  //			v = 3
+    {{2.0f, -6.0f, 0.0f},  // u =2		v = 0
+     {2.0f, -2.0f, 8.0f},  //			v = 1
+     {2.0f, 2.0f, 8.0f},   //			v = 2
+     //                            {    2.0f, -2.0f, 0.0f }, //
+     //                            v = 1 {    2.0f,  2.0f, 0.0f },	// v = 2
+     {2.0f, 6.0f, 0.0f}},  //			v = 3
 
     {{6.0f, -6.0f, 0.0f},   // u = 3	v = 0
      {6.0f, -2.0f, 0.0f},   //			v = 1
@@ -66,7 +65,7 @@ void NurbsErrorHandler(GLenum nErrorCode) {
 
   // Extract a text message of the error
   strcpy(cMessage, "NURBS error occured: ");
-  strcat(cMessage, (char *)gluErrorString(nErrorCode));
+  strcat(cMessage, (char*)gluErrorString(nErrorCode));
 
   // Display the message to the user
   glutSetWindowTitle(cMessage);
@@ -175,7 +174,7 @@ void ChangeSize(int w, int h) {
   glTranslatef(0.0f, 0.0f, -20.0f);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

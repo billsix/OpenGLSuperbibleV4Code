@@ -63,7 +63,7 @@ void my_display_code() {
                        1.0f);  // Edit 1 float using a slider from 0.0f to 1.0f
     ImGui::ColorEdit3(
         "clear color",
-        (float *)&clear_color);  // Edit 3 floats representing a color
+        (float*)&clear_color);  // Edit 3 floats representing a color
 
     if (ImGui::Button("Button"))  // Buttons return true when clicked (most
                                   // widgets return true when edited/activated)
@@ -110,7 +110,7 @@ void RenderScene(void) {
 
   // Rendering
   ImGui::Render();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
@@ -194,7 +194,7 @@ void ChangeSize(int w, int h) {
 
 ///////////////////////////////////////////////////////////
 // Main program entry point
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
   glutInitWindowSize(800, 600);
@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   (void)io;
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable
   // Keyboard Controls

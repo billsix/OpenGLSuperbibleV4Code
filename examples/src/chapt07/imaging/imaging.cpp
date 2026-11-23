@@ -13,7 +13,7 @@
 
 //////////////////////////////////////////////////////////////////
 // Module globals to save source image data
-static GLbyte *pImage = NULL;
+static GLbyte* pImage = NULL;
 static GLint iWidth, iHeight, iComponents;
 static GLenum eFormat;
 
@@ -206,7 +206,7 @@ void ChangeSize(int w, int h) {
 
 /////////////////////////////////////////////////////////////
 // Main program entrypoint
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GL_DOUBLE);
   glutInitWindowSize(600, 600);

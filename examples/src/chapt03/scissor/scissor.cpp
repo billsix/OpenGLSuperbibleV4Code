@@ -52,7 +52,7 @@ void ChangeSize(int w, int h) {
 
 ///////////////////////////////////////////////////////////
 // Program entry point
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
   glutInitWindowSize(800, 600);

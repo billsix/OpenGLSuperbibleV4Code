@@ -29,7 +29,7 @@ GLint maxColorAttachments;  // maximum number of FBO color attachments
 #define TOTAL_SHADERS 6
 GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
-char *shaderNames[TOTAL_SHADERS] = {"multirender", "combine",   "blur",
+char* shaderNames[TOTAL_SHADERS] = {"multirender", "combine",   "blur",
                                     "laplacian",   "grayscale", "colorinvert"};
 
 GLuint framebufferID[2];    // FBO names
@@ -50,10 +50,10 @@ GLfloat animationAngle = 0.0f;  // used to spin objects
 #define MAX_INFO_LOG_SIZE 2048
 
 // Load shader from disk into a null-terminated string
-GLchar *LoadShaderText(const char *fileName) {
-  GLchar *shaderText = NULL;
+GLchar* LoadShaderText(const char* fileName) {
+  GLchar* shaderText = NULL;
   GLint shaderLength = 0;
-  FILE *fp;
+  FILE* fp;
 
   fp = fopen(fileName, "r");
   if (fp != NULL) {
@@ -61,7 +61,7 @@ GLchar *LoadShaderText(const char *fileName) {
       shaderLength++;
     }
     rewind(fp);
-    shaderText = (GLchar *)malloc(shaderLength + 1);
+    shaderText = (GLchar*)malloc(shaderLength + 1);
     if (shaderText != NULL) {
       fread(shaderText, 1, shaderLength, fp);
     }
@@ -75,8 +75,8 @@ GLchar *LoadShaderText(const char *fileName) {
 // Compile shaders
 void PrepareShader(GLint shaderNum) {
   char fullFileName[255];
-  GLchar *fsString;
-  const GLchar *fsStringPtr[1];
+  GLchar* fsString;
+  const GLchar* fsStringPtr[1];
   GLint success;
 
   // Create shader objects and specify shader text
@@ -436,7 +436,7 @@ void SetupTextures(void) {
 
   GLint w, h, c;
   GLenum format;
-  GLbyte *texels;
+  GLbyte* texels;
 
   for (int i = 0; i < 4; i++) {
     switch (i) {
@@ -765,7 +765,7 @@ void SpecialKeys(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(windowWidth, windowHeight);

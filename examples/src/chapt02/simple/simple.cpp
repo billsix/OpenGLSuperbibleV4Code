@@ -22,7 +22,7 @@ void SetupRC(void) { glClearColor(0.0f, 0.0f, 1.0f, 1.0f); }
 
 ///////////////////////////////////////////////////////////
 // Main program entry point
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
   glutCreateWindow("Simple");

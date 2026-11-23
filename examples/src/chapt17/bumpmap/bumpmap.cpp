@@ -26,9 +26,9 @@ GLuint fShader[TOTAL_SHADER_SETS];  // shader object names
 GLuint vShader[TOTAL_SHADER_SETS];
 GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
-char *shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
-char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
-char *bumpmapNames[TOTAL_BUMPMAPS] = {"rivets", "pyramids"};
+char* shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
+char* shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
+char* bumpmapNames[TOTAL_BUMPMAPS] = {"rivets", "pyramids"};
 
 GLint whichShader = BUMPMAP;  // current shader
 GLint whichShape = BOX;       // current shape
@@ -137,10 +137,10 @@ GLvoid CreatePyramidMap() {
 }
 
 // Load shader from disk into a null-terminated string
-GLchar *LoadShaderText(const char *fileName) {
-  GLchar *shaderText = NULL;
+GLchar* LoadShaderText(const char* fileName) {
+  GLchar* shaderText = NULL;
   GLint shaderLength = 0;
-  FILE *fp;
+  FILE* fp;
 
   fp = fopen(fileName, "r");
   if (fp != NULL) {
@@ -148,7 +148,7 @@ GLchar *LoadShaderText(const char *fileName) {
       shaderLength++;
     }
     rewind(fp);
-    shaderText = (GLchar *)malloc(shaderLength + 1);
+    shaderText = (GLchar*)malloc(shaderLength + 1);
     if (shaderText != NULL) {
       fread(shaderText, 1, shaderLength, fp);
     }
@@ -162,8 +162,8 @@ GLchar *LoadShaderText(const char *fileName) {
 // Compile shaders
 void PrepareShader(GLint shaderNum) {
   char fullFileName[255];
-  GLchar *shString;
-  const GLchar *shStringPtr[1];
+  GLchar* shString;
+  const GLchar* shStringPtr[1];
   GLint success;
 
   // Create shader objects and specify shader text
@@ -662,7 +662,7 @@ void ChangeSize(int w, int h) {
   glViewport(0, 0, windowWidth, windowHeight);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   GLint i;
 
   glutInit(&argc, argv);

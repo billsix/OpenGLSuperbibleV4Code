@@ -100,7 +100,7 @@ class GLFrustum {
 
   // Builds a transformation matrix and transforms the corners of the Frustum,
   // then derives the plane equations
-  void Transform(GLFrame &Camera) {
+  void Transform(GLFrame& Camera) {
     // Workspace
     M3DMatrix44f rotMat;
     M3DVector3f vForward, vUp, vCross;

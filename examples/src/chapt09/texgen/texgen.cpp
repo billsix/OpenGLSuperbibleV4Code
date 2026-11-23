@@ -120,7 +120,7 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  GLbyte *pBytes;                      // Texture bytes
+  GLbyte* pBytes;                      // Texture bytes
   GLint iComponents, iWidth, iHeight;  // Texture sizes
   GLenum eFormat;                      // Texture format
 
@@ -142,7 +142,7 @@ void SetupRC() {
   glBindTexture(GL_TEXTURE_2D, toTextures[0]);
   pBytes = gltLoadTGA("stripes.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -157,7 +157,7 @@ void SetupRC() {
   pBytes =
       gltLoadTGA("Environment.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -222,7 +222,7 @@ void ChangeSize(int w, int h) {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Program Entry Point
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

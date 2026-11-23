@@ -18,7 +18,7 @@ GLuint fShader[TOTAL_SHADER_SETS];  // shader object names
 GLuint vShader[TOTAL_SHADER_SETS];
 GLuint progObj[TOTAL_SHADER_SETS];
 GLboolean needsValidation[TOTAL_SHADER_SETS];
-char *shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
+char* shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
 
 GLint whichShader = CHECKERBOARD;  // current shader
 
@@ -38,10 +38,10 @@ GLint tess = 75;
 #define MAX_INFO_LOG_SIZE 2048
 
 // Load shader from disk into a null-terminated string
-GLchar *LoadShaderText(const char *fileName) {
-  GLchar *shaderText = NULL;
+GLchar* LoadShaderText(const char* fileName) {
+  GLchar* shaderText = NULL;
   GLint shaderLength = 0;
-  FILE *fp;
+  FILE* fp;
 
   fp = fopen(fileName, "r");
   if (fp != NULL) {
@@ -49,7 +49,7 @@ GLchar *LoadShaderText(const char *fileName) {
       shaderLength++;
     }
     rewind(fp);
-    shaderText = (GLchar *)malloc(shaderLength + 1);
+    shaderText = (GLchar*)malloc(shaderLength + 1);
     if (shaderText != NULL) {
       fread(shaderText, 1, shaderLength, fp);
     }
@@ -63,8 +63,8 @@ GLchar *LoadShaderText(const char *fileName) {
 // Compile shaders
 void PrepareShader(GLint shaderNum) {
   char fullFileName[255];
-  GLchar *shString;
-  const GLchar *shStringPtr[1];
+  GLchar* shString;
+  const GLchar* shStringPtr[1];
   GLint success;
 
   // Create shader objects and specify shader text
@@ -335,7 +335,7 @@ void ChangeSize(int w, int h) {
   windowHeight = h;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   GLint i;
 
   glutInit(&argc, argv);

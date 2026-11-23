@@ -13,7 +13,7 @@ static GLfloat zPos = -60.0f;
 #define TEXTURE_CEILING 2
 #define TEXTURE_COUNT 3
 GLuint textures[TEXTURE_COUNT];
-const char *szTextureFiles[TEXTURE_COUNT] = {"brick.tga", "floor.tga",
+const char* szTextureFiles[TEXTURE_COUNT] = {"brick.tga", "floor.tga",
                                              "ceiling.tga"};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ void ProcessMenu(int value) {
 // This function does any needed initialization on the rendering
 // context.  Here it sets up and initializes the texture objects.
 void SetupRC() {
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
   GLint iLoop;
@@ -228,7 +228,7 @@ void RenderScene(void) {
 
 //////////////////////////////////////////////////////
 // Program entry point
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   // Standard initialization stuff
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

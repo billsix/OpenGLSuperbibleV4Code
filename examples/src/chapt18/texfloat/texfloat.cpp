@@ -22,7 +22,7 @@
 GLint windowWidth = 1024;  // window size
 GLint windowHeight = 768;
 
-GLfloat *fTexels;  // read back the framebuffer to here
+GLfloat* fTexels;  // read back the framebuffer to here
 
 GLfloat fCursorX = 0.0f;  // float cursor position [-1,1]
 GLfloat fCursorY = 0.0f;
@@ -41,7 +41,7 @@ GLfloat maxB = 0.0f;
 
 GLuint fShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
-char *shaderNames[TOTAL_SHADERS] = {"clamped", "trivial", "iris",
+char* shaderNames[TOTAL_SHADERS] = {"clamped", "trivial", "iris",
                                     "whitebalance"};
 int currentShader = TRIVIAL;
 
@@ -58,10 +58,10 @@ GLint textureMenu;
 #define MAX_INFO_LOG_SIZE 2048
 
 // Load shader from disk into a null-terminated string
-GLchar *LoadShaderText(const char *fileName) {
-  GLchar *shaderText = NULL;
+GLchar* LoadShaderText(const char* fileName) {
+  GLchar* shaderText = NULL;
   GLint shaderLength = 0;
-  FILE *fp;
+  FILE* fp;
 
   fp = fopen(fileName, "r");
   if (fp != NULL) {
@@ -69,7 +69,7 @@ GLchar *LoadShaderText(const char *fileName) {
       shaderLength++;
     }
     rewind(fp);
-    shaderText = (GLchar *)malloc(shaderLength + 1);
+    shaderText = (GLchar*)malloc(shaderLength + 1);
     if (shaderText != NULL) {
       fread(shaderText, 1, shaderLength, fp);
     }
@@ -83,8 +83,8 @@ GLchar *LoadShaderText(const char *fileName) {
 // Compile shaders
 void PrepareShader(GLint shaderNum) {
   char fullFileName[255];
-  GLchar *fsString;
-  const GLchar *fsStringPtr[1];
+  GLchar* fsString;
+  const GLchar* fsStringPtr[1];
   GLint success;
 
   // Create shader objects and specify shader text
@@ -156,7 +156,7 @@ void RenderScene(void) {
     GLfloat newMaxG = 0.0f;
     GLfloat newMaxB = 0.0f;
 
-    GLfloat *ptr;
+    GLfloat* ptr;
 
     // map cursor location [-1,1] to texel address [0,u/v]
     GLint centerU = (GLint)((((fCursorX / xAspect) + 1.0f) * 0.5f) *
@@ -309,9 +309,9 @@ void SetupTextures(int whichEXR) {
   }
 
   if (fTexels) free(fTexels);
-  fTexels = (GLfloat *)malloc(potTextureWidth * potTextureHeight * 3 *
-                              sizeof(GLfloat));
-  GLfloat *ptr = fTexels;
+  fTexels = (GLfloat*)malloc(potTextureWidth * potTextureHeight * 3 *
+                             sizeof(GLfloat));
+  GLfloat* ptr = fTexels;
   for (int v = 0; v < potTextureHeight; v++) {
     for (int u = 0; u < potTextureWidth; u++) {
       if ((v >= npotTextureHeight) || (u >= npotTextureWidth)) {
@@ -509,7 +509,7 @@ void ChangeSize(int w, int h) {
   CursorUpdate((x * xAspect * 0.5f) + 0.5f, (-y * yAspect * 0.5f) + 0.5f);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(windowWidth, windowHeight);

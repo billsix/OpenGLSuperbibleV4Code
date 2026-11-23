@@ -35,7 +35,7 @@ GLuint textureObjects[3];
 #define GLASS_TEXTURE 2
 
 // Six sides of a cube map
-const char *szCubeFaces[6] = {"pos_x.tga", "neg_x.tga", "pos_y.tga",
+const char* szCubeFaces[6] = {"pos_x.tga", "neg_x.tga", "pos_y.tga",
                               "neg_y.tga", "pos_z.tga", "neg_z.tga"};
 
 GLenum cube[6] = {
@@ -55,7 +55,7 @@ void ChangeSize(int w, int h);
 // context.
 void SetupRC() {
   GLfloat fScale = 0.01f;
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
   int i;
@@ -94,7 +94,7 @@ void SetupRC() {
   glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
   pBytes = gltLoadTGA("BODY.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
@@ -112,7 +112,7 @@ void SetupRC() {
 
   pBytes = gltLoadTGA("glass.tga", &iWidth, &iHeight, &iComponents, &eFormat);
   glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat,
-               GL_UNSIGNED_BYTE, (void *)pBytes);
+               GL_UNSIGNED_BYTE, (void*)pBytes);
   free(pBytes);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,

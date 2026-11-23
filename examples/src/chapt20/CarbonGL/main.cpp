@@ -13,10 +13,10 @@
 #include <Agl/agl.h>
 
 static OSStatus AppEventHandler(EventHandlerCallRef inCaller, EventRef inEvent,
-                                void *inRefcon);
+                                void* inRefcon);
 static OSStatus HandleNew();
 static OSStatus WindowEventHandler(EventHandlerCallRef inCaller,
-                                   EventRef inEvent, void *inRefcon);
+                                   EventRef inEvent, void* inRefcon);
 
 static IBNibRef sNibRef;
 
@@ -29,7 +29,7 @@ void RenderScene(void);
 void ChangeSize(int w, int h);
 
 ///////////////////////////////////////////////////////////////////////////////////
-bool SetupGL(WindowRef &windowRef) {
+bool SetupGL(WindowRef& windowRef) {
   static GLint glAttributes[] = {
       AGL_DOUBLEBUFFER, GL_TRUE,  // Double buffered
       AGL_RGBA,         GL_TRUE,  // Four component color
@@ -72,17 +72,17 @@ void ShutdownGL(void) {
 }
 
 //--------------------------------------------------------------------------------------------
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   OSStatus err;
   static const EventTypeSpec kAppEvents[] = {
       {kEventClassCommand, kEventCommandProcess}};
 
   // Little cheat to get working directory back to /Resources like it is in glut
-  char *parentdir;
-  char *c;
+  char* parentdir;
+  char* c;
 
   parentdir = strdup(argv[0]);
-  c = (char *)parentdir;
+  c = (char*)parentdir;
 
   while (*c != '\0')  // go to end
     c++;
@@ -127,7 +127,7 @@ CantGetNibRef:
 
 //--------------------------------------------------------------------------------------------
 static OSStatus AppEventHandler(EventHandlerCallRef inCaller, EventRef inEvent,
-                                void *inRefcon) {
+                                void* inRefcon) {
   OSStatus result = eventNotHandledErr;
 
   switch (GetEventClass(inEvent)) {
@@ -211,7 +211,7 @@ CantCreateWindow:
 
 //--------------------------------------------------------------------------------------------
 static OSStatus WindowEventHandler(EventHandlerCallRef inCaller,
-                                   EventRef inEvent, void *inRefcon) {
+                                   EventRef inEvent, void* inRefcon) {
   OSStatus err = eventNotHandledErr;
   static Rect windowRect;
 

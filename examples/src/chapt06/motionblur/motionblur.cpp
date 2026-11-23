@@ -150,7 +150,7 @@ void ChangeSize(int w, int h) {
 
 /////////////////////////////////////////////////////////////
 // Main program entrypoint
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_ACCUM);
   glutInitWindowSize(800, 600);

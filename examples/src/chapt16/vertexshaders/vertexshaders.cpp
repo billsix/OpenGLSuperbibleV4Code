@@ -23,7 +23,7 @@
 
 GLuint vShader[TOTAL_SHADERS], progObj[TOTAL_SHADERS];  // shader object names
 GLboolean needsValidation[TOTAL_SHADERS];
-char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
+char* shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
                                     "texspec", "3lights", "fogcoord", "fog",
                                     "ptsize",  "stretch"};
 
@@ -81,10 +81,10 @@ GLvoid CreatePowMap(GLfloat r, GLfloat g, GLfloat b) {
 }
 
 // Load shader from disk into a null-terminated string
-GLchar *LoadShaderText(const char *fileName) {
-  GLchar *shaderText = NULL;
+GLchar* LoadShaderText(const char* fileName) {
+  GLchar* shaderText = NULL;
   GLint shaderLength = 0;
-  FILE *fp;
+  FILE* fp;
 
   fp = fopen(fileName, "r");
   if (fp != NULL) {
@@ -92,7 +92,7 @@ GLchar *LoadShaderText(const char *fileName) {
       shaderLength++;
     }
     rewind(fp);
-    shaderText = (GLchar *)malloc(shaderLength + 1);
+    shaderText = (GLchar*)malloc(shaderLength + 1);
     if (shaderText != NULL) {
       fread(shaderText, 1, shaderLength, fp);
     }
@@ -106,8 +106,8 @@ GLchar *LoadShaderText(const char *fileName) {
 // Compile shaders
 void PrepareShader(GLint shaderNum) {
   char fullFileName[255];
-  GLchar *vsString;
-  const GLchar *vsStringPtr[1];
+  GLchar* vsString;
+  const GLchar* vsStringPtr[1];
   GLint success;
 
   // Create shader objects and specify shader text
@@ -553,7 +553,7 @@ void ChangeSize(int w, int h) {
   windowHeight = h;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   GLint i;
 
   glutInit(&argc, argv);

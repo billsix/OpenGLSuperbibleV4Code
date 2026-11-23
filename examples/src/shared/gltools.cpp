@@ -19,8 +19,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Get the OpenGL version number
-bool gltGetOpenGLVersion(int &nMajor, int &nMinor) {
-  const char *szVersionString = (const char *)glGetString(GL_VERSION);
+bool gltGetOpenGLVersion(int& nMajor, int& nMinor) {
+  const char* szVersionString = (const char*)glGetString(GL_VERSION);
   if (szVersionString == NULL) {
     nMajor = 0;
     nMinor = 0;
@@ -40,19 +40,19 @@ bool gltGetOpenGLVersion(int &nMajor, int &nMinor) {
 ///////////////////////////////////////////////////////////////////////////////
 // This function determines if the named OpenGL Extension is supported
 // Returns 1 or 0
-int gltIsExtSupported(const char *extension) {
-  GLubyte *extensions = NULL;
-  const GLubyte *start;
+int gltIsExtSupported(const char* extension) {
+  GLubyte* extensions = NULL;
+  const GLubyte* start;
   GLubyte *where, *terminator;
 
-  where = (GLubyte *)strchr(extension, ' ');
+  where = (GLubyte*)strchr(extension, ' ');
   if (where || *extension == '\0') return 0;
 
-  extensions = (GLubyte *)glGetString(GL_EXTENSIONS);
+  extensions = (GLubyte*)glGetString(GL_EXTENSIONS);
 
   start = extensions;
   for (;;) {
-    where = (GLubyte *)strstr((const char *)start, extension);
+    where = (GLubyte*)strstr((const char*)start, extension);
 
     if (!where) break;
 
@@ -70,9 +70,9 @@ int gltIsExtSupported(const char *extension) {
 ///////////////////////////////////////////////////////////////////////////////
 // Win32 Only, check for WGL extension
 #include "wglext.h"
-int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
-  GLubyte *extensions = NULL;
-  const GLubyte *start;
+int gltIsWGLExtSupported(HDC hDC, const char* szExtension) {
+  GLubyte* extensions = NULL;
+  const GLubyte* start;
   GLubyte *where, *terminator;
   PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
 
@@ -82,14 +82,14 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
           "wglGetExtensionsStringARB");
   if (wglGetExtensionsStringARB == NULL) return 0;
 
-  where = (GLubyte *)strchr(szExtension, ' ');
+  where = (GLubyte*)strchr(szExtension, ' ');
   if (where || *szExtension == '\0') return 0;
 
-  extensions = (GLubyte *)wglGetExtensionsStringARB(hDC);
+  extensions = (GLubyte*)wglGetExtensionsStringARB(hDC);
 
   start = extensions;
   for (;;) {
-    where = (GLubyte *)strstr((const char *)start, szExtension);
+    where = (GLubyte*)strstr((const char*)start, szExtension);
 
     if (!where) break;
 
@@ -112,7 +112,7 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension) {
 // be lit. These are all built using the quadric shapes. For best
 // results, put this in a display list.
 void gltDrawUnitAxes(void) {
-  GLUquadricObj *pObj;  // Temporary, used for quadrics
+  GLUquadricObj* pObj;  // Temporary, used for quadrics
 
   // Measurements
   float fAxisRadius = 0.025f;
@@ -295,11 +295,11 @@ typedef struct {
 // Be sure and call SwapBuffers for double buffered contexts or
 // glFinish for single buffered contexts before calling this function.
 // Returns 0 if an error occurs, or 1 on success.
-GLint gltWriteTGA(const char *szFileName) {
-  FILE *pFile;               // File pointer
+GLint gltWriteTGA(const char* szFileName) {
+  FILE* pFile;               // File pointer
   TGAHEADER tgaHeader;       // TGA file header
   unsigned long lImageSize;  // Size in bytes of image
-  GLbyte *pBits = NULL;      // Pointer to bits
+  GLbyte* pBits = NULL;      // Pointer to bits
   GLint iViewport[4];        // Viewport in pixels
   GLenum lastBuffer;         // Storage for the current read buffer setting
 
@@ -310,7 +310,7 @@ GLint gltWriteTGA(const char *szFileName) {
   lImageSize = iViewport[2] * 3 * iViewport[3];
 
   // Allocate block. If this doesn't work, go home
-  pBits = (GLbyte *)malloc(lImageSize);
+  pBits = (GLbyte*)malloc(lImageSize);
   if (pBits == NULL) return 0;
 
   // Read bits from color buffer
@@ -322,7 +322,7 @@ GLint gltWriteTGA(const char *szFileName) {
   // Get the current read buffer setting and save it. Switch to
   // the front buffer and do the read operation. Finally, restore
   // the read buffer state
-  glGetIntegerv(GL_READ_BUFFER, (GLint *)&lastBuffer);
+  glGetIntegerv(GL_READ_BUFFER, (GLint*)&lastBuffer);
   glReadBuffer(GL_FRONT);
   glReadPixels(0, 0, iViewport[2], iViewport[3], GL_BGR_EXT, GL_UNSIGNED_BYTE,
                pBits);
@@ -379,13 +379,13 @@ GLint gltWriteTGA(const char *szFileName) {
 // Call free() on buffer when finished!
 // This only works on pretty vanilla targas... 8, 24, or 32 bit color
 // only, no palettes, no RLE encoding.
-GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
-                   GLint *iComponents, GLenum *eFormat) {
-  FILE *pFile;               // File pointer
+GLbyte* gltLoadTGA(const char* szFileName, GLint* iWidth, GLint* iHeight,
+                   GLint* iComponents, GLenum* eFormat) {
+  FILE* pFile;               // File pointer
   TGAHEADER tgaHeader;       // TGA file header
   unsigned long lImageSize;  // Size in bytes of image
   short sDepth;              // Pixel depth;
-  GLbyte *pBits = NULL;      // Pointer to bits
+  GLbyte* pBits = NULL;      // Pointer to bits
 
   // Default/Failed values
   *iWidth = 0;
@@ -416,7 +416,7 @@ GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
   lImageSize = tgaHeader.width * tgaHeader.height * sDepth;
 
   // Allocate memory and check for success
-  pBits = (GLbyte *)malloc(lImageSize * sizeof(GLbyte));
+  pBits = (GLbyte*)malloc(lImageSize * sizeof(GLbyte));
   if (pBits == NULL) return NULL;
 
   // Read in the bits
@@ -462,10 +462,10 @@ static GLubyte shaderText[MAX_SHADER_LENGTH];
 ////////////////////////////////////////////////////////////////
 // Load the shader from the specified file. Returns false if the
 // shader could not be loaded
-bool bLoadShaderFile(const char *szFile, GLhandleARB shader) {
+bool bLoadShaderFile(const char* szFile, GLhandleARB shader) {
   GLint shaderLength = 0;
-  FILE *fp;
-  GLcharARB *fsStringPtr[1];
+  FILE* fp;
+  GLcharARB* fsStringPtr[1];
 
   // Open the shader file
   fp = fopen(szFile, "r");
@@ -493,8 +493,8 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader) {
     return false;
 
   // Load the string
-  fsStringPtr[0] = (GLcharARB *)shaderText;
-  glShaderSourceARB(shader, 1, (const GLcharARB **)fsStringPtr, NULL);
+  fsStringPtr[0] = (GLcharARB*)shaderText;
+  glShaderSourceARB(shader, 1, (const GLcharARB**)fsStringPtr, NULL);
 
   return true;
 }
@@ -503,8 +503,8 @@ bool bLoadShaderFile(const char *szFile, GLhandleARB shader) {
 // Load a pair of shaders, compile, and link together. Specify the complete
 // path and file name of each ASCII shader file. Note, there is no support for
 // just loading say a vertex program... you have to do both.
-GLhandleARB gltLoadShaderPair(const char *szVertexProg,
-                              const char *szFragmentProg) {
+GLhandleARB gltLoadShaderPair(const char* szVertexProg,
+                              const char* szFragmentProg) {
   // Temporary Shader objects
   GLhandleARB hVertexShader;
   GLhandleARB hFragmentShader;

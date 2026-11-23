@@ -20,7 +20,7 @@ void SetupRC() {
 ///////////////////////////////////////////////////////////////////////
 // Called to draw scene
 void RenderScene(void) {
-  GLbyte *pImage = NULL;
+  GLbyte* pImage = NULL;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
 
@@ -70,7 +70,7 @@ void ChangeSize(int w, int h) {
 
 /////////////////////////////////////////////////////////////
 // Main program entrypoint
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GL_DOUBLE);
   glutInitWindowSize(512, 512);

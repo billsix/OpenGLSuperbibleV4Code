@@ -35,7 +35,7 @@ M3DMatrix44f mShadowMatrix;
 #define NUM_TEXTURES 3
 GLuint textureObjects[NUM_TEXTURES];
 
-const char *szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
+const char* szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
 
 // Display list identifiers
 GLuint sphereList, groundList, torusList;
@@ -116,7 +116,7 @@ void SetupRC() {
   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   for (i = 0; i < NUM_TEXTURES; i++) {
-    GLbyte *pBytes;
+    GLbyte* pBytes;
     GLint iWidth, iHeight, iComponents;
     GLenum eFormat;
 
@@ -366,7 +366,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
   glutInitWindowSize(800, 600);

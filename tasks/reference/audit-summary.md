@@ -1,9 +1,9 @@
 # Audit summary: what changes the CMake plan
 
-**Reference doc**, 2026-11-23. The end of stage 1 of `tasks/cmake-crossplatform-build.md`. The six audit documents it
+**Reference doc**, 2026-11-23. The end of stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`. The six audit documents it
 summarizes are `source-audit.md`, `imgui-retrofit-status.md`, `history-audit.md`, `windows-build-history.md`,
-`dependency-and-portability-audit.md` and `formatting-audit.md`. Stage 2 starts when the questions at the end are
-answered.
+`dependency-and-portability-audit.md` and `formatting-audit.md`. Stage 2 ran afterwards (archived task `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). The scripts named in
+these documents (`tasks/adhoc/cmake-crossplatform-build/`) were removed at archive and are in git history.
 
 ## What the audit found
 

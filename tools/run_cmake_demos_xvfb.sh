@@ -2,12 +2,12 @@
 #
 # Start every demo built by the CMake build (build/cmake/bin/<chapter>/<demo>/) under Xvfb with Mesa's software renderer, let it run a few
 # seconds, capture the screen, and record whether it stayed alive and drew something. Run inside the container
-# after `cmake --build build/cmake`:   make shell-exec SCRIPT=tasks/adhoc/cmake-crossplatform-build/run_cmake_demos_xvfb.sh
-# Writes data/cmake-run.tsv: chapter, demo, result (alive/exited/crashed/no-binary), exit code, distinct
+# after `cmake --build build/cmake`:   make shell-exec SCRIPT=tools/run_cmake_demos_xvfb.sh
+# Writes build/cmake-run.tsv and build/cmake-shots/: chapter, demo, result (alive/exited/crashed/no-binary), exit code, distinct
 # colours in the capture, stderr first line. "alive" = still running when the timeout fired.
 set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-repo="$(cd "$here/../../.." && pwd)"
+repo="$(cd "$here/.." && pwd)"
 scratch="$repo/build"
 secs="${SECS:-5}"
 export LIBGL_ALWAYS_SOFTWARE=1
@@ -18,8 +18,8 @@ sleep 2
 # A window manager: freeglut's glutSetWindowTitle asks the X server for EWMH atoms and dies with BadAtom
 # without one.
 if [ "${WM:-1}" = 1 ] && command -v twm >/dev/null; then twm >/dev/null 2>&1 & wm=$!; sleep 1; fi
-mkdir -p "$here/data/cmake-shots"
-out="$here/data/cmake-run.tsv"
+mkdir -p "$repo/build/cmake-shots"
+out="$repo/build/cmake-run.tsv"
 printf 'chapter\tdemo\tresult\texit\tcolours\tstderr\n' > "$out"
 cd "$scratch/cmake/bin" || exit 1
 for dir in $(find chapt* -mindepth 1 -maxdepth 1 -type d | sort); do
@@ -35,9 +35,9 @@ for dir in $(find chapt* -mindepth 1 -maxdepth 1 -type d | sort); do
     (cd "$dir" && timeout "$secs" "./$(basename "$prog")" >/dev/null 2>"$scratch/cmake-err.txt") &
     pid=$!
     sleep $(( secs - 2 ))
-    import -window root "$here/data/cmake-shots/$chapter-$demo.png" 2>/dev/null
+    import -window root "$repo/build/cmake-shots/$chapter-$demo.png" 2>/dev/null
     wait "$pid"; code=$?
-    colours=$(identify -format %k "$here/data/cmake-shots/$chapter-$demo.png" 2>/dev/null || echo 0)
+    colours=$(identify -format %k "$repo/build/cmake-shots/$chapter-$demo.png" 2>/dev/null || echo 0)
     case "$code" in
         124) result=alive ;;
         0) result=exited ;;

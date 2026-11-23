@@ -26,7 +26,7 @@ that directory. Options: `-DSB4_FETCH_FREEGLUT=ON` builds freeglut from source o
 ```sh
 make image                                   # [HOST] Fedora image with the toolchain, Mesa and Xvfb
 make shell-exec CMD='cmake -B build/cmake -G Ninja && cmake --build build/cmake'
-make shell-exec SCRIPT=tasks/adhoc/cmake-crossplatform-build/run_cmake_demos_xvfb.sh   # run every demo headless
+make shell-exec SCRIPT=tools/run_cmake_demos_xvfb.sh   # run every demo headless
 make format                                  # clang-format the first-party sources
 ```
 
@@ -37,4 +37,4 @@ is installed. Chapters 19 and 20 (Win32 and Cocoa programs), chapter 22 and `cha
 in the CMake build. The older per-platform trees under `examples/projects/` remain until the CMake build has been
 verified on macOS and Windows.
 
-Where things stand and why: `tasks/cmake-crossplatform-build.md`, `tasks/reference/audit-summary.md`.
+Where things stand and why: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`, `tasks/reference/audit-summary.md`.

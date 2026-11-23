@@ -1,6 +1,6 @@
 # Dependency and portability audit: what the code needs from the platform
 
-**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/cmake-crossplatform-build.md`). Counts come from `git grep`
+**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Counts come from `git grep`
 over `examples/src` (the 101 demos and `shared/`), the audit's `data/demos.tsv`, and the container build
 (`source-audit.md`). Companion docs: `gltools-framework.md` (the shared library), `chapter-demo-inventory.md`.
 

@@ -1,6 +1,6 @@
 # Dear ImGui in four demos: did the retrofit succeed?
 
-**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/cmake-crossplatform-build.md`). Measured on Linux in the
+**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Measured on Linux in the
 audit's container (Xvfb, Mesa software GL, freeglut 3.8); macOS and Windows were not available. Probe script:
 `tasks/adhoc/cmake-crossplatform-build/imgui_probe.sh`; screenshots in its `data/imgui-shots/`.
 

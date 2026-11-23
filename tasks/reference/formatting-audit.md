@@ -1,6 +1,6 @@
 # Formatting audit: what the sources look like today, and one style to enforce
 
-**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/cmake-crossplatform-build.md`). Measured with clang-format
+**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Measured with clang-format
 23.1.5 in the audit's container (`tasks/adhoc/cmake-crossplatform-build/formatting_audit.sh`, data in
 `data/formatting.tsv`; style comparison run separately over the 122 demo `.c`/`.cpp` files).
 

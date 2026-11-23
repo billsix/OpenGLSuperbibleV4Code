@@ -1,6 +1,6 @@
 # Source audit: every demo, what wraps it, and whether it builds and runs on Linux
 
-**Reference doc**, written 2026-11-23 by the audit in `tasks/cmake-crossplatform-build.md` (stage 1). Every
+**Reference doc**, written 2026-11-23 by the audit in `tasks/archive/2026/11/23/cmake-crossplatform-build.md` (stage 1). Every
 number below is measured, not read: the tables come from `tasks/adhoc/cmake-crossplatform-build/` (`inventory.py`,
 `build_linux_demos.sh`, `run_demos_xvfb.sh`, `wrapper_check.py`; snapshot data in its `data/`). It corrects and
 extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and

@@ -25,7 +25,7 @@ subsystem-by-subsystem read; every claim `file:line`-anchored and verified):
   one-shot link line) and the complete fork delta from git history.
 - **`chapter-demo-inventory.md`** — the jump table: every demo in ch01–22, what it teaches, and its
   key `file:line`. Use it to find a Python port's C++ original.
-- **The 2026-11-23 audit** (stage 1 of `tasks/cmake-crossplatform-build.md`; measured, not read):
+- **The 2026-11-23 audit** (stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`; measured, not read):
   **`audit-summary.md`** (start here: findings, the revised CMake plan, open questions), **`source-audit.md`** (every
   demo: wrappers, whether it builds and runs on Linux), **`imgui-retrofit-status.md`** (the four ImGui demos work
   on Linux; the Makefile include path is wrong), **`history-audit.md`** (all 45 commits; the real source delta
@@ -35,11 +35,20 @@ subsystem-by-subsystem read; every claim `file:line`-anchored and verified):
 - **`chapt18-advanced-buffers.md`** — deep-dive on the chapter under active debugging (pixbufobj's
   motion-blur feedback ring — the multi-image answer — and texfloat's float-texture setup).
 
+## Build (CMake, added 2026-11-23)
+
+`cmake -B build/cmake && cmake --build build/cmake` builds all 88 demos that had a Linux Makefile (`README.md` has the
+macOS and Windows commands; those two are unverified, `tasks/cmake-verify-macos-windows.md`). Layout: `CMakeLists.txt`,
+`examples/CMakeLists.txt` (`gltools` and `imgui` libraries, `add_demo()`), and `examples/cmake/chaptNN.cmake`, which are
+**generated** by `tools/gen_chapter_cmake.py` from the old Makefiles: edit the generator, not the files. The old
+per-platform trees under `examples/projects/` remain until the CMake build is verified on macOS and Windows.
+
 ## Container (added 2026-11-23)
 
 `make image` / `make shell` / `make shell-exec SCRIPT=...|CMD=...` / `make format`: a Fedora 45 image with gcc, freeglut,
-Mesa, Xvfb and clang-format; the source is bind-mounted, builds go to the ignored `build/`. The audit scripts are in
-`tasks/adhoc/cmake-crossplatform-build/`.
+Mesa, Xvfb and clang-format; the source is bind-mounted, builds go to the ignored `build/`. `tools/run_cmake_demos_xvfb.sh`
+runs every built demo headless. The audit's one-shot scripts and snapshot data are in git history under
+`tasks/adhoc/cmake-crossplatform-build/` (removed when the task archived).
 
 ## Review records
 
@@ -47,14 +56,15 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 
 ## Tasks
 
-Work lives in `tasks/` (see `tasks/archive/2026/08/02/study-the-source.md`, the study that produced the reference
-set). Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
+Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
+CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions
 
-- It's a teaching artifact frozen at the 4th edition; **don't refactor or modernize** the C++.
+- It's a teaching artifact frozen at the 4th edition; **don't refactor or modernize** the C++ (formatting is Google style
+  through `.clang-format`; `make format` applies it).
 - Dependencies: GLUT (→ freeglut on Linux), GL/GLU; only `chapt21/GLXBasics` needs X libs, only
-  `chapt18/texfloat` needs system OpenEXR. The Linux build recompiles everything from source each
-  time (see the build doc).
+  `chapt18/texfloat` needs system OpenEXR. The CMake build compiles the shared GLTools code once into
+  a static library (the old Makefiles recompiled it per demo).
 - Reference container paths are sandbox-local; refer to Bill's own projects by their GitHub URL in
   any committed doc.

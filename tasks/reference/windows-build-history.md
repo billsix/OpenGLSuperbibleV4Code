@@ -1,6 +1,6 @@
 # Windows build history: what was tried, and the state of the 94 Visual Studio projects
 
-**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/cmake-crossplatform-build.md`). From the git history of
+**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). From the git history of
 `examples/projects/microsoft/` and the project files at HEAD (`tasks/adhoc/cmake-crossplatform-build/data/
 windows-projects.tsv`, `wrapper-check.tsv`). The audit has no Windows machine: **what Visual Studio actually says
 today is the one fact missing, and the maintainer will supply the first error text when stage 2 reaches Windows.**

@@ -1,6 +1,6 @@
 # History audit: 45 commits, 2019 to 2026
 
-**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/cmake-crossplatform-build.md`). Built from `git log --numstat`
+**Reference doc**, 2026-11-23 (audit, stage 1 of `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Built from `git log --numstat`
 (`tasks/adhoc/cmake-crossplatform-build/history_table.py`) and from the diffs of every commit that changed behavior.
 The root commit `e802274` is the verbatim upstream import, so **the whole history is the maintainer's delta**. Its
 author date and commit date are both 2019-11-26 (the day it was imported into git). The repository has 45 commits, not

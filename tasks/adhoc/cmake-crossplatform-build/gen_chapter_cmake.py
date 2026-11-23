@@ -3,7 +3,7 @@
 
 For every ``examples/projects/linux/<chapter>/<demo>/Makefile`` this runs ``make -n`` (a dry run), takes the one
 ``-o <binary>`` compile line, and keeps the demo's own sources (those under ``src/<chapter>/``), dropping the shared
-GLTools files that the ``gltools`` library supplies. Demos that need ImGui, OpenEXR or X11 libraries are listed in a
+GLTools files that the ``gltools`` library supplies. Demos that need ImGui get the IMGUI keyword; demos that need other libraries (OpenEXR) are listed in a
 comment per chapter and left for a later step. Idempotent: rerunning rewrites identical files.
 
 Usage: ``python3 tasks/adhoc/cmake-crossplatform-build/gen_chapter_cmake.py``
@@ -97,8 +97,8 @@ def main() -> None:
             libs: list[str]
             sources, imgui, libs = demo_sources(chapter, command)
             demo_path: str = sources[0].rsplit("/", 1)[0] if sources and "/" in sources[0] else ""
-            if imgui or libs or not sources:
-                later.append(f"{demo_dir.name} ({'ImGui' if imgui else ''}{' '.join(libs)}{'' if sources else ' no demo sources'})")
+            if libs or not sources:
+                later.append(f"{demo_dir.name} ({' '.join(libs)}{'' if sources else ' no demo sources'})")
                 continue
             # The source directory on disk can differ in case from the Makefile directory; use the Makefile's spelling of the sources.
             folder: str = demo_path.split("/")[0] if "/" in sources[0] else ""
@@ -107,6 +107,8 @@ def main() -> None:
             line: str = f"add_demo({chapter} {folder} SOURCES {' '.join(names)}"
             if extras:
                 line += f" SHARED {' '.join(extras)}"
+            if imgui:
+                line += " IMGUI"
             if folder in X11_DEMOS:
                 added.append(f"if(UNIX AND NOT APPLE)\n  {line} LIBS {X11_DEMOS[folder]})\nendif()")
             else:

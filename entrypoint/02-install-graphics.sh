@@ -12,5 +12,4 @@ dnf install -y --skip-unavailable \
     xwd \
     xorg-x11-server-Xvfb \
     xdotool \
-    twm \
-    OpenEXR-devel  # TEMPORARY dev-only: trying chapt18/texfloat (task cmake-crossplatform-build); remove before the task closes
+    openbox

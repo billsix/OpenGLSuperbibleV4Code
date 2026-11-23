@@ -13,8 +13,9 @@ extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and
   with `make` in a **scratch copy** of the tree (the Makefiles write the binary next to the Makefile; the
   maintainer's checkout has one stray built binary, `chapt18/pixbufobj/pixbufobj`, from such a run), inside the
   Fedora 45 container the audit added (gcc 16, freeglut 3.8, Mesa llvmpipe). 88 Makefiles exist.
-- **Linux run:** each built program started under Xvfb (800x600x24, GLX) with Mesa software rendering, a window
-  manager (`twm`), 5 seconds, a screenshot at 3 seconds. "alive" = still running at the timeout; the colour count
+- **Linux run:** each built program started under Xvfb (800x600x24, GLX) with Mesa software rendering, an
+  `openbox` window manager (the first measurement ran with none: Fedora 45 has no `twm` package and the install
+  skipped it silently), 5 seconds, a screenshot at 3 seconds. "alive" = still running at the timeout; the colour count
   is the number of distinct colours in the screenshot, so 1 means nothing was drawn and 2 or more means a window
   with content (a line demo legitimately has 2).
 - **Not measured:** correctness of the pictures against the book, macOS and Windows builds (the audit has no
@@ -40,12 +41,14 @@ extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and
 | `chapt18/texfloat` | `ImfRgbaFile.h: No such file or directory` | needs OpenEXR **1.x** headers (`-I/usr/local/include/OpenEXR`, `-lIlmThread -lIlmImf`); Fedora ships OpenEXR 3, whose API differs. The repository carries OpenEXR 1.4 headers and libraries under `shared/openexr-*` for Windows and macOS |
 | `chapt21/fonts` | `implicit declaration of function 'glXGetCurrentDisplay'` | GCC 14 and later reject implicit function declarations; the demo includes no GLX header (a missing `#include <GL/glx.h>`) |
 
-### The 6 built demos that do not stay alive under Xvfb
+### The demos that do not stay alive under Xvfb (first run: 6; with a window manager: 2 of the original 6 remain)
 
 - `chapt11/sphereworld`, `chapt13/occquery`, `chapt18/fboenvmap`, `chapt18/pixbufobj`: die with `X Error: BadAtom
   (X_DeleteProperty)`. The common factor is `glutSetWindowTitle`. **A six-line program that only creates a window and
-  calls `glutSetWindowTitle` reproduces it** with freeglut 3.8 under Xvfb, with and without a window manager. Whether it
-  happens on a real X server or XWayland is unknown (the maintainer can test `chapt11/sphereworld` on a real display).
+  calls `glutSetWindowTitle` reproduces it** with freeglut 3.8 under Xvfb **with no window manager**. With `openbox`
+  running, `chapt11/sphereworld` stays alive: freeglut sets an EWMH property that needs a window manager, so this is a
+  test-environment limit, not a defect (the maintainer's real desktop agrees). The first audit run believed a window
+  manager was running; `twm` does not exist in Fedora 45.
 - `chapt06/motionblur`: `FBConfig with necessary capabilities not found`: the demo asks for an accumulation buffer
   (`GLUT_ACCUM`), which Xvfb's GLX configurations lack. An environment limit, not a demo bug.
 - `chapt07/imaging`: exits with status 0 within 5 seconds; not investigated (it loads `horse.tga` from the working

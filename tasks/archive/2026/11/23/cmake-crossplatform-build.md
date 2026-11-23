@@ -32,9 +32,11 @@ came before the CMake work.
 
 ## Results (Linux, Fedora 45 container, GCC 16, freeglut 3.8, Mesa llvmpipe)
 
-88 of 88 targets build. 81 stay alive for 5 seconds under Xvfb. The seven that do not: the four demos that call
-`glutSetWindowTitle` (freeglut `BadAtom` under Xvfb, as in the audit), `motionblur` (no accumulation buffer), `imaging`
-(exits 0), and `chapt21/fonts` (below). The Makefile baseline was 75 alive of 81 built.
+88 of 88 targets build. With an `openbox` window manager running, 85 stay alive for 5 seconds under Xvfb. The three
+that do not: `motionblur` (Xvfb has no accumulation-buffer GLX configuration), `imaging` (exits 0), and `chapt21/fonts`
+(below). The first run had no window manager (Fedora 45 has no `twm` package, and `--skip-unavailable` hid that), which
+made four `glutSetWindowTitle` demos die with `BadAtom` (81 alive); the Makefile baseline had the same flaw (75 alive of
+81 built). The container now installs `openbox`.
 
 ## Findings and decisions to keep
 
@@ -46,8 +48,8 @@ came before the CMake work.
 - **`chapt21/fonts` crashes** (SIGSEGV in `SetupRC`): `XLoadQueryFont` for `-*-courier-bold-r-normal--48-*` returns NULL
   and the code dereferences it. Modern X servers ship no scalable core font, and even with the 75 and 100 dpi font
   packages there is no 48-pixel Courier. Not a build problem; the source was left as the book has it.
-- **`OpenEXR-devel`** is in `entrypoint/02-install-graphics.sh` (marked TEMPORARY). Keep it or remove it when the
-  container's contract is next reviewed; removing it makes `texfloat` drop out of the build, not fail it.
+- **`OpenEXR-devel`** stays in `entrypoint/01-install-base.sh` (maintainer's decision, 2026-11-23), so all 88 demos build in
+  the container; on a host without OpenEXR, `texfloat` drops out of the build instead of failing it.
 - **The one-shot audit scripts and snapshot data** were removed at archive; they are in git history at the commit before
   the archive commit, under `tasks/adhoc/cmake-crossplatform-build/`. The reusable pair was promoted to `tools/`.
 

@@ -17,7 +17,7 @@ xvfb=$!
 sleep 2
 # A window manager: freeglut's glutSetWindowTitle asks the X server for EWMH atoms and dies with BadAtom
 # without one.
-if [ "${WM:-1}" = 1 ] && command -v twm >/dev/null; then twm >/dev/null 2>&1 & wm=$!; sleep 1; fi
+if [ "${WM:-1}" = 1 ] && command -v openbox >/dev/null; then openbox >/dev/null 2>&1 & wm=$!; sleep 1; fi
 mkdir -p "$repo/build/cmake-shots"
 out="$repo/build/cmake-run.tsv"
 printf 'chapter\tdemo\tresult\texit\tcolours\tstderr\n' > "$out"

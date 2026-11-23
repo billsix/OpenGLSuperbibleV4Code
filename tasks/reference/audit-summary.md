@@ -28,8 +28,9 @@ these documents (`tasks/adhoc/cmake-crossplatform-build/`) were removed at archi
 6. **The GLUT surface is small and classic:** about 35 functions in 87 callback programs, plus ~290 menu call sites in
    29 demos (the real cost of any non-GLUT backend), and three freeglut-only calls (`dependency-and-portability-
    audit.md`).
-7. **A freeglut 3.8 defect shows in the audit:** `glutSetWindowTitle` crashes with `BadAtom` under Xvfb, reproduced by
-   a six-line program (10 demos call it; 4 died). Unknown on a real display.
+7. **`glutSetWindowTitle` needs a window manager:** under Xvfb with none it dies with `BadAtom` (10 demos call it; 4
+   died); with `openbox` running they stay alive. The first run wrongly believed a window manager was running (`twm` is
+   not in Fedora 45, and `--skip-unavailable` hid it); the container now installs `openbox`. Not a freeglut defect.
 8. **The demos are fixed-function plus GLSL 1.x: an OpenGL 2.1 compatibility profile**, so the loader must load a
    compatibility profile and no demo can move to core.
 9. **Case:** 50 Visual Studio and Xcode projects reference source paths with the wrong capitalization (fine on Windows

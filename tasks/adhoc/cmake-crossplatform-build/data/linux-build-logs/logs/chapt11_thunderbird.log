@@ -1,3 +1,0 @@
-make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt11/thunderbird'
-gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o thunderbird -L /usr/local/lib ../../../../src/chapt11/thunderbird/thunderbird.cpp  ../../../../src/chapt11/thunderbird/body.cpp  ../../../../src/chapt11/thunderbird/glass.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
-make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt11/thunderbird'

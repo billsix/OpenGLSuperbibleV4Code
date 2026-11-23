@@ -1,3 +1,0 @@
-make: Entering directory '/tmp/sb4-build/examples/projects/linux/chapt03/lines'
-gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o lines -L /usr/local/lib ../../../../src/chapt03/lines/lines.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
-make: Leaving directory '/tmp/sb4-build/examples/projects/linux/chapt03/lines'

@@ -1,4 +1,0 @@
-make: Entering directory '/tmp/sb4-build/examples/projects/linux/chapt21/GLXBasics'
-gcc  -g -I/usr/include -L/usr/local/include -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++   -c -o ../../../../src/chapt21/GLXBasics/GLXBasics.o ../../../../src/chapt21/GLXBasics/GLXBasics.c
-gcc  -g -I/usr/include -L/usr/local/include -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o GLXBasics -L/usr/X11R6/lib -L/usr/X11R6/lib64 -L/usr/local/lib ../../../../src/chapt21/GLXBasics/GLXBasics.c -lX11 -lXi -lXmu -lglut -lGL -lGLU -lm
-make: Leaving directory '/tmp/sb4-build/examples/projects/linux/chapt21/GLXBasics'

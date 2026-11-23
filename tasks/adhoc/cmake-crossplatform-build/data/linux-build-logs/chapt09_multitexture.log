@@ -1,3 +1,0 @@
-make: Entering directory '/tmp/sb4-build/examples/projects/linux/chapt09/multitexture'
-gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o multitexture -L /usr/local/lib ../../../../src/chapt09/multitexture/multitexture.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
-make: Leaving directory '/tmp/sb4-build/examples/projects/linux/chapt09/multitexture'

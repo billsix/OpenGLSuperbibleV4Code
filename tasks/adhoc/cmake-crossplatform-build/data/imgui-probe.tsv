@@ -1,5 +1,0 @@
-demo	build	run	colours_before	colours_after_hover	capture_changed_after_hover
-bounce	ok	alive	87	82	yes
-ambient	ok	alive	49	50	yes
-pyramid	ok	alive	14536	14556	yes
-shaders	FAIL	no-binary	-	-	-

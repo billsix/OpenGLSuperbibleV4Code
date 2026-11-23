@@ -58,7 +58,7 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 
 Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
 CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Open: `tasks/cmake-verify-macos-windows.md`,
-`tasks/headless-demo-gaps.md`, `tasks/glut-shim-on-glfw.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
+`tasks/glut-shim-on-glfw.md`, `tasks/python-port-branch.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions
 

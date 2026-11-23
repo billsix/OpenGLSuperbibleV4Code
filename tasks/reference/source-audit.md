@@ -52,7 +52,7 @@ extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and
 - `chapt06/motionblur`: `FBConfig with necessary capabilities not found`: the demo asks for an accumulation buffer
   (`GLUT_ACCUM`); all 320 GLX configurations under Xvfb have accumulation size 0, and the maintainer's AMD/Mesa desktop
   fails the same way. The demo now probes with `glutGet(GLUT_DISPLAY_MODE_POSSIBLE)` and sums the passes with textures
-  when there is no buffer (`tasks/headless-demo-gaps.md`).
+  when there is no buffer (`tasks/archive/2026/11/23/headless-demo-gaps.md`).
 - `chapt07/imaging`: it exited 0 on the book's own `GL_ARB_imaging` check, and Mesa llvmpipe does not list that
   extension. The operations now run on the CPU and are drawn with `glDrawPixels`.
 - `chapt21/fonts` crashed at startup until `font.c` fell back from the 48-pixel Courier to another core font.

@@ -6,7 +6,7 @@
 **Created:** 2026-11-23
 **Source:** the maintainer's question (William Emerison Six <billsix@gmail.com>, 2026-11-23): how hard is a GLUT-like wrapper
 on GLFW (SDL3 only if needed), with Wayland preferred over X; findings from the session that also produced
-`tasks/headless-demo-gaps.md`.
+`tasks/archive/2026/11/23/headless-demo-gaps.md`.
 
 ## BLUF
 

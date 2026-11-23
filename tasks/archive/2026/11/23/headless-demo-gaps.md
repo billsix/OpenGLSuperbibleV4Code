@@ -57,8 +57,7 @@ work is a valid reason to edit). The full run (`BUILD_DIR=cmake-ctr tools/run_cm
 - `tools/run_cmake_demos_xvfb.sh` takes `BUILD_DIR` (default `cmake`) so the container can use `build/cmake-ctr` while a
   host build sits in `build/cmake` (a CMake cache cannot be shared between the two paths).
 
-## Owed
+## Owed (the maintainer, high priority)
 
-- Archive move to `tasks/archive/2026/11/23/headless-demo-gaps.md` once the work commit exists.
 - The maintainer's check on the real desktop: `build/cmake/bin/chapt06/motionblur/motionblur` (should now show the blur
   trail) and `build/cmake/bin/chapt07/imaging/imaging` (right-click menu: emboss, sharpen, histogram).

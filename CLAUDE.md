@@ -57,12 +57,16 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 ## Tasks
 
 Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
-CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
+CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Open: `tasks/cmake-verify-macos-windows.md`,
+`tasks/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions
 
 - It's a teaching artifact frozen at the 4th edition; **don't refactor or modernize** the C++ (formatting is Google style
   through `.clang-format`; `make format` applies it).
+- Keep source edits minimal so the code stays like the book, but fixing a program that does not work is a valid reason to
+  edit it (maintainer's rule, William Emerison Six <billsix@gmail.com>, 2026-11-23). Edits so far: `windows.h` guard in
+  `chapt04/transformgl`, `GL/glx.h` in `chapt21/fonts`.
 - Dependencies: GLUT (→ freeglut on Linux), GL/GLU; only `chapt21/GLXBasics` needs X libs, only
   `chapt18/texfloat` needs system OpenEXR. The CMake build compiles the shared GLTools code once into
   a static library (the old Makefiles recompiled it per demo).

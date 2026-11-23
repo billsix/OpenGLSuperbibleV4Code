@@ -5,12 +5,7 @@ add_library(gltools STATIC
   src/shared/GLee.c)
 target_include_directories(gltools PUBLIC src/shared)
 target_compile_definitions(gltools PUBLIC GL_GLEXT_PROTOTYPES)
-target_link_libraries(gltools PUBLIC OpenGL::GL OpenGL::GLU GLUT::GLUT)
-# gltools.h includes <glut.h>, <glee.h> style bare names on non-Apple platforms: the GLUT header directory
-# itself must be on the include path (the old Makefiles passed -I/usr/include/GL).
-if(NOT APPLE AND GLUT_INCLUDE_DIR AND EXISTS "${GLUT_INCLUDE_DIR}/GL/glut.h")
-  target_include_directories(gltools PUBLIC "${GLUT_INCLUDE_DIR}/GL")
-endif()
+target_link_libraries(gltools PUBLIC OpenGL::GL OpenGL::GLU sb4_glut)
 if(UNIX)
   target_link_libraries(gltools PUBLIC m)
 endif()
@@ -29,17 +24,20 @@ target_include_directories(imgui PUBLIC ../contrib/imgui)
 target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
 target_link_libraries(imgui PUBLIC gltools)
 
-# add_demo(<chapter> <demo> SOURCES <files in the demo directory> [SHARED <files in src/shared>] [LIBS <libraries>] [IMGUI])
+# add_demo(<chapter> <demo> SOURCES <files in the demo directory> [SHARED <files in src/shared>] [LIBS <libraries>] [IMGUI] [OPENEXR])
 # Builds bin/<demo>/<demo>; the demos open their data files by relative name, so every
 # non-source file in the demo directory is copied next to the binary.
 function(add_demo chapter demo)
-  cmake_parse_arguments(ARG "IMGUI" "" "SOURCES;SHARED;LIBS" ${ARGN})
+  cmake_parse_arguments(ARG "IMGUI;OPENEXR" "" "SOURCES;SHARED;LIBS" ${ARGN})
   set(dir "${CMAKE_CURRENT_SOURCE_DIR}/src/${chapter}/${demo}")
   list(TRANSFORM ARG_SOURCES PREPEND "${dir}/")
   list(TRANSFORM ARG_SHARED PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/src/shared/")
   set(target ${chapter}_${demo})  # demo names repeat across chapters
   add_executable(${target} ${ARG_SOURCES} ${ARG_SHARED})
   target_link_libraries(${target} PRIVATE gltools ${ARG_LIBS})
+  if(ARG_OPENEXR)
+    target_link_libraries(${target} PRIVATE OpenEXR::OpenEXR)
+  endif()
   if(ARG_IMGUI)
     target_link_libraries(${target} PRIVATE imgui)
   endif()
@@ -58,6 +56,9 @@ function(add_demo chapter demo)
     endif()
   endforeach()
 endfunction()
+
+# chapt18/texfloat reads OpenEXR images; it is built only when OpenEXR is installed.
+find_package(OpenEXR CONFIG QUIET)
 
 file(GLOB chapter_files "${CMAKE_CURRENT_SOURCE_DIR}/cmake/chapt*.cmake")
 list(SORT chapter_files)

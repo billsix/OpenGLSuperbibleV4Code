@@ -308,6 +308,12 @@ steps 4 and 5, not by a preference now.
 
 ## History
 
+- 2026-11-23: `chapt18/texfloat` builds against OpenEXR 3 (guarded on `OpenEXR::OpenEXR`) and stays alive under
+  Xvfb; all 88 Linux Makefile demos are now CMake targets (`OpenEXR-devel` is a TEMPORARY addition to
+  `entrypoint/02-install-graphics.sh`, to be kept or removed at close: maintainer decides). Added `SB4_LOADER`
+  (GLEE only) and `SB4_FETCH_FREEGLUT` (default ON on Windows): freeglut 3.8.0 fetched and built static; on Linux
+  with `-DSB4_FETCH_FREEGLUT=ON` all 88 build, which exercises the Windows configure path except MSVC itself. macOS and
+  Windows are untested (no machine); `README.md` written.
 - 2026-11-23: the four ImGui demos are in the CMake build through an `imgui` static library over `contrib/imgui` (the
   include path no longer depends on the directory depth). The OpenGL3 backend's header needs
   `IMGUI_IMPL_OPENGL_LOADER_CUSTOM`, because the vendored backend includes `GLee.h` itself. Result: 87 targets build, 80

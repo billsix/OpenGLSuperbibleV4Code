@@ -308,6 +308,10 @@ steps 4 and 5, not by a preference now.
 
 ## History
 
+- 2026-11-23: stage 2 started on branch `cmake-stage2`: the reformat (`.clang-format`) is committed by the maintainer;
+  the first CMake target, `chapt01/block`, builds and stays alive 5 s under Xvfb in the container (Ninja, GCC 16, freeglut
+  3.8). Two findings: `gltools.h` includes bare `<glut.h>`, so the `GL/` header directory goes on the include path; and
+  `OpenGL_GL_PREFERENCE LEGACY` is required, because GLVND's `libOpenGL` lacks the ARB entry points `gltools.cpp` calls.
 - 2026-11-23: the audit questions were answered (see decisions); a scoped review record was written at
   `tasks/review/2026/11/23/repo-review.md`.
 - 2026-11-22: created at the maintainer's request.

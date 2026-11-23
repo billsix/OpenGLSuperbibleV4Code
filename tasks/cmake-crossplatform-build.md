@@ -308,6 +308,12 @@ steps 4 and 5, not by a preference now.
 
 ## History
 
+- 2026-11-23: the four ImGui demos are in the CMake build through an `imgui` static library over `contrib/imgui` (the
+  include path no longer depends on the directory depth). The OpenGL3 backend's header needs
+  `IMGUI_IMPL_OPENGL_LOADER_CUSTOM`, because the vendored backend includes `GLee.h` itself. Result: 87 targets build, 80
+  stay alive under Xvfb (all four ImGui demos alive). Still missing from the Linux set: `chapt18/texfloat` (needs
+  OpenEXR, which the image lacks and the demo's 1.x API predates). Stage 2 still owes: the `SB4_LOADER` option, the
+  `chapt21/fonts` startup crash, macOS and Windows, docs, and deleting the three old project trees.
 - 2026-11-23: every Linux demo that builds without ImGui or OpenEXR is in the CMake build: 83 targets, generated per
   chapter into `examples/cmake/chaptNN.cmake` by `tasks/adhoc/cmake-crossplatform-build/gen_chapter_cmake.py` from the
   Makefiles' dry-run link lines (targets are named `<chapter>_<demo>` because demo names repeat). All 83 build; under

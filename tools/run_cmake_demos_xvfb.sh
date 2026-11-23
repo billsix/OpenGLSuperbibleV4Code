@@ -2,7 +2,7 @@
 #
 # Start every demo built by the CMake build (build/cmake/bin/<chapter>/<demo>/) under Xvfb with Mesa's software renderer, let it run a few
 # seconds, capture the screen, and record whether it stayed alive and drew something. Run inside the container
-# after `cmake --build build/cmake`:   make shell-exec SCRIPT=tools/run_cmake_demos_xvfb.sh
+# after `cmake --build build/cmake` (BUILD_DIR=cmake-ctr for another build dir under build/):   make shell-exec SCRIPT=tools/run_cmake_demos_xvfb.sh
 # Writes build/cmake-run.tsv and build/cmake-shots/: chapter, demo, result (alive/exited/crashed/no-binary), exit code, distinct
 # colours in the capture, stderr first line. "alive" = still running when the timeout fired.
 set -uo pipefail
@@ -21,7 +21,7 @@ if [ "${WM:-1}" = 1 ] && command -v openbox >/dev/null; then openbox >/dev/null 
 mkdir -p "$repo/build/cmake-shots"
 out="$repo/build/cmake-run.tsv"
 printf 'chapter\tdemo\tresult\texit\tcolours\tstderr\n' > "$out"
-cd "$scratch/cmake/bin" || exit 1
+cd "$scratch/${BUILD_DIR:-cmake}/bin" || exit 1
 for dir in $(find chapt* -mindepth 1 -maxdepth 1 -type d | sort); do
     chapter="${dir%%/*}"; demo="${dir#*/}"
     prog=""

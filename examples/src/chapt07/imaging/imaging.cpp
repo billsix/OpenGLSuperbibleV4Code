@@ -62,19 +62,89 @@ void ProcessMenu(int value) {
 }
 
 ///////////////////////////////////////////////////////////////////////
-// Called to draw scene
-void RenderScene(void) {
-  GLint i;             // Looping variable
-  GLint iViewport[4];  // Viewport
-  GLint iLargest;      // Largest histogram value
+// The imaging operations, done on the CPU. The book used the GL_ARB_imaging
+// subset (glConvolutionFilter2D, glColorTable, the color matrix and
+// glHistogram), which Mesa and most current drivers do not provide. These
+// functions compute the same results and the pixels are drawn with
+// glDrawPixels as before.
 
-  static GLubyte invertTable[256][3];  // Inverted color table
+// Bytes per pixel of the loaded image, and the index of its red, green and
+// blue bytes (the TGA loader returns BGR or BGRA on most files).
+static int PixelBytes(void) {
+  switch (eFormat) {
+    case GL_BGRA_EXT:
+    case GL_RGBA:
+      return 4;
+    case GL_LUMINANCE:
+      return 1;
+    default:
+      return 3;
+  }
+}
 
-  // Do a black and white scaling
-  static GLfloat lumMat[16] = {0.30f, 0.30f, 0.30f, 0.0f,  0.59f, 0.59f,
-                               0.59f, 0.0f,  0.11f, 0.11f, 0.11f, 0.0f,
-                               0.0f,  0.0f,  0.0f,  1.0f};
+static int RedIndex(void) {
+  return (eFormat == GL_BGR_EXT || eFormat == GL_BGRA_EXT) ? 2 : 0;
+}
 
+static GLubyte ClampToByte(GLfloat f) {
+  if (f < 0.0f) return 0;
+  if (f > 255.0f) return 255;
+  return (GLubyte)f;
+}
+
+// 3x3 convolution of each color channel, with the edge pixels repeated.
+static void Convolve3x3(const GLubyte* pSrc, GLubyte* pDst,
+                        const GLfloat kernel[3][3]) {
+  int nBytes = PixelBytes();
+  int nColor = (nBytes == 4) ? 3 : nBytes;  // alpha is left alone
+  for (int y = 0; y < iHeight; y++) {
+    for (int x = 0; x < iWidth; x++) {
+      for (int c = 0; c < nBytes; c++) {
+        if (c >= nColor) {
+          pDst[(y * iWidth + x) * nBytes + c] =
+              pSrc[(y * iWidth + x) * nBytes + c];
+          continue;
+        }
+        GLfloat sum = 0.0f;
+        for (int i = 0; i < 3; i++) {
+          int sy = y + i - 1;
+          if (sy < 0) sy = 0;
+          if (sy >= iHeight) sy = iHeight - 1;
+          for (int j = 0; j < 3; j++) {
+            int sx = x + j - 1;
+            if (sx < 0) sx = 0;
+            if (sx >= iWidth) sx = iWidth - 1;
+            sum += kernel[i][j] * pSrc[(sy * iWidth + sx) * nBytes + c];
+          }
+        }
+        pDst[(y * iWidth + x) * nBytes + c] = ClampToByte(sum);
+      }
+    }
+  }
+}
+
+// Luminance of one pixel, using the book's weights.
+static GLubyte Luminance(const GLubyte* pPixel) {
+  if (PixelBytes() == 1) return pPixel[0];
+  int r = RedIndex();
+  return ClampToByte(0.30f * pPixel[r] + 0.59f * pPixel[1] +
+                     0.11f * pPixel[2 - r]);
+}
+
+// Replace each pixel's color with its luminance.
+static void ToLuminance(GLubyte* pImageData) {
+  int nBytes = PixelBytes();
+  if (nBytes == 1) return;
+  for (int i = 0; i < iWidth * iHeight; i++) {
+    GLubyte* pPixel = pImageData + i * nBytes;
+    GLubyte lum = Luminance(pPixel);
+    pPixel[0] = pPixel[1] = pPixel[2] = lum;
+  }
+}
+
+// Returns a newly allocated copy of the source image with the operation for
+// the given render mode applied.
+static GLubyte* ProcessImage(GLint iMode) {
   static GLfloat mSharpen[3][3] = {// Sharpen convolution kernel
                                    {0.0f, -1.0f, 0.0f},
                                    {-1.0f, 5.0f, -1.0f},
@@ -84,6 +154,51 @@ void RenderScene(void) {
                                   {2.0f, 0.0f, 0.0f},
                                   {0.0f, -1.0f, 0.0f},
                                   {0.0f, 0.0f, -1.0f}};
+
+  int nBytes = PixelBytes();
+  int nColor = (nBytes == 4) ? 3 : nBytes;  // alpha is left alone
+  size_t nSize = (size_t)iWidth * iHeight * nBytes;
+  GLubyte* pOut = (GLubyte*)malloc(nSize);
+  const GLubyte* pIn = (const GLubyte*)pImage;
+
+  switch (iMode) {
+    case 5:  // Sharpen image
+      Convolve3x3(pIn, pOut, mSharpen);
+      break;
+
+    case 4:  // Emboss image, then take the luminance
+      Convolve3x3(pIn, pOut, mEmboss);
+      ToLuminance(pOut);
+      break;
+
+    case 3:  // Invert Image
+      for (size_t i = 0; i < nSize; i++) {
+        int c = (int)(i % nBytes);
+        pOut[i] = (c < nColor) ? (GLubyte)(255 - pIn[i]) : pIn[i];
+      }
+      break;
+
+    case 2:  // Brighten Image
+      for (size_t i = 0; i < nSize; i++) {
+        int c = (int)(i % nBytes);
+        pOut[i] = (c < nColor) ? ClampToByte(1.25f * pIn[i]) : pIn[i];
+      }
+      break;
+
+    case 1:  // Just do a plain old image copy
+    default:
+      for (size_t i = 0; i < nSize; i++) pOut[i] = pIn[i];
+      break;
+  }
+  return pOut;
+}
+
+///////////////////////////////////////////////////////////////////////
+// Called to draw scene
+void RenderScene(void) {
+  GLint i;             // Looping variable
+  GLint iViewport[4];  // Viewport
+  GLint iLargest;      // Largest histogram value
 
   static GLint histoGram[256];  // Storeage for histogram statistics
 
@@ -96,70 +211,22 @@ void RenderScene(void) {
   glPixelZoom((GLfloat)iViewport[2] / (GLfloat)iWidth,
               (GLfloat)iViewport[3] / (GLfloat)iHeight);
 
-  if (bHistogram == GL_TRUE)  // Collect Historgram data
-  {
-    // We are collecting luminance data, use our conversion formula
-    // instead of OpenGL's (which just adds color components together)
-    glMatrixMode(GL_COLOR);
-    glLoadMatrixf(lumMat);
-    glMatrixMode(GL_MODELVIEW);
-
-    // Start collecting histogram data, 256 luminance values
-    glHistogram(GL_HISTOGRAM, 256, GL_LUMINANCE, GL_FALSE);
-    glEnable(GL_HISTOGRAM);
-  }
-
   // Do image operation, depending on rendermode index
-  switch (iRenderMode) {
-    case 5:  // Sharpen image
-      glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
-                            GL_FLOAT, mSharpen);
-      glEnable(GL_CONVOLUTION_2D);
-      break;
-
-    case 4:  // Emboss image
-      glConvolutionFilter2D(GL_CONVOLUTION_2D, GL_RGB, 3, 3, GL_LUMINANCE,
-                            GL_FLOAT, mEmboss);
-      glEnable(GL_CONVOLUTION_2D);
-      glMatrixMode(GL_COLOR);
-      glLoadMatrixf(lumMat);
-      glMatrixMode(GL_MODELVIEW);
-      break;
-
-    case 3:  // Invert Image
-      for (i = 0; i < 255; i++) {
-        invertTable[i][0] = (GLubyte)(255 - i);
-        invertTable[i][1] = (GLubyte)(255 - i);
-        invertTable[i][2] = (GLubyte)(255 - i);
-      }
-
-      glColorTable(GL_COLOR_TABLE, GL_RGB, 256, GL_RGB, GL_UNSIGNED_BYTE,
-                   invertTable);
-      glEnable(GL_COLOR_TABLE);
-      break;
-
-    case 2:  // Brighten Image
-      glMatrixMode(GL_COLOR);
-      glScalef(1.25f, 1.25f, 1.25f);
-      glMatrixMode(GL_MODELVIEW);
-      break;
-
-    case 1:  // Just do a plain old image copy
-    default:
-      // This line intentially left blank
-      break;
-  }
+  GLubyte* pProcessed = ProcessImage(iRenderMode);
 
   // Do the pixel draw
-  glDrawPixels(iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pImage);
+  glDrawPixels(iWidth, iHeight, eFormat, GL_UNSIGNED_BYTE, pProcessed);
 
-  // Fetch and draw histogram?
+  // Collect and draw histogram?
   if (bHistogram == GL_TRUE) {
-    // Read histogram data into buffer
-    glGetHistogram(GL_HISTOGRAM, GL_TRUE, GL_LUMINANCE, GL_INT, histoGram);
+    // 256 luminance values, using our conversion formula
+    int nBytes = PixelBytes();
+    for (i = 0; i < 256; i++) histoGram[i] = 0;
+    for (i = 0; i < iWidth * iHeight; i++)
+      histoGram[Luminance(pProcessed + i * nBytes)]++;
 
     // Find largest value for scaling graph down
-    iLargest = 0;
+    iLargest = 1;
     for (i = 0; i < 255; i++)
       if (iLargest < histoGram[i]) iLargest = histoGram[i];
 
@@ -172,15 +239,9 @@ void RenderScene(void) {
     glEnd();
 
     bHistogram = GL_FALSE;
-    glDisable(GL_HISTOGRAM);
   }
 
-  // Reset everyting to default
-  glMatrixMode(GL_COLOR);
-  glLoadIdentity();
-  glMatrixMode(GL_MODELVIEW);
-  glDisable(GL_CONVOLUTION_2D);
-  glDisable(GL_COLOR_TABLE);
+  free(pProcessed);
 
   // Show our hard work...
   glutSwapBuffers();
@@ -211,13 +272,6 @@ int main(int argc, char* argv[]) {
   glutInitDisplayMode(GLUT_RGB | GL_DOUBLE);
   glutInitWindowSize(600, 600);
   glutCreateWindow("OpenGL Imaging subset");
-
-  // Check for imaging subset, must be done after window
-  // is create or there won't be an OpenGL context to query
-  if (gltIsExtSupported("GL_ARB_imaging") == 0) {
-    printf("Imaging subset not supported\r\n");
-    return 0;
-  }
 
   glutReshapeFunc(ChangeSize);
   glutDisplayFunc(RenderScene);

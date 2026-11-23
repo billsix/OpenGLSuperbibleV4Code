@@ -50,12 +50,13 @@ extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and
   test-environment limit, not a defect (the maintainer's real desktop agrees). The first audit run believed a window
   manager was running; `twm` does not exist in Fedora 45.
 - `chapt06/motionblur`: `FBConfig with necessary capabilities not found`: the demo asks for an accumulation buffer
-  (`GLUT_ACCUM`); all 320 GLX configurations under Xvfb have accumulation size 0 (`glxinfo -v`). An environment limit,
-  not a demo bug; it needs a real display.
-- `chapt07/imaging`: exits with status 0 on the book's own check, `gltIsExtSupported("GL_ARB_imaging") == 0`; Mesa
-  llvmpipe (26.2.7) does not list `GL_ARB_imaging` in `glxinfo`. An environment limit.
-- `chapt21/fonts` crashed at startup until `font.c` fell back from the 48-pixel Courier to another core font
-  (`tasks/headless-demo-gaps.md`); 86 of 88 demos now stay alive under Xvfb with openbox.
+  (`GLUT_ACCUM`); all 320 GLX configurations under Xvfb have accumulation size 0, and the maintainer's AMD/Mesa desktop
+  fails the same way. The demo now probes with `glutGet(GLUT_DISPLAY_MODE_POSSIBLE)` and sums the passes with textures
+  when there is no buffer (`tasks/headless-demo-gaps.md`).
+- `chapt07/imaging`: it exited 0 on the book's own `GL_ARB_imaging` check, and Mesa llvmpipe does not list that
+  extension. The operations now run on the CPU and are drawn with `glDrawPixels`.
+- `chapt21/fonts` crashed at startup until `font.c` fell back from the 48-pixel Courier to another core font.
+  With these three edits, 88 of 88 demos stay alive under Xvfb with openbox.
 
 ### `chapt08/sphereworld` and `chapt09/texgen`
 

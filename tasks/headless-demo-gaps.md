@@ -1,46 +1,32 @@
-# Make the three demos that do not run under Xvfb run (fonts, motionblur, imaging)
+# Make the three demos that did not run under Xvfb run (fonts, motionblur, imaging)
 
-**Status:** proposed — needs go-ahead (filed 2026-11-23)
-**Priority:** 6
-**Difficulty:** 3
-**Created:** 2026-11-23
-**Source:** `tasks/archive/2026/11/23/cmake-crossplatform-build.md` (results: 85 of 88 demos alive under Xvfb with openbox)
+**Created:** 2026-11-23. **Source:** `tasks/archive/2026/11/23/cmake-crossplatform-build.md`.
 
-## BLUF
+## Result
 
-Three of the 88 CMake targets build but do not stay alive under `tools/run_cmake_demos_xvfb.sh`. Done means each one
-either runs (a source edit is allowed for `chapt21/fonts`) or is documented as needing something a headless Mesa
-llvmpipe session lacks, with the evidence.
+`chapt21/fonts` was fixed; `chapt06/motionblur` and `chapt07/imaging` are limits of the headless environment, not
+defects. The full run (`tools/run_cmake_demos_xvfb.sh`, openbox running) now shows 86 of 88 demos alive.
 
-## Context
+- **`chapt21/fonts`:** `XLoadQueryFont` for the 48-pixel Courier returned NULL and `SetupRC` dereferenced it. With the
+  75dpi font packages installed, Courier bold exists only at small sizes. `examples/src/chapt21/fonts/font.c` now tries
+  the book's pattern, then `-*-courier-bold-r-normal--*`, then `fixed`, and exits with a message if none loads. It stays
+  alive under Xvfb. This is a third source edit, allowed by the maintainer's rule recorded in `CLAUDE.md` (fixing a
+  program that does not work is a valid reason to edit).
+- **`chapt06/motionblur`:** the demo requests `GLUT_ACCUM`; all 320 GLX configurations under Xvfb report accumulation
+  size 0 (`glxinfo -v`), so freeglut fails with `FBConfig with necessary capabilities not found`. Xvfb has no option to
+  add one. Needs a real display.
+- **`chapt07/imaging`:** `main` returns 0 when `gltIsExtSupported("GL_ARB_imaging")` is false; Mesa llvmpipe 26.2.7 does
+  not list that extension. Needs a driver that exposes the imaging subset, or a real display.
 
-- Source-edit policy (William Emerison Six <billsix@gmail.com>, 2026-11-23): keep the code as close to the book as
-  possible, within reason; making a program that does not work work is a valid reason. `CLAUDE.md` records this.
-- Run the demos with `make shell`, then `cmake -B build/cmake && cmake --build build/cmake`, then
-  `tools/run_cmake_demos_xvfb.sh` (writes `build/cmake-run.tsv`).
+## Decisions
 
-## The three demos
+- William Emerison Six <billsix@gmail.com>, 2026-11-23: one task for the three demos; a source edit is allowed for
+  `fonts`.
+- The probe packages (`xlsfonts`, `glx-utils`, font packages) were installed in throwaway containers only; the image is
+  unchanged. `fixed` is in `xorg-x11-fonts-misc`, which the fallback relies on only if the Courier patterns fail; the
+  image's own run found a loadable font.
 
-1. **`chapt21/fonts`** (`examples/src/chapt21/fonts/font.c`, `SetupRC`): SIGSEGV. `XLoadQueryFont(dpy,
-   "-*-courier-bold-r-normal--48-*-*-*-*-*-*-*")` returns NULL (modern X has no scalable core font) and the result is
-   dereferenced (`xFont->fid`). Fix: try the pattern, fall back to another core font (`fixed`, or any name from
-   `xlsfonts`), and fail with a message instead of a crash if none loads. Check that `fixed` exists in the image
-   (`xlsfonts`; the package may need adding to `entrypoint/02-install-graphics.sh` and both sandbox lists).
-2. **`chapt06/motionblur`** (`examples/src/chapt06/motionblur/motionblur.cpp`): requests `GLUT_ACCUM`; Xvfb's GLX
-   visuals have no accumulation buffer. Check `glxinfo -B`/`xdpyinfo` for an accum visual, try Xvfb options, and
-   otherwise confirm on a real display.
-3. **`chapt07/imaging`** (`examples/src/chapt07/imaging/imaging.cpp`, `main`): exits 0 by design when
-   `gltIsExtSupported("GL_ARB_imaging")` is false, which is the book's own check; the likely cause is that Mesa
-   llvmpipe does not advertise `GL_ARB_imaging` (unverified: print the extension string to confirm). Probably
-   closes as "needs a driver that exposes the imaging subset".
+## Owed
 
-## Plan
-
-1. Fix `fonts` and rerun it under Xvfb with openbox; screenshot it.
-2. Measure `motionblur` and `imaging` as above; record the first-hand cause.
-3. Update the done-record counts in `tasks/reference/source-audit.md` and `tasks/reference/audit-summary.md`, and the
-   demo counts in `README.md` if they change.
-
-## Open questions
-
-None.
+- Archive move to `tasks/archive/2026/11/23/headless-demo-gaps.md` once the work commit exists.
+- On a real display: confirm `motionblur` and `imaging` (the maintainer's run; no task needed unless one fails).

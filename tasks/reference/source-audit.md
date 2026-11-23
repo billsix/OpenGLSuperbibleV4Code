@@ -50,9 +50,12 @@ extends `tasks/reference/chapter-demo-inventory.md` (what each demo teaches) and
   test-environment limit, not a defect (the maintainer's real desktop agrees). The first audit run believed a window
   manager was running; `twm` does not exist in Fedora 45.
 - `chapt06/motionblur`: `FBConfig with necessary capabilities not found`: the demo asks for an accumulation buffer
-  (`GLUT_ACCUM`), which Xvfb's GLX configurations lack. An environment limit, not a demo bug.
-- `chapt07/imaging`: exits with status 0 within 5 seconds; not investigated (it loads `horse.tga` from the working
-  directory and may be waiting for a menu choice).
+  (`GLUT_ACCUM`); all 320 GLX configurations under Xvfb have accumulation size 0 (`glxinfo -v`). An environment limit,
+  not a demo bug; it needs a real display.
+- `chapt07/imaging`: exits with status 0 on the book's own check, `gltIsExtSupported("GL_ARB_imaging") == 0`; Mesa
+  llvmpipe (26.2.7) does not list `GL_ARB_imaging` in `glxinfo`. An environment limit.
+- `chapt21/fonts` crashed at startup until `font.c` fell back from the 48-pixel Courier to another core font
+  (`tasks/headless-demo-gaps.md`); 86 of 88 demos now stay alive under Xvfb with openbox.
 
 ### `chapt08/sphereworld` and `chapt09/texgen`
 

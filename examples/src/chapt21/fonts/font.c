@@ -7,6 +7,8 @@
 #include "GL/glut.h"
 #include <X11/Xlib.h>
 #include <GL/glx.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 GLuint uiDListStart;
@@ -43,9 +45,16 @@ void SetupRC(void) {
   // Set clear color to green
   glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 
-  // Load a courier font with size 48pix.
+  // Load a courier font with size 48pix. Current X servers often have no
+  // scalable core fonts, so fall back to whatever core font is installed.
   XFontStruct* xFont =
       XLoadQueryFont(dpy, "-*-courier-bold-r-normal--48-*-*-*-*-*-*-*");
+  if (xFont == NULL) xFont = XLoadQueryFont(dpy, "-*-courier-bold-r-normal--*");
+  if (xFont == NULL) xFont = XLoadQueryFont(dpy, "fixed");
+  if (xFont == NULL) {
+    fprintf(stderr, "fonts: no X core font could be loaded\n");
+    exit(1);
+  }
 
   // Generate display list names
   uiDListStart = glGenLists(96);

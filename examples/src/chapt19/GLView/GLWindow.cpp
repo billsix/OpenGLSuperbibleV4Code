@@ -13,7 +13,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
+BYTE* gltResourceBMPBits(UINT nResource, int* nWidth, int* nHeight) {
   HINSTANCE hInstance;  // Instance Handle
   HANDLE hBitmap;       // Handle to bitmap resource
   BITMAPINFO bmInfo;
@@ -33,7 +33,7 @@ BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
 
   if (hBitmap == NULL) return NULL;
 
-  BYTE *pData = (BYTE *)LockResource(hBitmap);
+  BYTE* pData = (BYTE*)LockResource(hBitmap);
   pData += sizeof(BITMAPINFO) - 1;
 
   *nWidth = bmInfo.bmiHeader.biWidth;    // bm.bmWidth;
@@ -225,7 +225,7 @@ int CGLWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
-    BYTE *pBytes;
+    BYTE* pBytes;
     int nWidth, nHeight;
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

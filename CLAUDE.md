@@ -41,6 +41,10 @@ subsystem-by-subsystem read; every claim `file:line`-anchored and verified):
 Mesa, Xvfb and clang-format; the source is bind-mounted, builds go to the ignored `build/`. The audit scripts are in
 `tasks/adhoc/cmake-crossplatform-build/`.
 
+## Review records
+
+Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake task; frozen).
+
 ## Tasks
 
 Work lives in `tasks/` (see `tasks/archive/2026/08/02/study-the-source.md`, the study that produced the reference

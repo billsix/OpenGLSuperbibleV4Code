@@ -57,7 +57,7 @@ M3DMatrix44f mShadowMatrix;
 #define SPHERE_TEXTURE 2
 #define NUM_TEXTURES 3
 GLuint textureObjects[NUM_TEXTURES];
-const char *szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
+const char* szTextureFiles[] = {"grass.tga", "wood.tga", "orb.tga"};
 
 // Sphere and torus display lists
 GLuint lTorusList, lSphereList;
@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL APIENTRY StartupDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 
 // Find the best available pixelformat, including if Multisample is available
-void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat);
+void FindBestPF(HDC hDC, int* nRegularFormat, int* nMSFormat);
 
 BOOL ShowStartupOptions(void);          // Initial startup dialog
 void ChangeSize(GLsizei w, GLsizei h);  // Change projection and viewport
@@ -376,7 +376,7 @@ void SetupRC(HDC hDC) {
 
   // Load teach texture
   for (i = 0; i < NUM_TEXTURES; i++) {
-    GLbyte *pBytes;
+    GLbyte* pBytes;
     GLint iWidth, iHeight, iComponents;
     GLenum eFormat;
 
@@ -446,7 +446,7 @@ void ShutdownRC(void) {
 HPALETTE GetOpenGLPalette(HDC hDC) {
   HPALETTE hRetPal = NULL;    // Handle to palette to be created
   PIXELFORMATDESCRIPTOR pfd;  // Pixel Format Descriptor
-  LOGPALETTE *pPal;           // Pointer to memory for logical palette
+  LOGPALETTE* pPal;           // Pointer to memory for logical palette
   int nPixelFormat;           // Pixel format index
   int nColors;                // Number of entries in palette
   int i;                      // Counting variable
@@ -466,7 +466,7 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
 
   // Allocate space for a logical palette structure plus all the palette entries
   pPal =
-      (LOGPALETTE *)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
+      (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
   // Fill in palette header
   pPal->palVersion = 0x300;       // Windows 3.0
@@ -794,10 +794,9 @@ BOOL APIENTRY StartupDlgProc(HWND hDlg, UINT message, UINT wParam,
       wglMakeCurrent(hDC, hRC);
 
       // Set text in dialog
-      SetDlgItemText(hDlg, IDC_VENDOR, (const char *)glGetString(GL_VENDOR));
-      SetDlgItemText(hDlg, IDC_RENDERER,
-                     (const char *)glGetString(GL_RENDERER));
-      SetDlgItemText(hDlg, IDC_VERSION, (const char *)glGetString(GL_VERSION));
+      SetDlgItemText(hDlg, IDC_VENDOR, (const char*)glGetString(GL_VENDOR));
+      SetDlgItemText(hDlg, IDC_RENDERER, (const char*)glGetString(GL_RENDERER));
+      SetDlgItemText(hDlg, IDC_VERSION, (const char*)glGetString(GL_VERSION));
 
       // Vertical Sync off by default
       if (gltIsExtSupported("WGL_EXT_swap_control"))
@@ -899,7 +898,7 @@ BOOL ShowStartupOptions(void) {
 // Select pixelformat with desired attributes
 // Returns the best available "regular" pixel format, and the best available
 // Multisampled pixelformat (0 if not available)
-void FindBestPF(HDC hDC, int *nRegularFormat, int *nMSFormat) {
+void FindBestPF(HDC hDC, int* nRegularFormat, int* nMSFormat) {
   *nRegularFormat = 0;
   *nMSFormat = 0;
 

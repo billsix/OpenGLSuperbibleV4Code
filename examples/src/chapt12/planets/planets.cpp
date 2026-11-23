@@ -16,7 +16,7 @@
 ///////////////////////////////////////////////////////////
 // Just draw a sphere of some given radius
 void DrawSphere(float radius) {
-  GLUquadricObj *pObj;
+  GLUquadricObj* pObj;
   pObj = gluNewQuadric();
   gluQuadricNormals(pObj, GLU_SMOOTH);
   gluSphere(pObj, radius, 26, 13);
@@ -238,7 +238,7 @@ void ChangeSize(int w, int h) {
 
 ///////////////////////////////////////////////////////////
 // Entry point of the program
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

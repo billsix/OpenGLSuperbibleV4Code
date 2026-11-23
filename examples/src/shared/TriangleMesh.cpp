@@ -119,10 +119,10 @@ void CTriangleMesh::AddTriangle(M3DVector3f verts[3], M3DVector3f vNorms[3],
 // is static (doesn't change).
 void CTriangleMesh::EndMesh(void) {
   // Allocate smaller arrays
-  GLushort *pPackedIndexes = new GLushort[nNumIndexes];
-  M3DVector3f *pPackedVerts = new M3DVector3f[nNumVerts];
-  M3DVector3f *pPackedNorms = new M3DVector3f[nNumVerts];
-  M3DVector2f *pPackedTex = new M3DVector2f[nNumVerts];
+  GLushort* pPackedIndexes = new GLushort[nNumIndexes];
+  M3DVector3f* pPackedVerts = new M3DVector3f[nNumVerts];
+  M3DVector3f* pPackedNorms = new M3DVector3f[nNumVerts];
+  M3DVector2f* pPackedTex = new M3DVector2f[nNumVerts];
 
   // Copy data to smaller arrays
   memcpy(pPackedIndexes, pIndexes, sizeof(GLushort) * nNumIndexes);

@@ -40,12 +40,12 @@ void updateWindow(int x, int y) {
   glFrustumf(fXLeft, fXRight, fYBottom, fYTop, 0.1f, 100.f);
 }
 
-void setup(ProgramInfo *programInfo, AKAppKit *appKit) {
+void setup(ProgramInfo* programInfo, AKAppKit* appKit) {
   EGLint majorVer = 0;
   EGLint minorVer = 0;
   EGLint matchingConfigCnt = 0;
   AKSurfaceDesc surfDesc;
-  EGLConfig *returnedConfigs = (EGLConfig *)malloc(1 * sizeof(EGLConfig));
+  EGLConfig* returnedConfigs = (EGLConfig*)malloc(1 * sizeof(EGLConfig));
 
   // select the surface attribs for EGL window
   EGLint surfAttribs[] = {EGL_COLORSPACE, EGL_COLORSPACE_sRGB, EGL_NONE};
@@ -111,8 +111,8 @@ void setup(ProgramInfo *programInfo, AKAppKit *appKit) {
   glVertexPointer(3, GL_BYTE, 0, verts);
 }
 
-void destroy(AKAppKit *appKit) {
-  ProgramInfo *programInfo = (ProgramInfo *)AKAppKit_getUserPtr(appKit);
+void destroy(AKAppKit* appKit) {
+  ProgramInfo* programInfo = (ProgramInfo*)AKAppKit_getUserPtr(appKit);
 
   // Cleanup up EGL state before exiting.
   if (programInfo != 0) {
@@ -124,7 +124,7 @@ void destroy(AKAppKit *appKit) {
   }
 }
 
-void updateScene(AKAppKit *ak, HGint32 timeDelta) {
+void updateScene(AKAppKit* ak, HGint32 timeDelta) {
   static int clearScale = 0;
   float fClearColor = 0;
 
@@ -132,7 +132,7 @@ void updateScene(AKAppKit *ak, HGint32 timeDelta) {
   const double time = fmod(AKAppKit_getTime(ak) / 1000.0, 40.0);
 
   // Get our context state
-  ProgramInfo *programInfo = (ProgramInfo *)AKAppKit_getUserPtr(ak);
+  ProgramInfo* programInfo = (ProgramInfo*)AKAppKit_getUserPtr(ak);
 
   // update window state for window dimension changes
   updateWindow(AKAppKit_getSurface(ak).width, AKAppKit_getSurface(ak).height);
@@ -144,8 +144,7 @@ void updateScene(AKAppKit *ak, HGint32 timeDelta) {
     fClearColor = (float)(4096 - clearScale) / (float)4096;
 
   clearScale += 1;
-  if (clearScale > 4096)
-    clearScale = 0;
+  if (clearScale > 4096) clearScale = 0;
 
   // Clear the color buffer with the new value
   glClearColor(fClearColor, fClearColor, fClearColor, 1.0f);
@@ -167,11 +166,11 @@ void updateScene(AKAppKit *ak, HGint32 timeDelta) {
   eglSwapBuffers(programInfo->display, programInfo->windowSurface);
 }
 
-HGbool appInit(AKAppKit *appKit) {
+HGbool appInit(AKAppKit* appKit) {
   AKAppKitParams setupParams;
 
   // Used to communicating program state to callbacks
-  ProgramInfo *programInfo = (ProgramInfo *)malloc(sizeof(ProgramInfo));
+  ProgramInfo* programInfo = (ProgramInfo*)malloc(sizeof(ProgramInfo));
 
   // Set callbacks
   AKAppKitParams_clear(&setupParams);

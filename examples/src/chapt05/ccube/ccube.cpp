@@ -185,7 +185,7 @@ void ChangeSize(int w, int h) {
   glTranslatef(0.0f, 0.0f, -400.0f);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

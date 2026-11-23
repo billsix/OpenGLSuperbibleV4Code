@@ -302,7 +302,7 @@ void SetupRC() {
     mask[i] = 0xAAAAAAAA;
     mask[i + 1] = 0x55555555;
   }
-  glPolygonStipple((GLubyte *)mask);
+  glPolygonStipple((GLubyte*)mask);
 
   // Set up some lighting state that never changes
   glShadeModel(GL_SMOOTH);
@@ -324,7 +324,7 @@ void SetupRC() {
     GLfloat p[4] = {1.0f / 50.0f, 0.0f, 0.0f, -0.5f};
     GLint w, h, c;
     GLenum format;
-    GLbyte *texels = gltLoadTGA("logo.tga", &w, &h, &c, &format);
+    GLbyte* texels = gltLoadTGA("logo.tga", &w, &h, &c, &format);
     glTexImage2D(GL_TEXTURE_2D, 0, c, w, h, 0, format, GL_UNSIGNED_BYTE,
                  texels);
     free(texels);
@@ -499,7 +499,7 @@ void MouseWheel(int wheel_number, int direction, int x, int y) {
   glutPostRedisplay();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(windowWidth, windowHeight);

@@ -22,7 +22,7 @@
 static HGLRC hRC = NULL;  // Permenant Rendering context
 static HDC hDC = NULL;    // Private GDI Device context
 static HWND hMainWindow = NULL;
-static GLUquadricObj *pSphere = NULL;
+static GLUquadricObj* pSphere = NULL;
 
 // Shared rendering state information
 struct RENDER_STATE {
@@ -37,7 +37,7 @@ CRITICAL_SECTION csThreadSafe;     // Critical section
 struct RENDER_STATE rsRenderData;  // Communication between threads
 
 // Rendering Thread Entry Point
-void RenderingThreadEntryPoint(void *pVoid);
+void RenderingThreadEntryPoint(void* pVoid);
 
 static LPCTSTR lpszAppName = "Rendering Thread";
 
@@ -49,11 +49,11 @@ void SetDCPixelFormat(HDC hDC);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Load a Bitmaps bits from a resource file. Only works with 24-bit images
-BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
+BYTE* gltResourceBMPBits(UINT nResource, int* nWidth, int* nHeight) {
   HINSTANCE hInstance;  // Instance Handle
   HANDLE hBitmap;       // Handle to bitmap resource
   BITMAPINFO bmInfo;
-  BYTE *pData;
+  BYTE* pData;
 
   // Find the bitmap resource
   hInstance = GetModuleHandle(NULL);
@@ -70,7 +70,7 @@ BYTE *gltResourceBMPBits(UINT nResource, int *nWidth, int *nHeight) {
 
   if (hBitmap == NULL) return NULL;
 
-  pData = (BYTE *)LockResource(hBitmap);
+  pData = (BYTE*)LockResource(hBitmap);
   pData += sizeof(BITMAPINFO) - 1;
 
   *nWidth = bmInfo.bmiHeader.biWidth;    // bm.bmWidth;
@@ -140,7 +140,7 @@ BOOL CheckStates() {
 }
 
 void SetupRC(HDC hDC) {
-  BYTE *pBytes;
+  BYTE* pBytes;
   int nWidth, nHeight;
 
   SetDCPixelFormat(hDC);
@@ -350,7 +350,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
 ///////////////////////////////////////////////////////////////////////////////
 // Rendering Thread Entry Point
-void RenderingThreadEntryPoint(void *pVoid) {
+void RenderingThreadEntryPoint(void* pVoid) {
   // Setup the rendering context
   SetupRC((HDC)pVoid);
 

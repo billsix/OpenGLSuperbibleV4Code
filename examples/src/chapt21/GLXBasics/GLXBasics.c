@@ -4,7 +4,7 @@
 // OpenGL SuperBible, 4th Edition
 // Nick Haemel
 
-#include "GL/gl.h" // System and OpenGL Stuff
+#include "GL/gl.h"  // System and OpenGL Stuff
 #include "GL/glut.h"
 #include "GL/glx.h"
 #include <math.h>
@@ -16,7 +16,7 @@
 // Store all system info in one place
 typedef struct RenderContextRec {
   GLXContext ctx;
-  Display *dpy;
+  Display* dpy;
   Window win;
   int nWinWidth;
   int nWinHeight;
@@ -25,12 +25,12 @@ typedef struct RenderContextRec {
 
 } RenderContext;
 
-void CreateWindow(RenderContext *rcx) {
+void CreateWindow(RenderContext* rcx) {
   XSetWindowAttributes winAttribs;
   GLint winmask;
   GLint nMajorVer = 0;
   GLint nMinorVer = 0;
-  XVisualInfo *visualInfo;
+  XVisualInfo* visualInfo;
   static int attributes[] = {GLX_RGBA,
                              GLX_DOUBLEBUFFER,
                              GLX_RED_SIZE,
@@ -80,7 +80,7 @@ void CreateWindow(RenderContext *rcx) {
   glXMakeCurrent(rcx->dpy, rcx->win, rcx->ctx);
 }
 
-void SetupGLState(RenderContext *rcx) {
+void SetupGLState(RenderContext* rcx) {
   float aspectRatio =
       rcx->nWinHeight ? (float)rcx->nWinWidth / (float)rcx->nWinHeight : 1.0f;
   float fYTop = 0.05f;
@@ -122,7 +122,7 @@ void DrawCircle() {
   glEnd();
 }
 
-void Draw(RenderContext *rcx) {
+void Draw(RenderContext* rcx) {
   float fRightX = 0.0;
   float fRightY = 0.0;
   float fLeftX = 0.0;
@@ -148,10 +148,8 @@ void Draw(RenderContext *rcx) {
                    pow((double)(rcx->nMousePosY - nRtEyePosY), 2.0));
 
   // Clamp the minimum magnatude
-  if (fRtVecMag < fMinLength)
-    fRtVecMag = fMinLength;
-  if (fLtVecMag < fMinLength)
-    fLtVecMag = fMinLength;
+  if (fRtVecMag < fMinLength) fRtVecMag = fMinLength;
+  if (fLtVecMag < fMinLength) fLtVecMag = fMinLength;
 
   // Normalize the vector components
   fLeftX = (float)(rcx->nMousePosX - nLtEyePosX) / fLtVecMag;
@@ -212,7 +210,7 @@ void Draw(RenderContext *rcx) {
   glXSwapBuffers(rcx->dpy, rcx->win);
 }
 
-void Cleanup(RenderContext *rcx) {
+void Cleanup(RenderContext* rcx) {
   // Unbind the context before deleting
   glXMakeCurrent(rcx->dpy, None, NULL);
 
@@ -226,7 +224,7 @@ void Cleanup(RenderContext *rcx) {
   rcx->dpy = 0;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   Bool bWinMapped = False;
   RenderContext rcx;
 
@@ -254,27 +252,27 @@ int main(int argc, char *argv[]) {
     XNextEvent(rcx.dpy, &newEvent);
 
     switch (newEvent.type) {
-    case UnmapNotify:
-      bWinMapped = False;
-      break;
-    case MapNotify:
-      bWinMapped = True;
-    case ConfigureNotify:
-      XGetWindowAttributes(rcx.dpy, rcx.win, &winData);
-      rcx.nWinHeight = winData.height;
-      rcx.nWinWidth = winData.width;
-      SetupGLState(&rcx);
-      break;
-    case MotionNotify:
-      rcx.nMousePosX = newEvent.xmotion.x;
-      rcx.nMousePosY = newEvent.xmotion.y;
-      Draw(&rcx);
-      break;
-    case KeyPress:
-    case DestroyNotify:
-      Cleanup(&rcx);
-      exit(0);
-      break;
+      case UnmapNotify:
+        bWinMapped = False;
+        break;
+      case MapNotify:
+        bWinMapped = True;
+      case ConfigureNotify:
+        XGetWindowAttributes(rcx.dpy, rcx.win, &winData);
+        rcx.nWinHeight = winData.height;
+        rcx.nWinWidth = winData.width;
+        SetupGLState(&rcx);
+        break;
+      case MotionNotify:
+        rcx.nMousePosX = newEvent.xmotion.x;
+        rcx.nMousePosY = newEvent.xmotion.y;
+        Draw(&rcx);
+        break;
+      case KeyPress:
+      case DestroyNotify:
+        Cleanup(&rcx);
+        exit(0);
+        break;
     }
 
     if (bWinMapped) {

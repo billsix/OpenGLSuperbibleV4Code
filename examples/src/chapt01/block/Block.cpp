@@ -241,7 +241,7 @@ void RenderScene(void) {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint nWidth, nHeight, nComponents;
   GLenum format;
 
@@ -340,7 +340,7 @@ void ChangeSize(int w, int h) {
   glRotatef(330.0f, 0.0f, 1.0f, 0.0f);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

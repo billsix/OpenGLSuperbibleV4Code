@@ -137,7 +137,7 @@ void RenderScene(void) {
 
   // Rendering
   ImGui::Render();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
   ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
@@ -219,7 +219,7 @@ void ChangeSize(int w, int h) {
   ImGui_ImplGLUT_ReshapeFunc(w, h);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutInitWindowSize(800, 600);
@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   (void)io;
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable
   // Keyboard Controls

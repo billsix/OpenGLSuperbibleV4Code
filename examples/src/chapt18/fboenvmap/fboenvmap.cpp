@@ -335,7 +335,7 @@ void RenderScene(void) {
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    GLubyte *texels = (GLubyte *)malloc(envMapSize * envMapSize * 4);
+    GLubyte* texels = (GLubyte*)malloc(envMapSize * envMapSize * 4);
     assert(texels);
 
     for (GLenum i = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
@@ -433,7 +433,7 @@ void SetupTextures(void) {
 
   GLint w, h, c;
   GLenum format;
-  GLbyte *texels;
+  GLbyte* texels;
 
   for (int i = 0; i < 4; i++) {
     switch (i) {
@@ -744,7 +744,7 @@ void SpecialKeys(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutInitWindowSize(windowWidth, windowHeight);

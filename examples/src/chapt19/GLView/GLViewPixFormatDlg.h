@@ -12,14 +12,14 @@ class GLViewPixFormatDlg : public CDialog {
   pFormatDesc;
 
  public:
-  GLViewPixFormatDlg(CWnd *pParent = NULL);  // standard constructor
+  GLViewPixFormatDlg(CWnd* pParent = NULL);  // standard constructor
   virtual ~GLViewPixFormatDlg();
 
   // Dialog Data
   enum { IDD = IDD_GLVIEW_PFORMAT };
 
  protected:
-  virtual void DoDataExchange(CDataExchange *pDX);  // DDX/DDV support
+  virtual void DoDataExchange(CDataExchange* pDX);  // DDX/DDV support
 
   DECLARE_MESSAGE_MAP()
  public:

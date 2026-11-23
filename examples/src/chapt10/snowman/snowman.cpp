@@ -85,7 +85,7 @@ void SpecialKeys(int key, int x, int y) {
 
 // Called to draw scene
 void RenderScene(void) {
-  GLUquadricObj *pObj;  // Quadric Object
+  GLUquadricObj* pObj;  // Quadric Object
 
   // Clear the window with current clearing color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -149,7 +149,7 @@ void RenderScene(void) {
   glutSwapBuffers();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

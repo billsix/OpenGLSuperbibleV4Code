@@ -14,7 +14,7 @@
 GLFrame frameCamera;  // The camera
 
 // Six sides of a cube map
-const char *szCubeFaces[6] = {"pos_x.tga", "neg_x.tga", "pos_y.tga",
+const char* szCubeFaces[6] = {"pos_x.tga", "neg_x.tga", "pos_y.tga",
                               "neg_y.tga", "pos_z.tga", "neg_z.tga"};
 
 GLenum cube[6] = {
@@ -26,7 +26,7 @@ GLenum cube[6] = {
 // This function does any needed initialization on the rendering
 // context.
 void SetupRC() {
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
   int i;
@@ -247,7 +247,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

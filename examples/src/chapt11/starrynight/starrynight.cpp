@@ -193,7 +193,7 @@ void SetupRC() {
 
   // Load our textures
   glGenTextures(2, textureObjects);
-  GLbyte *pBytes;
+  GLbyte* pBytes;
   GLint iWidth, iHeight, iComponents;
   GLenum eFormat;
 
@@ -255,7 +255,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(800, 600);

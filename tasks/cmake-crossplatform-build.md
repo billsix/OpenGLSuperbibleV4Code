@@ -1,6 +1,6 @@
 # Replace the per-platform build wrappers with one cross-platform CMake build
 
-**Status:** in progress — Stage 1 (the audit) done 2026-11-23, its documents indexed from `CLAUDE.md`; Stage 2 (CMake) waits for the answers to the five questions at the end of `tasks/reference/audit-summary.md`
+**Status:** in progress — Stage 1 (the audit) done 2026-11-23, its documents indexed from `CLAUDE.md`; Stage 2 (CMake) is unblocked: the audit questions were answered 2026-11-23 (see "Decisions")
 **Priority:** 5
 **Difficulty:** 6
 **Created:** 2026-11-22
@@ -287,9 +287,19 @@ follow it rather than inventing a layout. The untracked binary at
 - **Shim is the fallback, not the first move.** Rationale: the demos already work with real GLUT
   on Linux, so changing 94 files' backend before knowing Windows needs it is the larger risk.
 
+- **Audit answers (William Emerison Six <billsix@gmail.com>, 2026-11-23):** (1) `chapt08/toon` keeps its current values
+  (the 2020 change was deliberate). (2) `glutSetWindowTitle` demos run on a real Linux desktop (the maintainer built and
+  ran with the Makefile), so the `BadAtom` crash is Xvfb-only; the Xvfb harness treats those four as expected. (3) Stage 2
+  may make the two one-line portability edits: the `windows.h` guard in `chapt04/transformgl.cpp` and
+  `#include <GL/glx.h>` in `chapt21/fonts/font.c`. (4) GLee stays the default loader behind `SB4_LOADER`. (5) One
+  reformatting commit with a committed `.clang-format` before the CMake work, using the spimulator config
+  (`BasedOnStyle: google`, `SortIncludes: Never`). (6) The maintainer committed the stage 1 work.
+
 ## Open questions
 
-None blocking. Answered 2026-11-22: the Linux measurements run in the project's container (the
+None. (The audit's five questions were answered 2026-11-23; see the decisions above.)
+
+Earlier note: none blocking. Answered 2026-11-22: the Linux measurements run in the project's container (the
 normal Makefile/Dockerfile contract, added as the task's first step); the first error from a modern
 Visual Studio build is requested when the audit reaches `windows-build-history.md`, not before.
 
@@ -298,6 +308,8 @@ steps 4 and 5, not by a preference now.
 
 ## History
 
+- 2026-11-23: the audit questions were answered (see decisions); a scoped review record was written at
+  `tasks/review/2026/11/23/repo-review.md`.
 - 2026-11-22: created at the maintainer's request.
 - 2026-11-22: the maintainer answered two questions (use the normal Makefile/Dockerfile contract for
   the Linux runs; give the Visual Studio error when the audit gets there) and committed the task.

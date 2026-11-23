@@ -73,7 +73,7 @@ void RenderScene(void) {
 
 /////////////////////////////////////////////////////////////
 // Main program entrypoint
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
   glutInitWindowSize(512, 512);

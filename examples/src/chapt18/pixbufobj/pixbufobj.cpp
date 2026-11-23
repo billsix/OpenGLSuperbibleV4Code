@@ -28,7 +28,7 @@ GLboolean npotTexturesAvailable = GL_FALSE;
 GLboolean usePBOs = GL_FALSE;
 GLboolean useMotionBlur = GL_TRUE;
 
-GLubyte *pixels[3];       // 3 old frames the size of window
+GLubyte* pixels[3];       // 3 old frames the size of window
 GLboolean frameGood[3];   // is this frame valid yet?
 GLuint currentFrame = 0;  // which old frame are we on?
 
@@ -83,7 +83,7 @@ void RenderScene(void) {
   if (usePBOs) {
     glBindBuffer(GL_PIXEL_PACK_BUFFER, currentFrame + 1);
     glReadPixels(dataOffsetX, dataOffsetY, dataWidth, dataHeight, GL_RGB,
-                 GL_UNSIGNED_BYTE, (GLvoid *)0);
+                 GL_UNSIGNED_BYTE, (GLvoid*)0);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
   } else {
     glReadPixels(dataOffsetX, dataOffsetY, dataWidth, dataHeight, GL_RGB,
@@ -96,11 +96,11 @@ void RenderScene(void) {
   if (usePBOs) {
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, lastFrame + 1);
     pixels[lastFrame] =
-        (GLubyte *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_READ_WRITE);
+        (GLubyte*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_READ_WRITE);
   }
   for (int y = 0; y < dataHeight; y++) {
     for (int x = 0; x < dataWidth; x++) {
-      GLubyte *ptr = (GLubyte *)pixels[lastFrame] + (y * dataPitch) + (x * 3);
+      GLubyte* ptr = (GLubyte*)pixels[lastFrame] + (y * dataPitch) + (x * 3);
       *(ptr + 0) >>= 2;
       *(ptr + 1) >>= 2;
       *(ptr + 2) >>= 2;
@@ -116,7 +116,7 @@ void RenderScene(void) {
   if (usePBOs) {
     if (frameGood[lastFrame]) {
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dataWidth, dataHeight, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, (GLvoid *)0);
+                   GL_UNSIGNED_BYTE, (GLvoid*)0);
     }
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
   } else if (frameGood[lastFrame]) {
@@ -157,12 +157,12 @@ void SetupTextures(void) {
   // Divide colors by 2 and 4 to accommodate our additive blending
   GLint w, h, c;
   GLenum format;
-  GLbyte *texels = gltLoadTGA("reservoir.tga", &w, &h, &c, &format);
+  GLbyte* texels = gltLoadTGA("reservoir.tga", &w, &h, &c, &format);
   assert(c == GL_RGB8);
   assert((w % 4) == 0);
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      GLubyte *ptr = (GLubyte *)texels + ((y * w) + x) * 3;
+      GLubyte* ptr = (GLubyte*)texels + ((y * w) + x) * 3;
       *(ptr + 0) >>= 1;
       *(ptr + 1) >>= 1;
       *(ptr + 2) >>= 1;
@@ -177,7 +177,7 @@ void SetupTextures(void) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
-      GLubyte *ptr = (GLubyte *)texels + ((y * w) + x) * 3;
+      GLubyte* ptr = (GLubyte*)texels + ((y * w) + x) * 3;
       *(ptr + 0) >>= 1;
       *(ptr + 1) >>= 1;
       *(ptr + 2) >>= 1;
@@ -305,7 +305,7 @@ void togglePBOs(void) {
     // allocate read buffer, size of window
     for (int i = 0; i < 3; i++) {
       assert(!pixels[i]);
-      pixels[i] = (GLubyte *)malloc(dataHeight * dataPitch);
+      pixels[i] = (GLubyte*)malloc(dataHeight * dataPitch);
       assert(pixels[i]);
 
       // upload PBO data, then delete
@@ -417,13 +417,13 @@ void ChangeSize(int w, int h) {
     } else {
       // pixels[i] may not be set up yet on 1st time through
       if (pixels[i]) free(pixels[i]);
-      pixels[i] = (GLubyte *)malloc(dataHeight * dataPitch);
+      pixels[i] = (GLubyte*)malloc(dataHeight * dataPitch);
       assert(pixels[i]);
     }
   }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(windowWidth, windowHeight);

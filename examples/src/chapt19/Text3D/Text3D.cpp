@@ -121,7 +121,7 @@ void SetupRC(HDC hDC) {
 HPALETTE GetOpenGLPalette(HDC hDC) {
   HPALETTE hRetPal = NULL;    // Handle to palette to be created
   PIXELFORMATDESCRIPTOR pfd;  // Pixel Format Descriptor
-  LOGPALETTE *pPal;           // Pointer to memory for logical palette
+  LOGPALETTE* pPal;           // Pointer to memory for logical palette
   int nPixelFormat;           // Pixel format index
   int nColors;                // Number of entries in palette
   int i;                      // Counting variable
@@ -141,7 +141,7 @@ HPALETTE GetOpenGLPalette(HDC hDC) {
 
   // Allocate space for a logical palette structure plus all the palette entries
   pPal =
-      (LOGPALETTE *)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
+      (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + nColors * sizeof(PALETTEENTRY));
 
   // Fill in palette header
   pPal->palVersion = 0x300;       // Windows 3.0

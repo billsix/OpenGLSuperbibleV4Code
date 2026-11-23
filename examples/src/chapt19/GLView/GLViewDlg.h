@@ -15,7 +15,7 @@
 class CGLViewDlg : public CDialog {
   // Construction
  public:
-  CGLViewDlg(CWnd *pParent = NULL);  // standard constructor
+  CGLViewDlg(CWnd* pParent = NULL);  // standard constructor
 
   // Dialog Data
   //{{AFX_DATA(CGLViewDlg)
@@ -28,7 +28,7 @@ class CGLViewDlg : public CDialog {
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(CGLViewDlg)
  protected:
-  virtual void DoDataExchange(CDataExchange *pDX);  // DDX/DDV support
+  virtual void DoDataExchange(CDataExchange* pDX);  // DDX/DDV support
                                                     //}}AFX_VIRTUAL
 
   // Implementation

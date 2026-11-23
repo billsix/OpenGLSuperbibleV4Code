@@ -171,7 +171,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   int nModeMenu;
   int nEdgeMenu;
   int nMainMenu;

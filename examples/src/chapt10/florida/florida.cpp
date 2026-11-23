@@ -47,7 +47,7 @@ void ProcessMenu(int value) {
 // Tesselation error callback
 void tessError(GLenum error) {
   // Get error message string
-  const char *szError = (const char *)gluErrorString(error);
+  const char* szError = (const char*)gluErrorString(error);
 
   // Set error message as window caption
   glutSetWindowTitle(szError);
@@ -80,7 +80,7 @@ void RenderScene(void) {
     case DRAW_CONCAVE:  // Tesselate concave polygon
     {
       // Tesselator object
-      GLUtesselator *pTess;
+      GLUtesselator* pTess;
 
       // Green polygon
       glColor3f(0.0f, 1.0f, 0.0f);
@@ -122,7 +122,7 @@ void RenderScene(void) {
     case DRAW_COMPLEX:  // Tesselate, but with hole cut out
     {
       // Tesselator object
-      GLUtesselator *pTess;
+      GLUtesselator* pTess;
 
       // Green polygon
       glColor3f(0.0f, 1.0f, 0.0f);
@@ -208,7 +208,7 @@ void ChangeSize(int w, int h) {
 }
 
 //////////////////////////////////////////////////////////////////
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
   glutInitWindowSize(500, 400);

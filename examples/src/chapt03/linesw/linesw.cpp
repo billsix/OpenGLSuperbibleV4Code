@@ -108,7 +108,7 @@ void ChangeSize(int w, int h) {
   glLoadIdentity();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutCreateWindow("Line Width Example");

@@ -53,7 +53,7 @@ typedef GLvoid (*CallBack)();
 #ifndef WIN32
 typedef GLvoid (*CallBack)(...);  //  XCode (GNU) style
 #else
-typedef GLvoid(_stdcall *CallBack)();  // Visual C++ style
+typedef GLvoid(_stdcall* CallBack)();  // Visual C++ style
 #endif
 
 #endif
@@ -82,8 +82,8 @@ typedef GLvoid(_stdcall *CallBack)();  // Visual C++ style
 // This function says, "this pointer is a little endian value"
 // If the value must be changed it is... otherwise, this
 // function is defined away below (on Intel systems for example)
-inline void LITTLE_ENDIAN_WORD(void *pWord) {
-  unsigned char *pBytes = (unsigned char *)pWord;
+inline void LITTLE_ENDIAN_WORD(void* pWord) {
+  unsigned char* pBytes = (unsigned char*)pWord;
   unsigned char temp;
 
   temp = pBytes[0];
@@ -95,8 +95,8 @@ inline void LITTLE_ENDIAN_WORD(void *pWord) {
 // This function says, "this pointer is a little endian value"
 // If the value must be changed it is... otherwise, this
 // function is defined away below (on Intel systems for example)
-inline void LITTLE_ENDIAN_DWORD(void *pWord) {
-  unsigned char *pBytes = (unsigned char *)pWord;
+inline void LITTLE_ENDIAN_DWORD(void* pWord) {
+  unsigned char* pBytes = (unsigned char*)pWord;
   unsigned char temp;
 
   // Swap outer bytes
@@ -122,11 +122,11 @@ inline void LITTLE_ENDIAN_DWORD(void *pWord) {
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Load a .TGA file
-GLbyte *gltLoadTGA(const char *szFileName, GLint *iWidth, GLint *iHeight,
-                   GLint *iComponents, GLenum *eFormat);
+GLbyte* gltLoadTGA(const char* szFileName, GLint* iWidth, GLint* iHeight,
+                   GLint* iComponents, GLenum* eFormat);
 
 // Capute the frame buffer and write it as a .tga
-GLint gltWriteTGA(const char *szFileName);
+GLint gltWriteTGA(const char* szFileName);
 
 // Draw a Torus
 void gltDrawTorus(GLfloat majorRadius, GLfloat minorRadius, GLint numMajor,
@@ -139,23 +139,23 @@ void gltDrawSphere(GLfloat fRadius, GLint iSlices, GLint iStacks);
 void gltDrawUnitAxes(void);
 
 // Shader loading support
-bool bLoadShaderFile(const char *szFile, GLhandleARB shader);
-GLhandleARB gltLoadShaderPair(const char *szVertexProg,
-                              const char *szFragmentProg);
+bool bLoadShaderFile(const char* szFile, GLhandleARB shader);
+GLhandleARB gltLoadShaderPair(const char* szVertexProg,
+                              const char* szFragmentProg);
 
 // Get the OpenGL version, returns fals on error
-bool gltGetOpenGLVersion(int &nMajor, int &nMinor);
+bool gltGetOpenGLVersion(int& nMajor, int& nMinor);
 
 // Check to see if an exension is supported
-int gltIsExtSupported(const char *szExtension);
+int gltIsExtSupported(const char* szExtension);
 
 // Get the function pointer for an extension
-void *gltGetExtensionPointer(const char *szFunctionName);
+void* gltGetExtensionPointer(const char* szFunctionName);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Win32 Only
 #ifdef WIN32
-int gltIsWGLExtSupported(HDC hDC, const char *szExtension);
+int gltIsWGLExtSupported(HDC hDC, const char* szExtension);
 #endif
 
 #endif

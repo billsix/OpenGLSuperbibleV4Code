@@ -308,6 +308,14 @@ steps 4 and 5, not by a preference now.
 
 ## History
 
+- 2026-11-23: every Linux demo that builds without ImGui or OpenEXR is in the CMake build: 83 targets, generated per
+  chapter into `examples/cmake/chaptNN.cmake` by `tasks/adhoc/cmake-crossplatform-build/gen_chapter_cmake.py` from the
+  Makefiles' dry-run link lines (targets are named `<chapter>_<demo>` because demo names repeat). All 83 build; under
+  Xvfb 76 stay alive, which matches the Makefile baseline (the same four `glutSetWindowTitle` demos, `motionblur` and
+  `imaging` fail) plus `transformgl`, now alive after the `windows.h` guard. The `shaders/` data directories are copied
+  beside the binary (first attempt copied files only and nine shader demos exited). New: `chapt21/fonts` builds after
+  the `GL/glx.h` include and links X11, but crashes (SIGSEGV) at startup under Xvfb; not yet investigated. Left for
+  later steps: the four ImGui demos, `texfloat`, the `SB4_LOADER` option, macOS and Windows.
 - 2026-11-23: stage 2 started on branch `cmake-stage2`: the reformat (`.clang-format`) is committed by the maintainer;
   the first CMake target, `chapt01/block`, builds and stays alive 5 s under Xvfb in the container (Ninja, GCC 16, freeglut
   3.8). Two findings: `gltools.h` includes bare `<glut.h>`, so the `GL/` header directory goes on the include path; and

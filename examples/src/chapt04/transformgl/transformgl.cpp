@@ -3,7 +3,9 @@
 // Demonstrates letting OpenGL do the transformations
 // Program by Richard S. Wright Jr.
 
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include "../../shared/gltools.h"  // OpenGL toolkit
 

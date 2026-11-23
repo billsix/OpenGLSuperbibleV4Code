@@ -6,6 +6,7 @@
 #include "GL/gl.h"  // System and OpenGL Stuff
 #include "GL/glut.h"
 #include <X11/Xlib.h>
+#include <GL/glx.h>
 #include <string.h>
 
 GLuint uiDListStart;

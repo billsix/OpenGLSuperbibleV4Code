@@ -1,0 +1,3 @@
+make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt11/thundergl'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES -lstdc++ -o thundergl -L /usr/local/lib ../../../../src/chapt11/thundergl/thundergl.cpp  ../../../../src/chapt11/thundergl/body.cpp  ../../../../src/chapt11/thundergl/glass.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/TriangleMesh.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt11/thundergl'

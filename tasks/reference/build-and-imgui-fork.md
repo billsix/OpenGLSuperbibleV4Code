@@ -5,6 +5,11 @@
 the source + git history 2026-08-02. Sibling docs: `architecture-overview.md`,
 `gltools-framework.md`, `chapter-demo-inventory.md`, `chapt18-advanced-buffers.md`.
 
+> **Corrections (2026-11-23, from the audit):** `c74bbd6` did not make a fresh clone build the ImGui demos (the
+> Makefile and Visual Studio include paths are six levels up, outside the repository; `imgui-retrofit-status.md`);
+> the repository has 45 commits; the 2025 Windows NuGet change reached 30 of 94 projects (`windows-build-history.md`);
+> the Linux build succeeds for 81 of 88 demos (`source-audit.md`). Read `audit-summary.md` first.
+
 ## The fork question, settled
 
 The root commit **`e802274` "from http://www.openglsuperbible.com/previous-editions/"** is

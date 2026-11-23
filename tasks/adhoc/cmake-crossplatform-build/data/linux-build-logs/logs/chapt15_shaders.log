@@ -1,0 +1,21 @@
+make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt15/shaders'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -I../../../../../../contrib/imgui/ -DGL_GLEXT_PROTOTYPES   -fno-threadsafe-statics -fno-exceptions  -lstdc++ -o shaders -L /usr/local/lib  ../../../../../../contrib/imgui//imgui.cpp ../../../../../../contrib/imgui//imgui_demo.cpp ../../../../../../contrib/imgui//imgui_draw.cpp ../../../../../../contrib/imgui/imgui_impl_glut.cpp ../../../../../../contrib/imgui//imgui_widgets.cpp ../../../../../../contrib/imgui//imgui_impl_opengl3.cpp ../../../../src/chapt15/shaders/shaders.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_demo.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_draw.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui/imgui_impl_glut.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_widgets.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_impl_opengl3.cpp: No such file or directory
+compilation terminated.
+../../../../src/chapt15/shaders/shaders.cpp:8:10: fatal error: imgui.h: No such file or directory
+    8 | #include "imgui.h"
+      |          ^~~~~~~~~
+compilation terminated.
+cc1: warning: command-line option '-fno-threadsafe-statics' is valid for C++/ObjC++ but not for C
+make: *** [Makefile:22: shaders] Error 1
+make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt15/shaders'

@@ -1,6 +1,6 @@
 # Replace the per-platform build wrappers with one cross-platform CMake build
 
-**Status:** proposed — needs go-ahead (the maintainer asked for this task on 2026-11-22; no work started)
+**Status:** in progress — Stage 1 (the audit) done 2026-11-23, its documents indexed from `CLAUDE.md`; Stage 2 (CMake) waits for the answers to the five questions at the end of `tasks/reference/audit-summary.md`
 **Priority:** 5
 **Difficulty:** 6
 **Created:** 2026-11-22
@@ -124,6 +124,18 @@ dependency; the GLUT loop becomes a GLFW polling loop. Its `_primitives.py` has 
 `glutSolidSphere`-style geometry that can be translated back to C++ for the shim; `_common.py`
 has the shared window and timer plumbing. In committed docs refer to it as
 `github.com/billsix/modelviewprojection` (the mount name `modelviewprojection` matches the repo).
+
+## Stage 1 result (2026-11-23)
+
+Done. Seven documents in `tasks/reference/` (`audit-summary.md` first), the container (`Dockerfile`, `Makefile`,
+`entrypoint/`, `.gitignore`), and the measuring scripts and snapshot data in `tasks/adhoc/cmake-crossplatform-build/`
+(`inventory.py`, `history_table.py`, `wrapper_check.py`, `semantic_delta.sh`, `formatting_audit.sh`,
+`build_linux_demos.sh`, `run_demos_xvfb.sh`, `imgui_probe.sh`, `make_demo_table.py`; `data/`). The headline facts: 81 of 88
+Linux Makefiles build and 75 programs run under Xvfb; the real source delta against the book is 15 files; ImGui works on
+Linux but every Makefile points at it six directories up; only 30 of 94 Visual Studio projects were converted in 2025;
+the code is Google-style formatted with no committed `.clang-format`. The stage 2 plan below is revised in
+`audit-summary.md` ("Revised stage 2 plan"); where the two differ, the summary wins. The adhoc scripts and `data/` are
+`git rm`'d when this task is archived; the durable results are the reference documents.
 
 ## Stage 1: the audit (reference documents, no code changes)
 
@@ -289,6 +301,7 @@ steps 4 and 5, not by a preference now.
 - 2026-11-22: created at the maintainer's request.
 - 2026-11-22: the maintainer answered two questions (use the normal Makefile/Dockerfile contract for
   the Linux runs; give the Visual Studio error when the audit gets there) and committed the task.
+- 2026-11-23: Stage 1 done (see "Stage 1 result").
 - 2026-11-22: the maintainer added a second message: do a full audit of the source and of the git
   history first, with reference documents as the deliverables; keep the callback-based book
   structure, allow consistent reformatting, free GUI controls and any extension loader. The task

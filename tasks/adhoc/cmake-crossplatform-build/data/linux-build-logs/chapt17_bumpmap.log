@@ -1,0 +1,24 @@
+make: Entering directory '/tmp/sb4-build/examples/projects/linux/chapt17/bumpmap'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o bumpmap -L /usr/local/lib ../../../../src/chapt17/bumpmap/bumpmap.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+../../../../src/chapt17/bumpmap/bumpmap.cpp:29:41: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   29 | char *shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
+      |                                         ^~~~~~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:29:52: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   29 | char *shaderNames[TOTAL_SHADER_SETS] = {"bumpmap", "showbump"};
+      |                                                    ^~~~~~~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:30:35: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   30 | char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
+      |                                   ^~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:30:42: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   30 | char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
+      |                                          ^~~~~~~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:30:54: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   30 | char *shapeNames[TOTAL_SHAPES] = {"box", "cylinder", "torus"};
+      |                                                      ^~~~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:31:39: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   31 | char *bumpmapNames[TOTAL_BUMPMAPS] = {"rivets", "pyramids"};
+      |                                       ^~~~~~~~
+../../../../src/chapt17/bumpmap/bumpmap.cpp:31:49: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   31 | char *bumpmapNames[TOTAL_BUMPMAPS] = {"rivets", "pyramids"};
+      |                                                 ^~~~~~~~~~
+make: Leaving directory '/tmp/sb4-build/examples/projects/linux/chapt17/bumpmap'

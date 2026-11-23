@@ -1,0 +1,24 @@
+make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt17/fragmentshaders'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o fragmentshaders -L /usr/local/lib ../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:23:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   23 | char *shaderNames[TOTAL_SHADERS] = {"simple",     "grayscale", "sepia",
+      |                                     ^~~~~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:23:51: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   23 | char *shaderNames[TOTAL_SHADERS] = {"simple",     "grayscale", "sepia",
+      |                                                   ^~~~~~~~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:23:64: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   23 | char *shaderNames[TOTAL_SHADERS] = {"simple",     "grayscale", "sepia",
+      |                                                                ^~~~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:24:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   24 |                                     "heatsig",    "fog",       "grayinvert",
+      |                                     ^~~~~~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:24:51: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   24 |                                     "heatsig",    "fog",       "grayinvert",
+      |                                                   ^~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:24:64: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   24 |                                     "heatsig",    "fog",       "grayinvert",
+      |                                                                ^~~~~~~~~~~~
+../../../../src/chapt17/fragmentshaders/fragmentshaders.cpp:25:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   25 |                                     "colorinvert"};
+      |                                     ^~~~~~~~~~~~~
+make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt17/fragmentshaders'

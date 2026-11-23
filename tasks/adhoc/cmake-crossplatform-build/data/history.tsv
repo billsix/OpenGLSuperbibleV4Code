@@ -1,0 +1,46 @@
+sha	date	subject	src	linux	apple	microsoft	contrib	tasks	other	src_added	src_deleted
+e802274	2019-11-26	from http://www.openglsuperbible.com/previous-editions/	571	232	640	333	0	0	1	150701	0
+638345d	2019-11-26	dos2unix.  removed exe permissions from makefiles	68	86	0	0	0	0	0	21615	21615
+4536bd7	2019-11-26	fixed broken build on linux	0	88	0	0	0	0	0	0	0
+8a04619	2019-11-26	Visual Studio 2019/Nuget updates.	7	0	0	565	0	0	0	2	932
+498c5ca	2019-11-26	Added IMGUI to chapt02/bounce.  VS2019 Community and Makefile for Linux.	1	1	0	2	0	0	0	116	10
+d4820a0	2019-11-26	fixed compiler bug on Arch Linux	1	0	0	0	0	0	0	22	22
+5f39bd0	2019-11-26	fix cxa_guard_acquire, dso missing failure	0	5	0	0	0	0	0	0	0
+523eaa1	2019-11-30	add libstd++ as a library to every project	0	83	0	0	0	0	0	0	0
+a9d941f	2020-01-29	updated through chapter 5 for macOS	1	0	67	0	0	0	0	0	63
+2d05a12	2020-02-01	updated remaining macOS demos to newer version of XCode project files	0	0	108	0	0	0	0	0	0
+e8e7750	2020-02-01	updated bounce demo for osx	0	0	2	0	0	0	0	0	0
+48900a8	2020-02-01	update search path for headers	0	0	1	0	0	0	0	0	0
+17d5297	2020-02-01	added imgui files to the project.  Inputs are not working though	0	0	1	0	0	0	0	0	0
+e43b649	2020-03-04	Fix the call to ortho. Apparently I do need to pay attention to that call.	1	0	0	0	0	0	0	9	9
+acdbe02	2020-03-22	Added GUI to Ambient demo for experimentation.	1	1	0	0	0	0	0	90	16
+bb01dd2	2020-03-23	Get the previous commit to work on Windows.	0	0	0	2	0	0	0	0	0
+3b6f3b3	2020-03-29	added IMGUI controls to pyramid to demo min/mag	1	0	0	2	0	0	0	153	9
+12b37fb	2020-03-29	messed up toon on purpose	1	0	0	0	0	0	0	2	2
+22cf6f6	2020-03-29	fixed build of pyramid on linux	0	1	0	0	0	0	0	0	0
+d6defd8	2020-04-07	Updated demo with IMGUI controls.  The glut ones were failing.	1	1	0	0	0	0	0	129	12
+eb7a0b3	2021-10-22	prep for clang-format -i	83	0	0	0	0	0	0	2299	2132
+73f58ea	2021-10-22	ran clang-format for consistent formatting	123	0	0	0	0	0	0	98798	60510
+c14074a	2021-10-22	fixed on macos11	1	0	0	0	0	0	0	2	2
+698760e	2021-10-22	updated xcode projects	0	0	175	0	0	0	0	0	0
+7b874d4	2021-11-09	updated MacOS projects	0	0	100	0	0	0	0	0	0
+3d9d61c	2021-11-13	updated macos projects	0	0	130	0	0	0	0	0	0
+c5dc7ca	2022-02-21	fix build on macos	0	0	1	0	0	0	0	0	0
+88101c8	2022-02-22	updated	1	0	0	0	0	0	0	2	2
+02e83be	2022-03-20	clang-format	226	0	0	0	0	0	0	50025	47943
+70a39bd	2022-04-06	updated	1	0	0	0	0	0	0	7	0
+a9660cb	2022-04-10	fixed on linux	0	1	0	0	0	0	0	0	0
+7fadda7	2022-04-06	updated	1	0	0	0	0	0	0	7	0
+8611346	2022-04-11	Merge remote-tracking branch 'github/master'	0	0	0	0	0	0	0	0	0
+8d0bd63	2022-04-18	fix vector from object to viewer	3	0	0	0	0	0	0	8	8
+6092828	2022-04-24	normalize these vectors	3	0	0	0	0	0	0	3	3
+6f8a3ed	2024-11-16	updated formatting	104	0	0	0	0	0	0	3974	4463
+0b6affa	2024-11-16	updated headers	21	0	0	0	0	0	0	1928	3559
+b8e9cea	2025-05-11	fixed build on windows, turns out windows.h needs to be imported first	2	0	0	63	0	0	0	3	1
+c74bbd6	2025-12-06	add imgui, to fix build	0	0	0	0	17	0	0	0	0
+c461a2f	2026-08-02	added task to study the source in depth	0	0	0	0	0	6	1	0	0
+0d78d5d	2026-08-02	auto generated priority and difficulty	0	0	0	0	0	1	0	0	0
+8643375	2026-08-02	archived task	0	0	0	0	0	1	0	0	0
+e1c9bb9	2026-11-22	added cmake task	0	0	0	0	0	1	0	0	0
+8f53347	2026-11-22	updated task	0	0	0	0	0	1	0	0	0
+122abd3	2026-11-22	updated	0	0	0	0	0	1	0	0	0

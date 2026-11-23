@@ -1,0 +1,102 @@
+chapter	demo	files	lines	makefile	xcode	vcxproj	glut_calls	glut_distinct	imgui	shared	linux_libs	platform_tokens
+chapt01	block	1	357	y	y	y	16	12	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt02	bounce	1	240	y	y	y	19	18	y	gltools	-lglut -lGL -lGLU -lm	__APPLE__
+chapt02	glrect	1	73	y	y	y	7	7	-	gltools	-lglut -lGL -lGLU -lm	
+chapt02	simple	1	36	y	y	y	5	5	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	lines	1	128	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	linesw	1	122	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	lstipple	1	120	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	lstrips	1	117	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	points	1	118	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	pointsz	1	134	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	pstipple	1	132	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	scissor	1	65	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	single	1	77	y	y	y	10	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	star	1	205	y	y	y	21	13	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	stencil	1	140	y	y	y	11	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt03	triangle	1	217	y	y	y	15	12	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	atom	1	149	y	y	y	17	12	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	atom2	1	141	y	y	y	17	12	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	ortho	1	248	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	perspect	1	246	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	solar	1	138	y	y	y	14	11	-	gltools	-lglut -lGL -lGLU -lm	
+chapt04	sphereworld	1	161	y	y	y	15	12	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt04	transform	1	134	y	y	y	11	10	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt04	transformgl	1	94	y	y	y	11	10	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt05	ambient	1	264	y	y	y	20	18	y	gltools	-lglut -lGL -lGLU -lm	
+chapt05	ccube	1	200	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt05	jet	1	200	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt05	litjet	1	308	y	y	y	10	10	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt05	shadow	1	386	y	y	y	11	11	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt05	shinyjet	1	316	y	y	y	10	10	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt05	sphereworld	1	235	y	y	y	16	12	-	gltools,math3d,glframe	-lglut -lGL -lGLU -lm	
+chapt05	spot	1	224	y	y	y	23	15	-	gltools	-lglut -lGL -lGLU -lm	
+chapt05	triangle	1	82	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt06	fogged	1	241	y	y	y	15	12	-	gltools,math3d,glframe	-lglut -lGL -lGLU -lm	
+chapt06	motionblur	1	165	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt06	multisample	1	237	y	y	y	16	12	-	gltools,math3d,glframe	-lglut -lGL -lGLU -lm	
+chapt06	reflection	1	181	y	y	y	12	11	-	gltools	-lglut -lGL -lGLU -lm	
+chapt06	smoother	1	189	y	y	y	13	12	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt06	sphereworld	1	254	y	y	y	15	12	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt07	bitmaps	1	88	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt07	imageload	1	85	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt07	imaging	1	244	y	y	y	19	12	-	gltools	-lglut -lGL -lGLU -lm	
+chapt07	operations	1	204	y	y	y	20	12	-	gltools	-lglut -lGL -lGLU -lm	
+chapt08	pyramid	1	365	y	y	y	20	18	y	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt08	sphereworld	1	303	y	y	y	13	11	-	gltools,math3d,glframe	-lglut -lGL -lGLU -lm	
+chapt08	toon	1	168	y	y	y	11	10	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt08	tunnel	1	257	y	y	y	19	13	-	gltools	-lglut -lGL -lGLU -lm	
+chapt09	anisotropic	1	267	y	y	y	21	13	-	gltools	-lglut -lGL -lGLU -lm	
+chapt09	cubemap	1	265	y	y	y	13	11	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt09	multitexture	1	320	y	y	y	13	11	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt09	pointsprites	1	262	y	y	y	14	12	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt09	sphereworld	1	305	y	y	y	13	11	-	gltools,math3d,glframe	-lglut -lGL -lGLU -lm	
+chapt09	texgen	1	248	y	y	y	16	13	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	axes3d	1	120	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	bez3d	1	117	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	bezier	1	113	-	y	y	8	8	-	gltools		
+chapt10	bezlit	1	141	y	y	y	8	8	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	florida	1	230	y	y	y	15	13	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	nurbc	1	131	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	nurbs	1	189	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	nurbt	1	190	y	y	y	9	9	-	gltools	-lglut -lGL -lGLU -lm	
+chapt10	snowman	1	164	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt11	cubedx	1	124	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt11	sphereworld	1	392	y	y	y	19	15	-	gltools,math3d,stopwatch,glframe	-lglut -lGL -lGLU -lm	
+chapt11	starrynight	1	280	y	y	y	14	12	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt11	thunderbird	3	10827	y	y	y	11	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt11	thundergl	3	11100	y	y	y	13	11	-	gltools,TriangleMesh,glframe	-lglut -lGL -lGLU -lm	
+chapt11	vbo	3	11100	y	y	y	13	11	-	gltools,VBOMesh,glframe	-lglut -lGL -lGLU -lm	
+chapt12	moons	1	268	y	y	y	11	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt12	planets	1	253	y	y	y	16	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt12	select	1	362	y	y	y	10	10	-	gltools	-lglut -lGL -lGLU -lm	
+chapt13	occquery	1	538	y	y	y	61	27	-	gltools,stopwatch	-lglut -lGL -lGLU -lm	
+chapt14	shadowmap	1	553	y	y	y	31	20	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt15	shaders	2	587	y	y	y	49	29	y	gltools	-lglut -lGL -lGLU -lm	__APPLE__
+chapt16	vertexblend	1	553	y	y	y	21	15	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt16	vertexshaders	1	597	y	y	y	25	22	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt17	bumpmap	1	724	y	y	y	30	17	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt17	fragmentshaders	1	494	y	y	y	25	22	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt17	imageproc	1	547	y	y	y	34	22	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt17	lighting	1	428	y	y	y	25	22	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt17	proctex	1	380	y	y	y	21	18	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt18	fbodrawbuffers	1	795	y	y	y	31	21	-	gltools	-lglut -lGL -lGLU -lm	
+chapt18	fboenvmap	1	775	y	y	y	41	22	-	gltools,stopwatch	-lglut -lGL -lGLU -lm	
+chapt18	fboshadowmap	1	619	y	y	y	34	20	-	gltools,math3d	-lglut -lGL -lGLU -lm	
+chapt18	hdrbloom	1	955	y	y	y	21	18	-	gltools,glframe	-lglut -lGL -lGLU -lm	
+chapt18	pixbufobj	1	464	y	y	y	34	18	-	gltools,stopwatch,glframe	-lglut -lGL -lGLU -lm	
+chapt18	texfloat	1	553	y	y	y	33	17	-	gltools,openexr	-lglut -lGL -lGLU -lIlmThread -lIlmImf	_WIN32
+chapt19	GLRect	1	263	-	-	y	0	0	-			
+chapt19	GLView	11	1239	-	-	y	0	0	-			_MSC_VER
+chapt19	RThread	3	417	-	-	y	0	0	-	gltools		_MSC_VER
+chapt19	SphereWorld32	2	1018	-	-	y	0	0	-	gltools,glframe		
+chapt19	Text2D	1	371	-	-	y	0	0	-			
+chapt19	Text3D	1	392	-	-	y	0	0	-			
+chapt19	fscreen	1	269	-	-	y	0	0	-			
+chapt20	CarbonGL	4	11333	-	y	-	1	1	-	gltools,glframe		
+chapt20	CarbonGLFonts	4	11364	-	y	-	1	1	-	gltools,glframe		
+chapt20	CocoGL	6	11158	-	-	-	1	1	-	gltools,glframe		
+chapt20	FullScreen	4	11392	-	y	-	1	1	-	gltools,glframe		
+chapt21	GLXBasics	1	288	y	-	-	0	0	-		-lX11 -lXi -lXmu -lglut -lGL -lGLU -lm	
+chapt21	fonts	1	92	y	-	-	8	8	-		-lX11 -lXi -lXmu -lglut -lGL -lGLU -lm	
+chapt22	ES_example	1	189	-	-	-	0	0	-			

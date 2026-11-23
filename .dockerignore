@@ -1,0 +1,6 @@
+**/.git
+**/.claude
+tasks/
+examples/
+contrib/
+*.tar

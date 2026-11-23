@@ -1,0 +1,17 @@
+# Build products (the Linux Makefiles write the binary next to the Makefile)
+/build/
+/bldInstall/
+*.o
+*.tar
+# Per-demo Linux binaries: the Makefile names the program after the demo directory
+/examples/projects/linux/*/*/*
+!/examples/projects/linux/*/*/Makefile
+!/examples/projects/linux/*/*/*.tga
+!/examples/projects/linux/*/*/*.TGA
+!/examples/projects/linux/*/*/*.BMP
+!/examples/projects/linux/*/*/*.bmp
+!/examples/projects/linux/*/*/*.vs
+!/examples/projects/linux/*/*/*.fs
+!/examples/projects/linux/*/*/*.vp
+!/examples/projects/linux/*/*/*.fp
+!/examples/projects/linux/*/*/*.exr

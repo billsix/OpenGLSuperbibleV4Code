@@ -1,0 +1,12 @@
+make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt17/proctex'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o proctex -L /usr/local/lib ../../../../src/chapt17/proctex/proctex.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+../../../../src/chapt17/proctex/proctex.cpp:21:41: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   21 | char *shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
+      |                                         ^~~~~~~~~~~~~~
+../../../../src/chapt17/proctex/proctex.cpp:21:57: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   21 | char *shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
+      |                                                         ^~~~~~~~~~~
+../../../../src/chapt17/proctex/proctex.cpp:21:70: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   21 | char *shaderNames[TOTAL_SHADER_SETS] = {"checkerboard", "beachball", "toyball"};
+      |                                                                      ^~~~~~~~~
+make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt17/proctex'

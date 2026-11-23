@@ -1,0 +1,89 @@
+chapter	demo	result	exit	colours	stderr
+chapt01	block	alive	124	3	
+chapt02	bounce	no-binary	-	-	
+chapt02	glrect	alive	124	3	
+chapt02	simple	alive	124	2	
+chapt03	lines	alive	124	2	
+chapt03	linesw	alive	124	2	
+chapt03	lstipple	alive	124	2	
+chapt03	lstrips	alive	124	2	
+chapt03	points	alive	124	2	
+chapt03	pointsz	alive	124	2	
+chapt03	pstipple	alive	124	2	
+chapt03	scissor	alive	124	4	
+chapt03	single	alive	124	3	
+chapt03	star	alive	124	2	
+chapt03	stencil	alive	124	3	
+chapt03	triangle	alive	124	3	
+chapt04	atom	alive	124	3	
+chapt04	atom2	alive	124	3	
+chapt04	ortho	alive	124	2	
+chapt04	perspect	alive	124	5	
+chapt04	solar	alive	124	329	
+chapt04	sphereworld	alive	124	3	
+chapt04	transform	alive	124	3	
+chapt04	transformgl	no-binary	-	-	
+chapt05	ambient	no-binary	-	-	
+chapt05	ccube	alive	124	65537	
+chapt05	jet	alive	124	5	
+chapt05	litjet	alive	124	24	
+chapt05	shadow	alive	124	127	
+chapt05	shinyjet	alive	124	24	
+chapt05	sphereworld	alive	124	1903	
+chapt05	spot	alive	124	5	
+chapt05	triangle	alive	124	52264	
+chapt06	fogged	alive	124	2215	
+chapt06	motionblur	crashed	1	1	freeglut (./motionblur):  ERROR:  Internal error <FBConfig with necessary capabilities not found> in function fgOpenWindow
+chapt06	multisample	alive	124	1643	
+chapt06	reflection	alive	124	324	
+chapt06	smoother	alive	124	2	
+chapt06	sphereworld	alive	124	2151	
+chapt07	bitmaps	alive	124	2	
+chapt07	imageload	alive	124	22302	
+chapt07	imaging	exited	0	1	
+chapt07	operations	alive	124	114882	
+chapt08	pyramid	no-binary	-	-	
+chapt08	sphereworld	alive	124	13916	
+chapt08	toon	alive	124	114	
+chapt08	tunnel	alive	124	12798	
+chapt09	anisotropic	alive	124	12798	
+chapt09	cubemap	alive	124	35191	
+chapt09	multitexture	alive	124	41965	
+chapt09	pointsprites	alive	124	286	
+chapt09	sphereworld	alive	124	14902	
+chapt09	texgen	alive	124	8763	
+chapt10	axes3d	alive	124	141	
+chapt10	bez3d	alive	124	3	
+chapt10	bezlit	alive	124	130	
+chapt10	florida	alive	124	235	
+chapt10	nurbc	alive	124	4	
+chapt10	nurbs	alive	124	391	
+chapt10	nurbt	alive	124	778	
+chapt10	snowman	alive	124	119	
+chapt11	cubedx	alive	124	2	
+chapt11	sphereworld	crashed	1	1	X Error of failed request:  BadAtom (invalid Atom parameter)
+chapt11	starrynight	alive	124	286	
+chapt11	thunderbird	alive	124	5309	
+chapt11	thundergl	alive	124	20393	
+chapt11	vbo	alive	124	20266	
+chapt12	moons	alive	124	459	
+chapt12	planets	alive	124	534	
+chapt12	select	alive	124	251	
+chapt13	occquery	crashed	1	25383	X Error of failed request:  BadAtom (invalid Atom parameter)
+chapt14	shadowmap	alive	124	882	GL_ARB_shadow_ambient extension not available!
+chapt15	shaders	no-binary	-	-	
+chapt16	vertexblend	alive	124	928	
+chapt16	vertexshaders	alive	124	8	
+chapt17	bumpmap	alive	124	474	
+chapt17	fragmentshaders	alive	124	1416	
+chapt17	imageproc	alive	124	655	
+chapt17	lighting	alive	124	8	
+chapt17	proctex	alive	124	256	
+chapt18	fbodrawbuffers	alive	124	20372	
+chapt18	fboenvmap	crashed	1	1	X Error of failed request:  BadAtom (invalid Atom parameter)
+chapt18	fboshadowmap	alive	124	905	GL_ARB_shadow_ambient extension not available!
+chapt18	hdrbloom	alive	124	6646	
+chapt18	pixbufobj	crashed	1	1	X Error of failed request:  BadAtom (invalid Atom parameter)
+chapt18	texfloat	no-binary	-	-	
+chapt21	GLXBasics	alive	124	4	
+chapt21	fonts	no-binary	-	-	

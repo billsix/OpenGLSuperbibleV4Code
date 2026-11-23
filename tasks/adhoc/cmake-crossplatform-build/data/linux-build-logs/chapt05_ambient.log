@@ -1,0 +1,20 @@
+make: Entering directory '/tmp/sb4-build/examples/projects/linux/chapt05/ambient'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL  -I../../../../../../contrib/imgui/ -DGL_GLEXT_PROTOTYPES  -lstdc++ -o ambient -L /usr/local/lib ../../../../../../contrib/imgui//imgui.cpp ../../../../../../contrib/imgui//imgui_demo.cpp ../../../../../../contrib/imgui//imgui_draw.cpp ../../../../../../contrib/imgui/imgui_impl_glut.cpp ../../../../../../contrib/imgui//imgui_widgets.cpp ../../../../../../contrib/imgui//imgui_impl_opengl2.cpp ../../../../src/chapt05/ambient/ambient.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_demo.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_draw.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui/imgui_impl_glut.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_widgets.cpp: No such file or directory
+compilation terminated.
+cc1plus: fatal error: ../../../../../../contrib/imgui//imgui_impl_opengl2.cpp: No such file or directory
+compilation terminated.
+../../../../src/chapt05/ambient/ambient.cpp:9:10: fatal error: imgui.h: No such file or directory
+    9 | #include "imgui.h"
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [Makefile:22: ambient] Error 1
+make: Leaving directory '/tmp/sb4-build/examples/projects/linux/chapt05/ambient'

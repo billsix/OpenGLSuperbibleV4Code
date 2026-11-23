@@ -1,0 +1,33 @@
+make: Entering directory '/superbible4/build/sb4/examples/projects/linux/chapt16/vertexshaders'
+gcc  -g -I /usr/include -I /usr/local/include/GL -I ../../../../src/shared -I/usr/include/GL -DGL_GLEXT_PROTOTYPES  -lstdc++ -o vertexshaders -L /usr/local/lib ../../../../src/chapt16/vertexshaders/vertexshaders.cpp ../../../../src/shared/math3d.cpp ../../../../src/shared/gltools.cpp ../../../../src/shared/GLee.c -lglut -lGL -lGLU -lm
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:26:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   26 | char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
+      |                                     ^~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:26:48: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   26 | char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
+      |                                                ^~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:26:59: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   26 | char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
+      |                                                           ^~~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:26:71: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   26 | char *shaderNames[TOTAL_SHADERS] = {"simple",  "diffuse", "specular", "sepspec",
+      |                                                                       ^~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:27:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   27 |                                     "texspec", "3lights", "fogcoord", "fog",
+      |                                     ^~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:27:48: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   27 |                                     "texspec", "3lights", "fogcoord", "fog",
+      |                                                ^~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:27:59: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   27 |                                     "texspec", "3lights", "fogcoord", "fog",
+      |                                                           ^~~~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:27:71: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   27 |                                     "texspec", "3lights", "fogcoord", "fog",
+      |                                                                       ^~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:28:37: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   28 |                                     "ptsize",  "stretch"};
+      |                                     ^~~~~~~~
+../../../../src/chapt16/vertexshaders/vertexshaders.cpp:28:48: warning: ISO C++ forbids converting a string constant to 'char*' [-Wwrite-strings]
+   28 |                                     "ptsize",  "stretch"};
+      |                                                ^~~~~~~~~
+make: Leaving directory '/superbible4/build/sb4/examples/projects/linux/chapt16/vertexshaders'

@@ -34,7 +34,7 @@ came before the CMake work.
 
 88 of 88 targets build. With an `openbox` window manager running, 85 stay alive for 5 seconds under Xvfb. The three
 that do not: `motionblur` (Xvfb has no accumulation-buffer GLX configuration), `imaging` (exits 0), and `chapt21/fonts`
-(below). The first run had no window manager (Fedora 45 has no `twm` package, and `--skip-unavailable` hid that), which
+(below); all three were fixed afterwards, giving 88 of 88 alive (`tasks/archive/2026/11/23/headless-demo-gaps.md`). The first run had no window manager (Fedora 45 has no `twm` package, and `--skip-unavailable` hid that), which
 made four `glutSetWindowTitle` demos die with `BadAtom` (81 alive); the Makefile baseline had the same flaw (75 alive of
 81 built). The container now installs `openbox`.
 

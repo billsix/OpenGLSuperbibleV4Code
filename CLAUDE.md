@@ -47,7 +47,8 @@ per-platform trees under `examples/projects/` remain until the CMake build is ve
 
 `make image` / `make shell` / `make shell-exec SCRIPT=...|CMD=...` / `make format`: a Fedora 45 image with gcc, freeglut,
 Mesa, Xvfb and clang-format; the source is bind-mounted, builds go to the ignored `build/`. `tools/run_cmake_demos_xvfb.sh`
-runs every built demo headless. The audit's one-shot scripts and snapshot data are in git history under
+runs every built demo headless (`BUILD_DIR=cmake-ctr`
+for a container-only build tree: a host build in `build/cmake` and a container build cannot share one CMake cache). The audit's one-shot scripts and snapshot data are in git history under
 `tasks/adhoc/cmake-crossplatform-build/` (removed when the task archived).
 
 ## Review records
@@ -58,7 +59,7 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 
 Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
 CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Open: `tasks/cmake-verify-macos-windows.md`,
-`tasks/glut-shim-on-glfw.md`, `tasks/python-port-branch.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
+`tasks/glut-shim-on-glfw.md`, `tasks/python-port-into-master.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions
 

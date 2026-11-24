@@ -23,6 +23,8 @@ from OpenGL.constant import Constant
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 import _primitives  # noqa: E402
 
 camera_y: float = 0.0
@@ -66,7 +68,7 @@ cube_targets: list[Constant] = [
 
 
 def load_image(fname: str) -> "tuple[np.ndarray, int, int, Constant]":
-    img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+    img: np.ndarray = np.flipud(iio.imread(os.path.join(ASSET_DIR, fname)))
     img_size: tuple[int, ...] = img.shape[:2]
     fmt: Constant = (
         GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB

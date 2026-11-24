@@ -7,9 +7,12 @@ verbatim upstream import; everything since is Bill's revival work (build fixes o
 Linux/macOS/Windows, a Dear ImGui retrofit into 4 demos, a Windows include-order fix, two GLSL
 specular fixes, clang-format hygiene). Do not treat it as a maintained product or "modernize" it.
 
-**Why it's mounted here:** it's the C++ source the mvp book's `ports/openglsuperbiblev4/` Python
-demos are ported from. We consult it to compare the original C++ behavior against the (diverged)
-Python ports — e.g. the `chapt18/pixbufobj` "one image vs. multiple spinning images" issue.
+**Two languages, one branch:** `examples/` is the C++ (frozen at the 4th edition); `python/` is a faithful Python
+port of every demo (moved here 2026-11-24 from the course repository, `github.com/billsix/modelviewprojection`, with
+its history), reading the same textures and shaders from `examples/src/`. Each half is the other's oracle: compare the
+C++ against the (diverged) port, e.g. the `chapt18/pixbufobj` "one image vs. multiple spinning images" issue. The
+course repository keeps its own SuperBible-derived demos (`demo19a`–`19e`, `22`, `22a`, `22b`, `23`, `24`) and does not
+read anything from here.
 
 ## Reference docs — read the relevant one before working in an area
 
@@ -51,6 +54,19 @@ runs every built demo headless (`BUILD_DIR=cmake-ctr`
 for a container-only build tree: a host build in `build/cmake` and a container build cannot share one CMake cache). The audit's one-shot scripts and snapshot data are in git history under
 `tasks/adhoc/cmake-crossplatform-build/` (removed when the task archived).
 
+## Python port (`python/`, added 2026-11-24)
+
+`make run DEMO=chapt01/block` runs the Python port, `make run-c DEMO=chapt01/block` the C++ original (X11; the demos'
+GLee loader goes through GLX), `make list` lists the ports, `make check` imports every module with no display,
+`make type-check` runs the annotate-every-binding checker (`ty` is not a gate: glfw/imgui stub friction), `make format`
+runs clang-format and ruff (`ruff.toml`), `make update-pins` re-resolves `python/constraints.txt`. One image serves both
+halves; the Python `/venv` is built by `entrypoint/03-install-python.sh`. `tools/run_python_demos_xvfb.sh` runs every
+port headless. A demo reads its assets through `_common.asset_dir()` (the same directory under `examples/src/`); the
+only asset files beside the Python are `python/chapt15/shaders/shaders.{vs,fs}`. Read
+`tasks/reference/python-port/translation-guide.md` before porting or bulk-editing the port and
+`gl-and-imgui-gotchas.md` there before debugging GL or imgui. The Python follows the maintainer's Python standard
+(annotate every binding, Google docstrings), not the "don't modernize" rule below, which covers `examples/` only.
+
 ## Review records
 
 Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake task; frozen).
@@ -59,12 +75,14 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 
 Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
 CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Open: `tasks/cmake-verify-macos-windows.md`,
-`tasks/glut-shim-on-glfw.md`, `tasks/python-port-into-master.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
+`tasks/glut-shim-on-glfw.md`, and the port's own: `tasks/superbible-full-port.md` (hardware punchlist),
+`tasks/ports-ux-pass.md`, `tasks/pixbufobj-port-fidelity.md`, `tasks/v4-chapt14-shadowmap-fix.md`,
+`tasks/curate-superbible-v4-demos.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions
 
-- It's a teaching artifact frozen at the 4th edition; **don't refactor or modernize** the C++ (formatting is Google style
-  through `.clang-format`; `make format` applies it).
+- It's a teaching artifact frozen at the 4th edition; **don't refactor or modernize** the C++ under `examples/`
+  (formatting is Google style through `.clang-format`; `make format` applies it).
 - Keep source edits minimal so the code stays like the book, but fixing a program that does not work is a valid reason to
   edit it (maintainer's rule, William Emerison Six <billsix@gmail.com>, 2026-11-23). Edits so far: `windows.h` guard in
   `chapt04/transformgl`, `GL/glx.h` and a font fallback in `chapt21/fonts`, a texture replacement for the accumulation

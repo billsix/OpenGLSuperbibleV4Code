@@ -25,6 +25,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 TEXTURE_BRICK: int = 0
 TEXTURE_FLOOR: int = 1
 TEXTURE_CEILING: int = 2
@@ -66,7 +68,7 @@ def load_textures() -> None:
     i: int
     fname: str
     for i, fname in enumerate(texture_files):
-        img: np.ndarray = iio.imread(os.path.join(PWD, fname))
+        img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, fname))
         img = np.flipud(img)
         img_size: tuple[int, ...] = img.shape[:2]
         fmt: Constant

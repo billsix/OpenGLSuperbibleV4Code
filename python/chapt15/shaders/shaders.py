@@ -190,9 +190,9 @@ def setup_rc() -> None:
     GL.glShadeModel(GL.GL_SMOOTH)
 
     f: typing.TextIO
-    with open(os.path.join(PWD, "shaders", "shaders.vs")) as f:
+    with open(os.path.join(PWD, "shaders.vs")) as f:
         vs_src: str = f.read()
-    with open(os.path.join(PWD, "shaders", "shaders.fs")) as f:
+    with open(os.path.join(PWD, "shaders.fs")) as f:
         fs_src: str = f.read()
 
     state.v_shader = shaders_mod.compileShader(vs_src, GL.GL_VERTEX_SHADER)

@@ -24,6 +24,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 camera_y: float = 0.0
 
 
@@ -68,7 +70,7 @@ def load_textures() -> None:
     i: int
     fname: str
     for i, fname in enumerate(texture_files):
-        img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+        img: np.ndarray = np.flipud(iio.imread(os.path.join(ASSET_DIR, fname)))
         img_size: tuple[int, ...] = img.shape[:2]
         fmt: Constant = (
             GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB

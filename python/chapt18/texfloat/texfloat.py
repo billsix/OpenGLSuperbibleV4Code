@@ -30,6 +30,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 CLAMPED: int = 0
 TRIVIAL: int = 1
 IRIS: int = 2
@@ -89,7 +91,7 @@ state: AppState = AppState()
 
 
 def prepare_shader(n: int) -> None:
-    fname: str = os.path.join(PWD, "shaders", f"{shader_names[n]}.fs")
+    fname: str = os.path.join(ASSET_DIR, "shaders", f"{shader_names[n]}.fs")
     f: typing.TextIO
     with open(fname) as f:
         fs_src: str = f.read()
@@ -127,7 +129,7 @@ def setup_textures(which: int) -> None:
     state.current_image = which
     exr: OpenEXR.File
     with OpenEXR.File(
-        os.path.join(PWD, "openexr-images", exr_files[which])
+        os.path.join(ASSET_DIR, "openexr-images", exr_files[which])
     ) as exr:
         # The test images store color as one interleaved "RGBA" or "RGB"
         # channel of half floats, shape (height, width, channels), top row

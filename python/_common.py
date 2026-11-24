@@ -1,7 +1,10 @@
 """Shared helpers for the SuperBible ports.
 
-All ports under ``/mvp/ports/openglsuperbiblev4/chaptNN/<demo>/<demo>.py``
-import this module to pick up:
+All ports under ``python/chaptNN/<demo>/<demo>.py`` import this module to
+pick up:
+
+  - ``asset_dir(demo_dir)``            — the demo's textures and shaders: the
+    same chapter and demo directory under ``examples/src/``, next to the C++.
 
   - ``resolve_default_window_size()``  — pick a sensible initial size
     (1920x1080 capped to the primary monitor, or 90% of monitor on
@@ -42,13 +45,14 @@ import this module to pick up:
     Controls-menu content: mode display, focus selector, current
     state, key reminders. Pass it as ``draw_menubar``'s ``controls``.
 
-Each demo imports this by prepending the ports root to ``sys.path``.
-For a demo at ``chaptNN/<demo>/<demo>.py`` (two levels under the ports
-root) the canonical pattern is::
+Each demo imports this by prepending the ``python/`` root to ``sys.path``.
+For a demo at ``chaptNN/<demo>/<demo>.py`` (two levels under that root)
+the canonical pattern is::
 
     PWD = os.path.dirname(os.path.abspath(__file__))
     sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
     import _common
+    ASSET_DIR: str = _common.asset_dir(PWD)
 
 (Same convention as ``chapt11/_thunderbird_data.py``, but one level
 higher in the tree.)
@@ -68,6 +72,26 @@ import glfw
 import OpenGL.GL as GL
 from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PYTHON_ROOT: str = os.path.dirname(os.path.abspath(__file__))
+
+
+def asset_dir(demo_dir: str) -> str:
+    """Return the directory that holds a demo's textures and shaders.
+
+    The assets are the ones the C++ demo already uses, so the Python demo at
+    ``python/<chapter>/<demo>/`` reads ``examples/src/<chapter>/<demo>/``.
+
+    Args:
+        demo_dir: The demo's own directory (``os.path.dirname(__file__)``).
+
+    Returns:
+        The absolute path of the matching directory under ``examples/src/``.
+    """
+    relative: str = os.path.relpath(demo_dir, PYTHON_ROOT)
+    repo_root: str = os.path.dirname(PYTHON_ROOT)
+    return os.path.join(repo_root, "examples", "src", relative)
+
 
 WINDOW_DEFAULT: tuple[int, int] = (1920, 1080)
 
@@ -270,8 +294,8 @@ def menu_action(
 # Camera (walk-around with optional focus-orbit on a scene object)
 # ---------------------------------------------------------------------------
 #
-# State follows Bill's convention from
-# /mvp/src/modelviewprojection/mvpvisualization/: world-space
+# State follows Bill's convention from the course repository
+# (github.com/billsix/modelviewprojection, mvpvisualization/): world-space
 # position + angle rotated around Y + angle rotated around X (NOT yaw / pitch
 # / roll; we don't have roll). When ``focus_index`` is -1 the camera is in
 # walk-around mode and ``position`` is the world-space camera location. When

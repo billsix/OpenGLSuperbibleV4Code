@@ -21,15 +21,11 @@ from gacalc.g3 import Vector
 from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 
-from modelviewprojection.mathutils import (
-    find_normal,
-    plane_equation,
-)
-
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 import _primitives  # noqa: E402
+from _geometry import find_normal, plane_equation  # noqa: E402
 
 ambient_light: tuple[float, float, float, float] = (0.3, 0.3, 0.3, 1.0)
 diffuse_light: tuple[float, float, float, float] = (0.7, 0.7, 0.7, 1.0)

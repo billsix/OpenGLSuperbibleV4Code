@@ -13,7 +13,7 @@ import sys
 def main() -> None:
     print("ES_example is an OpenGL ES (embedded) sample.")
     print("Requires EGL/ES bindings that aren't available via GLFW+PyOpenGL.")
-    print("See /superbible/examples/src/chapt22/ES_example/ for the original.")
+    print("See examples/src/chapt22/ES_example/ for the original.")
     sys.exit(0)
 
 

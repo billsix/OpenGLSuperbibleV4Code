@@ -32,6 +32,8 @@ from OpenGL.constant import Constant
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 import _primitives  # noqa: E402
 
 ambient_light: list[float] = [0.4, 0.4, 0.4, 1.0]
@@ -424,7 +426,7 @@ def setup_textures() -> None:
     i: int
     name: str
     for i, name in enumerate(files):
-        img: np.ndarray = iio.imread(os.path.join(PWD, name))
+        img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, name))
         img = np.flipud(img)
         if img.ndim == 3 and img.shape[2] == 4:
             img = img[:, :, :3]

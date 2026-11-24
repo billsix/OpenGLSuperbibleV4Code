@@ -20,11 +20,12 @@ from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 from OpenGL.constant import Constant
 
-from modelviewprojection.mathutils import find_normal
-
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+from _geometry import find_normal  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 
 
 @dataclasses.dataclass
@@ -48,7 +49,7 @@ state: AppState = AppState()
 
 
 def load_texture() -> None:
-    img: np.ndarray = iio.imread(os.path.join(PWD, "stone.tga"))
+    img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, "stone.tga"))
     img = np.flipud(img)
     img_size: tuple[int, ...] = img.shape[:2]
     fmt: Constant = (

@@ -2,7 +2,8 @@
 #
 # 01-install-base.sh -- install the always-needed Fedora packages for this project: the C/C++ toolchain, the
 # GLUT/GL/GLU development headers every demo needs, cmake and ninja for the build-system work, clang-format
-# for the formatting gate, and python/git for the audit scripts. One package group per script, no options;
+# for the formatting gate, python/git for the audit scripts, and uv for the Python port's virtual environment. One
+# package group per script, no options;
 # the same packages during `podman build` or on a bare Fedora host.
 set -uo pipefail
 
@@ -40,6 +41,7 @@ dnf install -y --skip-unavailable \
     ripgrep \
     SDL2-devel \
     tmux \
+    uv \
     which || status=1
 
 exit $status

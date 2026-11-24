@@ -26,17 +26,18 @@ from gacalc.g3 import Vector
 from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 
-from modelviewprojection.mathutils import plane_equation
-
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+from _geometry import plane_equation  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 
 NUM_SPHERES: int = 30
 GROUND_TEXTURE: int = 0
 TORUS_TEXTURE: int = 1
 SPHERE_TEXTURE: int = 2
-texture_files: list[str] = ["grass.tga", "wood.tga", "orb.tga"]
+texture_files: list[str] = ["Grass.tga", "Wood.tga", "Orb.tga"]
 
 light_pos: list[float] = [-100.0, 100.0, 50.0, 1.0]
 no_light: list[float] = [0.0, 0.0, 0.0, 0.0]
@@ -302,7 +303,7 @@ def setup_rc() -> None:
     i: int
     name: str
     for i, name in enumerate(texture_files):
-        img: np.ndarray = iio.imread(os.path.join(PWD, name))
+        img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, name))
         img = np.flipud(img)
         if img.ndim == 3 and img.shape[2] == 4:
             img = img[:, :, :3]

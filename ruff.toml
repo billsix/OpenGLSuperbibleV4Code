@@ -1,0 +1,21 @@
+# Formatter and linter settings for the Python port (python/) and the Python tools (tools/). The C and C++ are
+# formatted by clang-format (.clang-format). entrypoint/format.sh and the `make` targets read this one file.
+line-length = 80
+# The CMake generator predates this configuration and is not part of the Python port.
+extend-exclude = ["tools/gen_chapter_cmake.py"]
+
+[lint]
+select = [
+    "E", "F", "I",
+    "B006", "B007", "B008", "UP007", "UP035",
+    "S311", "S602", "T201",
+    "N",
+]
+
+[lint.per-file-ignores]
+# The demos are run by path: each inserts the python/ root into sys.path to find `_common`, `_geometry` and
+# `_primitives`, so its imports follow that statement (E402). Game-style randomness is not cryptography (S311), and
+# the demos print on purpose (shader logs, teaching output; T201).
+"python/**" = ["S311", "T201", "E402"]
+# Command-line tools: printing diagnostics to stdout is their job.
+"tools/**" = ["T201"]

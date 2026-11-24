@@ -32,6 +32,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 
 @dataclasses.dataclass
 class AppState:
@@ -322,7 +324,7 @@ def setup_rc() -> None:
     GL.glTexGeni(GL.GL_T, GL.GL_TEXTURE_GEN_MODE, GL.GL_OBJECT_LINEAR)
     GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
 
-    img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, "logo.tga")))
+    img: np.ndarray = np.flipud(iio.imread(os.path.join(ASSET_DIR, "logo.tga")))
     shape: tuple[int, ...] = img.shape[:2]
     fmt: Constant = (
         GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB

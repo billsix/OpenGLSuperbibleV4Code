@@ -25,8 +25,6 @@ from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 from OpenGL.constant import Constant
 
-from modelviewprojection.mathutils import plane_equation
-
 STAGE_LABELS: tuple[str, ...] = (
     "0  Wireframe cube",
     "1  Wireframe cube + hidden-line removal",
@@ -55,6 +53,9 @@ ground: list[Vector] = [
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+from _geometry import plane_equation  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 
 
 @dataclasses.dataclass
@@ -437,10 +438,10 @@ def setup_rc() -> None:
     GL.glClearColor(0.0, 0.0, 0.0, 1.0)
     GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
 
-    state.textures[0] = load_tga_texture(os.path.join(PWD, "floor.tga"))
-    state.textures[1] = load_tga_texture(os.path.join(PWD, "Block4.tga"))
-    state.textures[2] = load_tga_texture(os.path.join(PWD, "Block5.tga"))
-    state.textures[3] = load_tga_texture(os.path.join(PWD, "Block6.tga"))
+    state.textures[0] = load_tga_texture(os.path.join(ASSET_DIR, "floor.tga"))
+    state.textures[1] = load_tga_texture(os.path.join(ASSET_DIR, "Block4.tga"))
+    state.textures[2] = load_tga_texture(os.path.join(ASSET_DIR, "Block5.tga"))
+    state.textures[3] = load_tga_texture(os.path.join(ASSET_DIR, "Block6.tga"))
 
 
 def change_size(w: int, h: int) -> None:

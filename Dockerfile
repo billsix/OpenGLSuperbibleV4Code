@@ -2,7 +2,8 @@ FROM registry.fedoraproject.org/fedora:45
 
 # System-package installation lives in per-group scripts (entrypoint/0N-install-*.sh), host-runnable with
 # no container runtime. The dnf cache mount, the tsflags sed and keepcache are build plumbing and stay here.
-COPY entrypoint/01-install-base.sh entrypoint/02-install-graphics.sh /usr/local/bin/
+COPY entrypoint/01-install-base.sh entrypoint/02-install-graphics.sh entrypoint/03-install-python.sh /usr/local/bin/
+COPY python/requirements.txt python/constraints.txt /tmp/python/
 
 RUN --mount=type=cache,target=/var/cache/libdnf5 \
     --mount=type=cache,target=/var/lib/dnf \
@@ -10,3 +11,8 @@ RUN --mount=type=cache,target=/var/cache/libdnf5 \
     echo "keepcache=True" >> /etc/dnf/dnf.conf && \
     /usr/local/bin/01-install-base.sh && \
     /usr/local/bin/02-install-graphics.sh
+
+# The Python port's virtual environment (/venv), built from the pinned lock file; the port's source is bind-mounted,
+# never baked.
+RUN /usr/local/bin/03-install-python.sh /tmp/python/requirements.txt /tmp/python/constraints.txt && \
+    rm -r /tmp/python

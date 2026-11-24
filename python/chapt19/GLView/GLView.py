@@ -12,7 +12,7 @@ import sys
 
 def main() -> None:
     print("GLView is a Win32 MFC sample (no portable equivalent).")
-    print("See /superbible/examples/src/chapt19/GLView/ for the original")
+    print("See examples/src/chapt19/GLView/ for the original")
     print("(~928 lines across GLView.cpp, GLViewDlg.cpp, GLWindow.cpp,")
     print("GLViewPixFormatDlg.cpp).")
     sys.exit(0)

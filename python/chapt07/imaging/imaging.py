@@ -29,6 +29,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 MODE_RAW: int = 1
 MODE_CONTRAST: int = 2
 MODE_INVERT: int = 3
@@ -72,7 +74,7 @@ KERNEL_EMBOSS: np.ndarray = np.array(
 
 
 def load_image() -> None:
-    img: np.ndarray = iio.imread(os.path.join(PWD, "horse.tga"))
+    img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, "horse.tga"))
     img = np.flipud(img)
     img_size: tuple[int, ...] = img.shape[:2]
     state.image_h = img_size[0]

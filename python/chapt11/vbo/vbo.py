@@ -28,6 +28,8 @@ PWD = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 sys.path.insert(0, os.path.dirname(PWD))
 import _common  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 from _thunderbird_data import load_model  # noqa: E402
 
 PWD: str = os.path.dirname(os.path.abspath(__file__))
@@ -162,7 +164,7 @@ def load_cube_map() -> int:
     i: int
     fname: str
     for i, fname in enumerate(cube_faces):
-        img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+        img: np.ndarray = np.flipud(iio.imread(os.path.join(ASSET_DIR, fname)))
         shape: tuple[int, ...] = img.shape[:2]
         fmt: Constant = (
             GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
@@ -267,10 +269,10 @@ def setup_rc() -> None:
     GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
 
     state.texture_objects[BODY_TEXTURE] = load_texture(
-        os.path.join(PWD, "body.tga")
+        os.path.join(ASSET_DIR, "body.tga")
     )
     state.texture_objects[GLASS_TEXTURE] = load_texture(
-        os.path.join(PWD, "glass.tga")
+        os.path.join(ASSET_DIR, "glass.tga")
     )
     state.texture_objects[CUBE_MAP] = load_cube_map()
 
@@ -299,7 +301,7 @@ def setup_rc() -> None:
     # and just enable RESCALE_NORMAL.
     GL.glEnable(GL.GL_RESCALE_NORMAL)
 
-    model: dict[str, np.ndarray] = load_model(PWD)
+    model: dict[str, np.ndarray] = load_model(ASSET_DIR)
     body_mesh: tuple[np.ndarray, np.ndarray, np.ndarray] = expand_mesh(
         model["face_indices"],
         model["vertices"],

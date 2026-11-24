@@ -21,6 +21,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 
 @dataclasses.dataclass
 class AppState:
@@ -38,7 +40,7 @@ state: AppState = AppState()
 
 
 def load_image() -> None:
-    img: np.ndarray = iio.imread(os.path.join(PWD, "Fire.tga"))
+    img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, "Fire.tga"))
     img = np.flipud(img)  # OpenGL bottom-up
     img_size: tuple[int, ...] = img.shape[:2]
     state.image_h = img_size[0]

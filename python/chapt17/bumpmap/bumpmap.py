@@ -32,6 +32,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 BUMPMAP: int = 0
 SHOWBUMP: int = 1
 TOTAL_SHADER_SETS: int = 2
@@ -160,9 +162,9 @@ def create_pyramid_map() -> None:
 def prepare_shader(n: int) -> None:
     name: str = shader_names[n]
     f: typing.TextIO
-    with open(os.path.join(PWD, "shaders", f"{name}.vs")) as f:
+    with open(os.path.join(ASSET_DIR, "shaders", f"{name}.vs")) as f:
         vs_src: str = f.read()
-    with open(os.path.join(PWD, "shaders", f"{name}.fs")) as f:
+    with open(os.path.join(ASSET_DIR, "shaders", f"{name}.fs")) as f:
         fs_src: str = f.read()
     state.v_shader[n] = shaders_mod.compileShader(vs_src, GL.GL_VERTEX_SHADER)
     state.f_shader[n] = shaders_mod.compileShader(fs_src, GL.GL_FRAGMENT_SHADER)

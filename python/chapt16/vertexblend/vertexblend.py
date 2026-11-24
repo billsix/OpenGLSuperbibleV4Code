@@ -30,6 +30,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 camera_zoom: float = 0.4
 light_pos: np.ndarray = np.array([-50.0, 100.0, 50.0, 1.0], dtype=np.float32)
 
@@ -101,7 +103,7 @@ def create_pow_map(r: float, g: float, b: float) -> None:
 
 
 def prepare_shader() -> None:
-    fname: str = os.path.join(PWD, "shaders", "skinning.vs")
+    fname: str = os.path.join(ASSET_DIR, "shaders", "skinning.vs")
     f: typing.TextIO
     with open(fname) as f:
         vs_src: str = f.read()

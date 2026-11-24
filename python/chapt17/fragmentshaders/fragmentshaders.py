@@ -30,6 +30,8 @@ from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 import _primitives  # noqa: E402
 
 SIMPLE: int = 0
@@ -149,7 +151,7 @@ TORUS: _primitives.Mesh = _primitives.build_torus(16.0, 8.0, 50, 50)
 
 
 def prepare_shader(n: int) -> None:
-    fname: str = os.path.join(PWD, "shaders", f"{shader_names[n]}.fs")
+    fname: str = os.path.join(ASSET_DIR, "shaders", f"{shader_names[n]}.fs")
     f: typing.TextIO
     with open(fname) as f:
         fs_src: str = f.read()

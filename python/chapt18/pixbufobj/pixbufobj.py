@@ -31,6 +31,8 @@ PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
 
+ASSET_DIR: str = _common.asset_dir(PWD)
+
 usage_hint: int = GL.GL_STREAM_COPY
 
 
@@ -86,7 +88,7 @@ def _check_gl(label: str) -> None:
 
 
 def setup_textures() -> None:
-    img: np.ndarray = iio.imread(os.path.join(PWD, "reservoir.tga"))
+    img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, "reservoir.tga"))
     img = np.flipud(img)
     if img.ndim == 3 and img.shape[2] == 4:
         img = img[:, :, :3]

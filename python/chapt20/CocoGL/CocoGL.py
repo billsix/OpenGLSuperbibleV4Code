@@ -10,7 +10,7 @@ import sys
 
 def main() -> None:
     print("CocoGL is an Objective-C / Cocoa sample (Mac only).")
-    print("See /superbible/examples/src/chapt20/CocoGL/ for the original.")
+    print("See examples/src/chapt20/CocoGL/ for the original.")
     sys.exit(0)
 
 

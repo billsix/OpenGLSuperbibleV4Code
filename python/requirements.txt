@@ -1,0 +1,13 @@
+# Direct dependencies of the Python port. python/constraints.txt pins the whole resolved set (direct and
+# transitive); regenerate it with `make update-pins`.
+gacalc==0.1.1
+glfw==2.11.0
+ImageIO==2.38.1
+imgui-bundle[glfw]==1.93.0
+numpy==2.5.4
+OpenEXR==3.5.4
+PyOpenGL==3.1.10
+PyOpenGL-accelerate==3.1.10
+# Gates (formatter, linter, type checker)
+ruff==0.17.4
+ty==0.0.99

@@ -14,7 +14,7 @@ import sys
 
 def main() -> None:
     print("RThread is a Win32-only multithreaded WGL demo.")
-    print("See /superbible/examples/src/chapt19/RThread/RThread.cpp")
+    print("See examples/src/chapt19/RThread/RThread.cpp")
     print("for the original (~376 lines).")
     print("Python equivalent would require a different design (GLFW")
     print("requires that all GL calls happen on the same thread that")

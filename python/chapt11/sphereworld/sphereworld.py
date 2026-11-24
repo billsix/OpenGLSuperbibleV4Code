@@ -22,11 +22,12 @@ from imgui_bundle import imgui
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 from OpenGL.constant import Constant
 
-from modelviewprojection.mathutils import plane_equation
-
 PWD: str = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
 import _common  # noqa: E402
+from _geometry import plane_equation  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
 
 NUM_SPHERES: int = 30
 camera_y: float = 0.0
@@ -201,7 +202,7 @@ def load_textures() -> None:
     i: int
     fname: str
     for i, fname in enumerate(texture_files):
-        img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+        img: np.ndarray = np.flipud(iio.imread(os.path.join(ASSET_DIR, fname)))
         shape: tuple[int, ...] = img.shape[:2]
         fmt: Constant = (
             GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB

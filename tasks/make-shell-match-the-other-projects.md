@@ -1,6 +1,6 @@
 # Give `make shell` the shell configuration of the other projects, and hide the venv name from the prompt
 
-**Status:** proposed — needs go-ahead (filed 2026-11-24)
+**Status:** proposed — needs go-ahead (filed 2026-11-24; open questions answered 2026-11-24)
 **Priority:** 6
 **Difficulty:** 2
 **Created:** 2026-11-24
@@ -55,7 +55,9 @@ then `└─λ`, `git config user.name` and `tmux` and `gpg --list-keys` work in
 
 ## Open questions
 
-1. Include the format-on-exit hook? It rewrites files with clang-format and ruff every time the shell exits. Recommend: yes, as in every other
-   project of the template; the formatters are idempotent and the C++ already has a `make format` gate.
-2. Also vendor `.emacs.d` as the other projects do (a large vendored `elpa` tree and its own update target)? Recommend: no, a separate task
-   if wanted; this task is the shell configuration and the prompt only.
+Both answered 2026-11-24 by the maintainer, William Emerison Six <billsix@gmail.com>:
+
+1. Include the format-on-exit hook? It rewrites files with clang-format and ruff every time the shell exits. Answered: **yes** (recommended: as in every other
+   project of the template; the formatters are idempotent and the C++ already has a `make format` gate.)
+2. Also vendor `.emacs.d` as the other projects do (a large vendored `elpa` tree and its own update target)? Answered: **no** (recommended: a separate task
+   if wanted; this task is the shell configuration and the prompt only.)

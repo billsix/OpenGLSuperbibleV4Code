@@ -9,9 +9,26 @@ PODMAN_RUN_FLAGS ?= $(if $(filter 1,$(NESTED_PODMAN)),--cgroups=disabled)
 
 # The whole repo is mounted at /superbible4, so a script under any path resolves.
 REPO_MOUNT = /superbible4
+# The maintainer's tmux, git and gpg configuration, mounted when present (a symlinked dotfile by its real path). :Z relabels the host
+# files for SELinux, as in the other projects of this template.
+TMUX_FILE := $(HOME)/.tmux.conf
+TMUX_REAL_PATH := $(shell readlink -f $(TMUX_FILE))
+TMUX_MOUNT := $(shell if [ -f $(TMUX_REAL_PATH) ]; then echo "-v $(TMUX_REAL_PATH):/root/.tmux.conf:Z" ; fi)
+
+GITCONFIG_FILE := $(HOME)/.gitconfig
+GITCONFIG_REAL_PATH := $(shell readlink -f $(GITCONFIG_FILE))
+GITCONFIG_MOUNT := $(shell if [ -f $(GITCONFIG_REAL_PATH) ]; then echo "-v $(GITCONFIG_REAL_PATH):/root/.gitconfig:Z" ; fi)
+
+GNUPG_FILE := $(HOME)/.gnupg
+GNUPG_REAL_PATH := $(shell readlink -f $(GNUPG_FILE))
+GNUPG_MOUNT := $(shell if [ -d $(GNUPG_REAL_PATH) ]; then echo "-v $(GNUPG_REAL_PATH):/root/.gnupg:Z" ; fi)
+
 FILES_TO_MOUNT = -v $(shell pwd):$(REPO_MOUNT)/:Z \
                  -v ./entrypoint/shell.sh:/usr/local/bin/shell.sh:Z \
-                 -v ./entrypoint/format.sh:/usr/local/bin/format.sh:Z
+                 -v ./entrypoint/format.sh:/usr/local/bin/format.sh:Z \
+                 $(TMUX_MOUNT) \
+                 $(GITCONFIG_MOUNT) \
+                 $(GNUPG_MOUNT)
 
 # The demos open a window: pass the host display through for `make shell` and `make run`.
 # An X11 or XWayland server refuses clients that lack its authority file ("Authorization required"), so XAUTHORITY is passed

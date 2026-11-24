@@ -1,6 +1,6 @@
 # Port every SuperBible v4 demo to Python under `python/`
 
-*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
+*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/archive/2026/11/24/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
 
 **Status:** the port itself is **COMPLETE** (2026-04-28): ~101 demo files
 across chapt01–chapt22 — chapt01–18 real ports, chapt19 mostly real plus

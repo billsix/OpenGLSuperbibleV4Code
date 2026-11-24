@@ -1,6 +1,6 @@
 # Plan: SuperBible ports UX pass — phased execution order
 
-*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
+*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/archive/2026/11/24/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
 
 **Status:** Phase 1 (#33 + #34) ✅ **done 2026-04-28**. **Phase 2 IN PROGRESS (2026-07-25):** the
 `_common.Camera` helper already exists and is sound (the postmortem's "lost in the reset,

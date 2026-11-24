@@ -1,6 +1,6 @@
 # Curate which OpenGL SuperBible v4 demos are worth studying; log it
 
-*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
+*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/archive/2026/11/24/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
 
 **Status:** proposed — needs go-ahead
 **Priority:** 7

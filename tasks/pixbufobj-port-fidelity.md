@@ -1,6 +1,6 @@
 # pixbufobj port renders "multiple spinning images" (not like the C++)
 
-*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
+*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/archive/2026/11/24/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
 
 **Status:** open — **REPRODUCED on the maintainer's hardware GPU 2026-08-31** ("spinning but
 not clean", observed during the PBO-crash verification run; still does NOT reproduce in the

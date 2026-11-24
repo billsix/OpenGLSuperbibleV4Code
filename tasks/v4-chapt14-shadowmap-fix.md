@@ -1,6 +1,6 @@
 # Plan: fix `chapt14/shadowmap` (SuperBible v4 port) — shadows don't render
 
-*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
+*Moved here on 2026-11-24 from `github.com/billsix/modelviewprojection` with the Python port (`tasks/archive/2026/11/24/python-port-into-master.md`); paths and references are rewritten for this repository. Earlier history is in that repository's git log and archive.*
 
 **Status:** NOT done — the one v4 demo that didn't land in the 2026-05-13
 session (two diagnoses were tried and reverted by Bill). Brought into master

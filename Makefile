@@ -13,13 +13,26 @@ FILES_TO_MOUNT = -v $(shell pwd):$(REPO_MOUNT)/:Z \
                  -v ./entrypoint/shell.sh:/usr/local/bin/shell.sh:Z \
                  -v ./entrypoint/format.sh:/usr/local/bin/format.sh:Z
 
-# The demos open a window: pass the host display through for `make shell`.
+# The demos open a window: pass the host display through for `make shell` and `make run`.
+# An X11 or XWayland server refuses clients that lack its authority file ("Authorization required"), so XAUTHORITY is passed
+# through and the file mounted when it exists.
+XAUTH_FLAGS := $(if $(XAUTHORITY),$(shell [ -f "$(XAUTHORITY)" ] && echo '-e XAUTHORITY=$(XAUTHORITY) -v $(XAUTHORITY):$(XAUTHORITY):ro'))
 USE_X = -e DISPLAY=$(DISPLAY) \
+	$(XAUTH_FLAGS) \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
 	--security-opt label=type:container_runtime_t
-WAYLAND_FLAGS_FOR_CONTAINER = -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}" \
+# GPU render node for hardware GL (Wayland EGL / X11); skipped if /dev/dri is absent.
+DRI_DEVICE := $(shell [ -d /dev/dri ] && echo "--device /dev/dri")
+# Wayland for the Python demos. PyPI glfw ships an X11-only and a Wayland-only build and picks one from XDG_SESSION_TYPE
+# (unset in the container, so it chose X11 and died with "Failed to open display"). The Wayland-only build lacks
+# `glfwGetX11Window`, which imgui_bundle needs, and both bind the soname `libglfw.so.3`. So PYGLFW_LIBRARY points PyPI glfw at
+# the Fedora system libglfw, a dual X11 + Wayland build (the `glfw` rpm); GLFW then picks Wayland at runtime from WAYLAND_DISPLAY.
+WAYLAND_FLAGS_FOR_CONTAINER = -e "XDG_SESSION_TYPE=wayland" \
+                              -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}" \
                               -e "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}" \
-                              -v "${XDG_RUNTIME_DIR}:${XDG_RUNTIME_DIR}"
+                              -e "PYGLFW_LIBRARY=/usr/lib64/libglfw.so.3" \
+                              -v "${XDG_RUNTIME_DIR}:${XDG_RUNTIME_DIR}" \
+                              $(DRI_DEVICE)
 
 # shell / shell-exec share ONE run invocation so the two cannot drift. shell is interactive; shell-exec
 # runs a script or command with no TTY.

@@ -61,7 +61,8 @@ GLee loader goes through GLX), `make list` lists the ports, `make check` imports
 `make type-check` runs the annotate-every-binding checker (`ty` is not a gate: glfw/imgui stub friction), `make format`
 runs clang-format and ruff (`ruff.toml`), `make update-pins` re-resolves `python/constraints.txt`. One image serves both
 halves; the Python `/venv` is built by `entrypoint/03-install-python.sh`. `tools/run_python_demos_xvfb.sh` runs every
-port headless. A demo reads its assets through `_common.asset_dir()` (the same directory under `examples/src/`); the
+port headless. The display flags (Wayland socket, `XDG_SESSION_TYPE`, `PYGLFW_LIBRARY` = Fedora's dual-build `libglfw`, `XAUTHORITY`, `/dev/dri`)
+are in the `Makefile` and explained in `python/README.md` ("Display"). A demo reads its assets through `_common.asset_dir()` (the same directory under `examples/src/`); the
 only asset files beside the Python are `python/chapt15/shaders/shaders.{vs,fs}`. Read
 `tasks/reference/python-port/translation-guide.md` before porting or bulk-editing the port and
 `gl-and-imgui-gotchas.md` there before debugging GL or imgui. The Python follows the maintainer's Python standard

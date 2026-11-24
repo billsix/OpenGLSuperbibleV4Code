@@ -1,0 +1,257 @@
+# atom.py
+# Demonstrates OpenGL coordinate transformation: a nucleus with three
+# orbiting electrons, each defined in a coordinate frame relative to
+# the nucleus via glPushMatrix/glRotatef/glTranslatef/glPopMatrix.
+# OpenGL SuperBible, Chapter 4
+# Python port of Atom.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import time
+import typing
+
+import glfw
+import OpenGL.GL as GL
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+import _primitives  # noqa: E402
+
+ELECTRON_DEG_PER_SEC: float = 100.0
+
+
+# The sphere tessellation is identical every frame, so build the vertex bands
+# once (here, at import) and replay them in render_scene instead of re-running
+# the sin/cos loop on every draw. Same GL_QUAD_STRIP-per-latitude-band shape
+# the old draw_solid_sphere emitted.
+NUCLEUS_SPHERE: _primitives.Mesh = _primitives.build_sphere(10.0, 15, 15)
+ELECTRON_SPHERE: _primitives.Mesh = _primitives.build_sphere(6.0, 15, 15)
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    window: typing.Any = None  # set in main(); used by the Quit menu item
+
+    x_rot: float = 0.0
+    y_rot: float = 0.0
+
+    # Angle of revolution around the nucleus, in degrees. Computed each
+    # frame from elapsed time; the C++ original advanced this by 10° on a
+    # 100 ms timer (= 100°/sec), but stepping it once per render call
+    # decouples motion smoothness from animation rate.
+    f_elect1: float = 0.0
+    start_time: float = 0.0
+
+
+state: AppState = AppState()
+
+
+def render_scene() -> None:
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+    GL.glTranslatef(0.0, 0.0, -100.0)
+
+    # Red nucleus
+    GL.glColor3ub(255, 0, 0)
+    _primitives.draw_mesh(NUCLEUS_SPHERE)
+
+    # Yellow electrons
+    GL.glColor3ub(255, 255, 0)
+
+    # First orbit
+    GL.glPushMatrix()
+    GL.glRotatef(state.f_elect1, 0.0, 1.0, 0.0)
+    GL.glTranslatef(90.0, 0.0, 0.0)
+    _primitives.draw_mesh(ELECTRON_SPHERE)
+    GL.glPopMatrix()
+
+    # Second orbit
+    GL.glPushMatrix()
+    GL.glRotatef(45.0, 0.0, 0.0, 1.0)
+    GL.glRotatef(state.f_elect1, 0.0, 1.0, 0.0)
+    GL.glTranslatef(-70.0, 0.0, 0.0)
+    _primitives.draw_mesh(ELECTRON_SPHERE)
+    GL.glPopMatrix()
+
+    # Third orbit
+    GL.glPushMatrix()
+    GL.glRotatef(360.0 - 45.0, 0.0, 0.0, 1.0)
+    GL.glRotatef(state.f_elect1, 0.0, 1.0, 0.0)
+    GL.glTranslatef(0.0, 0.0, 60.0)
+    _primitives.draw_mesh(ELECTRON_SPHERE)
+    GL.glPopMatrix()
+
+
+def update_animation() -> None:
+    """Advance the orbital angle based on elapsed time. Called every
+    frame so motion stays smooth at the render framerate."""
+    state.f_elect1 = (
+        (time.monotonic() - state.start_time) * ELECTRON_DEG_PER_SEC
+    ) % 360.0
+
+
+def setup_rc() -> None:
+    GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glClearColor(0.0, 0.0, 0.0, 1.0)
+
+
+def change_size(w: int, h: int) -> None:
+    n_range: float = 100.0
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    if w <= h:
+        GL.glOrtho(
+            -n_range,
+            n_range,
+            -n_range * h / w,
+            n_range * h / w,
+            -n_range * 2.0,
+            n_range * 2.0,
+        )
+    else:
+        GL.glOrtho(
+            -n_range * w / h,
+            n_range * w / h,
+            -n_range,
+            n_range,
+            -n_range * 2.0,
+            n_range * 2.0,
+        )
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+ROT_DEG_PER_SEC: float = 90.0
+
+
+def handle_special_keys(window: typing.Any, dt: float) -> None:
+    step: float = ROT_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.x_rot -= step
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.x_rot += step
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.y_rot -= step
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.y_rot += step
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+# Per-click step for the menubar rotate items (the keyboard, held, rotates
+# continuously via handle_special_keys; a menu click does one fixed step).
+BTN_ROT_STEP: float = 5.0
+
+
+def _rotate_x(d: float) -> None:
+    state.x_rot += d
+
+
+def _rotate_y(d: float) -> None:
+    state.y_rot += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Rotate items run once per click and show
+    # their key in the shortcut column; hold the key for continuous rotation.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Rotate up", "Up", lambda: _rotate_x(-BTN_ROT_STEP))
+        _common.menu_action(
+            "Rotate down", "Down", lambda: _rotate_x(BTN_ROT_STEP)
+        )
+        _common.menu_action(
+            "Rotate left", "Left", lambda: _rotate_y(-BTN_ROT_STEP)
+        )
+        _common.menu_action(
+            "Rotate right", "Right", lambda: _rotate_y(BTN_ROT_STEP)
+        )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+
+    window: typing.Any = glfw.create_window(  # glfw window handle
+        800, 600, "OpenGL Atom", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)  # vsync, ~60 Hz on standard displays
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    state.start_time = time.monotonic()
+    last_frame: float = state.start_time
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_special_keys(window, dt)
+        update_animation()
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

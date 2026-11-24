@@ -1,0 +1,496 @@
+# SphereWorld32.py
+# A camera flying through a textured "sphere world" with a stenciled
+# planar shadow on the ground. The original is a Win32 (no MFC)
+# program that wrappered raw OpenGL with FSAA + VSync setup; the
+# Python port uses GLFW with samples=4 for antialiasing.
+#
+# Keys: Up/Down/Left/Right move the camera; Esc to quit.
+#
+# OpenGL SuperBible, Chapter 19
+# Python port of SphereWorld32.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import math
+import os
+import random
+import sys
+import time
+import typing
+
+import glfw
+import imageio.v3 as iio
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from gacalc.g3 import Vector
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+from _geometry import plane_equation  # noqa: E402
+
+ASSET_DIR: str = _common.asset_dir(PWD)
+
+NUM_SPHERES: int = 30
+GROUND_TEXTURE: int = 0
+TORUS_TEXTURE: int = 1
+SPHERE_TEXTURE: int = 2
+texture_files: list[str] = ["Grass.tga", "Wood.tga", "Orb.tga"]
+
+light_pos: list[float] = [-100.0, 100.0, 50.0, 1.0]
+no_light: list[float] = [0.0, 0.0, 0.0, 0.0]
+low_light: list[float] = [0.25, 0.25, 0.25, 1.0]
+bright_light: list[float] = [1.0, 1.0, 1.0, 1.0]
+
+
+camera_y: float = 0.0
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    window: typing.Any = None  # glfw window handle; set in main()
+
+    window_width: int = 800
+    window_height: int = 600
+
+    texture_objects: list[int] = dataclasses.field(
+        default_factory=lambda: [0, 0, 0]
+    )
+    sphere_positions: list[tuple[float, float]] = dataclasses.field(
+        default_factory=list
+    )
+    shadow_matrix: np.ndarray = dataclasses.field(
+        default_factory=lambda: np.identity(4, dtype=np.float32)
+    )
+    torus_list: int = 0
+    sphere_list: int = 0
+
+    camera_x: float = 0.0
+    camera_z: float = 0.0
+    camera_yaw: float = 0.0
+    y_rot: float = 0.0
+
+
+state: AppState = AppState()
+
+
+# Three points defining a plane, each an (x, y, z) triple. Named because the
+# annotation spelled out is 107 characters, well past the 80-column limit the
+# book PDF needs.
+type Point3 = tuple[float, float, float]
+type PlanePoints = tuple[Point3, Point3, Point3]
+
+
+def make_planar_shadow_matrix(plane_pts: PlanePoints) -> np.ndarray:
+    """Cast light at light_pos onto the plane through plane_pts. Same
+    column-major form as math3d.cpp's m3dMakePlanarShadowMatrix and
+    chapt05/sphereworld -- the C++ original. The CCW plane_equation
+    can flip w<0 on the transformed vertices, which OpenGL clips
+    before perspective divide and the shadow disappears; negate the
+    matrix when needed. See
+    tasks/archive/2026/05/26/notes-planar-shadow-w-clipping.md."""
+    p1: Point3 = plane_pts[0]
+    p2: Point3 = plane_pts[1]
+    p3: Point3 = plane_pts[2]
+    plane: tuple[Vector, float] = plane_equation(
+        Vector(*p1), Vector(*p2), Vector(*p3)
+    )
+    a: float = plane[0].coeff_e_1
+    b: float = plane[0].coeff_e_2
+    c: float = plane[0].coeff_e_3
+    d: float = plane[1]
+    dx: float = -light_pos[0]
+    dy: float = -light_pos[1]
+    dz: float = -light_pos[2]
+    s: float = 1.0 if (a * dx + b * dy + c * dz) > 0.0 else -1.0
+    return np.array(
+        [
+            s * (b * dy + c * dz),
+            s * -a * dy,
+            s * -a * dz,
+            0.0,
+            s * -b * dx,
+            s * (a * dx + c * dz),
+            s * -b * dz,
+            0.0,
+            s * -c * dx,
+            s * -c * dy,
+            s * (a * dx + b * dy),
+            0.0,
+            s * -d * dx,
+            s * -d * dy,
+            s * -d * dz,
+            s * (a * dx + b * dy + c * dz),
+        ],
+        dtype=np.float32,
+    )
+
+
+def gl_draw_torus(
+    major: float, minor: float, n_major: int, n_minor: int
+) -> None:
+    major_step: float = 2.0 * math.pi / n_major
+    minor_step: float = 2.0 * math.pi / n_minor
+    i: int
+    for i in range(n_major):
+        a0: float = i * major_step
+        a1: float = (i + 1) * major_step
+        x0: float = math.cos(a0)
+        y0: float = math.sin(a0)
+        x1: float = math.cos(a1)
+        y1: float = math.sin(a1)
+        GL.glBegin(GL.GL_TRIANGLE_STRIP)
+        j: int
+        for j in range(n_minor + 1):
+            b: float = j * minor_step
+            cb: float = math.cos(b)
+            sb: float = math.sin(b)
+            r: float = minor * cb + major
+            z: float = minor * sb
+            u: float = float(i) / n_major
+            v: float = float(j) / n_minor
+            GL.glNormal3f(x0 * cb, y0 * cb, sb)
+            GL.glTexCoord2f(u, v)
+            GL.glVertex3f(x0 * r, y0 * r, z)
+            GL.glNormal3f(x1 * cb, y1 * cb, sb)
+            GL.glTexCoord2f(u + 1.0 / n_major, v)
+            GL.glVertex3f(x1 * r, y1 * r, z)
+        GL.glEnd()
+
+
+def gl_draw_sphere(radius: float, slices: int, stacks: int) -> None:
+    obj: typing.Any = GLU.gluNewQuadric()  # GLU quadric object
+    GLU.gluQuadricNormals(obj, GLU.GLU_SMOOTH)
+    GLU.gluQuadricTexture(obj, GL.GL_TRUE)
+    GLU.gluSphere(obj, radius, slices, stacks)
+    GLU.gluDeleteQuadric(obj)
+
+
+def draw_ground() -> None:
+    f_extent: float = 20.0
+    step: float = 1.0
+    y: float = -0.4
+    tex_step: float = 1.0 / (f_extent * 0.075)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[GROUND_TEXTURE])
+    GL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT)
+    GL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT)
+    s: float = 0.0
+    strip: float = -f_extent
+    while strip <= f_extent:
+        t: float = 0.0
+        GL.glBegin(GL.GL_TRIANGLE_STRIP)
+        run: float = f_extent
+        while run >= -f_extent:
+            GL.glTexCoord2f(s, t)
+            GL.glNormal3f(0.0, 1.0, 0.0)
+            GL.glVertex3f(strip, y, run)
+            GL.glTexCoord2f(s + tex_step, t)
+            GL.glNormal3f(0.0, 1.0, 0.0)
+            GL.glVertex3f(strip + step, y, run)
+            t += tex_step
+            run -= step
+        GL.glEnd()
+        s += tex_step
+        strip += step
+
+
+def draw_inhabitants(shadow: int) -> None:
+    if shadow == 0:
+        GL.glColor4f(1.0, 1.0, 1.0, 1.0)
+    else:
+        GL.glColor4f(0.0, 0.0, 0.0, 0.75)
+
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[SPHERE_TEXTURE])
+    sx: float
+    sz: float
+    for sx, sz in state.sphere_positions:
+        GL.glPushMatrix()
+        GL.glTranslatef(sx, 0.0, sz)
+        GL.glCallList(state.sphere_list)
+        GL.glPopMatrix()
+
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.1, -2.5)
+    GL.glPushMatrix()
+    GL.glRotatef(-state.y_rot * 2.0, 0.0, 1.0, 0.0)
+    GL.glTranslatef(1.0, 0.0, 0.0)
+    GL.glCallList(state.sphere_list)
+    GL.glPopMatrix()
+    if shadow == 0:
+        GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, bright_light)
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[TORUS_TEXTURE])
+    GL.glCallList(state.torus_list)
+    GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, no_light)
+    GL.glPopMatrix()
+
+
+def render_scene() -> None:
+    GL.glClear(
+        GL.GL_COLOR_BUFFER_BIT
+        | GL.GL_DEPTH_BUFFER_BIT
+        | GL.GL_STENCIL_BUFFER_BIT
+    )
+    GL.glPushMatrix()
+    GL.glRotatef(-state.camera_yaw, 0.0, 1.0, 0.0)
+    GL.glTranslatef(-state.camera_x, -camera_y, -state.camera_z)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_pos)
+
+    GL.glColor3f(1.0, 1.0, 1.0)
+    draw_ground()
+
+    GL.glDisable(GL.GL_DEPTH_TEST)
+    GL.glDisable(GL.GL_LIGHTING)
+    GL.glDisable(GL.GL_TEXTURE_2D)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    GL.glEnable(GL.GL_STENCIL_TEST)
+    GL.glPushMatrix()
+    GL.glMultMatrixf(state.shadow_matrix)
+    draw_inhabitants(1)
+    GL.glPopMatrix()
+    GL.glDisable(GL.GL_STENCIL_TEST)
+    GL.glDisable(GL.GL_BLEND)
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_TEXTURE_2D)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+
+    draw_inhabitants(0)
+    GL.glPopMatrix()
+
+
+def setup_rc() -> None:
+    GL.glStencilOp(GL.GL_INCR, GL.GL_INCR, GL.GL_INCR)
+    GL.glClearStencil(0)
+    GL.glStencilFunc(GL.GL_EQUAL, 0x0, 0x01)
+    GL.glClearColor(*low_light)
+    GL.glCullFace(GL.GL_BACK)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+
+    GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, no_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, low_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, bright_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, bright_light)
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_LIGHT0)
+
+    plane_pts: list[tuple[float, float, float]] = [
+        (0.0, -0.4, 0.0),
+        (10.0, -0.4, 0.0),
+        (5.0, -0.4, -5.0),
+    ]
+    state.shadow_matrix = make_planar_shadow_matrix(plane_pts)
+
+    GL.glEnable(GL.GL_COLOR_MATERIAL)
+    GL.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE)
+    GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128)
+
+    random.seed(42)
+    for _ in range(NUM_SPHERES):
+        sx: float = (random.randint(0, 399) - 200) * 0.1
+        sz: float = (random.randint(0, 399) - 200) * 0.1
+        state.sphere_positions.append((sx, sz))
+
+    GL.glEnable(GL.GL_TEXTURE_2D)
+    state.texture_objects = list(GL.glGenTextures(3))
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
+    i: int
+    name: str
+    for i, name in enumerate(texture_files):
+        img: np.ndarray = iio.imread(os.path.join(ASSET_DIR, name))
+        img = np.flipud(img)
+        if img.ndim == 3 and img.shape[2] == 4:
+            img = img[:, :, :3]
+        img = np.ascontiguousarray(img, dtype=np.uint8)
+        img_shape: tuple[int, ...] = img.shape[:2]
+        GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[i])
+        GLU.gluBuild2DMipmaps(
+            GL.GL_TEXTURE_2D,
+            GL.GL_RGB,
+            img_shape[1],
+            img_shape[0],
+            GL.GL_RGB,
+            GL.GL_UNSIGNED_BYTE,
+            img,
+        )
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR
+        )
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_2D,
+            GL.GL_TEXTURE_MIN_FILTER,
+            GL.GL_LINEAR_MIPMAP_LINEAR,
+        )
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE
+        )
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE
+        )
+
+    GL.glLightModeli(
+        GL.GL_LIGHT_MODEL_COLOR_CONTROL, GL.GL_SEPARATE_SPECULAR_COLOR
+    )
+
+    state.torus_list = GL.glGenLists(2)
+    state.sphere_list = state.torus_list + 1
+    GL.glNewList(state.torus_list, GL.GL_COMPILE)
+    gl_draw_torus(0.35, 0.15, 61, 37)
+    GL.glEndList()
+    GL.glNewList(state.sphere_list, GL.GL_COMPILE)
+    gl_draw_sphere(0.1, 26, 13)
+    GL.glEndList()
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    state.window_width = w
+    state.window_height = h
+    GL.glViewport(0, 0, w, h)
+    aspect: float = float(w) / float(h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, aspect, 1.0, 50.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+MOVE_UNITS_PER_SEC: float = 3.0
+YAW_DEG_PER_SEC: float = 90.0
+TORUS_DEG_PER_SEC: float = 30.0
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+def handle_camera_keys(window: typing.Any, dt: float) -> None:
+    move: float = MOVE_UNITS_PER_SEC * dt
+    yaw_rad: float = math.radians(state.camera_yaw)
+    fwd_x: float = -math.sin(yaw_rad) * move
+    fwd_z: float = -math.cos(yaw_rad) * move
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.camera_x += fwd_x
+        state.camera_z += fwd_z
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.camera_x -= fwd_x
+        state.camera_z -= fwd_z
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.camera_yaw += YAW_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.camera_yaw -= YAW_DEG_PER_SEC * dt
+
+
+# Per-click step for the menubar movement items (the keyboard, held, moves
+# continuously via handle_camera_keys; a menu click does one fixed step).
+# camera_yaw is stored in degrees in this demo.
+BTN_MOVE_STEP: float = 0.5
+BTN_YAW_STEP_DEG: float = 5.0
+
+
+def _walk(direction: int) -> None:
+    yaw_rad: float = math.radians(state.camera_yaw)
+    m: float = BTN_MOVE_STEP * direction
+    state.camera_x += -math.sin(yaw_rad) * m
+    state.camera_z += -math.cos(yaw_rad) * m
+
+
+def _turn(d: float) -> None:
+    state.camera_yaw += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Movement items run once per click and
+    # show their key in the shortcut column; hold the key for continuous motion.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Forward", "Up", lambda: _walk(1))
+        _common.menu_action("Back", "Down", lambda: _walk(-1))
+        _common.menu_action(
+            "Turn left", "Left", lambda: _turn(BTN_YAW_STEP_DEG)
+        )
+        _common.menu_action(
+            "Turn right", "Right", lambda: _turn(-BTN_YAW_STEP_DEG)
+        )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.SAMPLES, 4)
+    glfw.window_hint(glfw.DEPTH_BITS, 24)
+    glfw.window_hint(glfw.STENCIL_BITS, 8)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    window: typing.Any = glfw.create_window(  # glfw window handle
+        state.window_width, state.window_height, "SphereWorld32", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+    GL.glEnable(GL.GL_MULTISAMPLE)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_camera_keys(window, dt)
+        state.y_rot = (state.y_rot + TORUS_DEG_PER_SEC * dt) % 360.0
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

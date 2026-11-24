@@ -1,0 +1,291 @@
+# reflection.py
+# Planar reflection: the world is drawn twice -- once mirrored below
+# the floor with the light flipped, then a transparent checkerboard
+# floor is blended on top, then the world is drawn upright. Demonstrates
+# blending + glScalef(1, -1, 1).
+# OpenGL SuperBible, Chapter 6
+# Python port of Reflection.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import math
+import os
+import sys
+import time
+import typing
+
+import glfw
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+import _primitives  # noqa: E402
+
+f_light_pos: tuple[float, float, float, float] = (-100.0, 100.0, 50.0, 1.0)
+f_light_pos_mirror: tuple[float, float, float, float] = (
+    -100.0,
+    -100.0,
+    50.0,
+    1.0,
+)
+f_no_light: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0)
+f_low_light: tuple[float, float, float, float] = (0.25, 0.25, 0.25, 1.0)
+f_bright_light: tuple[float, float, float, float] = (1.0, 1.0, 1.0, 1.0)
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    # glfw window handle; set in main() for Quit item
+    window: typing.Any = None
+
+    y_rot: float = 0.0
+
+    # Walk-around camera. Initial position matches the original demo's
+    # fixed camera: 0.4 above the floor (y=0, the module constant camera_y),
+    # at z=0 looking down -Z toward the spinning torus/sphere group at z=-3.5.
+    camera_x: float = 0.0
+    camera_z: float = 0.0
+    camera_yaw: float = 0.0
+
+
+state: AppState = AppState()
+
+
+# Walk-around camera height; never changes (x, z and yaw are in AppState).
+camera_y: float = 0.4
+
+
+def apply_camera_transform() -> None:
+    GL.glRotatef(-math.degrees(state.camera_yaw), 0.0, 1.0, 0.0)
+    GL.glTranslatef(-state.camera_x, -camera_y, -state.camera_z)
+
+
+# The orbiting sphere and torus are the same every frame -- run the
+# tessellation once at import, replay the stored vertices each frame.
+SPHERE: _primitives.Mesh = _primitives.build_sphere(0.1, 17, 9)
+TORUS: _primitives.Mesh = _primitives.build_torus(0.35, 0.15, 61, 37)
+
+
+def draw_ground() -> None:
+    """Black-and-white transparent checkerboard at y=0."""
+    extent: float = 20.0
+    step: float = 0.5
+    bounce: int = 0
+    GL.glShadeModel(GL.GL_FLAT)
+    strip: float = -extent
+    while strip <= extent:
+        GL.glBegin(GL.GL_TRIANGLE_STRIP)
+        run: float = extent
+        while run >= -extent:
+            color: float = 1.0 if bounce % 2 == 0 else 0.0
+            GL.glColor4f(color, color, color, 0.5)
+            GL.glVertex3f(strip, 0.0, run)
+            GL.glVertex3f(strip + step, 0.0, run)
+            bounce += 1
+            run -= step
+        GL.glEnd()
+        strip += step
+    GL.glShadeModel(GL.GL_SMOOTH)
+
+
+def draw_world() -> None:
+    GL.glColor3f(1.0, 0.0, 0.0)
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.5, -3.5)
+
+    GL.glPushMatrix()
+    GL.glRotatef(-state.y_rot * 2.0, 0.0, 1.0, 0.0)
+    GL.glTranslatef(1.0, 0.0, 0.0)
+    _primitives.draw_mesh(SPHERE)
+    GL.glPopMatrix()
+
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+    _primitives.draw_mesh(TORUS)
+    GL.glPopMatrix()
+
+
+def render_scene() -> None:
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+
+    GL.glPushMatrix()
+    apply_camera_transform()
+    # Mirrored world: flip light below the floor too
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, f_light_pos_mirror)
+    GL.glPushMatrix()
+    GL.glFrontFace(GL.GL_CW)  # geometry mirrored, so CW now points "out"
+    GL.glScalef(1.0, -1.0, 1.0)
+    draw_world()
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glPopMatrix()
+
+    # Transparent floor on top of the reflection
+    GL.glDisable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    draw_ground()
+    GL.glDisable(GL.GL_BLEND)
+    GL.glEnable(GL.GL_LIGHTING)
+
+    # The real world above the floor
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, f_light_pos)
+    draw_world()
+    GL.glPopMatrix()
+
+
+def setup_rc() -> None:
+    GL.glClearColor(*f_low_light)
+    GL.glCullFace(GL.GL_BACK)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+
+    GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, f_no_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, f_low_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, f_bright_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, f_bright_light)
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_LIGHT0)
+
+    GL.glEnable(GL.GL_COLOR_MATERIAL)
+    GL.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE)
+    GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128)
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 50.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+Y_ROT_DEG_PER_SEC: float = 100.0
+MOVE_UNITS_PER_SEC: float = 3.0
+YAW_RAD_PER_SEC: float = 1.5
+
+
+def handle_camera_keys(window: typing.Any, dt: float) -> None:
+    move: float = MOVE_UNITS_PER_SEC * dt
+    yaw: float = YAW_RAD_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.camera_x += -move * math.sin(state.camera_yaw)
+        state.camera_z += -move * math.cos(state.camera_yaw)
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.camera_x -= -move * math.sin(state.camera_yaw)
+        state.camera_z -= -move * math.cos(state.camera_yaw)
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.camera_yaw += yaw
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.camera_yaw -= yaw
+
+
+# Per-click step for the menubar movement items (the keyboard, held, moves
+# continuously via handle_camera_keys; a menu click does one fixed step).
+BTN_MOVE_STEP: float = 0.5
+BTN_YAW_STEP: float = 0.1
+
+
+def _walk(direction: int) -> None:
+    m: float = BTN_MOVE_STEP * direction
+    state.camera_x += -m * math.sin(state.camera_yaw)
+    state.camera_z += -m * math.cos(state.camera_yaw)
+
+
+def _turn(d: float) -> None:
+    state.camera_yaw += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Movement items run once per click and
+    # show their key in the shortcut column; hold the key for continuous motion.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Forward", "Up", lambda: _walk(1))
+        _common.menu_action("Back", "Down", lambda: _walk(-1))
+        _common.menu_action("Turn left", "Left", lambda: _turn(BTN_YAW_STEP))
+        _common.menu_action("Turn right", "Right", lambda: _turn(-BTN_YAW_STEP))
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+
+    window: typing.Any = glfw.create_window(  # glfw window handle
+        800, 600, "OpenGL Blending and Transparency", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_camera_keys(window, dt)
+        state.y_rot = (state.y_rot + Y_ROT_DEG_PER_SEC * dt) % 360.0
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

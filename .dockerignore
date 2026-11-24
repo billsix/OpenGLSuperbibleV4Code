@@ -4,3 +4,5 @@ tasks/
 examples/
 contrib/
 *.tar
+build/
+python/**/__pycache__

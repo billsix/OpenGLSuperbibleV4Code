@@ -1,0 +1,232 @@
+# florida.py
+# Polygon tessellation: an outline of Florida (with Lake Okeechobee)
+# rendered three ways -- as line loops, as a tessellated concave
+# polygon, and as a complex polygon with the lake as a hole.
+# C++ used a right-click GLUT menu; replaced with an ImGui radio panel.
+# OpenGL SuperBible, Chapter 10
+# Python port of Florida.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import typing
+
+import glfw
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+
+COAST: np.ndarray = np.array(
+    [
+        [-70.0, 30.0, 0.0],
+        [-50.0, 30.0, 0.0],
+        [-50.0, 27.0, 0.0],
+        [-5.0, 27.0, 0.0],
+        [0.0, 20.0, 0.0],
+        [8.0, 10.0, 0.0],
+        [12.0, 5.0, 0.0],
+        [10.0, 0.0, 0.0],
+        [15.0, -10.0, 0.0],
+        [20.0, -20.0, 0.0],
+        [20.0, -35.0, 0.0],
+        [10.0, -40.0, 0.0],
+        [0.0, -30.0, 0.0],
+        [-5.0, -20.0, 0.0],
+        [-12.0, -10.0, 0.0],
+        [-13.0, -5.0, 0.0],
+        [-12.0, 5.0, 0.0],
+        [-20.0, 10.0, 0.0],
+        [-30.0, 20.0, 0.0],
+        [-40.0, 15.0, 0.0],
+        [-50.0, 15.0, 0.0],
+        [-55.0, 20.0, 0.0],
+        [-60.0, 25.0, 0.0],
+        [-70.0, 25.0, 0.0],
+    ],
+    dtype=np.float64,
+)
+LAKE: np.ndarray = np.array(
+    [
+        [10.0, -20.0, 0.0],
+        [15.0, -25.0, 0.0],
+        [10.0, -30.0, 0.0],
+        [5.0, -25.0, 0.0],
+    ],
+    dtype=np.float64,
+)
+
+DRAW_LOOPS: int = 0
+DRAW_CONCAVE: int = 1
+DRAW_COMPLEX: int = 2
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    # glfw window handle; set in main(); used by the Quit control button
+    window: typing.Any = None
+    i_method: int = DRAW_LOOPS
+
+
+state: AppState = AppState()
+
+
+def _tess_loops() -> None:
+    GL.glColor3f(0.0, 0.0, 0.0)
+    GL.glBegin(GL.GL_LINE_LOOP)
+    p: np.ndarray
+    for p in COAST:
+        GL.glVertex3dv(p)
+    GL.glEnd()
+    GL.glBegin(GL.GL_LINE_LOOP)
+    p: np.ndarray
+    for p in LAKE:
+        GL.glVertex3dv(p)
+    GL.glEnd()
+
+
+def _tess_polygon(contours: list[np.ndarray]) -> None:
+    GL.glColor3f(0.0, 1.0, 0.0)
+    tess: typing.Any = GLU.gluNewTess()  # GLU tessellator object
+    GLU.gluTessCallback(tess, GLU.GLU_TESS_BEGIN, GL.glBegin)
+    GLU.gluTessCallback(tess, GLU.GLU_TESS_END, GL.glEnd)
+    GLU.gluTessCallback(tess, GLU.GLU_TESS_VERTEX, GL.glVertex3dv)
+    GLU.gluTessProperty(
+        tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD
+    )
+    GLU.gluTessBeginPolygon(tess, None)
+    contour: np.ndarray
+    for contour in contours:
+        GLU.gluTessBeginContour(tess)
+        p: np.ndarray
+        for p in contour:
+            GLU.gluTessVertex(tess, p, p)
+        GLU.gluTessEndContour(tess)
+    GLU.gluTessEndPolygon(tess)
+    GLU.gluDeleteTess(tess)
+
+
+def render_scene() -> None:
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT)
+    if state.i_method == DRAW_LOOPS:
+        _tess_loops()
+    elif state.i_method == DRAW_CONCAVE:
+        _tess_polygon([COAST])
+    else:  # DRAW_COMPLEX
+        _tess_polygon([COAST, LAKE])
+
+
+def setup_rc() -> None:
+    GL.glClearColor(1.0, 1.0, 1.0, 1.0)
+    GL.glLineWidth(2.0)
+    GL.glEnable(GL.GL_LINE_SMOOTH)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluOrtho2D(-80, 35, -50, 50)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+def _set_method(value: int) -> None:
+    state.i_method = value
+
+
+def imgui_menubar() -> None:
+    # All controls live in the top menubar (no keyboard nav besides Esc,
+    # which the File -> Quit item covers).
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Florida", True):
+        label: str
+        value: int
+        for label, value in [
+            ("Line Loops", DRAW_LOOPS),
+            ("Concave Polygon", DRAW_CONCAVE),
+            ("Complex Polygon", DRAW_COMPLEX),
+        ]:
+            _common.menu_action(
+                label,
+                "",
+                lambda v=value: _set_method(v),
+                selected=(state.i_method == value),
+            )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    # glfw window handle
+    window: typing.Any = glfw.create_window(
+        500, 400, "Tesselated Florida", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw
+    # key callback that doesn't chain, so Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    while not glfw.window_should_close(window):
+        glfw.poll_events()
+        impl.process_inputs()
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

@@ -15,3 +15,7 @@
 !/examples/projects/linux/*/*/*.vp
 !/examples/projects/linux/*/*/*.fp
 !/examples/projects/linux/*/*/*.exr
+# Python port
+__pycache__/
+.ruff_cache/
+/venv/

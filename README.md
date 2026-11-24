@@ -1,7 +1,8 @@
 # OpenGL SuperBible 4th edition, example code
 
-The book's example programs (chapters 1 to 22), built with CMake. The C and C++ stay as the book has them
-(GLUT callbacks, the GLTools 4th-edition library, the GLee loader); formatting is Google style (`.clang-format`).
+The book's example programs (chapters 1 to 22), built with CMake, and a Python port of every demo in `python/`. The C and C++
+stay as the book has them (GLUT callbacks, the GLTools 4th-edition library, the GLee loader); formatting is Google style
+(`.clang-format`). The Python port reads the same textures and shaders from `examples/src/`; see `python/README.md`.
 
 ## Build
 
@@ -27,7 +28,10 @@ that directory. Options: `-DSB4_FETCH_FREEGLUT=ON` builds freeglut from source o
 make image                                   # [HOST] Fedora image with the toolchain, Mesa and Xvfb
 make shell-exec CMD='cmake -B build/cmake -G Ninja && cmake --build build/cmake'
 make shell-exec SCRIPT=tools/run_cmake_demos_xvfb.sh   # run every demo headless
-make format                                  # clang-format the first-party sources
+make format                                  # clang-format the C++, ruff the Python
+make run DEMO=chapt01/block                  # the Python port of a demo, on your display (Wayland or X11)
+make run-c DEMO=chapt01/block                # the C++ original of the same demo, on X11
+make check                                   # import every Python module, no display
 ```
 
 ## Which demos build

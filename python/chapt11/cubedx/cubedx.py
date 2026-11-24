@@ -1,0 +1,245 @@
+# cubedx.py
+# Demonstrates rendering with indexed vertex arrays via
+# glVertexPointer + glDrawElements.
+# OpenGL SuperBible, Chapter 11
+# Python port of CubeDX.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import time
+import typing
+
+import glfw
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+
+corners: np.ndarray = np.array(
+    [
+        -25.0,
+        25.0,
+        25.0,  # 0 -- front
+        25.0,
+        25.0,
+        25.0,  # 1
+        25.0,
+        -25.0,
+        25.0,  # 2
+        -25.0,
+        -25.0,
+        25.0,  # 3
+        -25.0,
+        25.0,
+        -25.0,  # 4 -- back
+        25.0,
+        25.0,
+        -25.0,  # 5
+        25.0,
+        -25.0,
+        -25.0,  # 6
+        -25.0,
+        -25.0,
+        -25.0,
+    ],
+    dtype=np.float32,
+)
+
+indexes: np.ndarray = np.array(
+    [
+        0,
+        1,
+        2,
+        3,  # Front
+        4,
+        5,
+        1,
+        0,  # Top
+        3,
+        2,
+        6,
+        7,  # Bottom
+        5,
+        4,
+        7,
+        6,  # Back
+        1,
+        5,
+        6,
+        2,  # Right
+        4,
+        0,
+        3,
+        7,
+    ],  # Left
+    dtype=np.uint8,
+)
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    window: typing.Any = None  # glfw window handle; set in main()
+
+    x_rot: float = 0.0
+    y_rot: float = 0.0
+
+
+state: AppState = AppState()
+
+
+def render_scene() -> None:
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+    GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.0, -200.0)
+    GL.glRotatef(state.x_rot, 1.0, 0.0, 0.0)
+    # C++ original wrote (0,0,1) here -- y_rot rotating about Z, which
+    # makes LEFT/RIGHT spin the cube like a steering wheel and looks
+    # like warping once x_rot has tilted the cube.  Use the Y axis so
+    # LEFT/RIGHT does the expected yaw.
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+
+    GL.glEnableClientState(GL.GL_VERTEX_ARRAY)
+    GL.glVertexPointer(3, GL.GL_FLOAT, 0, corners)
+    GL.glDrawElements(GL.GL_QUADS, 24, GL.GL_UNSIGNED_BYTE, indexes)
+
+    GL.glPopMatrix()
+
+
+def setup_rc() -> None:
+    GL.glClearColor(1.0, 1.0, 1.0, 1.0)
+    GL.glColor3ub(0, 0, 0)
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 1000.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+ROT_DEG_PER_SEC: float = 90.0
+
+
+def handle_special_keys(window: typing.Any, dt: float) -> None:
+    step: float = ROT_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.x_rot -= step
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.x_rot += step
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.y_rot -= step
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.y_rot += step
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+# Per-click step for the menubar rotation items (the keyboard, held, rotates
+# continuously via handle_special_keys; a menu click does one fixed step).
+BTN_ROT_STEP: float = 5.0
+
+
+def _rot_x(d: float) -> None:
+    state.x_rot += d
+
+
+def _rot_y(d: float) -> None:
+    state.y_rot += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Rotation items run once per click and
+    # show their key in the shortcut column; hold the key for continuous spin.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Rotate up", "Up", lambda: _rot_x(-BTN_ROT_STEP))
+        _common.menu_action("Rotate down", "Down", lambda: _rot_x(BTN_ROT_STEP))
+        _common.menu_action(
+            "Rotate left", "Left", lambda: _rot_y(-BTN_ROT_STEP)
+        )
+        _common.menu_action(
+            "Rotate right", "Right", lambda: _rot_y(BTN_ROT_STEP)
+        )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    window: typing.Any = glfw.create_window(800, 600, "Cube DX", None, None)
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_special_keys(window, dt)
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

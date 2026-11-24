@@ -53,12 +53,57 @@ shell-exec: image ## Run a script/command in the container env (no TTY): make sh
 		/usr/local/bin/shell.sh $(SHELL_EXEC_ARGS)
 
 .PHONY: format
-format: image ## Format the first-party C/C++ with clang-format in the container
+format: image ## Format the first-party C/C++ (clang-format) and the Python port (ruff) in the container
 	$(CONTAINER_CMD) run --rm $(PODMAN_RUN_FLAGS) \
 		--entrypoint /bin/bash \
 		$(FILES_TO_MOUNT) \
 		$(CONTAINER_NAME) \
 		/usr/local/bin/format.sh
+
+# The Python port (python/) and the C++ demos run from one image. The Python demos use PyOpenGL and GLFW and run on
+# Wayland or X11; the C++ demos load GL through GLX, so run-c starts them on X11 (or XWayland).
+.PHONY: run
+run: image ## Run a Python demo on your display: make run DEMO=chapt01/block
+	@[ -n "$(DEMO)" ] || { echo 'usage: make run DEMO=<chapter>/<demo> (make list shows them)'; exit 2; }
+	$(CONTAINER_CMD) run -it --rm $(PODMAN_RUN_FLAGS) \
+		$(SHELL_RUN_FLAGS) \
+		$(CONTAINER_NAME) \
+		/usr/local/bin/shell.sh -c 'cd $(REPO_MOUNT) && exec tools/run_python_demo.sh $(DEMO)'
+
+.PHONY: run-c
+run-c: image ## Build and run the C++ demo on X11: make run-c DEMO=chapt01/block
+	@[ -n "$(DEMO)" ] || { echo 'usage: make run-c DEMO=<chapter>/<demo>'; exit 2; }
+	$(CONTAINER_CMD) run -it --rm $(PODMAN_RUN_FLAGS) \
+		$(SHELL_RUN_FLAGS) \
+		$(CONTAINER_NAME) \
+		/usr/local/bin/shell.sh -c 'cd $(REPO_MOUNT) && exec tools/run_c_demo.sh $(DEMO)'
+
+.PHONY: list
+list: ## List the demos that have a Python port
+	@cd python && find chapt* -mindepth 1 -maxdepth 1 -type d ! -name __pycache__ | sort
+
+.PHONY: check
+check: image ## Import every module of the Python port (no display)
+	$(CONTAINER_CMD) run --rm $(PODMAN_RUN_FLAGS) \
+		$(SHELL_RUN_FLAGS) \
+		$(CONTAINER_NAME) \
+		/usr/local/bin/shell.sh -c 'cd $(REPO_MOUNT) && exec python tools/check_python_imports.py'
+
+# The annotate-every-binding checker (the rule ty cannot enforce). ty itself is not a gate for this port: its
+# diagnostics are glfw and imgui stub friction (python/README.md, "Gates").
+.PHONY: type-check
+type-check: image ## Check that every binding in the Python port is annotated
+	$(CONTAINER_CMD) run --rm $(PODMAN_RUN_FLAGS) \
+		$(SHELL_RUN_FLAGS) \
+		$(CONTAINER_NAME) \
+		/usr/local/bin/shell.sh -c 'cd $(REPO_MOUNT) && exec python tools/check_local_annotations.py --include-module python'
+
+.PHONY: update-pins
+update-pins: image ## Re-resolve python/constraints.txt from python/requirements.txt
+	$(CONTAINER_CMD) run --rm $(PODMAN_RUN_FLAGS) \
+		$(SHELL_RUN_FLAGS) \
+		$(CONTAINER_NAME) \
+		/usr/local/bin/shell.sh -c 'cd $(REPO_MOUNT) && exec uv pip compile python/requirements.txt -o python/constraints.txt'
 
 .PHONY: image-export
 image-export: ## Export the OCI image to a timestamped tar in the repo root

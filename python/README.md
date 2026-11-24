@@ -18,7 +18,15 @@ make list                         # [HOST] every demo that has a port
 ```
 
 Both halves run from one image (`make image`). The Python demos use PyOpenGL and GLFW; the C++ demos load GL through GLX,
-so `run-c` unsets `WAYLAND_DISPLAY`. Dependencies are pinned in `python/requirements.txt` and `python/constraints.txt`
+so `run-c` unsets `WAYLAND_DISPLAY`.
+
+**Display.** The Makefile passes the Wayland socket, `XDG_SESSION_TYPE=wayland`, `PYGLFW_LIBRARY=/usr/lib64/libglfw.so.3`, `/dev/dri`
+(when present) and `XAUTHORITY` (when set) into the container. `PYGLFW_LIBRARY` is the one that matters: PyPI `glfw` bundles an X11-only
+and a Wayland-only build and chooses from `XDG_SESSION_TYPE`; left alone it picked X11 and failed with "Authorization required" and
+"X11: Failed to open display". The Wayland-only build lacks `glfwGetX11Window`, which `imgui_bundle` needs, so `PYGLFW_LIBRARY` points
+`glfw` at Fedora's dual X11 + Wayland `libglfw` instead; GLFW then picks Wayland from `WAYLAND_DISPLAY`. `import glfw` must still come
+before `import imgui_bundle`. The C++ demos need X11 (or XWayland), which is why `run-c` unsets `WAYLAND_DISPLAY` and `XDG_SESSION_TYPE`
+and why `XAUTHORITY` is passed. Dependencies are pinned in `python/requirements.txt` and `python/constraints.txt`
 (`make update-pins` re-resolves them).
 
 ## Gates

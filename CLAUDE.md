@@ -68,6 +68,11 @@ only asset files beside the Python are `python/chapt15/shaders/shaders.{vs,fs}`.
 `gl-and-imgui-gotchas.md` there before debugging GL or imgui. The Python follows the maintainer's Python standard
 (annotate every binding, Google docstrings), not the "don't modernize" rule below, which covers `examples/` only.
 
+`make shell` loads the maintainer's configuration like the other projects of the template: the host's `~/.tmux.conf`, `~/.gitconfig` and
+`~/.gnupg` are mounted when present (`:Z` relabels them), `entrypoint/dotfiles/.extrabashrc` sets the two-line prompt, `GPG_TTY` and an
+`exit()` that runs `format.sh` from the repository root, and `shell.sh` sets `VIRTUAL_ENV_DISABLE_PROMPT=1` so the venv name stays out of the
+prompt. Editing a dotfile rebuilds only the last image layers.
+
 ## Review records
 
 Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake task; frozen).

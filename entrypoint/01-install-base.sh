@@ -44,4 +44,7 @@ dnf install -y --skip-unavailable \
     uv \
     which || status=1
 
+# Pinentry for signing commits through GPG_TTY; its own line so a missing package does not fail the group above.
+dnf install -y pinentry || status=1
+
 exit $status

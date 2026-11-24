@@ -1,0 +1,465 @@
+# thundergl.py
+# The Thunderbird with a cube-map environment reflection applied to
+# the body (chrome-like). Uses two texture units: unit 0 for the body
+# decal, unit 1 for the cube-map reflection via texgen.
+# OpenGL SuperBible, Chapter 11
+# Python port of thundergl.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import time
+import typing
+
+import glfw
+import imageio.v3 as iio
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+from OpenGL.constant import Constant
+
+PWD = os.path.dirname(os.path.abspath(__file__))
+# The tree root for _common, and chapt11/ for _thunderbird_data.
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+sys.path.insert(0, os.path.dirname(PWD))
+import _common  # noqa: E402
+from _thunderbird_data import load_model  # noqa: E402
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+
+CUBE_MAP: int = 0
+BODY_TEXTURE: int = 1
+GLASS_TEXTURE: int = 2
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    window: typing.Any = None  # glfw window handle; set in main()
+
+    x_rot: float = 0.0
+    y_rot: float = 0.0
+
+    texture_objects: list[int] = dataclasses.field(
+        default_factory=lambda: [0, 0, 0]
+    )
+
+    # Static jet mesh (vertices/normals/faces parsed from body.cpp +
+    # glass.cpp). Loaded once in setup_rc; render_scene just replays it in
+    # immediate mode.
+    jet_model: "dict[str, np.ndarray] | None" = None
+
+
+state: AppState = AppState()
+
+cube_faces: list[str] = [
+    "pos_x.tga",
+    "neg_x.tga",
+    "pos_y.tga",
+    "neg_y.tga",
+    "pos_z.tga",
+    "neg_z.tga",
+]
+cube_targets: list[Constant] = [
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+]
+
+
+def draw_body(model: "dict[str, np.ndarray]") -> None:
+    fi: np.ndarray = model["face_indices"]
+    verts: np.ndarray = model["vertices"]
+    norms: np.ndarray = model["normals"]
+    texs: np.ndarray = model["textures"]
+    GL.glBegin(GL.GL_TRIANGLES)
+    face: np.ndarray
+    for face in fi:
+        i: int
+        for i in range(3):
+            GL.glMultiTexCoord2fv(GL.GL_TEXTURE0, texs[face[i + 6]])
+            GL.glNormal3fv(norms[face[i + 3]])
+            GL.glVertex3fv(verts[face[i]])
+    GL.glEnd()
+
+
+def draw_glass(model: "dict[str, np.ndarray]") -> None:
+    fi: np.ndarray = model["face_indices_glass"]
+    verts: np.ndarray = model["vertices_glass"]
+    norms: np.ndarray = model["normals_glass"]
+    texs: np.ndarray = model["textures_glass"]
+    GL.glBegin(GL.GL_TRIANGLES)
+    face: np.ndarray
+    for face in fi:
+        i: int
+        for i in range(3):
+            GL.glTexCoord2fv(texs[face[i + 6]])
+            GL.glNormal3fv(norms[face[i + 3]])
+            GL.glVertex3fv(verts[face[i]])
+    GL.glEnd()
+
+
+def load_2d_texture(path: str) -> int:
+    img: np.ndarray = np.flipud(iio.imread(path))
+    shape: tuple[int, ...] = img.shape[:2]
+    fmt: Constant = (
+        GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
+    )
+    img = np.ascontiguousarray(img, dtype=np.uint8)
+    tex: int = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, tex)
+    GL.glTexImage2D(
+        GL.GL_TEXTURE_2D,
+        0,
+        fmt,
+        shape[1],
+        shape[0],
+        0,
+        fmt,
+        GL.GL_UNSIGNED_BYTE,
+        img,
+    )
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
+    return tex
+
+
+def draw_sky_box() -> None:
+    """50x50x50 cube around the camera, textured directly from the
+    cube map (no texgen) so the user sees the environment as the
+    background.  The C++ samples TU1 with manual 3D texcoords
+    matching each vertex's direction from origin."""
+    e: float = 50.0
+    # (texcoord, vertex) for each of 24 quad vertices, six faces.
+    faces: list[tuple[tuple[int, int, int], tuple[float, float, float]]] = [
+        # -X
+        ((-1, -1, 1), (-e, -e, e)),
+        ((-1, -1, -1), (-e, -e, -e)),
+        ((-1, 1, -1), (-e, e, -e)),
+        ((-1, 1, 1), (-e, e, e)),
+        # +X
+        ((1, -1, -1), (e, -e, -e)),
+        ((1, -1, 1), (e, -e, e)),
+        ((1, 1, 1), (e, e, e)),
+        ((1, 1, -1), (e, e, -e)),
+        # -Z
+        ((-1, -1, -1), (-e, -e, -e)),
+        ((1, -1, -1), (e, -e, -e)),
+        ((1, 1, -1), (e, e, -e)),
+        ((-1, 1, -1), (-e, e, -e)),
+        # +Z
+        ((1, -1, 1), (e, -e, e)),
+        ((-1, -1, 1), (-e, -e, e)),
+        ((-1, 1, 1), (-e, e, e)),
+        ((1, 1, 1), (e, e, e)),
+        # +Y
+        ((-1, 1, 1), (-e, e, e)),
+        ((-1, 1, -1), (-e, e, -e)),
+        ((1, 1, -1), (e, e, -e)),
+        ((1, 1, 1), (e, e, e)),
+        # -Y
+        ((-1, -1, -1), (-e, -e, -e)),
+        ((-1, -1, 1), (-e, -e, e)),
+        ((1, -1, 1), (e, -e, e)),
+        ((1, -1, -1), (e, -e, -e)),
+    ]
+    GL.glBegin(GL.GL_QUADS)
+    tc: tuple[int, int, int]
+    v: tuple[float, float, float]
+    for tc, v in faces:
+        GL.glMultiTexCoord3f(GL.GL_TEXTURE1, *tc)
+        GL.glVertex3f(*v)
+    GL.glEnd()
+
+
+def load_cube_map() -> int:
+    tex: int = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, tex)
+    p: tuple[Constant, Constant]
+    for p in [
+        (GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR),
+        (GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_LINEAR),
+        (GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE),
+        (GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE),
+        (GL.GL_TEXTURE_WRAP_R, GL.GL_CLAMP_TO_EDGE),
+    ]:
+        GL.glTexParameteri(GL.GL_TEXTURE_CUBE_MAP, p[0], p[1])
+    i: int
+    fname: str
+    for i, fname in enumerate(cube_faces):
+        img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+        shape: tuple[int, ...] = img.shape[:2]
+        fmt: Constant = (
+            GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
+        )
+        img = np.ascontiguousarray(img, dtype=np.uint8)
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_CUBE_MAP, GL.GL_GENERATE_MIPMAP, GL.GL_TRUE
+        )
+        GL.glTexImage2D(
+            cube_targets[i],
+            0,
+            fmt,
+            shape[1],
+            shape[0],
+            0,
+            fmt,
+            GL.GL_UNSIGNED_BYTE,
+            img,
+        )
+    return tex
+
+
+def setup_rc() -> None:
+    state.jet_model = load_model(PWD)
+
+    f_amb: tuple[float, float, float, float] = (0.1, 0.1, 0.1, 0.0)
+    f_diff: tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0)
+    f_spec: tuple[float, float, float, float] = (0.5, 0.5, 0.5, 0.0)
+    light_pos: tuple[float, float, float, float] = (-100.0, 100.0, 100.0, 1.0)
+
+    GL.glClearColor(0.0, 0.0, 0.5, 1.0)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glEnable(GL.GL_CULL_FACE)
+
+    state.texture_objects[CUBE_MAP] = load_cube_map()
+    state.texture_objects[BODY_TEXTURE] = load_2d_texture(
+        os.path.join(PWD, "body.tga")
+    )
+    state.texture_objects[GLASS_TEXTURE] = load_2d_texture(
+        os.path.join(PWD, "glass.tga")
+    )
+
+    GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, f_amb)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, f_amb)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, f_diff)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, f_spec)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_pos)
+    # Keep specular highlights from being dimmed by the body/glass
+    # texture colors (matches the C++ SetupRC).
+    GL.glLightModeli(
+        GL.GL_LIGHT_MODEL_COLOR_CONTROL, GL.GL_SEPARATE_SPECULAR_COLOR
+    )
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_LIGHT0)
+    GL.glEnable(GL.GL_COLOR_MATERIAL)
+    GL.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE)
+    # Default material specular is black -- the C++ sets it to the
+    # diffuse-light value so highlights actually appear.
+    GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, f_diff)
+    GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128)
+
+    # render_scene does glScalef(0.01) which also scales normals; without
+    # rescaling, dot(N, L) collapses to ~1% and the plane is nearly black.
+    # The C++ pre-scaled the geometry; here it's faster to keep glScalef
+    # and just enable RESCALE_NORMAL.
+    GL.glEnable(GL.GL_RESCALE_NORMAL)
+
+
+def render_scene() -> None:
+    f_scale: float = 0.01
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+
+    # Sky box first, in world space (before the plane's translate/rotate).
+    # Uses TU1 directly with manual texcoords; TU0's 2D off, TU1's texgen
+    # off, env mode = DECAL so lighting doesn't tint it.
+    GL.glActiveTexture(GL.GL_TEXTURE0)
+    GL.glDisable(GL.GL_TEXTURE_2D)
+    GL.glActiveTexture(GL.GL_TEXTURE1)
+    GL.glEnable(GL.GL_TEXTURE_CUBE_MAP)
+    GL.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, state.texture_objects[CUBE_MAP])
+    GL.glDisable(GL.GL_TEXTURE_GEN_S)
+    GL.glDisable(GL.GL_TEXTURE_GEN_T)
+    GL.glDisable(GL.GL_TEXTURE_GEN_R)
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_DECAL)
+    draw_sky_box()
+
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.0, -3.0)
+    GL.glRotatef(state.x_rot, 1.0, 0.0, 0.0)
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+    # body.cpp and glass.cpp use different native coordinate systems:
+    # body needs -90 X to be drawn upright, glass is already upright
+    # and needs a small translate to sit on top of the cockpit.  User
+    # rotations above apply to both as a rigid body; per-mesh fixups
+    # are local to each draw block.
+
+    model: dict[str, np.ndarray] | None = state.jet_model
+
+    # Body: TU0 = body decal, TU1 = cube map reflection (texgen)
+    GL.glActiveTexture(GL.GL_TEXTURE0)
+    GL.glEnable(GL.GL_TEXTURE_2D)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[BODY_TEXTURE])
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_DECAL)
+
+    GL.glActiveTexture(GL.GL_TEXTURE1)
+    GL.glEnable(GL.GL_TEXTURE_CUBE_MAP)
+    GL.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, state.texture_objects[CUBE_MAP])
+    GL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+    GL.glTexGeni(GL.GL_T, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+    GL.glTexGeni(GL.GL_R, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+    GL.glEnable(GL.GL_TEXTURE_GEN_S)
+    GL.glEnable(GL.GL_TEXTURE_GEN_T)
+    GL.glEnable(GL.GL_TEXTURE_GEN_R)
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
+
+    GL.glPushMatrix()
+    GL.glRotatef(-90.0, 1.0, 0.0, 0.0)
+    GL.glScalef(f_scale, f_scale, f_scale)
+    GL.glColor4f(1.0, 1.0, 1.0, 1.0)
+    draw_body(model)
+    GL.glPopMatrix()
+
+    # Disable second unit for the glass
+    GL.glDisable(GL.GL_TEXTURE_GEN_S)
+    GL.glDisable(GL.GL_TEXTURE_GEN_T)
+    GL.glDisable(GL.GL_TEXTURE_GEN_R)
+    GL.glDisable(GL.GL_TEXTURE_CUBE_MAP)
+
+    GL.glActiveTexture(GL.GL_TEXTURE0)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[GLASS_TEXTURE])
+    GL.glTranslatef(0.0, 0.132, 0.555)
+    GL.glScalef(f_scale, f_scale, f_scale)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    GL.glColor4f(1.0, 1.0, 1.0, 0.5)
+    GL.glFrontFace(GL.GL_CW)
+    draw_glass(model)
+    GL.glFrontFace(GL.GL_CCW)
+    draw_glass(model)
+    GL.glDisable(GL.GL_BLEND)
+
+    GL.glPopMatrix()
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 1000.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+ROT_DEG_PER_SEC: float = 90.0
+
+
+def handle_special_keys(window: typing.Any, dt: float) -> None:
+    step: float = ROT_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.x_rot -= step
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.x_rot += step
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.y_rot -= step
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.y_rot += step
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+# Per-click step for the menubar rotation items (the keyboard, held, rotates
+# continuously via handle_special_keys; a menu click does one fixed step).
+BTN_ROT_STEP: float = 5.0
+
+
+def _rot_x(d: float) -> None:
+    state.x_rot += d
+
+
+def _rot_y(d: float) -> None:
+    state.y_rot += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Rotation items run once per click and
+    # show their key in the shortcut column; hold the key for continuous spin.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Rotate up", "Up", lambda: _rot_x(-BTN_ROT_STEP))
+        _common.menu_action("Rotate down", "Down", lambda: _rot_x(BTN_ROT_STEP))
+        _common.menu_action(
+            "Rotate left", "Left", lambda: _rot_y(-BTN_ROT_STEP)
+        )
+        _common.menu_action(
+            "Rotate right", "Right", lambda: _rot_y(BTN_ROT_STEP)
+        )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    window: typing.Any = glfw.create_window(
+        800, 600, "Thunderbird w/ Cube Map Reflection", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_special_keys(window, dt)
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

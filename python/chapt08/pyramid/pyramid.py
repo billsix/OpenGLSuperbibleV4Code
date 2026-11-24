@@ -1,0 +1,336 @@
+# pyramid.py
+# Demonstrates simple 2D texture mapping. A textured pyramid with
+# ImGui controls for texture environment mode and filtering.
+# OpenGL SuperBible, Chapter 8
+# Python port of Pyramid.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import time
+import typing
+
+import glfw
+import imageio.v3 as iio
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from gacalc.g3 import Vector
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+from OpenGL.constant import Constant
+
+from modelviewprojection.mathutils import find_normal
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    # glfw window handle; set in main()
+    window: typing.Any = None
+
+    x_rot: float = 0.0
+    y_rot: float = 0.0
+    extra_radius: float = 0.0
+    texture_id: int = 0
+
+    env_mode_idx: int = 0  # 0=Modulate, 1=Replace
+    min_filter_idx: int = 0  # 0=Linear, 1=Nearest
+    mag_filter_idx: int = 0  # 0=Linear, 1=Nearest
+
+
+state: AppState = AppState()
+
+
+def load_texture() -> None:
+    img: np.ndarray = iio.imread(os.path.join(PWD, "stone.tga"))
+    img = np.flipud(img)
+    img_size: tuple[int, ...] = img.shape[:2]
+    fmt: Constant = (
+        GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
+    )
+    internal: Constant = GL.GL_RGBA8 if fmt == GL.GL_RGBA else GL.GL_RGB8
+    img = np.ascontiguousarray(img, dtype=np.uint8)
+
+    GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
+    state.texture_id = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_id)
+    GL.glTexImage2D(
+        GL.GL_TEXTURE_2D,
+        0,
+        internal,
+        img_size[1],
+        img_size[0],
+        0,
+        fmt,
+        GL.GL_UNSIGNED_BYTE,
+        img,
+    )
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
+
+
+def render_scene() -> None:
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE
+    )
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE
+    )
+    GL.glEnable(GL.GL_TEXTURE_2D)
+
+    corners: list[Vector] = [
+        Vector(0.0, 0.80, 0.0),  # 0 top
+        Vector(-0.5, 0.0, -0.50),  # 1 back-left
+        Vector(0.5, 0.0, -0.50),  # 2 back-right
+        Vector(0.5, 0.0, 0.5),  # 3 front-right
+        Vector(-0.5, 0.0, 0.5),  # 4 front-left
+    ]
+
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, -0.25, -4.0 - state.extra_radius)
+    GL.glRotatef(state.x_rot, 1.0, 0.0, 0.0)
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+
+    GL.glColor3f(1.0, 1.0, 1.0)
+    GL.glBegin(GL.GL_TRIANGLES)
+
+    # Bottom -- two triangles, normal points down
+    GL.glNormal3f(0.0, -1.0, 0.0)
+    GL.glTexCoord2f(1.0, 1.0)
+    GL.glVertex3f(*corners[2])
+    GL.glTexCoord2f(0.0, 0.0)
+    GL.glVertex3f(*corners[4])
+    GL.glTexCoord2f(0.0, 1.0)
+    GL.glVertex3f(*corners[1])
+    GL.glTexCoord2f(1.0, 1.0)
+    GL.glVertex3f(*corners[2])
+    GL.glTexCoord2f(1.0, 0.0)
+    GL.glVertex3f(*corners[3])
+    GL.glTexCoord2f(0.0, 0.0)
+    GL.glVertex3f(*corners[4])
+
+    # Front, left, back, right faces -- normal computed via mathutils
+    tri: tuple[Vector, Vector, Vector]
+    for tri in [
+        (corners[0], corners[4], corners[3]),
+        (corners[0], corners[1], corners[4]),
+        (corners[0], corners[2], corners[1]),
+        (corners[0], corners[3], corners[2]),
+    ]:
+        n: Vector = find_normal(*tri)
+        GL.glNormal3f(n.coeff_e_1, n.coeff_e_2, n.coeff_e_3)
+        GL.glTexCoord2f(0.5, 1.0)
+        GL.glVertex3f(*tri[0])
+        GL.glTexCoord2f(0.0, 0.0)
+        GL.glVertex3f(*tri[1])
+        GL.glTexCoord2f(1.0, 0.0)
+        GL.glVertex3f(*tri[2])
+
+    GL.glEnd()
+    GL.glPopMatrix()
+
+
+def setup_rc() -> None:
+    white_light: tuple[float, float, float, float] = (0.05, 0.05, 0.05, 1.0)
+    source_light: tuple[float, float, float, float] = (0.25, 0.25, 0.25, 1.0)
+    light_pos: tuple[float, float, float, float] = (-10.0, 5.0, 5.0, 1.0)
+
+    GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, white_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, source_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, source_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_pos)
+    GL.glEnable(GL.GL_LIGHT0)
+    GL.glEnable(GL.GL_COLOR_MATERIAL)
+    GL.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE)
+    GL.glClearColor(0.0, 0.0, 0.0, 1.0)
+    load_texture()
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 40.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+ROT_DEG_PER_SEC: float = 90.0
+
+
+def handle_special_keys(window: typing.Any, dt: float) -> None:
+    step: float = ROT_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.x_rot -= step
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.x_rot += step
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.y_rot -= step
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.y_rot += step
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+def _nudge_x(d: float) -> None:
+    state.x_rot += d
+
+
+def _nudge_y(d: float) -> None:
+    state.y_rot += d
+
+
+def _set_env(idx: int) -> None:
+    state.env_mode_idx = idx
+    modes: list[Constant] = [GL.GL_MODULATE, GL.GL_REPLACE]
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, modes[idx])
+
+
+def _set_min(idx: int) -> None:
+    state.min_filter_idx = idx
+    f: list[Constant] = [GL.GL_LINEAR, GL.GL_NEAREST]
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, f[idx])
+
+
+def _set_mag(idx: int) -> None:
+    state.mag_filter_idx = idx
+    f: list[Constant] = [GL.GL_LINEAR, GL.GL_NEAREST]
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, f[idx])
+
+
+def imgui_menubar() -> None:
+    # All controls live in the top menubar. The combos become radio menu
+    # items; the slider lives inside its own menu. Movement items show
+    # their key (hold the key for continuous rotation).
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Texture Env Mode", True):
+        i: int
+        label: str
+        for i, label in enumerate(["Modulate", "Replace"]):
+            _common.menu_action(
+                label,
+                "",
+                lambda v=i: _set_env(v),
+                selected=(state.env_mode_idx == i),
+            )
+        imgui.end_menu()
+    if imgui.begin_menu("Min Filter", True):
+        for i, label in enumerate(["Linear", "Nearest"]):
+            _common.menu_action(
+                label,
+                "",
+                lambda v=i: _set_min(v),
+                selected=(state.min_filter_idx == i),
+            )
+        imgui.end_menu()
+    if imgui.begin_menu("Mag Filter", True):
+        for i, label in enumerate(["Linear", "Nearest"]):
+            _common.menu_action(
+                label,
+                "",
+                lambda v=i: _set_mag(v),
+                selected=(state.mag_filter_idx == i),
+            )
+        imgui.end_menu()
+    if imgui.begin_menu("Camera", True):
+        radius_slider: tuple[bool, float] = imgui.slider_float(
+            "Extra Radius", state.extra_radius, -4.0, 100.0
+        )
+        state.extra_radius = radius_slider[1]
+        imgui.end_menu()
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Rotate Up", "Up", lambda: _nudge_x(-2.0))
+        _common.menu_action("Rotate Down", "Down", lambda: _nudge_x(2.0))
+        _common.menu_action("Rotate Left", "Left", lambda: _nudge_y(-2.0))
+        _common.menu_action("Rotate Right", "Right", lambda: _nudge_y(2.0))
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    glfw.window_hint(glfw.SAMPLES, 4)
+
+    window: typing.Any = glfw.create_window(  # glfw window handle
+        800, 600, "Textured Pyramid", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+
+    glfw.make_context_current(window)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    glfw.swap_interval(1)
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_special_keys(window, dt)
+
+        render_scene()
+
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

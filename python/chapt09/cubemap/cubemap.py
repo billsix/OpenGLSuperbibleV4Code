@@ -1,0 +1,361 @@
+# cubemap.py
+# Cube map applied to a sphere via texgen reflection mapping, with the
+# same six images textured manually onto a skybox.
+# OpenGL SuperBible, Chapter 9
+# Python port of CubeMap.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import math
+import os
+import sys
+import time
+import typing
+
+import glfw
+import imageio.v3 as iio
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+from OpenGL.constant import Constant
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+import _common  # noqa: E402
+import _primitives  # noqa: E402
+
+camera_y: float = 0.0
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    # glfw window handle; set in main()
+    window: typing.Any = None
+    camera_x: float = 0.0
+    camera_z: float = 0.0
+    camera_yaw: float = 0.0
+
+
+state: AppState = AppState()
+
+
+cube_faces: list[str] = [
+    "pos_x.tga",
+    "neg_x.tga",
+    "pos_y.tga",
+    "neg_y.tga",
+    "pos_z.tga",
+    "neg_z.tga",
+]
+cube_targets: list[Constant] = [
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+    GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+]
+
+
+# Reflective sphere -- cube-map texgen generates its texcoords, so none
+# are stored; tessellate once at import.
+SPHERE: _primitives.Mesh = _primitives.build_sphere(0.75, 41, 41)
+
+
+def draw_skybox() -> None:
+    e: float = 15.0
+    GL.glBegin(GL.GL_QUADS)
+    # -X
+    GL.glTexCoord3f(-1.0, -1.0, 1.0)
+    GL.glVertex3f(-e, -e, e)
+    GL.glTexCoord3f(-1.0, -1.0, -1.0)
+    GL.glVertex3f(-e, -e, -e)
+    GL.glTexCoord3f(-1.0, 1.0, -1.0)
+    GL.glVertex3f(-e, e, -e)
+    GL.glTexCoord3f(-1.0, 1.0, 1.0)
+    GL.glVertex3f(-e, e, e)
+    # +X
+    GL.glTexCoord3f(1.0, -1.0, -1.0)
+    GL.glVertex3f(e, -e, -e)
+    GL.glTexCoord3f(1.0, -1.0, 1.0)
+    GL.glVertex3f(e, -e, e)
+    GL.glTexCoord3f(1.0, 1.0, 1.0)
+    GL.glVertex3f(e, e, e)
+    GL.glTexCoord3f(1.0, 1.0, -1.0)
+    GL.glVertex3f(e, e, -e)
+    # -Z
+    GL.glTexCoord3f(-1.0, -1.0, -1.0)
+    GL.glVertex3f(-e, -e, -e)
+    GL.glTexCoord3f(1.0, -1.0, -1.0)
+    GL.glVertex3f(e, -e, -e)
+    GL.glTexCoord3f(1.0, 1.0, -1.0)
+    GL.glVertex3f(e, e, -e)
+    GL.glTexCoord3f(-1.0, 1.0, -1.0)
+    GL.glVertex3f(-e, e, -e)
+    # +Z
+    GL.glTexCoord3f(1.0, -1.0, 1.0)
+    GL.glVertex3f(e, -e, e)
+    GL.glTexCoord3f(-1.0, -1.0, 1.0)
+    GL.glVertex3f(-e, -e, e)
+    GL.glTexCoord3f(-1.0, 1.0, 1.0)
+    GL.glVertex3f(-e, e, e)
+    GL.glTexCoord3f(1.0, 1.0, 1.0)
+    GL.glVertex3f(e, e, e)
+    # +Y
+    GL.glTexCoord3f(-1.0, 1.0, 1.0)
+    GL.glVertex3f(-e, e, e)
+    GL.glTexCoord3f(-1.0, 1.0, -1.0)
+    GL.glVertex3f(-e, e, -e)
+    GL.glTexCoord3f(1.0, 1.0, -1.0)
+    GL.glVertex3f(e, e, -e)
+    GL.glTexCoord3f(1.0, 1.0, 1.0)
+    GL.glVertex3f(e, e, e)
+    # -Y
+    GL.glTexCoord3f(-1.0, -1.0, -1.0)
+    GL.glVertex3f(-e, -e, -e)
+    GL.glTexCoord3f(-1.0, -1.0, 1.0)
+    GL.glVertex3f(-e, -e, e)
+    GL.glTexCoord3f(1.0, -1.0, 1.0)
+    GL.glVertex3f(e, -e, e)
+    GL.glTexCoord3f(1.0, -1.0, -1.0)
+    GL.glVertex3f(e, -e, -e)
+    GL.glEnd()
+
+
+def setup_rc() -> None:
+    GL.glCullFace(GL.GL_BACK)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR
+    )
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_CUBE_MAP,
+        GL.GL_TEXTURE_MIN_FILTER,
+        GL.GL_LINEAR_MIPMAP_LINEAR,
+    )
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE
+    )
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE
+    )
+    GL.glTexParameteri(
+        GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_WRAP_R, GL.GL_CLAMP_TO_EDGE
+    )
+
+    i: int
+    fname: str
+    for i, fname in enumerate(cube_faces):
+        img: np.ndarray = np.flipud(iio.imread(os.path.join(PWD, fname)))
+        img_size: tuple[int, ...] = img.shape[:2]
+        fmt: Constant = (
+            GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
+        )
+        img = np.ascontiguousarray(img, dtype=np.uint8)
+        GL.glTexParameteri(
+            GL.GL_TEXTURE_CUBE_MAP, GL.GL_GENERATE_MIPMAP, GL.GL_TRUE
+        )
+        GL.glTexImage2D(
+            cube_targets[i],
+            0,
+            fmt,
+            img_size[1],
+            img_size[0],
+            0,
+            fmt,
+            GL.GL_UNSIGNED_BYTE,
+            img,
+        )
+
+    GL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+    GL.glTexGeni(GL.GL_T, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+    GL.glTexGeni(GL.GL_R, GL.GL_TEXTURE_GEN_MODE, GL.GL_REFLECTION_MAP)
+
+    GL.glEnable(GL.GL_TEXTURE_CUBE_MAP)
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_DECAL)
+
+
+def apply_camera_transform() -> None:
+    GL.glRotatef(-math.degrees(state.camera_yaw), 0.0, 1.0, 0.0)
+    GL.glTranslatef(-state.camera_x, -camera_y, -state.camera_z)
+
+
+def render_scene() -> None:
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+
+    GL.glPushMatrix()
+    apply_camera_transform()
+
+    # Skybox -- manual texture coordinates, no texgen. Re-assert the cube
+    # map each frame (setup_rc enabled it once, but we disable it before
+    # imgui draws).
+    GL.glEnable(GL.GL_TEXTURE_CUBE_MAP)
+    GL.glDisable(GL.GL_TEXTURE_GEN_S)
+    GL.glDisable(GL.GL_TEXTURE_GEN_T)
+    GL.glDisable(GL.GL_TEXTURE_GEN_R)
+    draw_skybox()
+
+    # Sphere -- texgen reflects the cube map onto it
+    GL.glEnable(GL.GL_TEXTURE_GEN_S)
+    GL.glEnable(GL.GL_TEXTURE_GEN_T)
+    GL.glEnable(GL.GL_TEXTURE_GEN_R)
+
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.0, -3.0)
+
+    GL.glMatrixMode(GL.GL_TEXTURE)
+    GL.glPushMatrix()
+    # Inverse-rotate the texture matrix so reflections track the camera
+    GL.glRotatef(math.degrees(state.camera_yaw), 0.0, 1.0, 0.0)
+
+    _primitives.draw_mesh(SPHERE)
+
+    GL.glPopMatrix()
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glPopMatrix()
+    GL.glPopMatrix()
+
+    # Clean texture state for the imgui menubar (drawn next, fixed-function):
+    # disable texgen + the cube map so they don't texture the menubar quad.
+    # Both are re-asserted at the top of render_scene next frame.
+    GL.glDisable(GL.GL_TEXTURE_GEN_S)
+    GL.glDisable(GL.GL_TEXTURE_GEN_T)
+    GL.glDisable(GL.GL_TEXTURE_GEN_R)
+    GL.glDisable(GL.GL_TEXTURE_CUBE_MAP)
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 2000.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+MOVE_UNITS_PER_SEC: float = 3.0
+YAW_RAD_PER_SEC: float = 1.5
+
+
+def handle_camera_keys(window: typing.Any, dt: float) -> None:
+    move: float = MOVE_UNITS_PER_SEC * dt
+    yaw: float = YAW_RAD_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.camera_x += -move * math.sin(state.camera_yaw)
+        state.camera_z += -move * math.cos(state.camera_yaw)
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.camera_x -= -move * math.sin(state.camera_yaw)
+        state.camera_z -= -move * math.cos(state.camera_yaw)
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.camera_yaw += yaw
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.camera_yaw -= yaw
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+# Per-click step for the menubar movement items (the keyboard, held, moves
+# continuously via handle_camera_keys; a menu click does one fixed step).
+BTN_MOVE_STEP: float = 0.5
+BTN_YAW_STEP: float = 0.1
+
+
+def _walk(direction: int) -> None:
+    m: float = BTN_MOVE_STEP * direction
+    state.camera_x += -m * math.sin(state.camera_yaw)
+    state.camera_z += -m * math.cos(state.camera_yaw)
+
+
+def _turn(d: float) -> None:
+    state.camera_yaw += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Movement items run once per click and
+    # show their key in the shortcut column; hold the key for continuous motion.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Forward", "Up", lambda: _walk(1))
+        _common.menu_action("Back", "Down", lambda: _walk(-1))
+        _common.menu_action("Turn left", "Left", lambda: _turn(BTN_YAW_STEP))
+        _common.menu_action("Turn right", "Right", lambda: _turn(-BTN_YAW_STEP))
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    window: typing.Any = glfw.create_window(  # glfw window handle
+        800, 600, "OpenGL Cube Maps", None, None
+    )
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_camera_keys(window, dt)
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

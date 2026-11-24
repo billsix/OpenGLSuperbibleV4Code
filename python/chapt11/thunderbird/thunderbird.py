@@ -1,0 +1,348 @@
+# thunderbird.py
+# Renders a hand-modeled Thunderbird airplane using indexed vertex
+# arrays. The body and glass are loaded from body.cpp and glass.cpp
+# (the same C++ data files the SuperBible source links into the demo)
+# via the shared _thunderbird_data parser.
+# OpenGL SuperBible, Chapter 11
+# Python port of ThunderBird.cpp by Richard S. Wright Jr.
+
+import dataclasses
+import os
+import sys
+import time
+import typing
+
+import glfw
+import imageio.v3 as iio
+import numpy as np
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+from imgui_bundle import imgui
+from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+from OpenGL.constant import Constant
+
+# The shared loader lives one directory up
+PWD = os.path.dirname(os.path.abspath(__file__))
+# The tree root for _common, and chapt11/ for _thunderbird_data.
+sys.path.insert(0, os.path.dirname(os.path.dirname(PWD)))
+sys.path.insert(0, os.path.dirname(PWD))
+import _common  # noqa: E402
+from _thunderbird_data import load_model  # noqa: E402
+
+PWD: str = os.path.dirname(os.path.abspath(__file__))
+
+BODY_TEXTURE: int = 0
+GLASS_TEXTURE: int = 1
+
+
+@dataclasses.dataclass
+class AppState:
+    """The app's mutable state; the one instance is ``state`` below."""
+
+    window: typing.Any = None  # glfw window handle; set in main()
+
+    x_rot: float = 0.0
+    y_rot: float = 0.0
+    texture_objects: list[int] = dataclasses.field(
+        default_factory=lambda: [0, 0]
+    )
+    body_list: int = 0
+    glass_list: int = 0
+
+
+state: AppState = AppState()
+
+GL_TEXTURE_MAX_ANISOTROPY_EXT: int = 0x84FE
+GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT: int = 0x84FF
+
+
+def draw_body(model: "dict[str, np.ndarray]") -> None:
+    fi: np.ndarray = model["face_indices"]
+    verts: np.ndarray = model["vertices"]
+    norms: np.ndarray = model["normals"]
+    texs: np.ndarray = model["textures"]
+    GL.glBegin(GL.GL_TRIANGLES)
+    face: np.ndarray
+    for face in fi:
+        i: int
+        for i in range(3):
+            GL.glTexCoord2fv(texs[face[i + 6]])
+            GL.glNormal3fv(norms[face[i + 3]])
+            GL.glVertex3fv(verts[face[i]])
+    GL.glEnd()
+
+
+def draw_glass(model: "dict[str, np.ndarray]") -> None:
+    fi: np.ndarray = model["face_indices_glass"]
+    verts: np.ndarray = model["vertices_glass"]
+    norms: np.ndarray = model["normals_glass"]
+    texs: np.ndarray = model["textures_glass"]
+    GL.glBegin(GL.GL_TRIANGLES)
+    face: np.ndarray
+    for face in fi:
+        i: int
+        for i in range(3):
+            GL.glTexCoord2fv(texs[face[i + 6]])
+            GL.glNormal3fv(norms[face[i + 3]])
+            GL.glVertex3fv(verts[face[i]])
+    GL.glEnd()
+
+
+def load_texture(path: str) -> int:
+    img: np.ndarray = np.flipud(iio.imread(path))
+    shape: tuple[int, ...] = img.shape[:2]
+    fmt: Constant = (
+        GL.GL_RGBA if img.ndim == 3 and img.shape[2] == 4 else GL.GL_RGB
+    )
+    img = np.ascontiguousarray(img, dtype=np.uint8)
+    tex: int = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, tex)
+    GL.glTexImage2D(
+        GL.GL_TEXTURE_2D,
+        0,
+        fmt,
+        shape[1],
+        shape[0],
+        0,
+        fmt,
+        GL.GL_UNSIGNED_BYTE,
+        img,
+    )
+    try:
+        f_largest: float = GL.glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+        GL.glTexParameterf(
+            GL.GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, float(f_largest)
+        )
+    except Exception:
+        pass
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT)
+    return tex
+
+
+def setup_rc() -> None:
+    f_amb_light: tuple[float, float, float, float] = (0.1, 0.1, 0.1, 0.0)
+    f_diff_light: tuple[float, float, float, float] = (1.0, 1.0, 1.0, 0.0)
+    f_spec_light: tuple[float, float, float, float] = (0.5, 0.5, 0.5, 0.0)
+    light_pos: tuple[float, float, float, float] = (-100.0, 100.0, 100.0, 1.0)
+
+    GL.glClearColor(0.0, 0.0, 0.5, 1.0)
+    GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glEnable(GL.GL_CULL_FACE)
+    GL.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE)
+
+    state.texture_objects[BODY_TEXTURE] = load_texture(
+        os.path.join(PWD, "body.tga")
+    )
+    state.texture_objects[GLASS_TEXTURE] = load_texture(
+        os.path.join(PWD, "glass.tga")
+    )
+
+    GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, f_amb_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, f_amb_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, f_diff_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, f_spec_light)
+    GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_pos)
+    # Separate specular so highlights aren't modulated (dimmed) by the
+    # body/glass texture color.  The C++ sets this in SetupRC.
+    GL.glLightModeli(
+        GL.GL_LIGHT_MODEL_COLOR_CONTROL, GL.GL_SEPARATE_SPECULAR_COLOR
+    )
+    GL.glEnable(GL.GL_LIGHTING)
+    GL.glEnable(GL.GL_LIGHT0)
+
+    GL.glEnable(GL.GL_COLOR_MATERIAL)
+    GL.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE)
+    # Default material specular is black -- no highlights.  The C++
+    # sets specular to the (1,1,1) diffuse-light value.
+    GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, f_diff_light)
+    GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128)
+
+    # The render does glScalef(0.01, 0.01, 0.01) to shrink the model;
+    # that also scales normals to ~0.01 length, which kills diffuse
+    # lighting (dot(N, L) drops by 100x).  GL_RESCALE_NORMAL renormalizes
+    # after a uniform scale.  Without this the plane is nearly black.
+    GL.glEnable(GL.GL_RESCALE_NORMAL)
+
+    # Compile body and glass into display lists
+    model: dict[str, np.ndarray] = load_model(PWD)
+    state.body_list = GL.glGenLists(2)
+    state.glass_list = state.body_list + 1
+
+    GL.glNewList(state.body_list, GL.GL_COMPILE)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[BODY_TEXTURE])
+    draw_body(model)
+    GL.glEndList()
+
+    GL.glNewList(state.glass_list, GL.GL_COMPILE)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, state.texture_objects[GLASS_TEXTURE])
+    draw_glass(model)
+    GL.glEndList()
+
+
+def render_scene() -> None:
+    f_scale: float = 0.01
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+    GL.glEnable(GL.GL_TEXTURE_2D)
+
+    GL.glPushMatrix()
+    GL.glTranslatef(0.0, 0.0, -3.0)
+    GL.glRotatef(state.x_rot, 1.0, 0.0, 0.0)
+    GL.glRotatef(state.y_rot, 0.0, 1.0, 0.0)
+
+    # body.cpp and glass.cpp are authored in DIFFERENT coordinate
+    # systems: body needs -90 X to be drawn upright, glass is already
+    # upright and needs a small translate to sit on top of the cockpit.
+    # The user x_rot/y_rot above is applied to both (rigid-body motion);
+    # body's frame-fix and glass's offset are local to each.
+
+    GL.glPushMatrix()
+    GL.glRotatef(-90.0, 1.0, 0.0, 0.0)
+    GL.glScalef(f_scale, f_scale, f_scale)
+    GL.glColor4f(1.0, 1.0, 1.0, 1.0)
+    GL.glCallList(state.body_list)
+    GL.glPopMatrix()
+
+    # Glass is transparent. C++ draws it twice -- once with CW front-
+    # face so the back of the cockpit shows through, then once with the
+    # default CCW so the near side draws too.
+    GL.glTranslatef(0.0, 0.132, 0.555)
+    GL.glScalef(f_scale, f_scale, f_scale)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    GL.glColor4f(1.0, 1.0, 1.0, 0.5)
+    GL.glFrontFace(GL.GL_CW)
+    GL.glCallList(state.glass_list)
+    GL.glFrontFace(GL.GL_CCW)
+    GL.glCallList(state.glass_list)
+    GL.glDisable(GL.GL_BLEND)
+
+    GL.glPopMatrix()
+    GL.glDisable(GL.GL_TEXTURE_2D)
+
+
+def change_size(w: int, h: int) -> None:
+    if h == 0:
+        h = 1
+    GL.glViewport(0, 0, w, h)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GLU.gluPerspective(35.0, float(w) / float(h), 1.0, 1000.0)
+    GL.glMatrixMode(GL.GL_MODELVIEW)
+    GL.glLoadIdentity()
+
+
+def on_framebuffer_size(_window: typing.Any, w: int, h: int) -> None:
+    change_size(w, h)
+
+
+ROT_DEG_PER_SEC: float = 90.0
+
+
+def handle_special_keys(window: typing.Any, dt: float) -> None:
+    step: float = ROT_DEG_PER_SEC * dt
+    if glfw.get_key(window, glfw.KEY_UP) == glfw.PRESS:
+        state.x_rot -= step
+    if glfw.get_key(window, glfw.KEY_DOWN) == glfw.PRESS:
+        state.x_rot += step
+    if glfw.get_key(window, glfw.KEY_LEFT) == glfw.PRESS:
+        state.y_rot -= step
+    if glfw.get_key(window, glfw.KEY_RIGHT) == glfw.PRESS:
+        state.y_rot += step
+
+
+def on_key(
+    window: typing.Any, key: int, _scancode: int, action: int, _mods: int
+) -> None:
+    if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
+        glfw.set_window_should_close(window, True)
+
+
+# Per-click step for the menubar rotation items (the keyboard, held, rotates
+# continuously via handle_special_keys; a menu click does one fixed step).
+BTN_ROT_STEP: float = 5.0
+
+
+def _rot_x(d: float) -> None:
+    state.x_rot += d
+
+
+def _rot_y(d: float) -> None:
+    state.y_rot += d
+
+
+def imgui_menubar() -> None:
+    # All controls in the top menubar. Rotation items run once per click and
+    # show their key in the shortcut column; hold the key for continuous spin.
+    if not imgui.begin_main_menu_bar():
+        return
+    if imgui.begin_menu("File", True):
+        _common.menu_action(
+            "Quit",
+            "Esc",
+            lambda: glfw.set_window_should_close(state.window, True),
+        )
+        imgui.end_menu()
+    _common.draw_view_menu(state.window)
+    if imgui.begin_menu("Controls", True):
+        _common.menu_action("Rotate up", "Up", lambda: _rot_x(-BTN_ROT_STEP))
+        _common.menu_action("Rotate down", "Down", lambda: _rot_x(BTN_ROT_STEP))
+        _common.menu_action(
+            "Rotate left", "Left", lambda: _rot_y(-BTN_ROT_STEP)
+        )
+        _common.menu_action(
+            "Rotate right", "Right", lambda: _rot_y(BTN_ROT_STEP)
+        )
+        imgui.end_menu()
+    imgui.end_main_menu_bar()
+
+
+def main() -> None:
+    if not glfw.init():
+        sys.exit(1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 1)
+    glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+    window: typing.Any = glfw.create_window(800, 600, "Thunderbird", None, None)
+    if not window:
+        glfw.terminate()
+        sys.exit(1)
+    state.window = window
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+    glfw.set_framebuffer_size_callback(window, on_framebuffer_size)
+
+    imgui.create_context()
+    impl: GlfwRenderer = GlfwRenderer(window)
+    # Set our key callback AFTER GlfwRenderer -- it installs its own glfw key
+    # callback that doesn't chain, so navigation/Esc must be registered last.
+    glfw.set_key_callback(window, on_key)
+
+    setup_rc()
+    size: tuple[int, int] = glfw.get_framebuffer_size(window)
+    change_size(size[0], size[1])
+
+    last_frame: float = time.monotonic()
+
+    while not glfw.window_should_close(window):
+        now: float = time.monotonic()
+        dt: float = now - last_frame
+        last_frame = now
+
+        glfw.poll_events()
+        impl.process_inputs()
+        handle_special_keys(window, dt)
+        render_scene()
+        imgui.new_frame()
+        imgui_menubar()
+        imgui.render()
+        impl.render(imgui.get_draw_data())
+        glfw.swap_buffers(window)
+
+    impl.shutdown()
+    glfw.terminate()
+
+
+if __name__ == "__main__":
+    main()

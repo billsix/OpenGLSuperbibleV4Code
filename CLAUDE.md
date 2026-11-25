@@ -82,7 +82,7 @@ Latest: `tasks/review/2026/11/23/repo-review.md` (a scoped review for the CMake 
 Work lives in `tasks/` (the study that produced the reference set: `tasks/archive/2026/08/02/study-the-source.md`; the
 CMake build: `tasks/archive/2026/11/23/cmake-crossplatform-build.md`). Open: `tasks/cmake-verify-macos-windows.md`,
 `tasks/glut-shim-on-glfw.md`, and the port's own:
-`tasks/ports-ux-pass.md`, `tasks/pixbufobj-port-fidelity.md`, `tasks/v4-chapt14-shadowmap-fix.md`,
+`tasks/verify-motionblur-imaging-on-desktop.md`, `tasks/ports-ux-pass.md`, `tasks/pixbufobj-port-fidelity.md`, `tasks/v4-chapt14-shadowmap-fix.md`,
 `tasks/curate-superbible-v4-demos.md`; the 88-demo fixes: `tasks/archive/2026/11/23/headless-demo-gaps.md`. Completed work moves to `tasks/archive/<YYYY>/<MM>/<DD>/`.
 
 ## Conventions

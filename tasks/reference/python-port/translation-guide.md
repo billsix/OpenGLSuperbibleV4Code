@@ -5,7 +5,7 @@ the `python/` tree. Read this before porting, re-porting, or bulk-editing anythi
 Moved here from `github.com/billsix/modelviewprojection` (`tasks/reference/superbible-ports-guide.md`) on 2026-11-24.
 
 The port itself is **complete** (2026-04-28, ~101 demo files, all chapters); the live work is the UX pass
-(`tasks/ports-ux-pass.md`) and the maintainer's hardware verification (punchlist in `tasks/superbible-full-port.md`).
+(`tasks/ports-ux-pass.md`) and the maintainer's hardware verification (first-run risks in `tasks/archive/2026/11/25/superbible-full-port.md`).
 GL failure modes learned during the port are in `tasks/reference/python-port/gl-and-imgui-gotchas.md`. The upstream C++
 is mapped in this repository's other `tasks/reference/` docs (start with `architecture-overview.md`).
 
@@ -199,6 +199,6 @@ chapt01:1, 02:3, 03:12, 04:8, 05:9, 06:6, 07:4, 08:4, 09:6, 10:9, 11:7,
   per-demo camera code. That migration is `tasks/ports-ux-pass.md` Phase 2;
   read `tasks/archive/2026/04/28/postmortem-phase2-attempt-1.md` before any
   bulk attempt.
-- **None hardware-verified except what the maintainer has run** — the open punchlist
-  (camera sign, Rodrigues transpose, single-buffer flicker, etc.) lives in
-  `tasks/superbible-full-port.md`.
+- **None hardware-verified except what the maintainer has run** — the first-run risks
+  (camera sign, Rodrigues transpose, etc.) are in
+  `tasks/archive/2026/11/25/superbible-full-port.md`.

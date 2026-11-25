@@ -26,7 +26,7 @@ ones aren't. Log that in the model view perspective book."*
 - **"Log in the book" needs a home decision:** the ports have **no book chapters** and the book toctree
   stops at ch21 (`tasks/reference/demo-chapter-inventory.md §1`) — so a new book section would have to be
   created, OR this becomes a `tasks/reference/` curation doc. Edition = **v4 / 4th ed.** (confirmed).
-- Adjacent active: `superbible-full-port.md`, `ports-ux-pass.md`.
+- Adjacent active: `ports-ux-pass.md`.
 
 ## Plan (draft — after questions)
 

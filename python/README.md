@@ -85,6 +85,6 @@ These are `.py` files that print a notice and exit, so every upstream demo has a
 ## Status
 
 The port is complete (2026-04-28): about 101 demo files across chapt01–chapt22 (everything real except the stubs above).
-Hardware verification is ongoing and is the maintainer's: the punchlist is `tasks/superbible-full-port.md`, the walk-around
+Hardware verification is ongoing and is the maintainer's: the first-run risks are in `tasks/archive/2026/11/25/superbible-full-port.md`, the walk-around
 camera migration is `tasks/ports-ux-pass.md` (only the `chapt08/sphereworld` canary is wired), and a known fidelity gap is
 `tasks/pixbufobj-port-fidelity.md`.
